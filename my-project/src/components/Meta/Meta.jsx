@@ -1,11 +1,9 @@
-export function Meta() {
+export function Meta({title}) {
   return (
     <>
       <meta charSet="utf-8" />
       <title>
-        {"{"}
-        {"{"} title {"}"}
-        {"}"} - Tailwind CSS Chat App Template
+        {title}
       </title>
       <meta
         name="viewport"

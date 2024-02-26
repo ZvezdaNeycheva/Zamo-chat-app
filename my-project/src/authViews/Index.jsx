@@ -20,7 +20,7 @@ export function Index() {
         <>
 
             <head>
-                <Meta />
+                <Meta title={'Chat App'}></Meta>
 
                 {/* <!-- magnific-popup css --> */}
                 <link href="assets/libs/magnific-popup/magnific-popup.css" rel="stylesheet" type="text/css" />
@@ -30,7 +30,6 @@ export function Index() {
 
                 <link rel="stylesheet" href="assets/libs/owl.carousel/assets/owl.theme.default.min.css" />
 
-                {/* <!-- {{> partials/head-css }}  --> */}
                 <link rel="stylesheet" href="assets/css/icons.css" />
                 <link rel="stylesheet" href="assets/css/tailwind.css" />
 

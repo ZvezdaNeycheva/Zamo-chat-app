@@ -1,9 +1,10 @@
+import { Meta } from "../components/Meta";
+
+
 export function LockScreen() {
   return (
     <>
-      {"{"}
-      {"{"}&gt; partials/title-meta title="Lock Screen" {"}"}
-      {"}"}
+      <Meta title={'LockScreen'}></Meta>
       {/* magnific-popup css */}
       <link
         href="assets/libs/magnific-popup/magnific-popup.css"
@@ -19,9 +20,9 @@ export function LockScreen() {
         rel="stylesheet"
         href="assets/libs/owl.carousel/assets/owl.theme.default.min.css"
       />
-      {"{"}
-      {"{"}&gt; partials/head-css {"}"}
-      {"}"}
+      <link rel="stylesheet" href="assets/css/icons.css" />
+      <link rel="stylesheet" href="assets/css/tailwind.css" />
+
       <div className="w-full h-full">
         <div className="px-5 py-24 sm:px-24 lg:px-0">
           <div className="grid items-center justify-center grid-cols-1 lg:grid-cols-12 auth-bg">
@@ -109,9 +110,9 @@ export function LockScreen() {
           </div>
         </div>
       </div>
-      {"{"}
-      {"{"}&gt; partials/vendor-scripts {"}"}
-      {"}"}
+      <script src="assets/libs/jquery/jquery.min.js"></script>
+      <script src="assets/libs/@popperjs/core/umd/popper.min.js"></script>
+      <script src="assets/libs/simplebar/simplebar.min.js"></script>
     </>
 
   );
