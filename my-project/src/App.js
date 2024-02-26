@@ -1,5 +1,4 @@
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter as Router, Routes, Route, Switch } from 'react-router-dom';import './App.css';
 import {Index} from './authViews/Index';
 
 function App() {

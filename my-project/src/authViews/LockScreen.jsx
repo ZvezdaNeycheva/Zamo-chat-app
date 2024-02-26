@@ -1,5 +1,7 @@
 import { Meta } from "../components/Meta";
-
+import { Index } from "./Index";
+import React from 'react';
+import { NavLink } from 'react-router-dom';
 
 export function LockScreen() {
   return (
@@ -28,7 +30,8 @@ export function LockScreen() {
           <div className="grid items-center justify-center grid-cols-1 lg:grid-cols-12 auth-bg">
             <div className="mx-5 lg:mx-20 lg:col-start-5 lg:col-span-4">
               <div className="text-center">
-                <a href="index.html" className="block mb-10">
+                {/* <a href="index.html" className="block mb-10"> */}
+                <NavLink to="/about">About</NavLink>
                   <img
                     src="assets/images/logo-dark.png"
                     alt=""
@@ -96,10 +99,12 @@ export function LockScreen() {
               <div className="mt-10 text-center">
                 <p className="mb-5 text-gray-700 dark:text-gray-200">
                   Not you ? return{" "}
-                  <a href="auth-login.html" className="fw-medium text-violet-500">
+
+                  <Login className="fw-medium text-violet-500"></Login>
+                  {/* <a href="auth-login.html" className="fw-medium text-violet-500">
                     {" "}
                     Sign in{" "}
-                  </a>{" "}
+                  </a>{" "} */}
                 </p>
                 <p className="text-gray-700 dark:text-gray-200">
                   © Chatvia. Crafted with{" "}
