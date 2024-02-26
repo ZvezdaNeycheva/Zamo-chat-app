@@ -1,4 +1,6 @@
 import { Meta } from "../components/Meta/Meta"
+import { Login } from "./Login"
+
 
 export function Register() {
   return (
@@ -134,10 +136,11 @@ export function Register() {
               <div className="mt-10 text-center">
                 <p className="mb-5 text-gray-700 dark:text-gray-200">
                   Don't have an account ?{" "}
-                  <a href="auth-login.html" className="fw-medium text-violet-500">
-                    {" "}
-                    Signin{" "}
-                  </a>{" "}
+                  {/* <a href="auth-login.html" className="fw-medium text-violet-500">
+                    {" "} */}
+                    <Login className="fw-medium text-violet-500"></Login>
+                    {/* Signin{" "}
+                  </a>{" "} */}
                 </p>
                 <p className="text-gray-700 dark:text-gray-200">
                   © Chatvia. Crafted with{" "}
