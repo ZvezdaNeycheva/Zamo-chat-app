@@ -1,9 +1,10 @@
+import { Meta } from "../components/Meta/Meta"
+
 export function Register() {
   return (
     <>
-      {"{"}
-      {"{"}&gt; partials/title-meta title="Register" {"}"}
-      {"}"}
+      <Meta title={'Register'}></Meta>
+
       {/* magnific-popup css */}
       <link
         href="assets/libs/magnific-popup/magnific-popup.css"
