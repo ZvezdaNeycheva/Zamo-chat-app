@@ -8,13 +8,13 @@ export default function Index() {
       <meta content="Themesbrand" name="author" />
       <meta name="keywords" content="Chatvia HTML documentation" />
       {/* App favicon */}
-      <link rel="shortcut icon" href="assets/images/favicon.ico" />
+      <link rel="shortcut icon" href="./assets/images/favicon.ico" />
       {/* TailwindCSS Css */}
-      <link href="assets/css/bootstrap.min.css" id="bootstrap-style" rel="stylesheet" type="text/css" />
+      <link href="./assets/css/bootstrap.min.css" id="bootstrap-style" rel="stylesheet" type="text/css" />
       {/* Icons Css */}
-      <link href="assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+      <link href="./assets/css/icons.min.css" rel="stylesheet" type="text/css" />
       {/* App Css*/}
-      <link href="assets/css/app.min.css" id="app-style" rel="stylesheet" type="text/css" />
+      <link href="./assets/css/app.min.css" id="app-style" rel="stylesheet" type="text/css" />
       {/* Begin page */}
       <div id="layout-wrapper">
         <header id="page-topbar">
@@ -24,10 +24,10 @@ export default function Index() {
               <div className="navbar-brand-box">
                 <a href="index.html" className="logo logo-light">
                   <span className="logo-sm">
-                    <img src="assets/images/logo.svg" alt="" height={25} />
+                    <img src="./assets/images/logo.svg" alt="" height={25} />
                   </span>
                   <span className="logo-lg">
-                    <img src="assets/images/logo-light.png" alt="" height={22} />{" "}
+                    <img src="./assets/images/logo-light.png" alt="" height={22} />{" "}
                     <span className="badge badge-soft-success ml-2">HTML</span>
                   </span>
                 </a>
