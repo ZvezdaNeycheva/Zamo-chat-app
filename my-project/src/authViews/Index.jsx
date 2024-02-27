@@ -11,6 +11,11 @@ import { LockScreen } from "./LockScreen";
 import { Login } from "./Login";
 import { Register } from "./Register";
 import { RecoverPassword } from "./RecoverPassword";
+import './assets/libs/magnific-popup/magnific-popup.css';
+import './assets/libs/owl.carousel/assets/owl.carousel.min.css';
+import './assets/libs/owl.carousel/assets/owl.theme.default.min.css';
+import './assets/css/icons.css';
+import './assets/css/tailwind.css';
 
 export function Index() {
     return (
@@ -18,12 +23,12 @@ export function Index() {
                 <Meta title={'Chat App'}></Meta>
 
                 {/* <!-- magnific-popup css --> */}
-                <link href="./assets/libs/magnific-popup/magnific-popup.css" rel="stylesheet" type="text/css" />
+                {/* <link href="./assets/libs/magnific-popup/magnific-popup.css" rel="stylesheet" type="text/css" /> */}
                 {/* <!-- owl.carousel css --> */}
-                <link rel="stylesheet" href="./assets/libs/owl.carousel/assets/owl.carousel.min.css" />
+                {/* <link rel="stylesheet" href="./assets/libs/owl.carousel/assets/owl.carousel.min.css" />
                 <link rel="stylesheet" href="./assets/libs/owl.carousel/assets/owl.theme.default.min.css" />
                 <link rel="stylesheet" href="./assets/css/icons.css" />
-                <link rel="stylesheet" href="./assets/css/tailwind.css" />
+                <link rel="stylesheet" href="./assets/css/tailwind.css" /> */}
 
                 <div className="lg:flex">
                     {/* <!-- Start left sidebar-menu --> */}
