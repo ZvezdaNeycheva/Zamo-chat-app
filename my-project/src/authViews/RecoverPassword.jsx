@@ -22,11 +22,11 @@ export function RecoverPassword() {
             <div className="mx-5 lg:mx-20 lg:col-start-5 lg:col-span-4">
               <div className="text-center">
                 {/* <a href="Index.jsx" className="block mb-10"> */}
-                <NavLink to='/index' className="block mb-10"> Index{" "}</NavLink>
+                <NavLink to='/index' className="block mb-10"> 
 
                   <img src="assets/images/logo-dark.png" alt="" className="block h-8 mx-auto dark:hidden" />
                   <img src="assets/images/logo-light.png" alt="" className="hidden h-8 mx-auto logo-light dark:block"/>
-                {/* </a> */}
+                {/* </a> */}</NavLink>
                 <h4 className="mb-2 text-gray-800 text-21 dark:text-gray-50"> Reset Password </h4>
                 <p className="mb-6 text-gray-500 dark:text-gray-300"> Reset Password With Chatvia. </p>
               </div>
