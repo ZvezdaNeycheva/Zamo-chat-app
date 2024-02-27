@@ -20,7 +20,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/lock-screen" element={<LockScreen />} />
-        <Route path="/recoverpw" element={<RecoverPassword />} />
+        <Route path="/recover" element={<RecoverPassword />} />
       </Routes>
         <div className="App">
           <Index />
