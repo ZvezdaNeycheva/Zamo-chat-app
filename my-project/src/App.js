@@ -36,7 +36,7 @@ function App() {
         <Route path="/user-profile-details" element={<UserProfileDetails />} />
       </Routes>
         <div className="App">
-          <Index />
+          {/* <Index /> */}
         </div>
     </Router>
   );
