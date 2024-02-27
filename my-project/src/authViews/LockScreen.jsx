@@ -21,9 +21,10 @@ export function LockScreen() {
           <div className="grid items-center justify-center grid-cols-1 lg:grid-cols-12 auth-bg">
             <div className="mx-5 lg:mx-20 lg:col-start-5 lg:col-span-4">
               <div className="text-center">
-                <NavLink to="/index">Index</NavLink>
+                <NavLink to="/index" className="block mb-10">
                 <img src="assets/images/logo-dark.png" alt="" className="block h-8 mx-auto dark:hidden" />
                 <img src="assets/images/logo-light.png" alt="" className="hidden h-8 mx-auto logo-light dark:block" />
+                </NavLink>
                 <h4 className="mb-2 text-gray-800 text-21 dark:text-gray-50"> Lock screen </h4>
                 <p className="mb-6 text-gray-500 dark:text-gray-300"> Enter your password to unlock the screen! </p>
               </div>
