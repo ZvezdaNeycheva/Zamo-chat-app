@@ -57,7 +57,7 @@ export function Index() {
                                         <div className="col-span-8 sm:col-span-4">
                                             <div className="flex items-center">
                                                 <div className="block ltr:mr-2 rtl:ml-2 lg:hidden">
-                                                    <a href="javascript: void(0);" className="p-2 text-gray-500 user-chat-remove text-16"><i className="ri-arrow-left-s-line"></i></a>
+                                                    <a href="#" onClick={() => {}} className="p-2 text-gray-500 user-chat-remove text-16"><i className="ri-arrow-left-s-line"></i></a>
                                                 </div>
                                                 <div className="rtl:ml-3 ltr:mr-3">
                                                     <img src="assets/images/users/avatar-4.jpg" className="rounded-full h-9 w-9" alt="" />
