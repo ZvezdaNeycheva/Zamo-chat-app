@@ -1,6 +1,5 @@
 import React from 'react';
 import { Meta } from "../components/Meta/Meta";
-import { Index } from './Index.jsx';
 import { NavLink } from 'react-router-dom';
 import './assets/libs/magnific-popup/magnific-popup.css';
 import './assets/libs/owl.carousel/assets/owl.carousel.min.css';
@@ -25,10 +24,10 @@ export function Login() {
           <div className="grid items-center justify-center grid-cols-1 lg:grid-cols-12 auth-bg">
             <div className="mx-5 lg:mx-20 lg:col-start-5 lg:col-span-4">
               <div className="text-center">
-                <NavLink to="/" className="block mb-10" > Index </NavLink>
+                <NavLink to="/" className="block mb-10" > 
                 <img src="assets/images/logo-dark.png" alt="" className="block h-8 mx-auto dark:hidden" />
                 <img src="assets/images/logo-light.png" alt="" className="hidden h-8 mx-auto logo-light dark:block" />
-
+                </NavLink>
                 <h4 className="mb-2 text-gray-800 text-21 dark:text-gray-50"> Sign in </h4>
                 <p className="mb-6 text-gray-500 dark:text-gray-300">
                   Sign in to continue to ChatApp.
