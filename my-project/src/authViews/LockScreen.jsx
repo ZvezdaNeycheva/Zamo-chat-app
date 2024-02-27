@@ -1,7 +1,9 @@
-import { Meta } from "../components/Meta";
+import { Meta } from "../components/Meta/Meta";
 import { Index } from "./Index";
 import React from 'react';
 import { NavLink } from 'react-router-dom';
+import { Login } from "./Login";
+
 
 export function LockScreen() {
   return (
@@ -42,7 +44,7 @@ export function LockScreen() {
                     alt=""
                     className="hidden h-8 mx-auto logo-light dark:block"
                   />
-                </a>
+                {/* </a> */}
                 <h4 className="mb-2 text-gray-800 text-21 dark:text-gray-50">
                   Lock screen
                 </h4>
