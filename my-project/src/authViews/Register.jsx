@@ -88,9 +88,9 @@ export function Register() {
           </div>
         </div>
       </div>
-      <script src="assets/libs/jquery/jquery.min.js"></script>
-      <script src="assets/libs/@popperjs/core/umd/popper.min.js"></script>
-      <script src="assets/libs/simplebar/simplebar.min.js"></script>
+      <script src="./assets/libs/jquery/jquery.min.js"></script>
+      <script src="./assets/libs/@popperjs/core/umd/popper.min.js"></script>
+      <script src="./assets/libs/simplebar/simplebar.min.js"></script>
     </>
   );
 }

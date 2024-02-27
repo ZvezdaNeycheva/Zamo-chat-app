@@ -624,9 +624,9 @@ export function Index() {
                 {/* <!-- owl.carousel js --> */}
                 <script src="./assets/libs/owl.carousel/owl.carousel.min.js"></script>
                 {/* <!-- page init --> */}
-                <script src="assets/js/pages/index.init.js"></script>
-                <script src="assets/js/pages/profile.init.js"></script>
-                <script src="assets/js/app.js"></script>
+                <script src="./assets/js/pages/index.init.js"></script>
+                <script src="./assets/js/pages/profile.init.js"></script>
+                <script src="./assets/js/app.js"></script>
         </>
     )
 }
