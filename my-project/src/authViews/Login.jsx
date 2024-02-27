@@ -45,9 +45,10 @@ export function Login() {
                       </div>
                       <div className="mb-6">
                         <div className="float-right">
-                          <a href="./RecoverPassword.jsx" className="text-gray-500 text-13 ">
+                          {/* <a href="./RecoverPassword.jsx" className="text-gray-500 text-13 ">
                             Forgot password?
-                          </a>
+                          </a> */}
+                          <NavLink to='/recover' className="text-gray-500 text-13 ">Forgot password?</NavLink>
                         </div>
                         <label className="font-medium text-gray-700 dark:text-gray-200">
                           Password
@@ -76,9 +77,11 @@ export function Login() {
               </div>
               <div className="mt-10 text-center">
                 <p className="mb-5 text-gray-700 dark:text-gray-200"> Don't have an account ?{" "}
-                  <a href="./Register.jsx" className="fw-medium text-violet-500">
+                  {/* <a href="./Register.jsx" className="fw-medium text-violet-500">
                     Signup now{" "}
-                  </a>{" "}
+                  </a>{" "} */}
+                  <NavLink to='/register' className="fw-medium text-violet-500 "> Signup now{" "}</NavLink>
+
                 </p>
                 <p className="text-gray-700 dark:text-gray-200"> © Chatvia. Crafted with{" "}
                   <i className="text-red-500 mdi mdi-heart" /> by Themesbrand
