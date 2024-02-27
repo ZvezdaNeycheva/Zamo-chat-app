@@ -1,7 +1,7 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { Meta } from "../components/Meta/Meta";
-import { Index } from "./Index";
+import { Index } from './Index.jsx';
 import { Login } from "./Login";
 
 export function LockScreen() {
@@ -9,12 +9,12 @@ export function LockScreen() {
     <>
       <Meta title={'LockScreen'} />
       {/* magnific-popup css */}
-      <link href="assets/libs/magnific-popup/magnific-popup.css" rel="stylesheet" type="text/css"/>
+      <link href="./assets/libs/magnific-popup/magnific-popup.css" rel="stylesheet" type="text/css"/>
       {/* owl.carousel css */}
-      <link rel="stylesheet" href="assets/libs/owl.carousel/assets/owl.carousel.min.css"/>
-      <link rel="stylesheet" href="assets/libs/owl.carousel/assets/owl.theme.default.min.css"/>
-      <link rel="stylesheet" href="assets/css/icons.css" />
-      <link rel="stylesheet" href="assets/css/tailwind.css" />
+      <link rel="stylesheet" href="./assets/libs/owl.carousel/assets/owl.carousel.min.css"/>
+      <link rel="stylesheet" href="./assets/libs/owl.carousel/assets/owl.theme.default.min.css"/>
+      <link rel="stylesheet" href="./assets/css/icons.css" />
+      <link rel="stylesheet" href="./assets/css/tailwind.css" />
 
       <div className="w-full h-full">
         <div className="px-5 py-24 sm:px-24 lg:px-0">
@@ -34,7 +34,7 @@ export function LockScreen() {
                       <img src="assets/images/users/avatar-1.jpg" className="w-24 h-24 mx-auto border-4 rounded-full border-gray-50 dark:border-zinc-600" alt="thumbnail" />
                       <h5 className="mt-3 text-base text-gray-700 dark:text-gray-200"> Patricia Smith </h5>
                     </div>
-                    <form action="index.html">
+                    <form action="Index.jsx">
                       <div className="mb-5">
                         <label className="font-medium text-gray-700 dark:text-gray-200"> Password </label>
                         <div className="flex items-center mt-2 mb-3 rounded-3 bg-slate-50/50 dark:bg-transparent">
@@ -67,9 +67,9 @@ export function LockScreen() {
         </div>
       </div>
 
-      <script src="assets/libs/jquery/jquery.min.js"></script>
-      <script src="assets/libs/@popperjs/core/umd/popper.min.js"></script>
-      <script src="assets/libs/simplebar/simplebar.min.js"></script>
+      <script src="./assets/libs/jquery/jquery.min.js"></script>
+      <script src="./assets/libs/@popperjs/core/umd/popper.min.js"></script>
+      <script src="./assets/libs/simplebar/simplebar.min.js"></script>
     </>
   );
 }

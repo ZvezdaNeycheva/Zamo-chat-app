@@ -1,24 +1,24 @@
 import React from 'react';
 import { Meta } from "../components/Meta/Meta";
-
+import { Index } from './Index.jsx';
 export function Login() {
   return (
     <>
       <Meta title={'Login'} />
       {/* magnific-popup css */}
-      <link href="assets/libs/magnific-popup/magnific-popup.css" rel="stylesheet" type="text/css" />
+      <link href="./assets/libs/magnific-popup/magnific-popup.css" rel="stylesheet" type="text/css" />
       {/* owl.carousel css */}
-      <link rel="stylesheet" href="assets/libs/owl.carousel/assets/owl.carousel.min.css"/>
-      <link rel="stylesheet" href="assets/libs/owl.carousel/assets/owl.theme.default.min.css" />
-      <link rel="stylesheet" href="assets/css/icons.css" />
-      <link rel="stylesheet" href="assets/css/tailwind.css" />
+      <link rel="stylesheet" href="./assets/libs/owl.carousel/assets/owl.carousel.min.css"/>
+      <link rel="stylesheet" href="./assets/libs/owl.carousel/assets/owl.theme.default.min.css" />
+      <link rel="stylesheet" href="./assets/css/icons.css" />
+      <link rel="stylesheet" href="./assets/css/tailwind.css" />
 
       <div className="w-full h-full">
         <div className="px-5 py-24 sm:px-24 lg:px-0">
           <div className="grid items-center justify-center grid-cols-1 lg:grid-cols-12 auth-bg">
             <div className="mx-5 lg:mx-20 lg:col-start-5 lg:col-span-4">
               <div className="text-center">
-                <a href="index.html" className="block mb-10">
+                <a href="Index.jsx" className="block mb-10">
                   <img src="assets/images/logo-dark.png" alt="" className="block h-8 mx-auto dark:hidden"/>
                   <img src="assets/images/logo-light.png" alt="" className="hidden h-8 mx-auto logo-light dark:block" />
                 </a>
@@ -30,7 +30,7 @@ export function Login() {
               <div className="bg-white card dark:bg-zinc-800 dark:border-transparent">
                 <div className="p-5">
                   <div className="p-4">
-                    <form action="index.html">
+                    <form action="Index.jsx">
                       <div className="mb-5">
                         <label className="font-medium text-gray-700 dark:text-gray-200">
                           Username
@@ -44,7 +44,7 @@ export function Login() {
                       </div>
                       <div className="mb-6">
                         <div className="float-right">
-                          <a href="auth-recoverpw.html" className="text-gray-500 text-13 ">
+                          <a href="./RecoverPassword.jsx" className="text-gray-500 text-13 ">
                             Forgot password?
                           </a>
                         </div>
@@ -75,7 +75,7 @@ export function Login() {
               </div>
               <div className="mt-10 text-center">
                 <p className="mb-5 text-gray-700 dark:text-gray-200"> Don't have an account ?{" "}
-                  <a href="auth-register.html" className="fw-medium text-violet-500">
+                  <a href="./Register.jsx" className="fw-medium text-violet-500">
                     Signup now{" "}
                   </a>{" "}
                 </p>
@@ -87,9 +87,9 @@ export function Login() {
           </div>
         </div>
       </div>
-      <script src="assets/libs/jquery/jquery.min.js"></script>
-      <script src="assets/libs/@popperjs/core/umd/popper.min.js"></script>
-      <script src="assets/libs/simplebar/simplebar.min.js"></script>
+      <script src="./assets/libs/jquery/jquery.min.js"></script>
+      <script src="./assets/libs/@popperjs/core/umd/popper.min.js"></script>
+      <script src="./assets/libs/simplebar/simplebar.min.js"></script>
     </>
   );
 }

@@ -15,25 +15,15 @@ import { RecoverPassword } from "./RecoverPassword";
 export function Index() {
     return (
         <>
-
-            <head>
                 <Meta title={'Chat App'}></Meta>
 
                 {/* <!-- magnific-popup css --> */}
                 <link href="assets/libs/magnific-popup/magnific-popup.css" rel="stylesheet" type="text/css" />
-
                 {/* <!-- owl.carousel css --> */}
                 <link rel="stylesheet" href="assets/libs/owl.carousel/assets/owl.carousel.min.css" />
-
                 <link rel="stylesheet" href="assets/libs/owl.carousel/assets/owl.theme.default.min.css" />
-
                 <link rel="stylesheet" href="assets/css/icons.css" />
                 <link rel="stylesheet" href="assets/css/tailwind.css" />
-
-            </head>
-
-            <body>
-
 
                 <div className="lg:flex">
                     {/* <!-- Start left sidebar-menu --> */}
@@ -47,29 +37,11 @@ export function Index() {
                     <div className="chat-leftsidebar lg:w-[380px] group-data-[theme-color=violet]:bg-slate-50 group-data-[theme-color=green]:bg-green-50/20 group-data-[theme-color=red]:bg-red-50/20 shadow overflow-y-hidden mb-[80px] lg:mb-0 group-data-[theme-color=violet]:dark:bg-zinc-700 group-data-[theme-color=green]:dark:bg-zinc-700 group-data-[theme-color=red]:dark:bg-zinc-700">
                         <div>
                             {/* <!-- Start Profile tab-pane --> */}
-                            <div className="tab-content">
-                                <Profile />
-                            </div>
-
-                            <div className="tab-content active">
-                                <Chats />
-
-                            </div>
-
-                            <div className="tab-content">
-                                <Groups />
-
-                            </div>
-
-                            <div className="tab-content">
-                                <Contacts />
-
-                            </div>
-
-                            <div className="tab-content">
-                                <Settings />
-
-                            </div>
+                            <div className="tab-content"> <Profile /> </div>
+                            <div className="tab-content active"> <Chats /> </div>
+                            <div className="tab-content"> <Groups /> </div>
+                            <div className="tab-content"> <Contacts /> </div>
+                            <div className="tab-content"> <Settings /> </div>
                         </div>
                     </div>
                     {/* <!-- end chat-leftsidebar --> */}
@@ -213,7 +185,6 @@ export function Index() {
                                                 </li>
                                                 {/* <!-- Modal end --> */}
 
-
                                                 <li className="px-3">
                                                     <a href="#" className="hidden text-gray-500 dark:text-gray-300 lg:block profileTab">
                                                         <i className="text-xl ri-group-line"></i>
@@ -312,7 +283,6 @@ export function Index() {
                                                             </div>
                                                         </div>
                                                     </div>
-
                                                     <div className="font-medium text-gray-700 rtl:text-left text-14 dark:text-gray-300">Patricia Smith</div>
                                                 </div>
                                             </div>
@@ -355,9 +325,7 @@ export function Index() {
 
                                                     <div className="flex gap-2 mb-2">
                                                         <div className="relative px-5 py-3 text-white rounded-lg ltr:rounded-bl-none rtl:rounded-br-none group-data-[theme-color=violet]:bg-violet-500 group-data-[theme-color=green]:bg-green-500 group-data-[theme-color=red]:bg-red-500">
-                                                            <p className="mb-0">
-                                                                & Next meeting tomorrow 10.00AM
-                                                            </p>
+                                                            <p className="mb-0"> & Next meeting tomorrow 10.00AM </p>
                                                             <p className="mt-1 mb-0 text-xs text-right text-white/50"><i className="align-middle ri-time-line"></i> <span className="align-middle">10:05</span></p>
                                                             <div className="before:content-[''] before:absolute before:border-[5px] before:border-transparent group-data-[theme-color=violet]:ltr:before:border-l-violet-500 group-data-[theme-color=violet]:ltr:before:border-t-violet-500 group-data-[theme-color=green]:ltr:before:border-l-green-500 group-data-[theme-color=green]:ltr:before:border-t-green-500 group-data-[theme-color=red]:ltr:before:border-l-red-500 group-data-[theme-color=red]:ltr:before:border-t-red-500 group-data-[theme-color=violet]:rtl:before:border-r-violet-500 group-data-[theme-color=violet]:rtl:before:border-t-violet-500 group-data-[theme-color=green]:rtl:before:border-r-green-500 group-data-[theme-color=green]:rtl:before:border-t-green-500 group-data-[theme-color=red]:rtl:before:border-r-red-500 group-data-[theme-color=red]:rtl:before:border-t-red-500 ltr:before:left-0 rtl:before:right-0 before:-bottom-2"></div>
                                                         </div>
@@ -373,7 +341,6 @@ export function Index() {
                                                             </div>
                                                         </div>
                                                     </div>
-
                                                     <div className="font-medium text-gray-700 text-14 dark:text-gray-300">Doris Brown</div>
                                                 </div>
 
@@ -410,7 +377,6 @@ export function Index() {
 
                                                     <div className="font-medium text-gray-700 rtl:text-left text-14 dark:text-gray-300">Patricia Smith</div>
                                                 </div>
-
                                             </div>
                                         </li>
 
@@ -422,7 +388,6 @@ export function Index() {
 
                                                 <div>
                                                     <div className="flex gap-2 mb-2">
-
                                                         <div className="relative px-5 py-3 text-white rounded-lg ltr:rounded-bl-none rtl:rounded-br-none group-data-[theme-color=violet]:bg-violet-500 group-data-[theme-color=green]:bg-green-500 group-data-[theme-color=red]:bg-red-500">
                                                             <div className="before:content-[''] before:absolute before:border-[5px] before:border-transparent group-data-[theme-color=violet]:ltr:before:border-l-violet-500 group-data-[theme-color=violet]:ltr:before:border-t-violet-500 group-data-[theme-color=green]:ltr:before:border-l-green-500 group-data-[theme-color=green]:ltr:before:border-t-green-500 group-data-[theme-color=red]:ltr:before:border-l-red-500 group-data-[theme-color=red]:ltr:before:border-t-red-500 group-data-[theme-color=violet]:rtl:before:border-r-violet-500 group-data-[theme-color=violet]:rtl:before:border-t-violet-500 group-data-[theme-color=green]:rtl:before:border-r-green-500 group-data-[theme-color=green]:rtl:before:border-t-green-500 group-data-[theme-color=red]:rtl:before:border-r-red-500 group-data-[theme-color=red]:rtl:before:border-t-red-500 ltr:before:left-0 rtl:before:right-0 before:-bottom-2"></div>
                                                             <ul className="relative mb-0">
@@ -496,12 +461,10 @@ export function Index() {
                                                                 <a className="block w-full px-4 py-2 text-sm font-normal text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/50 dark:text-gray-100 dark:hover:bg-zinc-600 ltr:text-left rtl:text-right" href="#">Delete <i className="text-gray-500 rtl:float-left ltr:float-right dark:text-gray-200 ri-delete-bin-line"></i></a>
                                                             </div>
                                                         </div>
-
                                                     </div>
 
                                                     <div className="font-medium text-gray-700 text-14 dark:text-gray-300">Doris Brown</div>
                                                 </div>
-
                                             </div>
                                         </li>
 
@@ -513,7 +476,6 @@ export function Index() {
 
                                                 <div>
                                                     <div className="flex justify-end gap-2 mb-2">
-
                                                         <div className="relative order-2 px-5 py-3 text-gray-700 rounded-lg rounded-br-none bg-gray-50 dark:bg-zinc-700">
                                                             <div className="before:content-[''] before:absolute before:border-[5px] before:border-transparent ltr:before:border-r-gray-50 ltr:before:border-t-gray-50 rtl:before:border-l-gray-50 rtl:before:border-t-gray-50 ltr:before:right-0 rtl:before:left-0 before:-bottom-2 ltr:dark:before:border-t-zinc-700 ltr:dark:before:border-r-zinc-700 rtl:dark:before:border-t-zinc-700 rtl:dark:before:border-l-zinc-700"></div>
                                                             <div className="p-2 mb-2 bg-white rounded dark:bg-zinc-800">
@@ -539,7 +501,6 @@ export function Index() {
                                                                                     <i className="text-lg text-gray-500 ri-more-2-fill dark:text-gray-300"></i>
                                                                                 </a>
                                                                                 <div className="absolute left-0 right-auto z-50 hidden py-2 my-6 text-left list-none bg-white border-none rounded shadow-lg lg:ltr:right-0 lg:ltr:left-auto rtl:left-0 rtl:right-auto dropdown-menu w-36 bg-clip-padding dark:bg-zinc-700" aria-labelledby="dropdownMenuButton20">
-
                                                                                     <a className="block w-full px-4 py-2 text-sm font-normal text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/50 dark:text-gray-100 dark:hover:bg-zinc-600 ltr:text-left rtl:text-right" href="#">Forward <i className="text-gray-500 rtl:float-left ltr:float-right dark:text-gray-100 ri-chat-forward-line"></i></a>
                                                                                     <a className="block w-full px-4 py-2 text-sm font-normal text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/50 dark:text-gray-100 dark:hover:bg-zinc-600 ltr:text-left rtl:text-right" href="#">Delete <i className="text-gray-500 rtl:float-left ltr:float-right dark:text-gray-100 ri-delete-bin-line"></i></a>
                                                                                 </div>
@@ -563,12 +524,9 @@ export function Index() {
                                                                 <a className="block w-full px-4 py-2 text-sm font-normal text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/50 dark:text-gray-100 dark:hover:bg-zinc-600 ltr:text-left rtl:text-right" href="#">Delete <i className="text-gray-500 rtl:float-left ltr:float-right dark:text-gray-100 ri-delete-bin-line"></i></a>
                                                             </div>
                                                         </div>
-
                                                     </div>
-
                                                     <div className="font-medium text-gray-700 rtl:text-left text-14 dark:text-gray-300">Patricia Smith</div>
                                                 </div>
-
                                             </div>
                                         </li>
 
@@ -582,34 +540,29 @@ export function Index() {
                                                     <div className="flex gap-2 mb-2">
                                                         <div className="relative px-5 py-3 text-white rounded-lg ltr:rounded-bl-none rtl:rounded-br-none group-data-[theme-color=violet]:bg-violet-500 group-data-[theme-color=green]:bg-green-500 group-data-[theme-color=red]:bg-red-500">
                                                             <div className="before:content-[''] before:absolute before:border-[5px] before:border-transparent group-data-[theme-color=violet]:ltr:before:border-l-violet-500 group-data-[theme-color=violet]:ltr:before:border-t-violet-500 group-data-[theme-color=green]:ltr:before:border-l-green-500 group-data-[theme-color=green]:ltr:before:border-t-green-500 group-data-[theme-color=red]:ltr:before:border-l-red-500 group-data-[theme-color=red]:ltr:before:border-t-red-500 group-data-[theme-color=violet]:rtl:before:border-r-violet-500 group-data-[theme-color=violet]:rtl:before:border-t-violet-500 group-data-[theme-color=green]:rtl:before:border-r-green-500 group-data-[theme-color=green]:rtl:before:border-t-green-500 group-data-[theme-color=red]:rtl:before:border-r-red-500 group-data-[theme-color=red]:rtl:before:border-t-red-500 ltr:before:left-0 rtl:before:right-0 before:-bottom-2"></div>
-                                                            <div className="flex items-end gap-2 mb-0 text-white text-14">
-                                                                <p className="mb-0">typing</p>
+                                                                <div className="flex items-end gap-2 mb-0 text-white text-14">
+                                                                    <p className="mb-0">typing</p>
 
-                                                                <div className="animate-typing flex gap-0.5">
-                                                                    <p className="w-1 h-1 mb-1 bg-white rounded-full dot animate-bounce"></p>
-                                                                    <p className="w-1 h-1 mb-1 bg-white rounded-full dot-2 "></p>
-                                                                    <p className="w-1 h-1 mb-1 bg-white rounded-full dot-3 animate-bounce"></p>
+                                                                    <div className="animate-typing flex gap-0.5">
+                                                                        <p className="w-1 h-1 mb-1 bg-white rounded-full dot animate-bounce"></p>
+                                                                        <p className="w-1 h-1 mb-1 bg-white rounded-full dot-2 "></p>
+                                                                        <p className="w-1 h-1 mb-1 bg-white rounded-full dot-3 animate-bounce"></p>
+                                                                    </div>
                                                                 </div>
                                                             </div>
-
                                                         </div>
-                                                    </div>
 
                                                     <div className="font-medium text-gray-700 text-14 dark:text-gray-300">Doris Brown</div>
                                                 </div>
-
                                             </div>
                                         </li>
-
                                     </ul>
                                 </div>
                                 {/* <!-- end chat conversation end --> */}
 
                                 {/* <!-- start chat input section --> */}
                                 <div className="z-40 w-full p-6 mb-0 bg-white border-t lg:mb-1 border-gray-50 dark:bg-zinc-800 dark:border-zinc-700">
-
                                     <div className="flex gap-2">
-
                                         <div className="flex-grow">
                                             <input type="text" className="w-full border-transparent rounded bg-gray-50 placeholder:text-14 text-14 dark:bg-zinc-700 dark:placeholder:text-gray-300 dark:text-gray-300" placeholder="Enter Message..." />
                                         </div>
@@ -641,7 +594,6 @@ export function Index() {
                                                     </li>
                                                 </ul>
                                             </div>
-
                                         </div>
                                     </div>
                                 </div>
@@ -649,7 +601,6 @@ export function Index() {
 
                             </div>
                             {/* <!-- end chat conversation section --> */}
-
 
                             {/* <!-- start User profile detail sidebar --> */}
                             <UserProfileDetails />
@@ -660,24 +611,17 @@ export function Index() {
                     {/* <!-- End User chat --> */}
                 </div>
 
-
                 <script src="assets/libs/jquery/jquery.min.js"></script>
                 <script src="assets/libs/@popperjs/core/umd/popper.min.js"></script>
                 <script src="assets/libs/simplebar/simplebar.min.js"></script>
-
                 {/* <!-- Magnific Popup--> */}
                 <script src="assets/libs/magnific-popup/jquery.magnific-popup.min.js"></script>
-
                 {/* <!-- owl.carousel js --> */}
                 <script src="assets/libs/owl.carousel/owl.carousel.min.js"></script>
-
                 {/* <!-- page init --> */}
                 <script src="assets/js/pages/index.init.js"></script>
-
                 <script src="assets/js/pages/profile.init.js"></script>
-
                 <script src="assets/js/app.js"></script>
-            </body>
         </>
     )
 }

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Meta } from "../components/Meta/Meta";
 import { Login } from "./Login";
+import { Index } from './Index.jsx';
 
 export function Register() {
   return (
@@ -8,19 +9,19 @@ export function Register() {
       <Meta title={'Register'} />
 
       {/* magnific-popup css */}
-      <link href="assets/libs/magnific-popup/magnific-popup.css" rel="stylesheet" type="text/css" />
+      <link href="./assets/libs/magnific-popup/magnific-popup.css" rel="stylesheet" type="text/css" />
       {/* owl.carousel css */}
-      <link rel="stylesheet" href="assets/libs/owl.carousel/assets/owl.carousel.min.css" />
-      <link rel="stylesheet" href="assets/libs/owl.carousel/assets/owl.theme.default.min.css" />
-      <link rel="stylesheet" href="assets/css/icons.css" />
-      <link rel="stylesheet" href="assets/css/tailwind.css" />
+      <link rel="stylesheet" href="./assets/libs/owl.carousel/assets/owl.carousel.min.css" />
+      <link rel="stylesheet" href="./assets/libs/owl.carousel/assets/owl.theme.default.min.css" />
+      <link rel="stylesheet" href="./assets/css/icons.css" />
+      <link rel="stylesheet" href="./assets/css/tailwind.css" />
 
       <div className="w-full h-full">
         <div className="px-5 py-24 sm:px-24 lg:px-0">
           <div className="grid items-center justify-center grid-cols-1 lg:grid-cols-12 auth-bg">
             <div className="mx-5 lg:mx-20 lg:col-start-5 lg:col-span-4">
               <div className="text-center">
-                <a href="index.html" className="block mb-10">
+                <a href="Index.jsx" className="block mb-10">
                   <img src="assets/images/logo-dark.png" alt="" className="block h-8 mx-auto dark:hidden" />
                   <img src="assets/images/logo-light.png" alt="" className="hidden h-8 mx-auto logo-light dark:block" />
                 </a>
@@ -32,7 +33,7 @@ export function Register() {
               <div className="bg-white card dark:bg-zinc-800 dark:border-transparent">
                 <div className="p-5">
                   <div className="p-4">
-                    <form action="index.html">
+                    <form action="Index.jsx">
                       <div className="mb-5">
                         <label className="font-medium text-gray-700 dark:text-gray-200"> Email </label>
                         <div className="flex items-center mt-2 mb-3 rounded-3 bg-slate-50/50 dark:bg-transparent">
