@@ -1,3 +1,7 @@
+import 'assets/css/bootstrap.min.css';
+import 'assets/css/icons.min.css';
+import 'assets/css/app.min.css';
+
 export default function Rtl() {
   return (
     <>

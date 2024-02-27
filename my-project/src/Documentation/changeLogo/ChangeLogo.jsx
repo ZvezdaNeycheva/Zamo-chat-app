@@ -1,10 +1,14 @@
+import 'assets/css/bootstrap.min.css';
+import 'assets/css/icons.min.css';
+import 'assets/css/app.min.css';
+
 import React from "react";
 
 const ChangelogPage = () => {
   return (
     <>
       <meta charSet="utf-8" />
-      <title>Changelog | Chatvia - Responsive TailwindCSS Chat App</title>
+      <title>Changelog | ChatApp - Responsive TailwindCSS Chat App</title>
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <meta content="Chatvia Premium Multipurpose Admin & Dashboard Template documentation of HTML" name="description" />
       <meta content="Themesbrand" name="author" />
