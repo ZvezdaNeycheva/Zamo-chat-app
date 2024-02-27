@@ -26,7 +26,7 @@ export function RecoverPassword() {
             <div className="mx-5 lg:mx-20 lg:col-start-5 lg:col-span-4">
               <div className="text-center">
                 {/* <a href="Index.jsx" className="block mb-10"> */}
-                <NavLink to='/index' className="block mb-10"> 
+                <NavLink to='/' className="block mb-10"> 
 
                   <img src="assets/images/logo-dark.png" alt="" className="block h-8 mx-auto dark:hidden" />
                   <img src="assets/images/logo-light.png" alt="" className="hidden h-8 mx-auto logo-light dark:block"/>
