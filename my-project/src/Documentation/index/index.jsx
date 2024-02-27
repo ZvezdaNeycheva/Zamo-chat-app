@@ -13,13 +13,7 @@ export default function Index() {
       <meta name="keywords" content="Chatvia HTML documentation" />
       {/* App favicon */}
       <link rel="shortcut icon" href="./assets/images/favicon.ico" />
-      {/* TailwindCSS Css */}
-      <link href="./assets/css/bootstrap.min.css" id="bootstrap-style" rel="stylesheet" type="text/css" />
-      {/* Icons Css */}
-      <link href="./assets/css/icons.min.css" rel="stylesheet" type="text/css" />
-      {/* App Css*/}
-      <link href="./assets/css/app.min.css" id="app-style" rel="stylesheet" type="text/css" />
-      {/* Begin page */}
+    {/* Begin page */}
       <div id="layout-wrapper">
         <header id="page-topbar">
           <div className="navbar-header">

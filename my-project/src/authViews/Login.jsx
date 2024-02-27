@@ -11,14 +11,7 @@ export function Login() {
   return (
     <>
       <Meta title={'Login'} />
-      {/* magnific-popup css */}
-      {/* <link href="./assets/libs/magnific-popup/magnific-popup.css" rel="stylesheet" type="text/css" /> */}
-      {/* owl.carousel css */}
-      {/* <link rel="stylesheet" href="./assets/libs/owl.carousel/assets/owl.carousel.min.css" />
-      <link rel="stylesheet" href="./assets/libs/owl.carousel/assets/owl.theme.default.min.css" />
-      <link rel="stylesheet" href="./assets/css/icons.css" />
-      <link rel="stylesheet" href="./assets/css/tailwind.css" /> */}
-
+      
       <div className="w-full h-full">
         <div className="px-5 py-24 sm:px-24 lg:px-0">
           <div className="grid items-center justify-center grid-cols-1 lg:grid-cols-12 auth-bg">
