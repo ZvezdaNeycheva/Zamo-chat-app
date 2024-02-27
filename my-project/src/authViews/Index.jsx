@@ -18,12 +18,12 @@ export function Index() {
                 <Meta title={'Chat App'}></Meta>
 
                 {/* <!-- magnific-popup css --> */}
-                <link href="assets/libs/magnific-popup/magnific-popup.css" rel="stylesheet" type="text/css" />
+                <link href="./assets/libs/magnific-popup/magnific-popup.css" rel="stylesheet" type="text/css" />
                 {/* <!-- owl.carousel css --> */}
-                <link rel="stylesheet" href="assets/libs/owl.carousel/assets/owl.carousel.min.css" />
-                <link rel="stylesheet" href="assets/libs/owl.carousel/assets/owl.theme.default.min.css" />
-                <link rel="stylesheet" href="assets/css/icons.css" />
-                <link rel="stylesheet" href="assets/css/tailwind.css" />
+                <link rel="stylesheet" href="./assets/libs/owl.carousel/assets/owl.carousel.min.css" />
+                <link rel="stylesheet" href="./assets/libs/owl.carousel/assets/owl.theme.default.min.css" />
+                <link rel="stylesheet" href="./assets/css/icons.css" />
+                <link rel="stylesheet" href="./assets/css/tailwind.css" />
 
                 <div className="lg:flex">
                     {/* <!-- Start left sidebar-menu --> */}
@@ -611,13 +611,13 @@ export function Index() {
                     {/* <!-- End User chat --> */}
                 </div>
 
-                <script src="assets/libs/jquery/jquery.min.js"></script>
-                <script src="assets/libs/@popperjs/core/umd/popper.min.js"></script>
-                <script src="assets/libs/simplebar/simplebar.min.js"></script>
+                <script src="./assets/libs/jquery/jquery.min.js"></script>
+                <script src="./assets/libs/@popperjs/core/umd/popper.min.js"></script>
+                <script src="./assets/libs/simplebar/simplebar.min.js"></script>
                 {/* <!-- Magnific Popup--> */}
-                <script src="assets/libs/magnific-popup/jquery.magnific-popup.min.js"></script>
+                <script src="./assets/libs/magnific-popup/jquery.magnific-popup.min.js"></script>
                 {/* <!-- owl.carousel js --> */}
-                <script src="assets/libs/owl.carousel/owl.carousel.min.js"></script>
+                <script src="./assets/libs/owl.carousel/owl.carousel.min.js"></script>
                 {/* <!-- page init --> */}
                 <script src="assets/js/pages/index.init.js"></script>
                 <script src="assets/js/pages/profile.init.js"></script>
