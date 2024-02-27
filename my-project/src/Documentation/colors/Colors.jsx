@@ -1,6 +1,7 @@
 import 'assets/css/bootstrap.min.css';
 import 'assets/css/icons.min.css';
 import 'assets/css/app.min.css';
+import { NavLink } from 'react-router-dom';
 
 export default function Colors() {
   return (
@@ -20,7 +21,7 @@ export default function Colors() {
             <div className="d-flex">
               {/* LOGO */}
               <div className="navbar-brand-box">
-                <a href="index.html" className="logo logo-light">
+                <NavLink to="../index/index.jsx" className="logo logo-light">
                   <span className="logo-sm">
                     <img src="./assets/images/logo.svg" alt="" height={25} />
                   </span>
@@ -28,7 +29,7 @@ export default function Colors() {
                     <img src="./assets/images/logo-light.png" alt="" height={22} />{" "}
                     <span className="badge badge-soft-success ml-2"> HTML </span>
                   </span>
-                </a>
+                </NavLink>
               </div>
               <button type="button" className="btn btn-sm px-3 font-size-24 header-item waves-effect d-lg-none" id="vertical-menu-btn">
                 <i className="mdi mdi-menu" />
@@ -67,48 +68,48 @@ export default function Colors() {
               <ul className="metismenu list-unstyled" id="side-menu">
                 <li className="menu-title">Docs</li>
                 <li>
-                  <a href="index.html" className="waves-effect">
+                  <NavLink to="../index/index.jsx" className="waves-effect">
                     <i className="mdi mdi-text-box-outline" />
                     <span>Introduction</span>
-                  </a>
+                  </NavLink>
                 </li>
                 <li>
-                  <a href="setup.html" className=" waves-effect">
+                  <NavLink to="../setup/setup.jsx" className=" waves-effect">
                     <i className="mdi mdi-cog-outline" />
                     <span>Setup</span>
-                  </a>
+                  </NavLink>
                 </li>
                 <li className="menu-title">Themes</li>
                 <li>
-                  <a href="light.html" className=" waves-effect">
+                  <NavLink to="../light/light.jsx" className=" waves-effect">
                     <i className="mdi mdi-white-balance-sunny" />
                     <span>Light Version</span>
-                  </a>
+                  </NavLink>
                 </li>
                 <li>
-                  <a href="dark.html" className=" waves-effect">
+                  <NavLink to="../dark/dark.jsx" className=" waves-effect">
                     <i className="mdi mdi-weather-night" />
                     <span>Dark Version</span>
-                  </a>
+                  </NavLink>
                 </li>
                 <li>
-                  <a href="rtl.html" className=" waves-effect">
+                  <NavLink to="../rtl/rtl.jsx" className=" waves-effect">
                     <i className="mdi mdi-web" />
                     <span>RTL Version</span>
-                  </a>
+                  </NavLink>
                 </li>
                 <li>
-                  <a href="colors.html" className=" waves-effect">
+                  <NavLink to="../colors/colors.jsx" className=" waves-effect">
                     <i className="mdi mdi-palette" />
                     <span>Color Version</span>
-                  </a>
+                  </NavLink>
                 </li>
                 <li className="menu-title">Other</li>
                 <li>
-                  <a href="changelog.html" className=" waves-effect">
+                  <NavLink to="../changelog/changelog.jsx" className=" waves-effect">
                     <i className="mdi mdi-format-list-bulleted" />
                     <span>Changelog</span>
-                  </a>
+                  </NavLink>
                 </li>
               </ul>
             </div>
