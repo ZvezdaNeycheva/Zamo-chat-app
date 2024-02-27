@@ -30,6 +30,15 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/lock-screen" element={<LockScreen />} />
         <Route path="/recover" element={<RecoverPassword />} />
+        <Route path="/chats" element={<Chats />} />
+        <Route path="/contacts" element={<Contacts />} />
+        <Route path="/groups" element={<Groups />} />
+        <Route path="/meta" element={<Meta />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/settings" element={<Settings />} />
+        <Route path="/sidebar-menu" element={<SidebarMenu />} />
+        <Route path="/switcher" element={<Switcher />} />
+        <Route path="/user-profile-details" element={<UserProfileDetails />} />
       </Routes>
         <div className="App">
           <Index />
