@@ -3,19 +3,16 @@ import { Meta } from "../components/Meta/Meta";
 import { Login } from "./Login";
 import { Index } from './Index.jsx';
 import { NavLink } from 'react-router-dom';
+import "./assets/libs/magnific-popup/magnific-popup.css";
+import "./assets/libs/owl.carousel/assets/owl.carousel.min.css";
+import "./assets/libs/owl.carousel/assets/owl.theme.default.min.css";
+import "./assets/css/icons.css";
+import "./assets/css/tailwind.css";
 
 export function Register() {
   return (
     <>
       <Meta title={'Register'} />
-
-      {/* magnific-popup css */}
-      <link href="./assets/libs/magnific-popup/magnific-popup.css" rel="stylesheet" type="text/css" />
-      {/* owl.carousel css */}
-      <link rel="stylesheet" href="./assets/libs/owl.carousel/assets/owl.carousel.min.css" />
-      <link rel="stylesheet" href="./assets/libs/owl.carousel/assets/owl.theme.default.min.css" />
-      <link rel="stylesheet" href="./assets/css/icons.css" />
-      <link rel="stylesheet" href="./assets/css/tailwind.css" />
 
       <div className="w-full h-full">
         <div className="px-5 py-24 sm:px-24 lg:px-0">
