@@ -4,17 +4,17 @@ export function SidebarMenu() {
     return (
         <div className="sidebar-menu w-full lg:w-[75px] shadow lg:flex lg:flex-col flex flex-row justify-between items-center fixed lg:relative z-40 bottom-0 bg-white dark:bg-zinc-600 ">
             <div className="hidden lg:my-5 lg:block">
-                <a href="index.html" className="block dark:hidden">
+                <NavLink to="../index/index.jsx" className="block dark:hidden">
                     <span>
                         {/* <img src="../../../public/assets/images/logo.svg" alt="" className="h-[30px]" /> */}
                     </span>
-                </a>
+                </NavLink>
 
-                <a href="index.html" className="hidden dark:block">
+                <NavLink to="../index/index.jsx" className="hidden dark:block">
                     <span>
                         {/* <img src="../../../public/assets/images/logo.svg" alt="" className="h-[30px]" /> */}
                     </span>
-                </a>
+                </NavLink>
             </div>
             {/* <!-- end navbar-brand-box --> */}
 
@@ -97,7 +97,7 @@ export function SidebarMenu() {
                     {/*profile picture need to fix the "to="#""" */}
                     <li className="relative lg:mt-4 dropdown lg:dropup">
                         <NavLink to="#" className="dropdown-toggle" id="dropdownButton2" data-bs-toggle="dropdown">
-                            <img src="../../../public/assets/images/users/avatar-1.jpg" alt="" className="w-10 h-10 p-1 mx-auto rounded-full bg-gray-50 dark:bg-zinc-700" />
+                            {/* <img src="../../../public/assets/images/users/avatar-1.jpg" alt="" className="w-10 h-10 p-1 mx-auto rounded-full bg-gray-50 dark:bg-zinc-700" /> */}
                         </NavLink>
 
                         <ul className="absolute z-40 hidden float-left w-40 py-2 mx-4 mb-12 text-left list-none bg-white border-none rounded-lg shadow-lg dropdown-menu bg-clip-padding dark:bg-zinc-700" aria-labelledby="dropdownButton2">
