@@ -1,3 +1,4 @@
+
 export function Chats() {
 
     return (
@@ -22,7 +23,7 @@ export function Chats() {
                         <div className="text-center">
                             <a href="#" className="block p-2 mt-4 rounded group-data-[theme-color=violet]:bg-slate-100 group-data-[theme-color=green]:bg-green-50 group-data-[theme-color=red]:bg-red-50 group-data-[theme-color=violet]:dark:bg-zinc-600 group-data-[theme-color=green]:dark:bg-zinc-600 group-data-[theme-color=red]:dark:bg-zinc-600">
                                 <div className="absolute inset-0 text-center">
-                                    <img src="assets/images/users/avatar-2.jpg" alt="user-img" className="mx-auto rounded-full w-9 h-9" />
+                                    <img src="./assets/images/users/avatar-2.jpg" alt="user-img" className="mx-auto rounded-full w-9 h-9" />
                                     <span className="absolute w-2.5 h-2.5 bg-green-500 border-2 border-white rounded-full top-7 lg:right-5 dark:border-zinc-600"></span>
                                 </div>
 
@@ -32,7 +33,7 @@ export function Chats() {
                         <div className="text-center">
                             <a href="#" className="block p-2 mt-4 rounded group-data-[theme-color=violet]:bg-slate-100 group-data-[theme-color=green]:bg-green-50 group-data-[theme-color=red]:bg-red-50 group-data-[theme-color=violet]:dark:bg-zinc-600 group-data-[theme-color=green]:dark:bg-zinc-600 group-data-[theme-color=red]:dark:bg-zinc-600">
                                 <div className="absolute inset-0 block text-center">
-                                    <img src="assets/images/users/avatar-4.jpg" alt="user-img" className="mx-auto rounded-full w-9 h-9" />
+                                    <img src="./assets/images/users/avatar-4.jpg" alt="user-img" className="mx-auto rounded-full w-9 h-9" />
                                     <span className="absolute w-2.5 h-2.5 bg-green-500 border-2 border-white rounded-full top-7 lg:right-5 dark:border-zinc-600"></span>
                                 </div>
 
@@ -43,7 +44,7 @@ export function Chats() {
                         <div className="text-center">
                             <a href="#" className="block p-2 mt-4 rounded group-data-[theme-color=violet]:bg-slate-100 group-data-[theme-color=green]:bg-green-50 group-data-[theme-color=red]:bg-red-50 group-data-[theme-color=violet]:dark:bg-zinc-600 group-data-[theme-color=green]:dark:bg-zinc-600 group-data-[theme-color=red]:dark:bg-zinc-600">
                                 <div className="absolute inset-0 block text-center">
-                                    <img src="assets/images/users/avatar-5.jpg" alt="user-img" className="mx-auto rounded-full w-9 h-9" />
+                                    <img src="./assets/images/users/avatar-5.jpg" alt="user-img" className="mx-auto rounded-full w-9 h-9" />
                                     <span className="absolute w-2.5 h-2.5 bg-green-500 border-2 border-white rounded-full top-7 lg:right-5 dark:border-zinc-600"></span>
                                 </div>
 
@@ -54,7 +55,7 @@ export function Chats() {
                         <div className="text-center">
                             <a href="#" className="block p-2 mt-4 rounded group-data-[theme-color=violet]:bg-slate-100 group-data-[theme-color=green]:bg-green-50 group-data-[theme-color=red]:bg-red-50 group-data-[theme-color=violet]:dark:bg-zinc-600 group-data-[theme-color=green]:dark:bg-zinc-600 group-data-[theme-color=red]:dark:bg-zinc-600">
                                 <div className="absolute inset-0 block text-center">
-                                    <img src="assets/images/users/avatar-6.jpg" alt="user-img" className="mx-auto rounded-full w-9 h-9" />
+                                    <img src="./assets/images/users/avatar-6.jpg" alt="user-img" className="mx-auto rounded-full w-9 h-9" />
                                     <span className="absolute w-2.5 h-2.5 bg-green-500 border-2 border-white rounded-full top-7 lg:right-5 dark:border-zinc-600"></span>
                                 </div>
 
@@ -90,7 +91,7 @@ export function Chats() {
                                 <a href="#">
                                     <div className="flex">
                                         <div className="relative self-center ltr:mr-3 rtl:ml-3">
-                                            <img src="assets/images/users/avatar-2.jpg" className="rounded-full w-9 h-9" alt="" />
+                                            <img src="./assets/images/users/avatar-2.jpg" className="rounded-full w-9 h-9" alt="" />
                                             <span className="absolute w-2.5 h-2.5 bg-green-500 border-2 border-white rounded-full top-7 ltr:right-1 rtl:left-1 dark:border-zinc-600"></span>
                                         </div>
 
@@ -107,7 +108,7 @@ export function Chats() {
                                 <a href="#">
                                     <div className="relative flex">
                                         <div className="relative self-center ltr:mr-3 rtl:ml-3">
-                                            <img src="assets/images/users/avatar-3.jpg" className="rounded-full w-9 h-9" alt="" />
+                                            <img src="./assets/images/users/avatar-3.jpg" className="rounded-full w-9 h-9" alt="" />
                                             <span className="absolute w-2.5 h-2.5 bg-yellow-500 border-2 border-white rounded-full top-7 ltr:right-1 rtl:left-1 dark:border-zinc-600"></span>
                                         </div>
                                         <div className="flex-grow overflow-hidden">
@@ -145,7 +146,7 @@ export function Chats() {
                                 <a href="#">
                                     <div className="flex">
                                         <div className="relative self-center ltr:mr-3 rtl:ml-3">
-                                            <img src="assets/images/users/avatar-4.jpg" className="rounded-full w-9 h-9" alt="" />
+                                            <img src="./assets/images/users/avatar-4.jpg" className="rounded-full w-9 h-9" alt="" />
                                             <span className="absolute w-2.5 h-2.5 bg-green-500 border-2 border-white rounded-full top-7 ltr:right-1 rtl:left-1 dark:border-zinc-600"></span>
                                         </div>
                                         <div className="flex-grow overflow-hidden">
@@ -183,7 +184,7 @@ export function Chats() {
                                 <a href="#">
                                     <div className="flex">
                                         <div className="relative self-center ltr:mr-3 rtl:ml-3">
-                                            <img src="assets/images/users/avatar-6.jpg" className="rounded-full w-9 h-9" alt="" />
+                                            <img src="./assets/images/users/avatar-6.jpg" className="rounded-full w-9 h-9" alt="" />
                                             <span className="absolute w-2.5 h-2.5 bg-yellow-500 border-2 border-white rounded-full top-7 ltr:right-1 rtl:left-1 dark:border-zinc-600"></span>
                                         </div>
                                         <div className="flex-grow overflow-hidden">
@@ -247,7 +248,7 @@ export function Chats() {
                                 <a href="#">
                                     <div className="flex">
                                         <div className="relative self-center ltr:mr-3 rtl:ml-3">
-                                            <img src="assets/images/users/avatar-7.jpg" className="rounded-full w-9 h-9" alt="" />
+                                            <img src="./assets/images/users/avatar-7.jpg" className="rounded-full w-9 h-9" alt="" />
                                             <span className="absolute w-2.5 h-2.5 bg-green-500 border-2 border-white rounded-full top-7 ltr:right-1 rtl:left-1 dark:border-zinc-600"></span>
                                         </div>
                                         <div className="flex-grow overflow-hidden">
@@ -283,7 +284,7 @@ export function Chats() {
                                 <a href="#">
                                     <div className="flex">
                                         <div className="relative self-center ltr:mr-3 rtl:ml-3">
-                                            <img src="assets/images/users/avatar-8.jpg" className="rounded-full w-9 h-9" alt="" />
+                                            <img src="./assets/images/users/avatar-8.jpg" className="rounded-full w-9 h-9" alt="" />
                                             <span className="absolute w-2.5 h-2.5 bg-green-500 border-2 border-white rounded-full top-7 ltr:right-1 rtl:left-1 dark:border-zinc-600"></span>
                                         </div>
                                         <div className="flex-grow overflow-hidden">
