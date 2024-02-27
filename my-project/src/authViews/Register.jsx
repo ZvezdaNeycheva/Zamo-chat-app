@@ -2,6 +2,7 @@ import React from 'react';
 import { Meta } from "../components/Meta/Meta";
 import { Login } from "./Login";
 import { Index } from './Index.jsx';
+import { NavLink } from 'react-router-dom';
 
 export function Register() {
   return (
