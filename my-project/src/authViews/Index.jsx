@@ -5,7 +5,7 @@ import { Meta } from "../components/Meta/Meta";
 import { Profile } from "../components/Profile/Profile";
 import { Settings } from "../components/Settings/Settings";
 import { SidebarMenu } from "../components/Sidebar-menu/SidebarMenu";
-import { Switcher } from "../components/Switcher/Switcher";
+// import { Switcher } from "../components/Switcher/Switcher";
 import { UserProfileDetails } from "../components/UserProfileDetails/UserProfileDetails";
 import { LockScreen } from "./LockScreen";
 import { Login } from "./Login";
@@ -28,7 +28,7 @@ export function Index() {
                     {/* <!-- end left sidebar-menu --> */}
 
                     {/* <!-- switcher --> */}
-                    <Switcher />
+                    {/* <Switcher /> */}
 
                     {/* <!-- start chat-leftsidebar --> */}
                     <div className="chat-leftsidebar lg:w-[380px] group-data-[theme-color=violet]:bg-slate-50 group-data-[theme-color=green]:bg-green-50/20 group-data-[theme-color=red]:bg-red-50/20 shadow overflow-y-hidden mb-[80px] lg:mb-0 group-data-[theme-color=violet]:dark:bg-zinc-700 group-data-[theme-color=green]:dark:bg-zinc-700 group-data-[theme-color=red]:dark:bg-zinc-700">
