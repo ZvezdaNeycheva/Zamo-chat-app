@@ -67,14 +67,12 @@ export function Chats() {
                             <a href="#" className="block p-2 mt-4 rounded group-data-[theme-color=violet]:bg-slate-100 group-data-[theme-color=green]:bg-green-50 group-data-[theme-color=red]:bg-red-50 group-data-[theme-color=violet]:dark:bg-zinc-600 group-data-[theme-color=green]:dark:bg-zinc-600 group-data-[theme-color=red]:dark:bg-zinc-600">
                                 <div className="absolute inset-0 block mx-auto rounded-full w-9 h-9 group-data-[theme-color=violet]:bg-violet-500/20 group-data-[theme-color=green]:bg-green-500/20 group-data-[theme-color=red]:bg-red-500/20">
                                     <span className="font-medium leading-9 group-data-[theme-color=violet]:text-violet-500 group-data-[theme-color=green]:text-green-500 group-data-[theme-color=red]:text-red-500">
-                                        T
                                     </span>
                                     <span className="absolute w-2.5 h-2.5 bg-green-500 border-2 border-white rounded-full top-7 lg:right-1 dark:border-zinc-600"></span>
                                 </div>
                                 <h5 className="mt-4 mb-0 truncate text-13 dark:text-gray-50">Teresa</h5>
                             </a>
                         </div>
-
                     </div>
                     {/* <!-- end user status carousel --> */}
                 </div>
@@ -85,7 +83,6 @@ export function Chats() {
                     <h5 className="px-6 mb-4 text-16 dark:text-gray-50">Recent</h5>
 
                     <div className="h-[610px] px-2" data-simplebar>
-
                         <ul className="chat-user-list">
                             <li className="px-5 py-[15px] group-data-[theme-color=violet]:hover:bg-slate-100 group-data-[theme-color=green]:hover:bg-green-50/50 group-data-[theme-color=red]:hover:bg-red-50/50 transition-all ease-in-out border-b border-white/20 dark:border-zinc-700 group-data-[theme-color=violet]:dark:hover:bg-zinc-600 group-data-[theme-color=green]:dark:hover:bg-zinc-600 group-data-[theme-color=red]:dark:hover:bg-zinc-600 dark:hover:border-zinc-700">
                                 <a href="#">
@@ -319,9 +316,7 @@ export function Chats() {
                     </div>
                 </div>
                 {/* <!-- End chat-message-list --> */}
-
             </div>
-
         </>
     );
 }

@@ -99,7 +99,6 @@ export function SidebarMenu() {
                     </li>
                 </ul>
             </div>
-
         </div>
     );
 }

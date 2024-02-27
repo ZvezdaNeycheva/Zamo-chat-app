@@ -9,7 +9,7 @@ export function Settings() {
         <div className="p-6 text-center border-b border-gray-100 dark:border-zinc-500">
           <div className="relative mb-4">
             <img
-              src="assets/images/users/avatar-1.jpg"
+              src="./assets/images/users/avatar-1.jpg"
               className="w-24 h-24 p-1 mx-auto border border-gray-100 rounded-full dark:border-zinc-800"
               alt=""
             />
