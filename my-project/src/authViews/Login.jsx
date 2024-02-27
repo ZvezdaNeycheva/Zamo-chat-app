@@ -8,7 +8,7 @@ export function Login() {
       {/* magnific-popup css */}
       <link href="./assets/libs/magnific-popup/magnific-popup.css" rel="stylesheet" type="text/css" />
       {/* owl.carousel css */}
-      <link rel="stylesheet" href="./assets/libs/owl.carousel/assets/owl.carousel.min.css"/>
+      <link rel="stylesheet" href="./assets/libs/owl.carousel/assets/owl.carousel.min.css" />
       <link rel="stylesheet" href="./assets/libs/owl.carousel/assets/owl.theme.default.min.css" />
       <link rel="stylesheet" href="./assets/css/icons.css" />
       <link rel="stylesheet" href="./assets/css/tailwind.css" />
@@ -18,13 +18,13 @@ export function Login() {
           <div className="grid items-center justify-center grid-cols-1 lg:grid-cols-12 auth-bg">
             <div className="mx-5 lg:mx-20 lg:col-start-5 lg:col-span-4">
               <div className="text-center">
-                <a href="Index.jsx" className="block mb-10">
-                  <img src="assets/images/logo-dark.png" alt="" className="block h-8 mx-auto dark:hidden"/>
-                  <img src="assets/images/logo-light.png" alt="" className="hidden h-8 mx-auto logo-light dark:block" />
-                </a>
+                <NavLink to="/index" className="block mb-10" >Index</NavLink>
+                <img src="assets/images/logo-dark.png" alt="" className="block h-8 mx-auto dark:hidden" />
+                <img src="assets/images/logo-light.png" alt="" className="hidden h-8 mx-auto logo-light dark:block" />
+
                 <h4 className="mb-2 text-gray-800 text-21 dark:text-gray-50"> Sign in </h4>
                 <p className="mb-6 text-gray-500 dark:text-gray-300">
-                  Sign in to continue to Chatvia.
+                  Sign in to continue to ChatApp.
                 </p>
               </div>
               <div className="bg-white card dark:bg-zinc-800 dark:border-transparent">
@@ -39,7 +39,7 @@ export function Login() {
                           <span className="flex items-center px-4 py-2 text-gray-500 border border-r-0 border-gray-100 rounded rounded-r-none dark:border-zinc-600" id="basic-addon3">
                             <i className="ri-user-2-line text-16" />
                           </span>
-                          <input type="text" className="w-full border-gray-100 rounded rounded-l-none placeholder:text-14 bg-slate-50/50 text-14 focus:ring-0 dark:bg-zinc-700 dark:border-zinc-600 dark:text-gray-200" placeholder="Enter Username" aria-label="Enter Username" aria-describedby="basic-addon3"/>
+                          <input type="text" className="w-full border-gray-100 rounded rounded-l-none placeholder:text-14 bg-slate-50/50 text-14 focus:ring-0 dark:bg-zinc-700 dark:border-zinc-600 dark:text-gray-200" placeholder="Enter Username" aria-label="Enter Username" aria-describedby="basic-addon3" />
                         </div>
                       </div>
                       <div className="mb-6">
@@ -55,11 +55,11 @@ export function Login() {
                           <span className="flex items-center px-4 py-2 text-gray-500 border border-r-0 border-gray-100 rounded rounded-r-none dark:border-zinc-600" id="basic-addon4" >
                             <i className="ri-lock-2-line text-16" />
                           </span>
-                          <input type="password" className="w-full border-gray-100 rounded rounded-l-none placeholder:text-14 bg-slate-50/50 text-14 focus:ring-0 dark:bg-zinc-700 dark:border-zinc-600 dark:text-gray-200" placeholder="Enter Password" aria-label="Enter Password" aria-describedby="basic-addon4"/>
+                          <input type="password" className="w-full border-gray-100 rounded rounded-l-none placeholder:text-14 bg-slate-50/50 text-14 focus:ring-0 dark:bg-zinc-700 dark:border-zinc-600 dark:text-gray-200" placeholder="Enter Password" aria-label="Enter Password" aria-describedby="basic-addon4" />
                         </div>
                       </div>
                       <div className="flex items-center mb-6">
-                        <input type="checkbox" className="border-gray-100 rounded focus:ring-1 checked:ring-1 focus:ring-offset-0 focus:outline-0 checked:bg-violet-500 dark:bg-zinc-600 dark:border-zinc-600 dark:checked:bg-violet-500 " id="memberCheck1"/>
+                        <input type="checkbox" className="border-gray-100 rounded focus:ring-1 checked:ring-1 focus:ring-offset-0 focus:outline-0 checked:bg-violet-500 dark:bg-zinc-600 dark:border-zinc-600 dark:checked:bg-violet-500 " id="memberCheck1" />
                         <label className="font-medium text-gray-700 ltr:ml-2 rtl:mr-2 dark:text-gray-200" htmlFor="remember-check">
                           Remember me
                         </label>
