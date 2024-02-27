@@ -33,7 +33,7 @@ export function LockScreen() {
             <div className="mx-5 lg:mx-20 lg:col-start-5 lg:col-span-4">
               <div className="text-center">
                 {/* <a href="index.html" className="block mb-10"> */}
-                <NavLink to="/about">About</NavLink>
+                <NavLink to="/index">Index</NavLink>
                   <img
                     src="assets/images/logo-dark.png"
                     alt=""
