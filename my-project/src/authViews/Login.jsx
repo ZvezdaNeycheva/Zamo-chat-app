@@ -83,8 +83,8 @@ export function Login() {
                   <NavLink to='/register' className="fw-medium text-violet-500 "> Signup now{" "}</NavLink>
 
                 </p>
-                <p className="text-gray-700 dark:text-gray-200"> © Chatvia. Crafted with{" "}
-                  <i className="text-red-500 mdi mdi-heart" /> by Themesbrand
+                <p className="text-gray-700 dark:text-gray-200"> © ChatApp. Crafted {" "}
+                  <i className="text-red-500 mdi mdi-heart" /> by Andrey, Zvezdy, Marty
                 </p>
               </div>
             </div>
