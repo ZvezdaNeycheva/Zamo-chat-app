@@ -20,7 +20,7 @@ export function Settings() {
               <i className="leading-10 ri-pencil-fill text-16" />
             </a>
           </div>
-          <h5 className="mb-1 text-16 dark:text-gray-50">{/* need to add a FullName here*/}</h5>
+          <h5 className="mb-1 text-16 dark:text-gray-50">{/* need to add a username here*/}</h5>
           <div className="relative mb-1 dropdown">
             <a
               className="pb-1 text-gray-500 dropdown-toggle d-block dark:text-gray-300"
@@ -80,7 +80,7 @@ export function Settings() {
                       </button>
                     </div>
                     <p className="mb-1 text-gray-500 dark:text-gray-300">Name</p>
-                    <h5 className="text-sm dark:text-gray-50">{/* need to add a FullName here*/}</h5>
+                    <h5 className="text-sm dark:text-gray-50">{/* need to add a username here*/}</h5>
                   </div>
                   <div className="mt-5">
                     <p className="mb-1 text-gray-500 dark:text-gray-300">Email</p>

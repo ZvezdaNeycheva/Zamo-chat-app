@@ -56,7 +56,7 @@ export function Profile() {
               alt=""
             /> */}
           </div>
-          <h5 className="mb-1 text-16 dark:text-gray-50">{/* need to add a FullName here*/}</h5>
+          <h5 className="mb-1 text-16 dark:text-gray-50">{/* need to add a username here*/}</h5>
           <h5 className="mb-0 truncate text-14 ltr:block rtl:hidden">
             <a href="#" className="text-gray-500 dark:text-gray-50">
               <i className="text-green-500 ltr:ml-1 rtl:mr-1 ri-record-circle-fill text-10 " />{" "}
@@ -101,7 +101,7 @@ export function Profile() {
                 <div className="p-5">
                   <div>
                     <p className="mb-1 text-gray-500 dark:text-gray-300">Name</p>
-                    <h5 className="text-sm dark:text-gray-50">{/* need to add a FullName here*/}</h5>
+                    <h5 className="text-sm dark:text-gray-50">{/* need to add a username here*/}</h5>
                   </div>
                   <div className="mt-5">
                     <p className="mb-1 text-gray-500 dark:text-gray-300">Email</p>

@@ -15,7 +15,7 @@ export function Login() {
 
   const { user, setContext } = useContext(AppContext);
   const [form, setForm] = useState({
-    email: "",
+    username: "",
     password: "",
   });
   const [errorMsg, setErrorMsg] = useState("");
@@ -35,12 +35,12 @@ export function Login() {
 
   const login = async () => {
     try {
-      const credentials = await loginUser(form.email, form.password);
+      const credentials = await loginUser(form.username, form.password);
       setContext({ user: credentials.user, userData: null });
       navigate("/");
     } catch (error) {
       if (error.code === "auth/invalid-credential") {
-        setErrorMsg("The email or/and password you entered is/are incorrect. Please try again.");
+        setErrorMsg("The username or/and password you entered is/are incorrect. Please try again.");
       } else if (error.code === "auth/too-many-requests") {
         setErrorMsg("Access to this account has been temporarily disabled due to many failed login attempts. You can immediately restore it by resetting your password or you can try again later.");
       } else {
@@ -120,7 +120,6 @@ export function Login() {
                     Signup now{" "}
                   </a>{" "} */}
                   <NavLink to='/register' className="fw-medium text-violet-500 "> Register {" "}</NavLink>
-
                 </p>
                 <p className="text-gray-700 dark:text-gray-200"> © ChatApp. Crafted {" "}
                   <i className="text-red-500 mdi mdi-heart" /> by Andy, Zvezdy, Marty

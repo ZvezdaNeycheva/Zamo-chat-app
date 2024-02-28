@@ -15,7 +15,7 @@ import './assets/css/tailwind.css';
 export function Register() {
   const { setContext } = useContext(AppContext);
   const [form, setForm] = useState({
-    FullName: '',
+    uid: '',
     username: '',
     email: '',
     phoneNumber: '',
@@ -24,6 +24,8 @@ export function Register() {
     role: 'user',
     image: '',
     status: '',
+    friendsRequests: '',
+    friendsList: '',
   });
 
   const [errorMessage, setErrorMessage] = useState('');
@@ -69,9 +71,8 @@ export function Register() {
       const credentials = await registerUser(form.email, form.password);
       const readableDate = format(new Date(), 'yyyy-MM-dd HH:mm:ss');
       await createUserProfile(
-        form.FullName,
-        form.username,
         credentials.user.uid,
+        form.username,
         form.email,
         form.phoneNumber,
         form.password,
