@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route, Switch } from "react-router-dom";
 import "./App.css";
 import { Index } from "./authViews/Index";
@@ -14,31 +15,62 @@ import { Settings } from "./components/Settings/Settings";
 import { SidebarMenu } from "./components/Sidebar-menu/SidebarMenu";
 // import { Switcher } from "./components/Switcher/Switcher"
 import { UserProfileDetails } from "./components/UserProfileDetails/UserProfileDetails";
+import { AppContext } from "./appContext/AppContext";
 
+import { auth } from "./config/firebase-config";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { getUserData } from "./service/users.service";
 
 function App() {
+  const [context, setContext] = useState({
+    user: null,
+    userData: null,
+  });
+  const [user, loading, error] = useAuthState(auth);
+
+  useEffect(() => {
+    if (user) {
+      getUserData(user.uid)
+        .then((snapshot) => {
+          if (snapshot.exists()) {
+            console.log(snapshot.val());
+            setContext({
+              user,
+              userData: snapshot.val()[Object.keys(snapshot.val())[0]],
+            });
+          }
+        })
+        .catch((error) => {
+          console.error("Error fetching user data:", error);
+        });
+    }
+  }, [user]);
+
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Index />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/lock-screen" element={<LockScreen />} />
-        <Route path="/recover" element={<RecoverPassword />} />
-        <Route path="/chats" element={<Chats />} />
-        <Route path="/contacts" element={<Contacts />} />
-        <Route path="/groups" element={<Groups />} />
-        <Route path="/meta" element={<Meta />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/settings" element={<Settings />} />
-        <Route path="/sidebar-menu" element={<SidebarMenu />} />
-        {/* <Route path="/switcher" element={<Switcher />} /> */}
-        <Route path="/user-profile-details" element={<UserProfileDetails />} />
-      </Routes>
-        <div className="App">
-          {/* <Index /> */}
-        </div>
-    </Router>
+    <AppContext.Provider value={{ ...context, setContext }}>
+      <Router>
+        <Routes>
+          <Route path="*" element={<Index />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/lock-screen" element={<LockScreen />} />
+          <Route path="/recover" element={<RecoverPassword />} />
+          <Route path="/chats" element={<Chats />} />
+          <Route path="/contacts" element={<Contacts />} />
+          <Route path="/groups" element={<Groups />} />
+          <Route path="/meta" element={<Meta />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/settings" element={<Settings />} />
+          <Route path="/sidebar-menu" element={<SidebarMenu />} />
+          {/* <Route path="/switcher" element={<Switcher />} /> */}
+          <Route
+            path="/user-profile-details"
+            element={<UserProfileDetails />}
+          />
+        </Routes>
+        <div className="App">{/* <Index /> */}</div>
+      </Router>
+    </AppContext.Provider>
   );
 }
 

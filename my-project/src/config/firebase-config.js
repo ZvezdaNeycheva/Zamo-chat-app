@@ -1,5 +1,7 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
+import { getAuth } from "firebase/auth";
+import { getDatabase } from "firebase/database";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -11,7 +13,7 @@ const firebaseConfig = {
   storageBucket: "final-project-456f5.appspot.com",
   messagingSenderId: "938556894180",
   appId: "1:938556894180:web:e445fd101facddb02a35f1",
-  dateabaseURL: "https://final-project-456f5-default-rtdb.europe-west1.firebasedatabase.app/",
+  databaseURL: "https://final-project-456f5-default-rtdb.europe-west1.firebasedatabase.app/",
 };
 
 // Initialize Firebase
