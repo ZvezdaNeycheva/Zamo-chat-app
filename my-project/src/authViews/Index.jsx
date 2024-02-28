@@ -11,6 +11,7 @@ import { LockScreen } from "./LockScreen";
 import { Login } from "./Login";
 import { Register } from "./Register";
 import { RecoverPassword } from "./RecoverPassword";
+
 import './assets/libs/magnific-popup/magnific-popup.css';
 import './assets/libs/owl.carousel/assets/owl.carousel.min.css';
 import './assets/libs/owl.carousel/assets/owl.theme.default.min.css';
@@ -607,18 +608,6 @@ export function Index() {
                     </div>
                     {/* <!-- End User chat --> */}
                 </div>
-
-                <script src="./assets/libs/jquery/jquery.min.js"></script>
-                <script src="./assets/libs/@popperjs/core/umd/popper.min.js"></script>
-                <script src="./assets/libs/simplebar/simplebar.min.js"></script>
-                {/* <!-- Magnific Popup--> */}
-                <script src="./assets/libs/magnific-popup/jquery.magnific-popup.min.js"></script>
-                {/* <!-- owl.carousel js --> */}
-                <script src="./assets/libs/owl.carousel/owl.carousel.min.js"></script>
-                {/* <!-- page init --> */}
-                <script src="./assets/js/pages/index.init.js"></script>
-                <script src="./assets/js/pages/profile.init.js"></script>
-                <script src="./assets/js/app.js"></script>
         </>
     )
 }

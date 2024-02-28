@@ -11,13 +11,13 @@ export function Login() {
   return (
     <>
       <Meta title={'Login'} />
-      
+
       <div className="w-full h-full">
         <div className="px-5 py-24 sm:px-24 lg:px-0">
           <div className="grid items-center justify-center grid-cols-1 lg:grid-cols-12 auth-bg">
             <div className="mx-5 lg:mx-20 lg:col-start-5 lg:col-span-4">
               <div className="text-center">
-                <NavLink to="/" className="block mb-10" > 
+                <NavLink to="/" className="block mb-10" >
                 <img src="assets/images/logo-dark.png" alt="" className="block h-8 mx-auto dark:hidden" />
                 <img src="assets/images/logo-light.png" alt="" className="hidden h-8 mx-auto logo-light dark:block" />
                 </NavLink>

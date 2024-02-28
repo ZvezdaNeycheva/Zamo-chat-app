@@ -13,7 +13,7 @@ export function LockScreen() {
   return (
     <>
       <Meta title={'LockScreen'} />
-      
+
       <div className="w-full h-full">
         <div className="px-5 py-24 sm:px-24 lg:px-0">
           <div className="grid items-center justify-center grid-cols-1 lg:grid-cols-12 auth-bg">
