@@ -15,7 +15,7 @@ export function Login() {
 
   const { user, setContext } = useContext(AppContext);
   const [form, setForm] = useState({
-    username: "",
+    email: "",
     password: "",
   });
   const [errorMsg, setErrorMsg] = useState("");
@@ -29,7 +29,7 @@ export function Login() {
 
   useEffect(() => {
     if (user) {
-      navigate(location.state?.from.pathname || "/");
+      navigate(location.state?.from.pathname || "");
     }
   }, [user]);
 
@@ -76,13 +76,13 @@ export function Login() {
                       {/* Username*/}
                       <div className="mb-5">
                         <label className="font-medium text-gray-700 dark:text-gray-200">
-                          Username
+                          Email
                         </label>
                         <div className="flex items-center mt-2 mb-3 rounded-3 bg-slate-50/50 dark:bg-transparent">
                           <span className="flex items-center px-4 py-2 text-gray-500 border border-r-0 border-gray-100 rounded rounded-r-none dark:border-zinc-600" id="basic-addon3">
                             <i className="ri-user-2-line text-16" />
                           </span>
-                          <input value={form.username} onChange={updateForm("username")} type="text" className="w-full border-gray-100 rounded rounded-l-none placeholder:text-14 bg-slate-50/50 text-14 focus:ring-0 dark:bg-zinc-700 dark:border-zinc-600 dark:text-gray-200" placeholder="Enter Username" aria-label="Enter Username" aria-describedby="basic-addon3" />
+                          <input value={form.email} onChange={updateForm("email")} type="text" className="w-full border-gray-100 rounded rounded-l-none placeholder:text-14 bg-slate-50/50 text-14 focus:ring-0 dark:bg-zinc-700 dark:border-zinc-600 dark:text-gray-200" placeholder="Enter Email" aria-label="Enter Email" aria-describedby="basic-addon3" />
                         </div>
                       </div>
 
