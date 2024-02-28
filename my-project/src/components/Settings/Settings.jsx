@@ -1,4 +1,12 @@
+import { AppContext } from "../../appContext/AppContext";
+import { useContext, useState } from "react";
+
 export function Settings() {
+  const { user, setContext } = useContext(AppContext);
+  // const [photo, setPhoto] = useState(null);
+  // const [loading, setLoading] = useState(false);
+  const [photoURL] = useState(user?.photoURL);
+
   return (
     <>
       {/* Start profile content */}
@@ -9,9 +17,9 @@ export function Settings() {
         <div className="p-6 text-center border-b border-gray-100 dark:border-zinc-500">
           <div className="relative mb-4">
             <img
-              src="./assets/images/users/avatar-1.jpg"
+              src={photoURL}
               className="w-24 h-24 p-1 mx-auto border border-gray-100 rounded-full dark:border-zinc-800"
-              alt=""
+              alt="Avatar"
             />
             <a
               href="#!"
