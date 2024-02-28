@@ -1,4 +1,29 @@
+import React, { useContext, useEffect, useState } from "react";
+import { AppContext } from "../../appContext/AppContext";
+import { uploadProfileImage } from "../../service/auth.service";
+
 export function Profile() {
+const { user, userData } = useContext(AppContext);
+const [photo, setPhoto] = useState(null);
+const [loading, setLoading] = useState(false);
+
+const [photoURL, setPhotoURL] = useState("https://thinksport.com.au/wp-content/uploads/2020/01/avatar-.jpg");
+
+  function handleChange(e) {
+    if(e.target.files[0]){
+      setPhoto(e.target.files[0]);
+    }
+  }
+  function handleClick() {
+    uploadProfileImage(photo, user, setLoading);
+  }
+
+  useEffect(() => {
+    if (user && user.photoURL) {
+    setPhotoURL(user?.photoURL);
+    }
+  }, [user]);
+
   return (
     <>
       {/* Start profile content */}
@@ -48,14 +73,21 @@ export function Profile() {
           <h4 className="mb-0 text-gray-700 dark:text-gray-50">My Profile</h4>
         </div>
         <div className="p-6 text-center border-b border-gray-100 dark:border-zinc-600">
+          
+          {/* Profile picture */}
+          {/* need to add a profile picture HERE:*/}
           <div className="mb-4">
-            {/* need to add a profile picture HERE:*/}
-            {/* <img
-              src="./assets/images/users/avatar-1.jpg"
+            <input type="file" onChange={handleChange} id="file"/>
+            <button disabled={loading || !photo} onClick={handleClick}> Upload</button>
+            <img
+              src={photoURL}
               className="w-24 h-24 p-1 mx-auto border border-gray-100 rounded-full dark:border-zinc-800"
-              alt=""
-            /> */}
+              alt="Avatar"
+            />
           </div>
+          {/* End profile picture */}
+
+          {/* Profile Status */}
           <h5 className="mb-1 text-16 dark:text-gray-50">{/* need to add a username here*/}</h5>
           <h5 className="mb-0 truncate text-14 ltr:block rtl:hidden">
             <a href="#" className="text-gray-500 dark:text-gray-50">
@@ -70,7 +102,8 @@ export function Profile() {
             </a>
           </h5>
         </div>
-        {/* End profile user */}
+        {/* End Profile Status */}
+
         {/* Start user-profile-desc */}
         <div className="p-6 h-[550px]" data-simplebar="">
           <div>

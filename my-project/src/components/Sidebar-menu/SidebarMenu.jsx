@@ -1,10 +1,16 @@
 import { NavLink } from "react-router-dom";
 import { logoutUser } from "../../service/auth.service";
 import { AppContext } from "../../appContext/AppContext";
-import { useContext } from "react";
+import { useContext, useState } from "react";
+import { uploadProfileImage } from "../../service/auth.service";
 
 export function SidebarMenu() {
-    const { setContext } = useContext(AppContext);
+    const { user, setContext } = useContext(AppContext);
+    const [photo, setPhoto] = useState(null);
+    const [loading, setLoading] = useState(false);
+  
+    const [photoURL] = useState(user?.photoURL);
+
   
     const logout = async () => {
       try {
@@ -112,7 +118,7 @@ export function SidebarMenu() {
                     {/*profile picture need to fix the "to="#""" */}
                     <li className="relative lg:mt-4 dropdown lg:dropup">
                      <NavLink to="#" className="dropdown-toggle" id="dropdownButton2" data-bs-toggle="dropdown">
-                       <img src="../../../public/assets/images/users/avatar-1.jpg" alt="" className="w-10 h-10 p-1 mx-auto rounded-full bg-gray-50 dark:bg-zinc-700"/>
+                       <img src={photoURL} alt="Profile" className="w-10 h-10 p-1 mx-auto rounded-full bg-gray-50 dark:bg-zinc-700"/>
                      </NavLink>
 
                         <ul className="absolute z-40 hidden float-left w-40 py-2 mx-4 mb-12 text-left list-none bg-white border-none rounded-lg shadow-lg dropdown-menu bg-clip-padding dark:bg-zinc-700" aria-labelledby="dropdownButton2">
