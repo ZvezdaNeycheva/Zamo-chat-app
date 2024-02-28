@@ -400,7 +400,7 @@ export function Groups() {
             />
           </div>
           {/* Start chat-group-list */}
-          <div className="chat-message-list chat-group-list" data-simplebar="">
+          {/* <div className="chat-message-list chat-group-list" data-simplebar="">
             <ul>
               <li className="px-5 py-[15px] group-data-[theme-color=violet]:hover:bg-slate-100 group-data-[theme-color=green]:hover:bg-green-50/50 group-data-[theme-color=red]:hover:bg-red-50/50 group-data-[theme-color=violet]:dark:hover:bg-zinc-600 group-data-[theme-color=green]:dark:hover:bg-zinc-600 group-data-[theme-color=red]:dark:hover:bg-zinc-600 transition-all ease-in-out rounded">
                 <a href="#">
@@ -517,7 +517,7 @@ export function Groups() {
                 </a>
               </li>
             </ul>
-          </div>
+          </div> */}
           {/* End chat-group-list */}
         </div>
       </div>

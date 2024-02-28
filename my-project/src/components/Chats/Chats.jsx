@@ -101,7 +101,7 @@ export function Chats() {
                                 </a>
                             </li>
 
-                            <li className="unread px-5 py-[15px] group-data-[theme-color=violet]:hover:bg-slate-100 group-data-[theme-color=green]:hover:bg-green-50/50 group-data-[theme-color=red]:hover:bg-red-50/50 transition-all ease-in-out border-b border-white/20 dark:border-zinc-700 group-data-[theme-color=violet]:dark:hover:bg-zinc-600 group-data-[theme-color=green]:dark:hover:bg-zinc-600 group-data-[theme-color=red]:dark:hover:bg-zinc-600 dark:hover:border-zinc-700">
+                            {/* <li className="unread px-5 py-[15px] group-data-[theme-color=violet]:hover:bg-slate-100 group-data-[theme-color=green]:hover:bg-green-50/50 group-data-[theme-color=red]:hover:bg-red-50/50 transition-all ease-in-out border-b border-white/20 dark:border-zinc-700 group-data-[theme-color=violet]:dark:hover:bg-zinc-600 group-data-[theme-color=green]:dark:hover:bg-zinc-600 group-data-[theme-color=red]:dark:hover:bg-zinc-600 dark:hover:border-zinc-700">
                                 <a href="#">
                                     <div className="relative flex">
                                         <div className="relative self-center ltr:mr-3 rtl:ml-3">
@@ -311,7 +311,7 @@ export function Chats() {
                                         <div className="text-gray-500 text-11 dark:text-gray-300">11/07</div>
                                     </div>
                                 </a>
-                            </li>
+                            </li> */}
                         </ul>
                     </div>
                 </div>

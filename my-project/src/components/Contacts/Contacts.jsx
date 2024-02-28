@@ -74,7 +74,7 @@ export function Contacts() {
           </div>
         </div>
         {/* Start contact lists */}
-        <div className="h-[80vh]" data-simplebar="">
+        {/* <div className="h-[80vh]" data-simplebar="">
           <div className="p-6">
             <div>
               <div className="p-3 font-bold group-data-[theme-color=violet]:text-violet-500 group-data-[theme-color=green]:text-green-500 group-data-[theme-color=red]:text-red-500">
@@ -140,9 +140,9 @@ export function Contacts() {
                   </div>
                 </li>
               </ul>
-            </div>
+            </div> */}
             {/* end contact list A */}
-            <div className="mt-3">
+            {/* <div className="mt-3">
               <div className="p-3 font-bold group-data-[theme-color=violet]:text-violet-500 group-data-[theme-color=green]:text-green-500 group-data-[theme-color=red]:text-red-500">
                 C
               </div>
@@ -199,9 +199,9 @@ export function Contacts() {
                   </div>
                 </li>
               </ul>
-            </div>
+            </div> */}
             {/* end contact list C */}
-            <div className="mt-3">
+            {/* <div className="mt-3">
               <div className="p-3 font-bold group-data-[theme-color=violet]:text-violet-500 group-data-[theme-color=green]:text-green-500 group-data-[theme-color=red]:text-red-500">
                 D
               </div>
@@ -309,9 +309,9 @@ export function Contacts() {
                   </div>
                 </li>
               </ul>
-            </div>
+            </div> */}
             {/* end contact list D */}
-            <div className="mt-3">
+            {/* <div className="mt-3">
               <div className="p-3 font-bold group-data-[theme-color=violet]:text-violet-500 group-data-[theme-color=green]:text-green-500 group-data-[theme-color=red]:text-red-500">
                 I
               </div>
@@ -368,9 +368,9 @@ export function Contacts() {
                   </div>
                 </li>
               </ul>
-            </div>
+            </div> */}
             {/* end contact list I */}
-            <div className="mt-3">
+            {/* <div className="mt-3">
               <div className="p-3 font-bold group-data-[theme-color=violet]:text-violet-500 group-data-[theme-color=green]:text-green-500 group-data-[theme-color=red]:text-red-500">
                 J
               </div>
@@ -529,9 +529,9 @@ export function Contacts() {
                   </div>
                 </li>
               </ul>
-            </div>
+            </div> */}
             {/* end contact list J */}
-            <div className="mt-3">
+            {/* <div className="mt-3">
               <div className="p-3 font-bold group-data-[theme-color=violet]:text-violet-500 group-data-[theme-color=green]:text-green-500 group-data-[theme-color=red]:text-red-500">
                 M
               </div>
@@ -690,9 +690,9 @@ export function Contacts() {
                   </div>
                 </li>
               </ul>
-            </div>
+            </div> */}
             {/* end contact list M */}
-            <div className="mt-3">
+            {/* <div className="mt-3">
               <div className="p-3 font-bold group-data-[theme-color=violet]:text-violet-500 group-data-[theme-color=green]:text-green-500 group-data-[theme-color=red]:text-red-500">
                 O
               </div>
@@ -749,9 +749,9 @@ export function Contacts() {
                   </div>
                 </li>
               </ul>
-            </div>
+            </div> */}
             {/* end contact list O */}
-            <div className="mt-3">
+            {/* <div className="mt-3">
               <div className="p-3 font-bold group-data-[theme-color=violet]:text-violet-500 group-data-[theme-color=green]:text-green-500 group-data-[theme-color=red]:text-red-500">
                 P
               </div>
@@ -859,9 +859,9 @@ export function Contacts() {
                   </div>
                 </li>
               </ul>
-            </div>
+            </div> */}
             {/* end contact list P */}
-            <div className="mt-3">
+            {/* <div className="mt-3">
               <div className="p-3 font-bold group-data-[theme-color=violet]:text-violet-500 group-data-[theme-color=green]:text-green-500 group-data-[theme-color=red]:text-red-500">
                 R
               </div>
@@ -918,9 +918,9 @@ export function Contacts() {
                   </div>
                 </li>
               </ul>
-            </div>
+            </div> */}
             {/* end contact list R */}
-            <div className="mt-3">
+            {/* <div className="mt-3">
               <div className="p-3 font-bold group-data-[theme-color=violet]:text-violet-500 group-data-[theme-color=green]:text-green-500 group-data-[theme-color=red]:text-red-500">
                 S
               </div>
@@ -1079,10 +1079,10 @@ export function Contacts() {
                   </div>
                 </li>
               </ul>
-            </div>
+            </div> */}
             {/* end contact list S */}
-          </div>
-        </div>
+          {/* </div> */}
+        {/* </div> */}
         {/* end contact lists */}
       </div>
     </>
