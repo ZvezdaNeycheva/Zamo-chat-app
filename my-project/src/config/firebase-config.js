@@ -7,13 +7,13 @@ import { getDatabase } from "firebase/database";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyCcrNZcJ2hfUCM_dbJa6xJPJ0Gej3cgtvY",
-  authDomain: "final-project-456f5.firebaseapp.com",
-  projectId: "final-project-456f5",
-  storageBucket: "final-project-456f5.appspot.com",
-  messagingSenderId: "938556894180",
-  appId: "1:938556894180:web:e445fd101facddb02a35f1",
-  databaseURL: "https://final-project-456f5-default-rtdb.europe-west1.firebasedatabase.app/",
+  apiKey: "AIzaSyCJLJh9C08iNJ4oCNnysoREuHe64c26uFo",
+  authDomain: "final-project-chat-cd4de.firebaseapp.com",
+  projectId: "final-project-chat-cd4de",
+  storageBucket: "final-project-chat-cd4de.appspot.com",
+  messagingSenderId: "345534762505",
+  appId: "1:345534762505:web:7bdcafbd4412a67be6b2d8",
+  databaseURL: "https://final-project-chat-cd4de-default-rtdb.europe-west1.firebasedatabase.app/",
 };
 
 // Initialize Firebase

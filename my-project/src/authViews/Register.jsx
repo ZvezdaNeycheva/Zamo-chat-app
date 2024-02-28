@@ -41,14 +41,10 @@ export function Register() {
     }
     return true;
   };
-
-  const register = async () => {
+  
+  const register = async (event) => {
+    event.preventDefault();
     try {
-      if (form.FullName.length < 4 || form.FullName.length > 32) {
-        setErrorMessage('First name and last name must be between 4 and 32 symbols.');
-        return;
-      }
-
       const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
       if (!emailRegex.test(form.email)) {
         setErrorMessage('Please enter a valid email address.');
@@ -70,7 +66,6 @@ export function Register() {
         setErrorMessage(`Handle @${form.username} already exists`);
         return;
       }
-
       const credentials = await registerUser(form.email, form.password);
       const readableDate = format(new Date(), 'yyyy-MM-dd HH:mm:ss');
       await createUserProfile(
@@ -85,7 +80,6 @@ export function Register() {
         form.status,
         readableDate,
       );
-      console.log('IDN')
       setContext({ user: credentials.user, userData: null });
       navigate('/login');
     } catch (error) {
@@ -176,7 +170,7 @@ export function Register() {
 
                       {/* Register up button */}
                       <div className="grid">
-                        <button onClick={register} className="py-2 text-white border-transparent btn bg-violet-500 hover:bg-violet-600 text-16" type="submit">
+                        <button onClick={register} className="py-2 text-white border-transparent btn bg-violet-500 hover:bg-violet-600 text-16">
                           Register
                         </button>
                       </div>
@@ -202,9 +196,6 @@ export function Register() {
           </div>
         </div>
       </div>
-      <script src="./assets/libs/jquery/jquery.min.js"></script>
-      <script src="./assets/libs/@popperjs/core/umd/popper.min.js"></script>
-      <script src="./assets/libs/simplebar/simplebar.min.js"></script>
     </>
   );
 }
