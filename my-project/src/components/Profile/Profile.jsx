@@ -9,9 +9,12 @@ const [loading, setLoading] = useState(false);
 const [photoURL, setPhotoURL] = useState("https://thinksport.com.au/wp-content/uploads/2020/01/avatar-.jpg");
 const [open, setOpen] = useState(false);
 
-  function toggleDropdown() {
-    setOpen((prev) => !prev);
+  function toggleDropdown(event) {
+    event.preventDefault();
+    setOpen(!open);
+    console.log(open);
   }
+
 
   function handleChange(e) {
     if(e.target.files[0]){
@@ -37,12 +40,12 @@ const [open, setOpen] = useState(false);
 
           {/* Drop Down */} 
           <div className="ltr:float-right rtl:float-left" >
-          <div className={`relative flex-shrink-0 dropdown ${open ? "active" : "inactive"}`}>
+          <div className={`relative flex-shrink-0 dropdown `}>
               <button onClick={toggleDropdown} className="p-0 bottom-10 text-gray-400 border-0 btn dropdown-toggle dark:text-gray-300" data-bs-toggle="dropdown" id="dropdownMenuButtonA">
                 <i className="text-lg ri-more-2-fill" />
                 Drop
               </button>
-              <ul className="absolute z-50 block w-40 py-2 text-left list-none bg-white border border-transparent rounded shadow-lg rtl:right-auto rtl:left-0 ltr:left-auto ltr:right-0 my-7 dropdown-menu bg-clip-padding dark:bg-zinc-700 dark:shadow-sm dark:border-zinc-600"
+              <ul className={`${open ? "visible" : "invisible"} absolute z-50 block w-40 py-2 text-left list-none bg-white border border-transparent rounded shadow-lg rtl:right-auto rtl:left-0 ltr:left-auto ltr:right-0 my-7 dropdown-menu bg-clip-padding dark:bg-zinc-700 dark:shadow-sm dark:border-zinc-600`}
                 aria-labelledby="dropdownMenuButtonA">
 
                 {/* Action */} 
@@ -137,8 +140,12 @@ const [open, setOpen] = useState(false);
               <div className="block bg-white border border-t-0 border-gray-100 accordion-body dark:bg-transparent dark:border-zinc-600">
                 <div className="p-5">
                   <div>
-                    <p className="mb-1 text-gray-500 dark:text-gray-300">Name</p>
-                    <h5 className="text-sm dark:text-gray-50">{}</h5>
+                  <p className="mb-1 text-gray-500 dark:text-gray-300">Name</p>
+                    {user ? (
+                      <h5 className="text-sm dark:text-gray-50">{user.username}</h5>
+                    ) : (
+                      <h5 className="text-sm dark:text-gray-50">Guest</h5>
+                    )}
                   </div>
                   <div className="mt-5">
                     <p className="mb-1 text-gray-500 dark:text-gray-300">Email</p>
@@ -187,6 +194,5 @@ const [open, setOpen] = useState(false);
         </div>
       </div>
     </>
-
   );
 }

@@ -35,7 +35,7 @@ export function Register() {
     setForm({ ...form, [prop]: e.target.value });
   };
 
-  const validateDetails = (phoneNumber) => {
+  function validateDetails (phoneNumber) {
     const phoneNumberRegex = /^\d{10}$/;
     if (!phoneNumberRegex.test(phoneNumber)) {
       setErrorMessage('Phone number must be of 10 digits');

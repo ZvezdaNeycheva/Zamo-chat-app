@@ -16,7 +16,7 @@ import { SidebarMenu } from "./components/Sidebar-menu/SidebarMenu";
 // import { Switcher } from "./components/Switcher/Switcher"
 import { UserProfileDetails } from "./components/UserProfileDetails/UserProfileDetails";
 import { AppContext } from "./appContext/AppContext";
-
+import Authenticated from "./authenticated/Authenticated";
 import { auth } from "./config/firebase-config";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { getUserData } from "./service/users.service";
@@ -53,20 +53,17 @@ function App() {
           <Route path="*" element={<Index />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/lock-screen" element={<LockScreen />} />
+          <Route path="/lock-screen" element={<Authenticated> <LockScreen /> </Authenticated>} />
           <Route path="/recover" element={<RecoverPassword />} />
           <Route path="/chats" element={<Chats />} />
           <Route path="/contacts" element={<Contacts />} />
           <Route path="/groups" element={<Groups />} />
           <Route path="/meta" element={<Meta />} />
-          <Route path="/profile" element={<Profile />} />
+          <Route path="/profile" element={<Authenticated> <Profile /> </Authenticated>} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/sidebar-menu" element={<SidebarMenu />} />
           {/* <Route path="/switcher" element={<Switcher />} /> */}
-          <Route
-            path="/user-profile-details"
-            element={<UserProfileDetails />}
-          />
+          <Route path="/user-profile-details" element={<UserProfileDetails />}/>
         </Routes>
         <div className="App">{/* <Index /> */}</div>
       </Router>
