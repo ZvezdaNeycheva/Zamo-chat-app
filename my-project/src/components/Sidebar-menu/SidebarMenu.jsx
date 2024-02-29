@@ -8,8 +8,14 @@ export function SidebarMenu() {
     // const [photo, setPhoto] = useState(null);
     // const [loading, setLoading] = useState(false);
     const [photoURL] = useState(user?.photoURL);
-
+    const [isDarkMode, setIsDarkMode] = useState(false);
   
+    const toggleDarkMode = () => {
+        setIsDarkMode(!isDarkMode);
+      };
+
+    const darkModeClass = isDarkMode ? 'dark-mode' : '';
+
     const logout = async () => {
       try {
         await logoutUser();
@@ -100,10 +106,11 @@ export function SidebarMenu() {
                 </ul>
             </div>
 
+            {/* <!-- Start side-menu footer --> */}
             <div className="w-20 my-5 lg:w-auto">
                 <ul className="lg:block">
 
-                    {/*dark mode    need to change attribute(a)*/} 
+                    {/*dark mode need to change attribute(a)*/} 
                     <li className="hidden text-center light-dark-mode nav-item lg:block">
                         <a href="#" className="hidden dark:block dark:text-violet-100/80">
                             <i className="text-2xl ri-sun-line "></i>
@@ -113,22 +120,50 @@ export function SidebarMenu() {
                         </a>
                     </li>
 
+
                     {/*profile picture need to fix the "to="#""" */}
+                    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-TyY1JT+7QlTXtKK3j3Ukw4e68vw9vhIISuqnazn/AH7g9CeQnYg5eFRLvO53z9s" crossorigin="anonymous"/>
+
+                    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-hk90YIReR5P1XPaUnO5OmJXkTJ7HZU1QZiEN7l4cm/vLkIEEamJ/j5L/GF2RqH8R" crossorigin="anonymous"></script>
+
+
                     <li className="relative lg:mt-4 dropdown lg:dropup">
                      <NavLink to="#" className="dropdown-toggle" id="dropdownButton2" data-bs-toggle="dropdown">
                        <img src={photoURL} alt="Avatar" className="w-10 h-10 p-1 mx-auto rounded-full bg-gray-50 dark:bg-zinc-700"/>
                      </NavLink>
 
+                        {/* Dropdown */}  
                         <ul className="absolute z-40 hidden float-left w-40 py-2 mx-4 mb-12 text-left list-none bg-white border-none rounded-lg shadow-lg dropdown-menu bg-clip-padding dark:bg-zinc-700" aria-labelledby="dropdownButton2">
+                            
+                            {/* Profile */}  
                             <li>
                               <NavLink to="/profile" className="block w-full px-4 py-2 text-sm font-normal text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/30 dark:text-gray-100 dark:hover:bg-zinc-600/50">
                                 Profile
                                 <i className="text-gray-500 rtl:float-left ltr:float-right ri-profile-line text-16"></i>
                               </NavLink>
                             </li>
-                            {/* ... (other dropdown items) */}
+
+                            {/* Setting */}  
                             <li>
-                              <NavLink to="/login" className="block w-full px-4 py-2 text-sm font-normal text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/30 dark:text-gray-100 dark:hover:bg-zinc-600/50 ltr:text-left rtl:text-right" >
+                                <NavLink to="/setting" class="block w-full px-4 py-2 text-sm font-normal text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/30 dark:text-gray-100 dark:hover:bg-zinc-600/50 ltr:text-left rtl:text-right" href="#">
+                                    Setting
+                                    <i class="text-gray-500 rtl:float-left ltr:float-right ri-settings-3-line text-16"></i>
+                                </NavLink>
+                            </li>
+
+                            {/* Lock Screen */}    
+                            <li>
+                                <NavLink to="/lock-screen " class="block w-full px-4 py-2 text-sm font-normal text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/30 dark:text-gray-100 dark:hover:bg-zinc-600/50 ltr:text-left rtl:text-right" href="auth-lock-screen.html">
+                                    Lock Screen 
+                                    <i class="text-gray-500 rtl:float-left ltr:float-right ri-git-repository-private-line text-16"></i>
+                                </NavLink>
+                            </li>
+
+                            <li class="my-2 border-b border-gray-100/20"></li>
+
+                            {/* Log out */}
+                            <li>
+                              <NavLink to="/login" className="block w-full px-4 py-2 text-sm font-normal text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/30 dark:text-gray-100 dark:hover:bg-zinc-600/50 ltr:text-left rtl:text-right" href="auth-login.html">
                                 <button onClick={logout}>Log out</button>
                                 <i className="text-gray-500 rtl:float-left ltr:float-right ri-logout-circle-r-line text-16"></i>
                               </NavLink>
@@ -136,7 +171,7 @@ export function SidebarMenu() {
                         </ul>
                     </li>
                 </ul>
-            </div>
-        </div>
+            </div>    
+        </div>   
     );
 }
