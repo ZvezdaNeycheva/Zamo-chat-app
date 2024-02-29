@@ -5,11 +5,11 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AppContext } from "../appContext/AppContext";
 import { loginUser } from "../service/auth.service";
 
-import './assets/libs/magnific-popup/magnific-popup.css';
-import './assets/libs/owl.carousel/assets/owl.carousel.min.css';
-import './assets/libs/owl.carousel/assets/owl.theme.default.min.css';
-import './assets/css/icons.css';
-import './assets/css/tailwind.css';
+// import './assets/libs/magnific-popup/magnific-popup.css';
+// import './assets/libs/owl.carousel/assets/owl.carousel.min.css';
+// import './assets/libs/owl.carousel/assets/owl.theme.default.min.css';
+// import './assets/css/icons.css';
+// import './assets/css/tailwind.css';
 
 export function Login() {
 
@@ -129,9 +129,9 @@ export function Login() {
           </div>
         </div>
       </div>
-      <script src="./assets/libs/jquery/jquery.min.js"></script>
+      {/* <script src="./assets/libs/jquery/jquery.min.js"></script>
       <script src="./assets/libs/@popperjs/core/umd/popper.min.js"></script>
-      <script src="./assets/libs/simplebar/simplebar.min.js"></script>
+      <script src="./assets/libs/simplebar/simplebar.min.js"></script> */}
     </>
   );
 }

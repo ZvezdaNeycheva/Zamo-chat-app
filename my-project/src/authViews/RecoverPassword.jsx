@@ -1,11 +1,11 @@
 import React from 'react';
 import { Meta } from "../components/Meta/Meta";
 import { NavLink } from 'react-router-dom';
-import './assets/libs/magnific-popup/magnific-popup.css';
-import './assets/libs/owl.carousel/assets/owl.carousel.min.css';
-import './assets/libs/owl.carousel/assets/owl.theme.default.min.css';
-import './assets/css/icons.css';
-import './assets/css/tailwind.css';
+// import './assets/libs/magnific-popup/magnific-popup.css';
+// import './assets/libs/owl.carousel/assets/owl.carousel.min.css';
+// import './assets/libs/owl.carousel/assets/owl.theme.default.min.css';
+// import './assets/css/icons.css';
+// import './assets/css/tailwind.css';
 
 export function RecoverPassword() {
   return (
@@ -66,9 +66,9 @@ export function RecoverPassword() {
       </div>
       <script src="./"></script>
 
-      <script src="./assets/libs/jquery/jquery.min.js"></script>
+      {/* <script src="./assets/libs/jquery/jquery.min.js"></script>
       <script src="./assets/libs/@popperjs/core/umd/popper.min.js"></script>
-      <script src="./assets/libs/simplebar/simplebar.min.js"></script>
+      <script src="./assets/libs/simplebar/simplebar.min.js"></script> */}
     </>
   );
 }
