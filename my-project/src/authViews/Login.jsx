@@ -5,12 +5,6 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AppContext } from "../appContext/AppContext";
 import { loginUser } from "../service/auth.service";
 
-// import './assets/libs/magnific-popup/magnific-popup.css';
-// import './assets/libs/owl.carousel/assets/owl.carousel.min.css';
-// import './assets/libs/owl.carousel/assets/owl.theme.default.min.css';
-// import './assets/css/icons.css';
-// import './assets/css/tailwind.css';
-
 export function Login() {
 
   const { user, setContext } = useContext(AppContext);
@@ -28,14 +22,16 @@ export function Login() {
   };
 
   useEffect(() => {
+    console.log("User state:", user);
     if (user) {
-      navigate(location.state?.from.pathname || "");
+      console.log("Redirecting...");
+      navigate(location.state?.from.pathname || "*");
     }
-  }, [user]);
+  }, [user, navigate, location.state]);
 
   const login = async () => {
     try {
-      const credentials = await loginUser(form.username, form.password);
+      const credentials = await loginUser(form.email, form.password);
       setContext({ user: credentials.user, userData: null });
       navigate("/");
     } catch (error) {
@@ -63,9 +59,9 @@ export function Login() {
                 <img src="assets/images/logo-dark.png" alt="" className="block h-8 mx-auto dark:hidden" />
                 <img src="assets/images/logo-light.png" alt="" className="hidden h-8 mx-auto logo-light dark:block" />
                 </NavLink>
-                <h4 className="mb-2 text-gray-800 text-21 dark:text-gray-50"> Sign in </h4>
+                <h4 className="mb-2 text-gray-800 text-21 dark:text-gray-50"> Login </h4>
                 <p className="mb-6 text-gray-500 dark:text-gray-300">
-                  Sign in to continue to ChatApp.
+                  Login to continue to ChatApp.
                 </p>
               </div>
               <div className="bg-white card dark:bg-zinc-800 dark:border-transparent">
@@ -107,7 +103,7 @@ export function Login() {
                       </div>
                       <div className="grid">
                         <button onClick={login} className="py-2 text-white border-transparent btn bg-violet-500 hover:bg-violet-600 text-16" type="submit" >
-                          Sign in
+                          Login
                         </button>
                       </div>
                     </form>
@@ -129,9 +125,6 @@ export function Login() {
           </div>
         </div>
       </div>
-      {/* <script src="./assets/libs/jquery/jquery.min.js"></script>
-      <script src="./assets/libs/@popperjs/core/umd/popper.min.js"></script>
-      <script src="./assets/libs/simplebar/simplebar.min.js"></script> */}
     </>
   );
 }

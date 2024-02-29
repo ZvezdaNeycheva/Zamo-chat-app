@@ -129,7 +129,7 @@ export function SidebarMenu() {
                      </NavLink>
 
                         {/* Dropdown */}  
-                        <ul onClick="" className="absolute bottom-5 z-40 float-left w-40 py-2 mx-4 mb-12 text-left list-none bg-white border-none rounded-lg shadow-lg dropdown-menu bg-clip-padding dark:bg-zinc-700" aria-labelledby="dropdownButton2">
+                        <ul className="absolute bottom-5 z-40 float-left w-40 py-2 mx-4 mb-12 text-left list-none bg-white border-none rounded-lg shadow-lg dropdown-menu bg-clip-padding dark:bg-zinc-700" aria-labelledby="dropdownButton2">
                             
                             {/* Profile */}  
                             <li>
@@ -143,7 +143,7 @@ export function SidebarMenu() {
                             <li>
                                 <NavLink to="/setting" className=" block w-full px-4 py-2 text-sm font-normal text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/30 dark:text-gray-100 dark:hover:bg-zinc-600/50 ltr:text-left rtl:text-right">
                                     Setting
-                                    <i class="text-gray-500 rtl:float-left ltr:float-right ri-settings-3-line text-16"></i>
+                                    <i className="text-gray-500 rtl:float-left ltr:float-right ri-settings-3-line text-16"></i>
                                 </NavLink>
                             </li>
 
@@ -151,11 +151,11 @@ export function SidebarMenu() {
                             <li>
                                 <NavLink to="/lock-screen " className=" block w-full px-4 py-2 text-sm font-normal text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/30 dark:text-gray-100 dark:hover:bg-zinc-600/50 ltr:text-left rtl:text-right">
                                     Lock Screen 
-                                    <i class="text-gray-500 rtl:float-left ltr:float-right ri-git-repository-private-line text-16"></i>
+                                    <i className="text-gray-500 rtl:float-left ltr:float-right ri-git-repository-private-line text-16"></i>
                                 </NavLink>
                             </li>
 
-                            <li class="my-2 border-b border-gray-100/20"></li>
+                            <li className="my-2 border-b border-gray-100/20"></li>
 
                             {/* Log out */}
                             <li>

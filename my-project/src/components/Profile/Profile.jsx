@@ -1,8 +1,10 @@
 import React, { useContext, useEffect, useState, useRef } from "react";
 import { AppContext } from "../../appContext/AppContext";
 import { uploadProfileImage } from "../../service/auth.service";
+import { useNavigate } from "react-router-dom";
 
 export function Profile() {
+const navigate = useNavigate();
 const { user, userData } = useContext(AppContext);
 const [photo, setPhoto] = useState(null);
 const [loading, setLoading] = useState(false);
@@ -15,7 +17,6 @@ const [open, setOpen] = useState(false);
     console.log(open);
   }
 
-
   function handleChange(e) {
     if(e.target.files[0]){
       setPhoto(e.target.files[0]);
@@ -26,11 +27,14 @@ const [open, setOpen] = useState(false);
   }
 
   useEffect(() => {
+    // if (!user) {
+    //   navigate("/");
+    //   return;
+    // }
     if (user && user.photoURL) {
     setPhotoURL(user?.photoURL);
     }
   }, [user, photo]);
-  console.log(user);
 
   return (
     <>
