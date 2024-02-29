@@ -58,8 +58,8 @@ $(document).ready(function () {
 const toggleButton = document.getElementById('toggleButton');
 const collapseElement = document.getElementById('collapseElement');
 
-toggleButton.addEventListener('click', () => {
-    collapseElement.classList.toggle('hidden');
+toggleButton?.addEventListener('click', () => {
+    collapseElement?.classList.toggle('hidden');
 });
 
 

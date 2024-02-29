@@ -181,9 +181,9 @@ Array.from(closeButton).forEach(function (subElem) {
 });
 
 
-// 
+//
 // tabs
-// 
+//
 
 const tabButtons = document.querySelectorAll('.tab-button');
 const tabContents = document.querySelectorAll('.tab-content');
@@ -310,7 +310,7 @@ const toggleBtn = document.getElementById('toggleButton');
 const content = document.getElementById('content');
 const profileSidebar = document.querySelector('.user-profile-sidebar');
 
-toggleBtn.addEventListener('click', function () {
+toggleBtn?.addEventListener('click', function () {
   if (content.style.display === 'none') {
     content.style.display = 'block';
   } else {
