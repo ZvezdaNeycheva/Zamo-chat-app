@@ -1,4 +1,4 @@
-export default function Meta({ title }) {
+export function Meta({ title }) {
   return (
     <>
       <meta charSet="utf-8" />

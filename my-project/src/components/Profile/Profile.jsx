@@ -3,7 +3,7 @@ import { AppContext } from "../../appContext/AppContext";
 import { uploadProfileImage } from "../../service/auth.service";
 import { useNavigate } from "react-router-dom";
 
-export default function Profile() {
+export function Profile() {
   const navigate = useNavigate();
   const { user, userData } = useContext(AppContext);
   const [photo, setPhoto] = useState(null);

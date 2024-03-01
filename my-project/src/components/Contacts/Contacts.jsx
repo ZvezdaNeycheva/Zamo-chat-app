@@ -1,4 +1,4 @@
-export default function Contacts() {
+export function Contacts() {
   return (
     <>
       {/* Start chat content */}

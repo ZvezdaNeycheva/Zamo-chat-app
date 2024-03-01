@@ -18,7 +18,7 @@ import { RecoverPassword } from "./RecoverPassword";
 // import './assets/css/icons.css';
 // import './assets/css/tailwind.css';
 
-export default function Index() {
+export function Index() {
     return (
         <>
                 <Meta title={'Chat App'}></Meta>

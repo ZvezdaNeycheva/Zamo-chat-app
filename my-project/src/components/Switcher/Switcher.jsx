@@ -1,4 +1,4 @@
-// export default function Switcher() {
+// export function Switcher() {
 //   const toggleSwitcher = () => {
 //     // Implement the toggleSwitcher logic here
 //     console.log('Toggle Switcher clicked');

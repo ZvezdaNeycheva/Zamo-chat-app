@@ -4,7 +4,7 @@ import { db } from "../../config/firebase-config";
 import { get, query, ref, update } from "firebase/database";
 
 
-export default function Chats() {
+export function Chats() {
     const { user, userData } = useContext(AppContext);
     const [users, setUsers] = useState([]);
     const [search, setSearch] = useState("");

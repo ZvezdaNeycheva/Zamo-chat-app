@@ -9,7 +9,7 @@ import { Login } from "./Login";
 // import './assets/css/icons.css';
 // import './assets/css/tailwind.css';
 
-export default function LockScreen() {
+export function LockScreen() {
   return (
     <>
       <Meta title={'LockScreen'} />
