@@ -56,10 +56,11 @@ export const createGroup = async (groupName) => {
 
   try {
     await set(newGroupRef, {
+      id: newGroupRef.key,
       name: groupName,
       createdOnReadable: readableDate,
     });
-    console.log("Group created successfully.");
+    console.log("Group created successfully with ID:", newGroupRef.key);
     return newGroupRef.key; // Returns the key of the newly created group
   } catch (error) {
     console.error("Error creating group:", error);
