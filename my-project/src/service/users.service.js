@@ -1,4 +1,4 @@
-import { get, set, ref, query, equalTo, orderByChild, update } from 'firebase/database';
+import { get, set, ref, query, equalTo, orderByChild, update, getDatabase, push } from 'firebase/database';
 import { db } from '../config/firebase-config';
 import { format } from 'date-fns';
 
@@ -46,4 +46,22 @@ export const updateUserRole = async (uid, newRole) => {
 export const getUsersCount = async () => {
   const snapshot = await get(query(ref(db, 'users')));
   return snapshot.exists() ? Object.keys(snapshot.val()).length : 0;
+};
+
+export const createGroup = async (groupName) => {
+  const readableDate = format(new Date(), 'yyyy-MM-dd HH:mm:ss');
+  const groupsRef = ref(getDatabase(), 'groups');
+  const newGroupRef = push(groupsRef);
+
+  try {
+    await set(newGroupRef, {
+      name: groupName,
+      createdOnReadable: readableDate,
+    });
+    console.log("Group created successfully.");
+    return newGroupRef.key; // Returns the key of the newly created group
+  } catch (error) {
+    console.error("Error creating group:", error);
+    throw error;
+  }
 };

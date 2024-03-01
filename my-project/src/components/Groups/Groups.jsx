@@ -3,45 +3,55 @@ import { createGroup } from "../../service/users.service";
 
 export function Groups() {
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [groupName, setGroupName] = useState('');
 
   const toggleModal = () => {
     setIsModalVisible(!isModalVisible);
   };
 
+  const handleCreateGroup = async (event) => {
+    event.preventDefault(); // Prevent the form from submitting in the traditional way
+    try {
+      await createGroup(groupName);
+      console.log("Group created:", groupName);
+      setIsModalVisible(false); // Close the modal
+      setGroupName(''); // Reset the group name input field
+      // Here, you could also add logic to refresh the list of groups displayed in the UI
+    } catch (error) {
+      console.error("Failed to create group:", error);
+    }
+  };
+
   return (
     <>
-      <div className="h-screen lg:h-auto p-6">
-        <div className="flex justify-end">
-          {/* Updated button to use Tailwind CSS */}
-          <button
-            onClick={toggleModal}
-            className="px-4 py-2 bg-blue-500 text-white rounded-lg shadow hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:ring-opacity-50"
-          >
-            + {/* Simple + sign for creating new groups */}
-          </button>
-        </div>
-        <h4 className="mb-6 text-gray-900 dark:text-gray-50">Groups</h4>
-        {/* Your content */}
+      <div className="p-6">
+        <button
+          onClick={toggleModal}
+          className="mb-4 px-4 py-2 bg-blue-500 text-white rounded-lg shadow hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:ring-opacity-50"
+        >
+          Create New Group
+        </button>
 
         {/* Modal */}
         {isModalVisible && (
-          <div className="fixed inset-0 z-50 overflow-auto bg-smoke-light flex">
-            <div className="relative p-8 bg-white w-full max-w-md m-auto flex-col flex rounded-lg">
-              <span
-                className="absolute top-0 right-0 p-4"
-                onClick={toggleModal}
-              >
-                <button className="text-gray-600 hover:text-gray-900">&times;</button>
-              </span>
-              <h2 className="text-xl font-bold">Create New Group</h2>
-              <form className="mt-4">
+          <div className="fixed inset-0 z-50 overflow-auto bg-gray-600 bg-opacity-50 flex">
+            <div className="relative p-8 bg-white w-full max-w-md m-auto flex-col flex rounded-lg shadow-lg">
+              <div className="flex justify-between items-center">
+                <h2 className="text-xl font-bold">Create New Group</h2>
+                <button onClick={toggleModal} className="text-gray-600 hover:text-gray-900">
+                  &times;
+                </button>
+              </div>
+              <form onSubmit={handleCreateGroup} className="mt-4">
+                <label htmlFor="groupName" className="block text-sm font-medium text-gray-700">Group Name</label>
                 <input
+                  id="groupName"
                   type="text"
-                  placeholder="Group Name"
-                  name="groupName"
+                  value={groupName}
+                  onChange={(e) => setGroupName(e.target.value)}
                   className="mt-1 p-2 w-full border rounded-md"
+                  required
                 />
-                {/* Add more inputs as needed */}
                 <button
                   type="submit"
                   className="mt-4 px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600"
