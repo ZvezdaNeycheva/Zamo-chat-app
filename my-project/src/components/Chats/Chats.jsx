@@ -44,8 +44,7 @@ export function Chats() {
     
             const filteredUsers = users.filter((user) =>
               user.username.toLowerCase().includes(value) ||
-              user.email.toLowerCase().includes(value) ||
-              (user.displayName && user.displayName.toLowerCase().includes(value))
+              user.email.toLowerCase().includes(value)
             );
             setUsers(filteredUsers);
           }
