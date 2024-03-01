@@ -1,7 +1,8 @@
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, getAuth, updateEmail, updateProfile } from 'firebase/auth';
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, getAuth, updateEmail } from 'firebase/auth';
 import { auth } from '../config/firebase-config';
 import { storage } from '../config/firebase-config';
 import { uploadBytes, ref, getDownloadURL } from "firebase/storage";
+import { updateUserData } from './users.service';
 
 export const registerUser = (email, password) => {
   return createUserWithEmailAndPassword(auth, email, password);
@@ -29,17 +30,17 @@ export const updateUserEmail = async (newEmail) => {
 };
 
 // Storage
-export async function uploadProfileImage (file, user, setLoading) {
-    // const fileRef = ref(storage, `users/${user.uid}/profile-image`);
-    const fileRef = ref(storage, user.uid + '.png');
+export async function uploadProfileImage(file, user, setLoading) {
+  const fileRef = ref(storage, user.uid + '.png');
 
-    setLoading(true);
+  setLoading(true);
 
-    const snapshot = await uploadBytes(fileRef, file);
-    const photoURL = await getDownloadURL(fileRef);
+  const snapshot = await uploadBytes(fileRef, file);
+  const photoURL = await getDownloadURL(fileRef);
 
-    updateProfile(user, {photoURL});
+  // Update user's profile photo URL in the Realtime Database
+  updateUserData(user.displayName, { profilePhotoURL: photoURL });
 
-    setLoading(false);
-    alert('Profile image uploaded successfully.');
+  setLoading(false);
+  alert('Profile image uploaded successfully.');
 };
