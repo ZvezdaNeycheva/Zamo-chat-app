@@ -10,11 +10,16 @@ export function Profile() {
   const [loading, setLoading] = useState(false);
   const [photoURL, setPhotoURL] = useState("https://thinksport.com.au/wp-content/uploads/2020/01/avatar-.jpg");
   const [open, setOpen] = useState(false);
+  const [openStatusDropdown, setOpenStatusDropdown] = useState(false);
   const [openAboutDropdown, setOpenAboutDropdown] = useState(false);
   const [openFilesDropdown, setOpenFilesDropdown] = useState(false);
 
   function toggleDropdown() {
     setOpen((prevOpen) => !prevOpen);
+  }
+
+  function toggleStatusDropdown() {
+    setOpenStatusDropdown((prevOpen) => !prevOpen);
   }
 
   function toggleAboutDropdown() {
@@ -54,14 +59,12 @@ export function Profile() {
                 Drop
               </button>
               <ul className={`${open ? "visible" : "invisible"} absolute z-50 block w-40 py-2 text-left list-none bg-white border border-transparent rounded shadow-lg rtl:right-auto rtl:left-0 ltr:left-auto ltr:right-0 my-7 dropdown-menu bg-clip-padding dark:bg-zinc-700 dark:shadow-sm dark:border-zinc-600`} aria-labelledby="dropdownMenuButtonA">
-                
                 {/* Action */}
                 <li>
                   <a className="block w-full px-4 py-2 text-sm font-normal text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/50 dark:text-gray-100 dark:hover:bg-zinc-600 ltr:text-left rtl:text-right" href="#">
                     Action
                   </a>
                 </li>
-
                 {/* Another action */}
                 <li>
                   <a className="block w-full px-4 py-2 text-sm font-normal text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/50 dark:text-gray-100 dark:hover:bg-zinc-600 ltr:text-left rtl:text-right" href="#" >
@@ -79,14 +82,11 @@ export function Profile() {
             </div>
           </div>
           {/* End Drop Down */}
-
           <h4 className="mb-0 text-gray-700 dark:text-gray-50"> My Profile </h4>
         </div>
         {/* End profile Header */}
-
         {/* Start user-profile-card */}
         <div className="p-6 text-center border-b border-gray-100 dark:border-zinc-600">
-
           {/* Profile picture */}
           <div className="mb-4">
             <input type="file" onChange={handleChange} id="file" />
@@ -96,22 +96,27 @@ export function Profile() {
             <img src={ photo ? URL.createObjectURL(photo) : photoURL || "https://thinksport.com.au/wp-content/uploads/2020/01/avatar-.jpg"}  className="w-24 h-24 p-1 mx-auto border border-gray-100 rounded-full dark:border-zinc-800" alt="Avatar"/>
           </div>
           {/* End profile picture */}
-
           {/* Profile Status */}
-          <h5 className="mb-1 text-16 dark:text-gray-50">{/* need to add a username here*/}</h5>
-          <h5 className="mb-0 truncate text-14 ltr:block rtl:hidden">
-            <a href="#" className="text-gray-500 dark:text-gray-50">
-              <i className="text-green-500 ltr:ml-1 rtl:mr-1 ri-record-circle-fill text-10 " /> Active
-            </a>
-          </h5>
-          <h5 className="mb-0 truncate text-14 ltr:hidden rtl:block">
-            <a href="#" className="text-gray-500 dark:text-gray-50">
-              Active <i className="text-green-500 ltr:ml-1 rtl:mr-1 ri-record-circle-fill text-10 " />
-            </a>
-          </h5>
+          <div className="relative mb-1 dropdown">
+            <button onClick={toggleStatusDropdown} role="button" className="pb-1 text-gray-500 dropdown-toggle d-block dark:text-gray-300" data-bs-toggle="dropdown" id="dropdownMenuButtonX">
+              Available <i className="mdi mdi-chevron-down" />
+            </button>
+            {/* Dropdown menu for status*/}
+            <ul className={`absolute z-50 ${openStatusDropdown ? 'visible' : 'invisible'} py-2 mt-2 text-left list-none bg-white border rounded shadow-lg left-20 dropdown-menu w-36 top-6 dark:bg-zinc-700 bg-clip-padding border-gray-50 dark:border-zinc-500`} aria-labelledby="dropdownMenuButtonX">
+              <li>
+                <a className="block w-full px-4 py-2 text-sm font-normal text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/50 dark:text-gray-100 dark:hover:bg-zinc-600/80 ltr:text-left rtl:text-right">
+                  Available
+                </a>
+              </li>
+              <li>
+                <a href="#" className="block w-full px-4 py-2 text-sm font-normal text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/50 dark:text-gray-100 dark:hover:bg-zinc-600/80 ltr:text-left rtl:text-right">
+                  Busy
+                </a>
+              </li>
+            </ul>
+          </div>
         </div>
         {/* End Profile Status */}
-
         {/* Start user-profile-desc */}
         <div className="p-6 h-[550px]" data-simplebar="">
           <div>
@@ -121,7 +126,6 @@ export function Profile() {
             </p>
           </div>
           <div data-tw-accordion="collapse">
-            
             {/* About Drop Down menu*/}
             <div className="text-gray-700 accordion-item">
               <h2>
@@ -136,7 +140,6 @@ export function Profile() {
                   <i className={`mdi mdi-chevron-down text-lg ${openAboutDropdown ? "group-[.active]:rotate-180" : ""} dark:text-gray-50`} />
                 </button>
               </h2>
-
               <div className={`block bg-white border border-t-0 border-gray-100 accordion-body dark:bg-transparent dark:border-zinc-600 
               ${openAboutDropdown ? "" : "hidden"}`} >
                 <div className="p-5">
@@ -166,7 +169,6 @@ export function Profile() {
               </div>
             </div>
             {/* End About Drop Down menu*/}
-
             {/* Attached Files Drop Down menu*/}
             <div className="mt-2 text-gray-700 accordion-item">
               <h2>
@@ -192,7 +194,6 @@ export function Profile() {
                           <i className="ri-file-text-fill" />
                         </div>
                       </div>
-
                       {/* File Name */}
                       <div className="flex-grow">
                         <div className="text-start">
@@ -200,7 +201,6 @@ export function Profile() {
                           <p className="mb-0 text-gray-500 text-13 dark:text-gray-300">12.5 MB</p>
                         </div>
                       </div>
-
                       {/* Drop Down */}
                       <div className="ltr:ml-4 rtl:mr-4">
                         <ul className="flex items-center gap-3 mb-0 text-lg">
@@ -234,13 +234,12 @@ export function Profile() {
                           </li>
                         </ul>
                       </div>
-
                     </div>
                   </div>
                 </div>
               </div>
               {/* Attached Files */}
-             {/*End Attached Files Drop Down menu*/}
+              {/*End Attached Files Drop Down menu*/}
             </div>
           </div>
         </div>

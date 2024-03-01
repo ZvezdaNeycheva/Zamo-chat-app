@@ -2,9 +2,7 @@ import { AppContext } from "../../appContext/AppContext";
 import { useContext, useState } from "react";
 
 export function Settings() {
-  const { user, setContext } = useContext(AppContext);
-  // const [photo, setPhoto] = useState(null);
-  // const [loading, setLoading] = useState(false);
+  const { user, userData } = useContext(AppContext);
   const [photoURL] = useState(user?.photoURL);
 
   return (
@@ -15,63 +13,51 @@ export function Settings() {
           <h4 className="mb-0 text-gray-700 dark:text-gray-50">Settings</h4>
         </div>
         <div className="p-6 text-center border-b border-gray-100 dark:border-zinc-500">
+
+          {/* Profile Picture */}
           <div className="relative mb-4">
-            <img
-              src={photoURL}
-              className="w-24 h-24 p-1 mx-auto border border-gray-100 rounded-full dark:border-zinc-800"
-              alt="Avatar"
-            />
-            <a
-              href="#!"
-              className="absolute bottom-0 w-10 h-10 bg-gray-100 rounded-full ltr:right-28 rtl:left-28dark:bg-zinc-800 dark:text-gray-100"
-            >
+            <img src={photoURL} className="w-24 h-24 p-1 mx-auto border border-gray-100 rounded-full dark:border-zinc-800" alt="Avatar" />
+            <a href="#!" className="absolute bottom-0 w-10 h-10 bg-gray-100 rounded-full ltr:right-28 rtl:left-28dark:bg-zinc-800 dark:text-gray-100">
               <i className="leading-10 ri-pencil-fill text-16" />
             </a>
           </div>
-          <h5 className="mb-1 text-16 dark:text-gray-50">{/* need to add a username here*/}</h5>
+
+          {/* Profile Name */}
+          <h5 className="mb-1 text-16 dark:text-gray-50">{userData ? userData.username : "N/A"}</h5>
+
+          {/* Profile Status */}
           <div className="relative mb-1 dropdown">
-            <a
-              className="pb-1 text-gray-500 dropdown-toggle d-block dark:text-gray-300"
-              href="#"
-              role="button"
-              data-bs-toggle="dropdown"
-              id="dropdownMenuButtonX"
-            >
+            <a href="#" role="button" className="pb-1 text-gray-500 dropdown-toggle d-block dark:text-gray-300" data-bs-toggle="dropdown" id="dropdownMenuButtonX">
               Available <i className="mdi mdi-chevron-down" />
             </a>
-            <ul
-              className="absolute z-50 hidden py-2 mt-2 text-left list-none bg-white border rounded shadow-lg left-20 dropdown-menu w-36 top-6 dark:bg-zinc-700 bg-clip-padding border-gray-50 dark:border-zinc-500"
-              aria-labelledby="dropdownMenuButtonX"
-            >
+
+            {/* Dropdown manu for status*/}
+            <ul className="absolute z-50 hidden py-2 mt-2 text-left list-none bg-white border rounded shadow-lg left-20 dropdown-menu w-36 top-6 dark:bg-zinc-700 bg-clip-padding border-gray-50 dark:border-zinc-500" aria-labelledby="dropdownMenuButtonX">
               <li>
-                <a
-                  className="block w-full px-4 py-2 text-sm font-normal text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/50 dark:text-gray-100 dark:hover:bg-zinc-600/80 ltr:text-left rtl:text-right"
-                  href="#"
-                >
+                <a href="#" className="block w-full px-4 py-2 text-sm font-normal text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/50 dark:text-gray-100 dark:hover:bg-zinc-600/80 ltr:text-left rtl:text-right">
                   Available
                 </a>
               </li>
+
               <li>
-                <a
-                  className="block w-full px-4 py-2 text-sm font-normal text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/50 dark:text-gray-100 dark:hover:bg-zinc-600/80 ltr:text-left rtl:text-right"
-                  href="#"
-                >
+                <a href="#" className="block w-full px-4 py-2 text-sm font-normal text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/50 dark:text-gray-100 dark:hover:bg-zinc-600/80 ltr:text-left rtl:text-right">
                   Busy
                 </a>
               </li>
             </ul>
           </div>
+          {/* End Profile Status */}
         </div>
         {/* End profile user */}
+
         {/* Start user-profile-desc */}
         <div className="p-6 h-[550px]" data-simplebar="">
           <div data-tw-accordion="collapse">
+
+            {/* Start Personal Info */}
             <div className="text-gray-700 accordion-item">
               <h2>
-                <button
-                  type="button"
-                  className="flex items-center justify-between w-full px-3 py-2 font-medium text-left border border-gray-100 rounded-t accordion-header group active dark:border-zinc-600 dark:bg-zinc-600 dark:text-gray-50"
-                >
+                <button type="button" className="flex items-center justify-between w-full px-3 py-2 font-medium text-left border border-gray-100 rounded-t accordion-header group active dark:border-zinc-600 dark:bg-zinc-600 dark:text-gray-50">
                   <span className="m-0 text-[14px] font-medium">Personal Info</span>
                   <i className="mdi mdi-chevron-down text-lg group-[.active]:rotate-180" />
                 </button>
@@ -80,39 +66,42 @@ export function Settings() {
                 <div className="p-5">
                   <div>
                     <div className="ltr:float-right rtl:float-left">
-                      <button
-                        type="button"
-                        className="py-1.5 btn bg-slate-100 border-transparent rounded hover:bg-gray-50 transition-all ease-in-out dark:bg-zinc-600 dark:text-gray-50 dark:hover:bg-zinc-500/50"
-                      >
+                      <button type="button" className="py-1.5 btn bg-slate-100 border-transparent rounded hover:bg-gray-50 transition-all ease-in-out dark:bg-zinc-600 dark:text-gray-50 dark:hover:bg-zinc-500/50">
                         <i className="mr-1 align-middle ri-edit-fill" /> Edit
                       </button>
                     </div>
+
+                    {/* Name */}
                     <p className="mb-1 text-gray-500 dark:text-gray-300">Name</p>
-                    <h5 className="text-sm dark:text-gray-50">{/* need to add a username here*/}</h5>
+                    <h5 className="text-sm dark:text-gray-50">{userData ? userData.username : "N/A"}</h5>
                   </div>
+
+                  {/* Email */}
                   <div className="mt-5">
                     <p className="mb-1 text-gray-500 dark:text-gray-300">Email</p>
-                    <h5 className="text-sm dark:text-gray-50">{/* need to add a Email here*/}</h5>
+                    <h5 className="text-sm dark:text-gray-50">{userData ? userData.email : "N/A"}</h5>
                   </div>
+
+                  {/* Time */}
                   <div className="mt-5">
                     <p className="mb-1 text-gray-500 dark:text-gray-300">Time</p>
-                    <h5 className="text-sm dark:text-gray-50">{/* need to add a create time here*/}</h5>
+                    <h5 className="text-sm dark:text-gray-50">{userData ? userData.createdOnReadable : "N/A"}</h5>
                   </div>
+
+                  {/* Location */}
                   <div className="mt-5">
-                    <p className="mb-1 text-gray-500 dark:text-gray-300">
-                      Location
-                    </p>
+                    <p className="mb-1 text-gray-500 dark:text-gray-300"> Location </p>
                     <h5 className="text-sm dark:text-gray-50">{/* need to add a location HERE:*/}</h5>
                   </div>
                 </div>
               </div>
             </div>
+            {/* End Personal Info */}
+
+            {/* Start Privacy */}
             <div className="mt-2 text-gray-700 accordion-item">
               <h2>
-                <button
-                  type="button"
-                  className="flex items-center justify-between w-full px-3 py-2 font-medium text-left border border-gray-100 rounded accordion-header group dark:bg-zinc-600 dark:text-gray-50 dark:border-zinc-600"
-                >
+                <button type="button" className="flex items-center justify-between w-full px-3 py-2 font-medium text-left border border-gray-100 rounded accordion-header group dark:bg-zinc-600 dark:text-gray-50 dark:border-zinc-600">
                   <span className="m-0 text-[14px] font-semibold">Privacy</span>
                   <i className="mdi mdi-chevron-down text-lg group-[.active]:rotate-180" />
                 </button>
@@ -122,44 +111,27 @@ export function Settings() {
                   <div className="py-4">
                     <div className="flex items-center">
                       <div className="flex-grow overflow-hidden">
-                        <h5 className="mb-0 text-gray-700 truncate text-13 dark:text-gray-50">
-                          Profile photo
-                        </h5>
+                        <h5 className="mb-0 text-gray-700 truncate text-13 dark:text-gray-50"> Profile photo </h5>
                       </div>
+                      {/* Dropdown Profile Pfoto */}
                       <div className="relative flex-shrink-0 dropdown">
-                        <button
-                          className="border-transparent rounded btn dropdown-toggle bg-slate-100 px-1.5 py-1 dark:bg-zinc-500 dark:text-gray-50 "
-                          type="button"
-                          data-bs-toggle="dropdown"
-                          id="dropdownMenuButtonY"
-                        >
+                        <button className="border-transparent rounded btn dropdown-toggle bg-slate-100 px-1.5 py-1 dark:bg-zinc-500 dark:text-gray-50 " type="button" data-bs-toggle="dropdown" id="dropdownMenuButtonY">
                           Everyone <i className="mdi mdi-chevron-down" />
                         </button>
-                        <ul
-                          className="absolute z-50 block w-40 py-2 my-8 text-left list-none bg-white border border-transparent rounded shadow-lg rtl:left-0 rtl:right-auto ltr:right-0 ltr:left-auto dropdown-menu bg-clip-padding dark:bg-zinc-700 dark:shadow-sm dark:border-zinc-600"
-                          aria-labelledby="dropdownMenuButtonY"
-                        >
+                        <ul className="absolute z-50 block w-40 py-2 my-8 text-left list-none bg-white border border-transparent rounded shadow-lg rtl:left-0 rtl:right-auto ltr:right-0 ltr:left-auto dropdown-menu bg-clip-padding dark:bg-zinc-700 dark:shadow-sm dark:border-zinc-600" aria-labelledby="dropdownMenuButtonY">
                           <li>
-                            <a
-                              className="block w-full px-5 py-2 text-sm font-normal text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/50 dark:text-gray-100 dark:hover:bg-zinc-600"
-                              href="#"
-                            >
+                            <a className="block w-full px-5 py-2 text-sm font-normal text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/50 dark:text-gray-100 dark:hover:bg-zinc-600" href="#">
                               Everyone
                             </a>
                           </li>
+
                           <li>
-                            <a
-                              className="block w-full px-5 py-2 text-sm font-normal text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/50 dark:text-gray-100 dark:hover:bg-zinc-600"
-                              href="#"
-                            >
+                            <a className="block w-full px-5 py-2 text-sm font-normal text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/50 dark:text-gray-100 dark:hover:bg-zinc-600" href="#">
                               selected
                             </a>
                           </li>
                           <li>
-                            <a
-                              className="block w-full px-5 py-2 text-sm font-normal text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/50 dark:text-gray-100 dark:hover:bg-zinc-600"
-                              href="#"
-                            >
+                            <a className="block w-full px-5 py-2 text-sm font-normal text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/50 dark:text-gray-100 dark:hover:bg-zinc-600" href="#" >
                               Nobody
                             </a>
                           </li>
@@ -175,17 +147,9 @@ export function Settings() {
                         </h5>
                       </div>
                       <div className="flex items-center">
-                        <label
-                          htmlFor="toggleSwitch"
-                          className="flex items-center cursor-pointer"
-                        >
+                        <label htmlFor="toggleSwitch" className="flex items-center cursor-pointer" >
                           <span className="relative">
-                            <input
-                              type="checkbox"
-                              id="toggleSwitch"
-                              className="sr-only"
-                              defaultChecked=""
-                            />
+                            <input type="checkbox" id="toggleSwitch" className="sr-only" defaultChecked="" />
                             <span className="block w-8 h-5 rounded-full checked-bg" />
                             <span className="absolute w-3 h-3 transition rounded-full dot left-1 top-1" />
                           </span>
@@ -201,39 +165,22 @@ export function Settings() {
                         </h5>
                       </div>
                       <div className="relative flex-shrink-0 dropdown">
-                        <button
-                          className="border-transparent rounded btn dropdown-toggle bg-slate-100 px-1.5 py-1 dark:bg-zinc-500 dark:text-gray-50 "
-                          type="button"
-                          data-bs-toggle="dropdown"
-                          id="dropdownMenuButtonT"
-                        >
+                        <button className="border-transparent rounded btn dropdown-toggle bg-slate-100 px-1.5 py-1 dark:bg-zinc-500 dark:text-gray-50 " type="button" data-bs-toggle="dropdown" id="dropdownMenuButtonT" >
                           Everyone <i className="mdi mdi-chevron-down" />
                         </button>
-                        <ul
-                          className="absolute z-50 block w-40 py-2 my-8 text-left list-none bg-white border border-transparent rounded shadow-lg rtl:left-0 rtl:right-auto ltr:right-0 ltr:left-auto dropdown-menu bg-clip-padding dark:bg-zinc-700 dark:shadow-sm dark:border-zinc-600"
-                          aria-labelledby="dropdownMenuButtonT"
-                        >
+                        <ul className="absolute z-50 block w-40 py-2 my-8 text-left list-none bg-white border border-transparent rounded shadow-lg rtl:left-0 rtl:right-auto ltr:right-0 ltr:left-auto dropdown-menu bg-clip-padding dark:bg-zinc-700 dark:shadow-sm dark:border-zinc-600" aria-labelledby="dropdownMenuButtonT" >
                           <li>
-                            <a
-                              className="block w-full px-5 py-2 text-sm font-normal text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/50 dark:text-gray-100 dark:hover:bg-zinc-600"
-                              href="#"
-                            >
+                            <a className="block w-full px-5 py-2 text-sm font-normal text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/50 dark:text-gray-100 dark:hover:bg-zinc-600" href="#" >
                               Everyone
                             </a>
                           </li>
                           <li>
-                            <a
-                              className="block w-full px-5 py-2 text-sm font-normal text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/50 dark:text-gray-100 dark:hover:bg-zinc-600"
-                              href="#"
-                            >
+                            <a className="block w-full px-5 py-2 text-sm font-normal text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/50 dark:text-gray-100 dark:hover:bg-zinc-600" href="#" >
                               selected
                             </a>
                           </li>
                           <li>
-                            <a
-                              className="block w-full px-5 py-2 text-sm font-normal text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/50 dark:text-gray-100 dark:hover:bg-zinc-600"
-                              href="#"
-                            >
+                            <a className="block w-full px-5 py-2 text-sm font-normal text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/50 dark:text-gray-100 dark:hover:bg-zinc-600" href="#" >
                               Nobody
                             </a>
                           </li>
@@ -249,17 +196,9 @@ export function Settings() {
                         </h5>
                       </div>
                       <div className="flex items-center">
-                        <label
-                          htmlFor="toggleSwitch2"
-                          className="flex items-center cursor-pointer"
-                        >
+                        <label htmlFor="toggleSwitch2" className="flex items-center cursor-pointer" >
                           <span className="relative">
-                            <input
-                              type="checkbox"
-                              id="toggleSwitch2"
-                              className="sr-only"
-                              defaultChecked=""
-                            />
+                            <input type="checkbox" id="toggleSwitch2" className="sr-only" defaultChecked="" />
                             <span className="block w-8 h-5 rounded-full checked-bg" />
                             <span className="absolute w-3 h-3 transition rounded-full dot left-1 top-1" />
                           </span>
@@ -275,39 +214,23 @@ export function Settings() {
                         </h5>
                       </div>
                       <div className="relative flex-shrink-0 dropdown">
-                        <button
-                          className="border-transparent rounded btn dropdown-toggle bg-slate-100 px-1.5 py-1 dark:bg-zinc-500 dark:text-gray-50 "
-                          type="button"
-                          data-bs-toggle="dropdown"
-                          id="dropdownMenuButtonZM"
-                        >
-                          Everyone <i className="mdi mdi-chevron-down" />
+                        <button className="border-transparent rounded btn dropdown-toggle bg-slate-100 px-1.5 py-1 dark:bg-zinc-500 dark:text-gray-50 " type="button" data-bs-toggle="dropdown" id="dropdownMenuButtonZM" >
+                          Everyone
+                          <i className="mdi mdi-chevron-down" />
                         </button>
-                        <ul
-                          className="absolute z-50 block w-40 py-2 my-8 text-left list-none bg-white border border-transparent rounded shadow-lg rtl:left-0 rtl:right-auto ltr:right-0 ltr:left-auto dropdown-menu bg-clip-padding dark:bg-zinc-700 dark:shadow-sm dark:border-zinc-600"
-                          aria-labelledby="dropdownMenuButtonZM"
-                        >
+                        <ul className="absolute z-50 block w-40 py-2 my-8 text-left list-none bg-white border border-transparent rounded shadow-lg rtl:left-0 rtl:right-auto ltr:right-0 ltr:left-auto dropdown-menu bg-clip-padding dark:bg-zinc-700 dark:shadow-sm dark:border-zinc-600" aria-labelledby="dropdownMenuButtonZM" >
                           <li>
-                            <a
-                              className="block w-full px-5 py-2 text-sm font-normal text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/50 dark:text-gray-100 dark:hover:bg-zinc-600"
-                              href="#"
-                            >
+                            <a className="block w-full px-5 py-2 text-sm font-normal text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/50 dark:text-gray-100 dark:hover:bg-zinc-600" href="#" >
                               Everyone
                             </a>
                           </li>
                           <li>
-                            <a
-                              className="block w-full px-5 py-2 text-sm font-normal text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/50 dark:text-gray-100 dark:hover:bg-zinc-600"
-                              href="#"
-                            >
+                            <a className="block w-full px-5 py-2 text-sm font-normal text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/50 dark:text-gray-100 dark:hover:bg-zinc-600" href="#" >
                               selected
                             </a>
                           </li>
                           <li>
-                            <a
-                              className="block w-full px-5 py-2 text-sm font-normal text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/50 dark:text-gray-100 dark:hover:bg-zinc-600"
-                              href="#"
-                            >
+                            <a className="block w-full px-5 py-2 text-sm font-normal text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/50 dark:text-gray-100 dark:hover:bg-zinc-600" href="#" >
                               Nobody
                             </a>
                           </li>
@@ -320,10 +243,7 @@ export function Settings() {
             </div>
             <div className="mt-2 text-gray-700 accordion-item">
               <h2>
-                <button
-                  type="button"
-                  className="flex items-center justify-between w-full px-3 py-2 font-medium text-left border border-gray-100 rounded accordion-header group dark:border-zinc-600 dark:bg-zinc-600 dark:text-gray-50"
-                >
+                <button type="button" className="flex items-center justify-between w-full px-3 py-2 font-medium text-left border border-gray-100 rounded accordion-header group dark:border-zinc-600 dark:bg-zinc-600 dark:text-gray-50" >
                   <span className="m-0 text-[14px] font-medium">Security</span>
                   <i className="mdi mdi-chevron-down text-lg group-[.active]:rotate-180" />
                 </button>
@@ -338,16 +258,9 @@ export function Settings() {
                         </h5>
                       </div>
                       <div className="flex items-center">
-                        <label
-                          htmlFor="toggleSwitch3"
-                          className="flex items-center cursor-pointer"
-                        >
+                        <label htmlFor="toggleSwitch3" className="flex items-center cursor-pointer" >
                           <span className="relative">
-                            <input
-                              type="checkbox"
-                              id="toggleSwitch3"
-                              className="sr-only"
-                            />
+                            <input type="checkbox" id="toggleSwitch3" className="sr-only" />
                             <span className="block w-8 h-5 rounded-full checked-bg" />
                             <span className="absolute w-3 h-3 transition rounded-full dot left-1 top-1" />
                           </span>
@@ -360,10 +273,7 @@ export function Settings() {
             </div>
             <div className="mt-2 text-gray-700 accordion-item">
               <h2>
-                <button
-                  type="button"
-                  className="flex items-center justify-between w-full px-3 py-2 font-medium text-left border border-gray-100 rounded accordion-header group dark:border-zinc-600 dark:bg-zinc-600 dark:text-gray-50"
-                >
+                <button type="button" className="flex items-center justify-between w-full px-3 py-2 font-medium text-left border border-gray-100 rounded accordion-header group dark:border-zinc-600 dark:bg-zinc-600 dark:text-gray-50" >
                   <span className="m-0 text-[14px] font-medium">Help</span>
                   <i className="mdi mdi-chevron-down text-lg group-[.active]:rotate-180" />
                 </button>
@@ -398,6 +308,5 @@ export function Settings() {
         </div>
       </div>
     </>
-
   );
 }

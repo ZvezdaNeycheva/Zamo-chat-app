@@ -1,7 +1,7 @@
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, getAuth, updateEmail } from 'firebase/auth';
 import { auth } from '../config/firebase-config';
 import { storage } from '../config/firebase-config';
-import { uploadBytes, ref, getDownloadURL } from "firebase/storage";
+import { uploadBytes, ref as storageRef, getDownloadURL } from "firebase/storage";
 import { updateUserData } from './users.service';
 
 export const registerUser = (email, password) => {
@@ -31,16 +31,25 @@ export const updateUserEmail = async (newEmail) => {
 
 // Storage
 export async function uploadProfileImage(file, user, setLoading) {
-  const fileRef = ref(storage, user.uid + '.png');
+  const fileRef = storageRef(storage, user.uid + '.png');
 
   setLoading(true);
 
-  const snapshot = await uploadBytes(fileRef, file);
-  const photoURL = await getDownloadURL(fileRef);
+  try {
+    // Upload the file to Firebase Storage
+    await uploadBytes(fileRef, file);
 
-  // Update user's profile photo URL in the Realtime Database
-  updateUserData(user.displayName, { profilePhotoURL: photoURL });
+    // Get the download URL of the uploaded file
+    const photoURL = await getDownloadURL(fileRef);
 
-  setLoading(false);
-  alert('Profile image uploaded successfully.');
-};
+    // Update user's profile photo URL in the Realtime Database
+    await updateUserData(user.displayName, { profilePhotoURL: photoURL });
+
+    setLoading(false);
+    alert('Profile image uploaded successfully.');
+  } catch (error) {
+    console.error("Error uploading profile image:", error);
+    setLoading(false);
+    // Handle the error accordingly
+  }
+}

@@ -25,6 +25,7 @@ export const auth = getAuth(app);
 export const db = getDatabase(app);
 
 export const storage = getStorage(app);
+
 // copilot suggetion
 // export const messaging = getMessaging(app);
 // export const functions = getFunctions(app);
