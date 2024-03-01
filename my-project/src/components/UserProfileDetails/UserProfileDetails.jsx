@@ -1,4 +1,4 @@
-export function UserProfileDetails() {
+export default function UserProfileDetails() {
   return (
     <>
       {/* Start profile content */}

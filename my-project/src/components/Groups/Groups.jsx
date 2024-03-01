@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { createGroup } from "../../service/users.service";
 
-export function Groups() {
+export default function Groups() {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [groupName, setGroupName] = useState('');
   const [isPrivate, setIsPrivate] = useState(false);

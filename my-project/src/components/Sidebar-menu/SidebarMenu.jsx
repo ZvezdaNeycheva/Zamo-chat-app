@@ -3,7 +3,7 @@ import { logoutUser } from "../../service/auth.service";
 import { AppContext } from "../../appContext/AppContext";
 import { useContext, useState } from "react";
 
-export function SidebarMenu() {
+export default function SidebarMenu() {
     const { user, setContext } = useContext(AppContext);
     // const [photo, setPhoto] = useState(null);
     // const [loading, setLoading] = useState(false);

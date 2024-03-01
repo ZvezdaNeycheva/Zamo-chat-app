@@ -1,7 +1,7 @@
 import { AppContext } from "../../appContext/AppContext";
 import { useContext, useState } from "react";
 
-export function Settings() {
+export default function Settings() {
   const { user, userData } = useContext(AppContext);
   const [photoURL] = useState(user?.photoURL);
 

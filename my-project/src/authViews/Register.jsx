@@ -12,7 +12,7 @@ import {format} from 'date-fns';
 // import './assets/css/icons.css';
 // import './assets/css/tailwind.css';
 
-export function Register() {
+export default function Register() {
   const { setContext } = useContext(AppContext);
   const [form, setForm] = useState({
     uid: '',

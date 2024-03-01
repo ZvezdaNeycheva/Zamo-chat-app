@@ -7,7 +7,7 @@ import { NavLink } from 'react-router-dom';
 // import './assets/css/icons.css';
 // import './assets/css/tailwind.css';
 
-export function RecoverPassword() {
+export default function RecoverPassword() {
   return (
     <>
       <Meta title={'RecoverPassword'} />

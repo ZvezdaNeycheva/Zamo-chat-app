@@ -5,7 +5,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AppContext } from "../appContext/AppContext";
 import { loginUser } from "../service/auth.service";
 
-export function Login() {
+export default function Login() {
 
   const { user, setContext } = useContext(AppContext);
   const [form, setForm] = useState({
