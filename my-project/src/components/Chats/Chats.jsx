@@ -2,6 +2,8 @@ import { useContext, useEffect, useState } from "react";
 import { AppContext, RoomContext } from "../../appContext/AppContext";
 import { db } from "../../config/firebase-config";
 import { get, query, ref, push, update, orderByChild, equalTo } from "firebase/database";
+import { useParams } from "react-router-dom";
+import { SingleChat } from "./SingleChat";
 
 
 export function Chats() {
@@ -9,6 +11,9 @@ export function Chats() {
     const [users, setUsers] = useState([]);
     const [search, setSearch] = useState("");
     const [newMessage, setNewMessage] = useState("");
+
+    let { id } = useParams();
+    const [rooms, setRooms] = useState(undefined);
 
     const { userId, friendId, roomId, setContext } = useContext(RoomContext);
     const [room, setRoom] = useState({
@@ -34,43 +39,140 @@ export function Chats() {
             setRoom(newRoom);
             setContext({
                 userId: user.uid,
-                friendId: friend.id,
+                friendId: friend.uid,
                 roomId: newRoom.id,
             });
         } else {
             setRoom(room);
             setContext({
                 userId: user.uid,
-                friendId: friend.id,
+                friendId: friend.uid,
                 roomId: room.id,
             });
         }
         setContext({
             userId: user.uid,
-            friendId: friend.id,
+            friendId: friend.uid,
             roomId: room.id,
         });
     }
 
+    // const getRoom = async (participants) => {
+    //     // const participants = Object.values(participants); // Extract the participants array
+    //     const participantIds = participants.participants;
+    //     const snapshot = await get(query(ref(db, "rooms"), orderByChild("participants"), equalTo(participantIds)));
+    //     console.log('HI');
+    //     if (!snapshot.exists()) {
+    //         console.log('rooms does not exist'+{room});
+    //         return null;
+    //     }
+    //     const room = {
+    //         id: snapshot.key,
+    //         ...snapshot.val(),
+    //     };
+    //     console.log({room});
+    //     return room;
+    // }
+    // const getRoom = async (participants) => {
+    //     try {
+    //         const participantIds = participants.participants;
+    //         const snapshot = await get(query(ref(db, "rooms"), orderByChild("participants"), equalTo(participantIds)));
+    
+    //         if (!snapshot.exists()) {
+    //             console.log('Room does not exist');
+    //             return null;
+    //         }
+    
+    //         const room = {
+    //             id: snapshot.key,
+    //             ...snapshot.val(),
+    //         };
+    
+    //         console.log('Room:', room);
+    //         return room;
+    //     } catch (error) {
+    //         console.error('Error fetching room:', error);
+    //         return null;
+    //     }
+    // }
     const getRoom = async (participants) => {
-        // const participants = Object.values(participants); // Extract the participants array
-        const participantIds = participants.participants;
-        const snapshot = await get(query(ref(db, "rooms"), orderByChild("participants"), equalTo(participantIds)));
-        console.log('HI');
-        if (!snapshot.exists()) {
-            console.log('rooms does not exist'+{room});
+        try {
+            const participantIds = participants.participants;
+            console.log( {participantIds});
+    
+            const roomsRef = ref(db, `rooms/${id}`);
+            const snapshot = await get(query(roomsRef, orderByChild("participants").equalTo(participants)));
+    
+            console.log('Snapshot:', snapshot.val());
+    
+            if (!snapshot.exists()) {
+                console.log('Room does not exist');
+                return null;
+            }
+    
+            // Iterate over the snapshot to retrieve the room data
+            let roomId;
+            snapshot.forEach((childSnapshot) => {
+                roomId = childSnapshot.key;
+            });
+    
+            const room = {
+                id: roomId,
+                ...snapshot.val()[roomId],
+            };
+    
+            console.log('Room:', room);
+            return room;
+        } catch (error) {
+            console.error('Error fetching room:', error);
             return null;
         }
-        const room = {
-            id: snapshot.key,
-            ...snapshot.val(),
-        };
-        console.log({room});
-        return room;
     }
-
+    // const getRoom = async (participants) => {
+    //     try {
+    //         const participantIds = participants.participants;
+    //         console.log('Participant IDs:', participantIds);
+    
+    //         const roomsRef = ref(db, "rooms");
+    //         const snapshot = await get(roomsRef);
+    
+    //         if (!snapshot.exists()) {
+    //             console.log('Rooms do not exist');
+    //             return null;
+    //         }
+    
+    //         let room = null;
+    
+    //         snapshot.forEach((childSnapshot) => {
+    //             const roomData = childSnapshot.val();
+    //             const roomParticipants = roomData.participants;
+    
+    //             // Check if the participants in the room match the provided participants
+    //             if (roomParticipants && roomParticipants.length === participantIds.length && roomParticipants.every((id, index) => id === participantIds[index])) {
+    //                 room = {
+    //                     id: childSnapshot.key,
+    //                     ...roomData
+    //                 };
+    //             }
+    //         });
+    
+    //         if (!room) {
+    //             console.log('Room not found for the given participants');
+    //             return null;
+    //         }
+    
+    //         console.log('Room:', room);
+    //         return room;
+    //     } catch (error) {
+    //         console.error('Error fetching room:', error);
+    //         return null;
+    //     }
+    // }
+    
+    
     const createRoom = async (participants) => {
         const newRoom = {
+            uid: '',
             participants,
             messages: [
                 {
@@ -78,9 +180,14 @@ export function Chats() {
                 },
             ],
         };
-        const roomRef = ref(db, "rooms");
+        const roomRef = ref(db, `rooms`);
         const newRoomRef = push(roomRef);
         await update(newRoomRef, newRoom);
+        // add room reference to user's rooms
+        await update(ref(db, `users/${user.uid}/rooms`), {
+            [newRoomRef.key]: true,
+        });
+        
         return {
             id: newRoomRef.key,
             ...newRoom,
@@ -169,7 +276,7 @@ export function Chats() {
                 </div>
 
                 {/* <!-- Start user status --> */}
-                <div className="px-6 pb-6" dir="ltr">
+                {/* <div className="px-6 pb-6" dir="ltr">
 
                     <div className="owl-carousel owl-theme" id="user-status-carousel">
                         <div className="text-center">
@@ -225,9 +332,9 @@ export function Chats() {
                                 <h5 className="mt-4 mb-0 truncate text-13 dark:text-gray-50">Teresa</h5>
                             </a>
                         </div>
-                    </div>
+                    </div> */}
                     {/* <!-- end user status carousel --> */}
-                </div>
+                {/* </div> */}
                 {/* <!-- end user status --> */}
 
                 {/* <!-- Start chat-message-list --> */}
@@ -239,22 +346,12 @@ export function Chats() {
                             {users.length > 0 &&
                             // onClick={() => selectFriend(user)} selectFriend(user.uid)
                                 users.map((user) => (
-                                    <li key={user.id} onClick={()=>(selectFriend(user))} className="px-5 py-[15px] group-data-[theme-color=violet]:hover:bg-slate-100 group-data-[theme-color=green]:hover:bg-green-50/50 group-data-[theme-color=red]:hover:bg-red-50/50 transition-all ease-in-out border-b border-white/20 dark:border-zinc-700 group-data-[theme-color=violet]:dark:hover:bg-zinc-600 group-data-[theme-color=green]:dark:hover:bg-zinc-600 group-data-[theme-color=red]:dark:hover:bg-zinc-600 dark:hover:border-zinc-700">
-                                        <a href="#">
-                                            <div className="flex">
-                                                <div className="relative self-center ltr:mr-3 rtl:ml-3">
-                                                    <img src="./assets/images/users/avatar-2.jpg" className="rounded-full w-9 h-9" alt="" />
-                                                    <span className="absolute w-2.5 h-2.5 bg-green-500 border-2 border-white rounded-full top-7 ltr:right-1 rtl:left-1 dark:border-zinc-600"></span>
-                                                </div>
+                                    <li className="px-5 py-[15px] group-data-[theme-color=violet]:hover:bg-slate-100 group-data-[theme-color=green]:hover:bg-green-50/50 group-data-[theme-color=red]:hover:bg-red-50/50 transition-all ease-in-out border-b border-white/20 dark:border-zinc-700 group-data-[theme-color=violet]:dark:hover:bg-zinc-600 group-data-[theme-color=green]:dark:hover:bg-zinc-600 group-data-[theme-color=red]:dark:hover:bg-zinc-600 dark:hover:border-zinc-700">
 
-                                                <div className="flex-grow overflow-hidden">
-                                                    <h5 className="mb-1 text-base truncate dark:text-gray-50">{user.username}</h5>
-                                                    <p className="mb-0 text-gray-500 truncate dark:text-gray-300 text-14">Hey! there I'm available</p>
-                                                </div>
-                                                <div className="text-gray-500 text-11 dark:text-gray-300">05 min</div>
-                                            </div>
-                                        </a>
-                                    </li>))
+                                        <SingleChat user={user} key={user.id} onClick={()=>(selectFriend(user))}/>
+                                        </li>
+
+                                    ))
                             }
                            </ul>
                     </div>
