@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { createGroup } from "../../service/users.service";
+import { fetchGroups } from "../../service/users.service";
 
 export function Groups() {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [groupName, setGroupName] = useState('');
   const [isPrivate, setIsPrivate] = useState(false);
+  const [groups, setGroups] = useState({});
 
   const toggleModal = () => {
     setIsModalVisible(!isModalVisible);
@@ -13,7 +15,8 @@ export function Groups() {
   const handleCreateGroup = async (event) => {
     event.preventDefault(); // Prevent the form from submitting in the traditional way
     try {
-      await createGroup(groupName, isPrivate);
+      const newGroup = await createGroup(groupName, isPrivate);
+      setGroups(prevGroups => ({ ...prevGroups, [newGroup.id]: newGroup }));
       console.log("Group created with privacy setting:", isPrivate);
       setIsModalVisible(false); // Close the modal
       setGroupName(''); // Reset the group name input field
@@ -23,6 +26,15 @@ export function Groups() {
       console.error("Failed to create group:", error);
     }
   };
+
+  useEffect(() => {
+    const getGroups = async () => {
+      const fetchedGroups = await fetchGroups();
+      setGroups(fetchedGroups);
+    };
+
+    getGroups();
+  }, []);
 
   return (
     <>
@@ -75,10 +87,23 @@ export function Groups() {
             </div>
           </div>
         )}
+        <div className="mt-4">
+          <h3 className="text-lg leading-6 font-medium text-gray-900">Groups</h3>
+          <div className="mt-2">
+            {/* Display groups here */}
+            {Object.entries(groups).map(([key, group]) => (
+              <div key={key} className="p-4 max-w-md bg-white rounded-lg border shadow-md">
+                <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900">{group.name}</h5>
+                <p className="font-normal text-gray-700">{group.private ? 'Private' : 'Public'}</p>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     </>
   );
 }
+
 
 // export function Groups() {
 //   return (
