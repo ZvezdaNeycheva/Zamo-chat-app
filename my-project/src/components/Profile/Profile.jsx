@@ -1,11 +1,12 @@
 import React, { useContext, useEffect, useState } from "react";
 import { AppContext } from "../../appContext/AppContext";
 import { uploadProfileImage } from "../../service/auth.service";
+import { updateUserData } from "../../service/users.service";
 import { useNavigate } from "react-router-dom";
 
 export function Profile() {
   const navigate = useNavigate();
-  const { user, userData } = useContext(AppContext);
+  const { user, userData, setUser } = useContext(AppContext);
   const [photo, setPhoto] = useState(null);
   const [loading, setLoading] = useState(false);
   const [photoURL, setPhotoURL] = useState("https://thinksport.com.au/wp-content/uploads/2020/01/avatar-.jpg");
@@ -37,7 +38,18 @@ export function Profile() {
   }
 
   function handleClick() {
-    uploadProfileImage(photo, user, setLoading);
+    uploadProfileImage(photo, user, setLoading)
+      .then((photoURL) => {
+        if (user && user.username) {
+          setUser((prevUser) => ({ ...prevUser, profilePhotoURL: photoURL }));
+          console.log(photoURL);
+        } else {
+          console.error('Error updating user data: Username is undefined');
+        }
+      })
+      .catch((error) => {
+        console.error('Error uploading profile image:', error);
+      });
   }
 
   useEffect(() => {
@@ -90,7 +102,7 @@ export function Profile() {
           {/* Profile picture */}
           <div className="mb-4">
             <input type="file" onChange={handleChange} id="file" />
-            <button disabled={loading || !photo} onClick={handleClick}  >
+            <button disabled={loading || !photo} onClick={handleClick}>
               Upload
             </button>
             <img src={ photo ? URL.createObjectURL(photo) : photoURL || "https://thinksport.com.au/wp-content/uploads/2020/01/avatar-.jpg"}  className="w-24 h-24 p-1 mx-auto border border-gray-100 rounded-full dark:border-zinc-800" alt="Avatar"/>
@@ -141,29 +153,37 @@ export function Profile() {
                 </button>
               </h2>
               <div className={`block bg-white border border-t-0 border-gray-100 accordion-body dark:bg-transparent dark:border-zinc-600 
-              ${openAboutDropdown ? "" : "hidden"}`} >
+                ${openAboutDropdown ? "" : "hidden"}`} >
                 <div className="p-5">
-                  {/* Name */}
                   <div>
-                    <p className="mb-1 text-gray-500 dark:text-gray-300">Name</p>
-                    <h5 className="text-sm dark:text-gray-50">{userData ? userData.username : "N/A"}</h5>
-                  </div>
-                  {/* Email */}
-                  <div className="mt-5">
-                    <p className="mb-1 text-gray-500 dark:text-gray-300">Email</p>
-                    <h5 className="text-sm dark:text-gray-50">{userData ? userData.email : "N/A"}</h5>
-                  </div>
-                  {/* Account Create */}
-                  <div className="mt-5">
-                    <p className="mb-1 text-gray-500 dark:text-gray-300">Account Create</p>
-                    <h5 className="text-sm dark:text-gray-50">
-                      {userData ? userData.createdOnReadable : "N/A"}
-                    </h5>
-                  </div>
-                  {/* Location */}
-                  <div className="mt-5">
-                    <p className="mb-1 text-gray-500 dark:text-gray-300"> Location </p>
-                    <h5 className="text-sm dark:text-gray-50">{/* need to add a location here*/}</h5>
+                    <div className="ltr:float-right rtl:float-left">
+                      <button type="button" className="py-1.5 btn bg-slate-100 border-transparent rounded hover:bg-gray-50 transition-all ease-in-out dark:bg-zinc-600 dark:text-gray-50 dark:hover:bg-zinc-500/50">
+                        <i className="mr-1 align-middle ri-edit-fill" /> Edit
+                      </button>
+                    </div>
+
+                    {/* Name */}
+                    <div>
+                      <p className="mb-1 text-gray-500 dark:text-gray-300">Name</p>
+                      <h5 className="text-sm dark:text-gray-50">{userData ? userData.username : "N/A"}</h5>
+                    </div>
+                    {/* Email */}
+                    <div className="mt-5">
+                      <p className="mb-1 text-gray-500 dark:text-gray-300">Email</p>
+                      <h5 className="text-sm dark:text-gray-50">{userData ? userData.email : "N/A"}</h5>
+                    </div>
+                    {/* Account Create */}
+                    <div className="mt-5">
+                      <p className="mb-1 text-gray-500 dark:text-gray-300">Account Create</p>
+                      <h5 className="text-sm dark:text-gray-50">
+                        {userData ? userData.createdOnReadable : "N/A"}
+                      </h5>
+                    </div>
+                    {/* Location */}
+                    <div className="mt-5">
+                      <p className="mb-1 text-gray-500 dark:text-gray-300"> Location </p>
+                      <h5 className="text-sm dark:text-gray-50">{/* need to add a location here*/}</h5>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -172,15 +192,14 @@ export function Profile() {
             {/* Attached Files Drop Down menu*/}
             <div className="mt-2 text-gray-700 accordion-item">
               <h2>
-                <button onClick={toggleFileDropdown} type="button" className={`flex items-center justify-between w-full px-3 py-2 font-medium text-left border border-gray-100 rounded accordion-header group dark:border-b-zinc-600 dark:bg-zinc-600 dark:border-zinc-600 
-                  ${openFilesDropdown ? "group-[.active]:rotate-180" : ""}`} >
+                <button onClick={toggleFileDropdown} type="button" className='flex items-center justify-between w-full px-3 py-2 font-medium text-left border border-gray-100 rounded accordion-header group dark:border-b-zinc-600 dark:bg-zinc-600 dark:border-zinc-600'>
                   <span className="m-0 text-[14px] dark:text-gray-50 font-semibold ltr:block rtl:hidden">
                     <i className="mr-2 align-middle ri-attachment-line d-inline-block" /> Attached Files
                   </span>
                   <span className="m-0 text-[14px] dark:text-gray-50 font-semibold ltr:hidden rtl:block">
                     Attached Files <i className="ml-2 align-middle ri-attachment-line d-inline-block" />
                   </span>
-                  <i className={`mdi mdi-chevron-down text-lg dark:text-gray-50 ${openFilesDropdown ? "group-[.active]:rotate-180" : ""}`} />
+                  <i className={`mdi mdi-chevron-down text-lg ${openFilesDropdown ? "group-[.active]:rotate-180" : ""} dark:text-gray-50 `} />
                 </button>
               </h2>
               {/* Attached Files */}
