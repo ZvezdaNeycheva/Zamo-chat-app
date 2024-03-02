@@ -53,14 +53,19 @@ export function Chats() {
     }
 
     const getRoom = async (participants) => {
-        const snapshot = await get(query(ref(db, "rooms"), orderByChild("participants"), equalTo(participants)));
+        // const participants = Object.values(participants); // Extract the participants array
+        const participantIds = participants.participants;
+        const snapshot = await get(query(ref(db, "rooms"), orderByChild("participants"), equalTo(participantIds)));
+        console.log('HI');
         if (!snapshot.exists()) {
+            console.log('rooms does not exist'+{room});
             return null;
         }
         const room = {
             id: snapshot.key,
             ...snapshot.val(),
         };
+        console.log({room});
         return room;
     }
 
