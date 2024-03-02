@@ -24,7 +24,9 @@ export function Chats() {
 
 //select friend, check if room exists, if not create room
     const selectFriend = async (friend) => {
-        const participants = [user.uid, friend.id];
+        
+        const participants = [user?.uid, friend.uid];
+        console.log({participants});
         const room = await getRoom(participants);
         
         if (!room) {
@@ -230,9 +232,9 @@ export function Chats() {
                     <div className="h-[610px] px-2" data-simplebar>
                         <ul className="chat-user-list">
                             {users.length > 0 &&
-                            // onClick={() => selectFriend(user)}
+                            // onClick={() => selectFriend(user)} selectFriend(user.uid)
                                 users.map((user) => (
-                                    <li key={user.id} onClick={selectFriend(user.id)} className="px-5 py-[15px] group-data-[theme-color=violet]:hover:bg-slate-100 group-data-[theme-color=green]:hover:bg-green-50/50 group-data-[theme-color=red]:hover:bg-red-50/50 transition-all ease-in-out border-b border-white/20 dark:border-zinc-700 group-data-[theme-color=violet]:dark:hover:bg-zinc-600 group-data-[theme-color=green]:dark:hover:bg-zinc-600 group-data-[theme-color=red]:dark:hover:bg-zinc-600 dark:hover:border-zinc-700">
+                                    <li key={user.id} onClick={()=>(selectFriend(user))} className="px-5 py-[15px] group-data-[theme-color=violet]:hover:bg-slate-100 group-data-[theme-color=green]:hover:bg-green-50/50 group-data-[theme-color=red]:hover:bg-red-50/50 transition-all ease-in-out border-b border-white/20 dark:border-zinc-700 group-data-[theme-color=violet]:dark:hover:bg-zinc-600 group-data-[theme-color=green]:dark:hover:bg-zinc-600 group-data-[theme-color=red]:dark:hover:bg-zinc-600 dark:hover:border-zinc-700">
                                         <a href="#">
                                             <div className="flex">
                                                 <div className="relative self-center ltr:mr-3 rtl:ml-3">

@@ -35,18 +35,18 @@ export function Index() {
         participants: [],
       });
 
-      useEffect(() => {
-        if (roomId) {
-            const roomRef = ref(db, `rooms/${roomId}/messages`);
-            const queryRef = query(roomRef);
-            const unsubscribe = onChildAdded(queryRef, (snapshot) => {
-                setMessages(prevMessages => [...prevMessages, snapshot.val()]);
-            });
-            return () => {
-                unsubscribe();
-            };
-        }
-    }, [roomId]);
+    //   useEffect(() => {
+    //     if (roomId) {
+    //         const roomRef = ref(db, `rooms/${roomId}/messages`);
+    //         const queryRef = query(roomRef);
+    //         const unsubscribe = onChildAdded(queryRef, (snapshot) => {
+    //             setMessages(prevMessages => [...prevMessages, snapshot.val()]);
+    //         });
+    //         return () => {
+    //             unsubscribe();
+    //         };
+    //     }
+    // }, [roomId]);
 
 
    const handleInputMessage = (e) => {
@@ -55,36 +55,36 @@ export function Index() {
         setNewMessage(message);
         // console.log({message});
     }
-    //  const handleSendMessage = (e) => {
-    //     e.preventDefault();
-    //     console.log({newMessage});
-    //     if(newMessage === ""){
-    //         return;
-    //     }
-    //     // const chatRef = ref(db, `rooms/${roomId}`);
-    //     // const chatData = {
-    //     //     uid,
-    //     //     message: newMessage,
-    //     //     timestamp: new Date().getTime()
-    //     // }
-    //     // const newChatRef = push(chatRef);
-    //     // set(newChatRef, chatData);
-    //     // setNewMessage("");
-    // }   
-    const handleSendMessage = async () => {
-        if (!newMessage.trim()) return;
+     const handleSendMessage = (e) => {
+        e.preventDefault();
+        console.log({newMessage});
+        if(newMessage === ""){
+            return;
+        }
+        // const chatRef = ref(db, `rooms/${roomId}`);
+        // const chatData = {
+        //     uid,
+        //     message: newMessage,
+        //     timestamp: new Date().getTime()
+        // }
+        // const newChatRef = push(chatRef);
+        // set(newChatRef, chatData);
+        // setNewMessage("");
+    }   
+    // const handleSendMessage = async () => {
+    //     if (!newMessage.trim()) return;
 
-        const message = {
-            messageId: "",
-            senderId: userId,
-            content: newMessage,
-            timestamp: db.ServerValue.TIMESTAMP,
-        };
+    //     const message = {
+    //         messageId: "",
+    //         senderId: userId,
+    //         content: newMessage,
+    //         timestamp: db.ServerValue.TIMESTAMP,
+    //     };
 
-        const messageRef = ref(db, `rooms/${roomId}/messages`);
-        await push(messageRef, message);
-        setNewMessage("");
-    };
+    //     const messageRef = ref(db, `rooms/${roomId}/messages`);
+    //     await push(messageRef, message);
+    //     setNewMessage("");
+    // };
 
 
 
