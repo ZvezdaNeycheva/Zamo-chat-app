@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { createGroup } from "../../service/users.service";
-import { fetchGroups } from "../../service/users.service";
+import { createGroup } from "../../service/channel.service";
+import { fetchGroups } from "../../service/channel.service";
 
 export function Groups() {
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -139,7 +139,7 @@ export function Groups() {
                 {/* Additional styling for hover effect */}
                 <div className="text-right">
                   <button className="text-sm text-white bg-blue-500 hover:bg-blue-600 rounded-lg px-3 py-1 transition-colors duration-150 ease-in-out">
-                    Join Group
+                    Delete the Group
                   </button>
                 </div>
               </div>
