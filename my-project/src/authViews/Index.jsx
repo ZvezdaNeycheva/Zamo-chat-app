@@ -11,6 +11,9 @@ import { LockScreen } from "./LockScreen";
 import { Login } from "./Login";
 import { Register } from "./Register";
 import { RecoverPassword } from "./RecoverPassword";
+import { useState, useEffect } from "react";
+import { db } from "../../config/firebase-config";
+import { get, query, ref, update } from "firebase/database";
 
 // import './assets/libs/magnific-popup/magnific-popup.css';
 // import './assets/libs/owl.carousel/assets/owl.carousel.min.css';
@@ -19,6 +22,26 @@ import { RecoverPassword } from "./RecoverPassword";
 // import './assets/css/tailwind.css';
 
 export function Index() {
+    const [newMessage, setNewMessage] = useState("");
+    
+   const handleInputMessage = (e) => {
+        e.preventDefault();
+        const message = e.target.value;
+        setNewMessage(message);
+        // console.log({message});
+    }
+     const handleSendMessage = (e) => {
+        e.preventDefault();
+        console.log({newMessage});
+        if(newMessage === ""){
+            return;
+        }
+
+        
+    }   
+
+
+
     return (
         <>
                 <Meta title={'Chat App'}></Meta>
@@ -562,7 +585,7 @@ export function Index() {
                                 <div className="z-40 w-full p-6 mb-0 bg-white border-t lg:mb-1 border-gray-50 dark:bg-zinc-800 dark:border-zinc-700">
                                     <div className="flex gap-2">
                                         <div className="flex-grow">
-                                            <input type="text" className="w-full border-transparent rounded bg-gray-50 placeholder:text-14 text-14 dark:bg-zinc-700 dark:placeholder:text-gray-300 dark:text-gray-300" placeholder="Enter Message..." />
+                                            <input type="text" value={newMessage} onChange={handleInputMessage} onClick={handleSendMessage} className="w-full border-transparent rounded bg-gray-50 placeholder:text-14 text-14 dark:bg-zinc-700 dark:placeholder:text-gray-300 dark:text-gray-300" placeholder="Enter Message..." />
                                         </div>
                                         <div>
                                             <div>

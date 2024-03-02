@@ -49,17 +49,19 @@ export const getUsersCount = async () => {
   return snapshot.exists() ? Object.keys(snapshot.val()).length : 0;
 };
 
-export const createGroup = async (groupName) => {
+export const createGroup = async (groupName, isPrivate) => {
   const readableDate = format(new Date(), 'yyyy-MM-dd HH:mm:ss');
   const groupsRef = ref(getDatabase(), 'groups');
   const newGroupRef = push(groupsRef);
 
   try {
     await set(newGroupRef, {
+      id: newGroupRef.key,
       name: groupName,
       createdOnReadable: readableDate,
+      private: isPrivate,
     });
-    console.log("Group created successfully.");
+    console.log("Group created successfully with ID:", newGroupRef.key);
     return newGroupRef.key; // Returns the key of the newly created group
   } catch (error) {
     console.error("Error creating group:", error);

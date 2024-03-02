@@ -4,6 +4,7 @@ import { createGroup } from "../../service/users.service";
 export function Groups() {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [groupName, setGroupName] = useState('');
+  const [isPrivate, setIsPrivate] = useState(false);
 
   const toggleModal = () => {
     setIsModalVisible(!isModalVisible);
@@ -12,11 +13,12 @@ export function Groups() {
   const handleCreateGroup = async (event) => {
     event.preventDefault(); // Prevent the form from submitting in the traditional way
     try {
-      await createGroup(groupName);
-      console.log("Group created:", groupName);
+      await createGroup(groupName, isPrivate);
+      console.log("Group created with privacy setting:", isPrivate);
       setIsModalVisible(false); // Close the modal
       setGroupName(''); // Reset the group name input field
-      // Here, you could also add logic to refresh the list of groups displayed in the UI
+      setIsPrivate(false); // Reset the privacy toggle
+      // Optionally refresh the list of groups
     } catch (error) {
       console.error("Failed to create group:", error);
     }
@@ -42,7 +44,7 @@ export function Groups() {
                   &times;
                 </button>
               </div>
-              <form onSubmit={handleCreateGroup} className="mt-4">
+              <form onSubmit={handleCreateGroup} className="mt-4 flex flex-col">
                 <label htmlFor="groupName" className="block text-sm font-medium text-gray-700">Group Name</label>
                 <input
                   id="groupName"
@@ -52,12 +54,23 @@ export function Groups() {
                   className="mt-1 p-2 w-full border rounded-md"
                   required
                 />
-                <button
-                  type="submit"
-                  className="mt-4 px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600"
-                >
-                  Create Group
-                </button>
+                <div className="flex justify-between items-center mt-4">
+                  <label htmlFor="group-private" className="inline-flex items-center">
+                    <input
+                      id="group-private"
+                      type="checkbox"
+                      checked={isPrivate}
+                      onChange={(e) => setIsPrivate(e.target.checked)}
+                      className="form-checkbox h-5 w-5 text-gray-600"
+                    /><span className="ml-2 text-gray-700">Private Group</span>
+                  </label>
+                  <button
+                    type="submit"
+                    className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600"
+                  >
+                    Create Group
+                  </button>
+                </div>
               </form>
             </div>
           </div>
