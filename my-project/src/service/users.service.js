@@ -2,11 +2,11 @@ import { get, set, ref, query, equalTo, orderByChild, update, getDatabase, push 
 import { db } from '../config/firebase-config';
 import { format } from 'date-fns';
 
-export const getUserByHandle = (username = 'pesho') => {
+export const getUserByUsername = (username = 'pesho') => {
   return get(ref(db, `users/${username}`));
 };
 
-export const createUserProfile = (uid, username, email, phoneNumber, password, role = 'user', status, fiendsRequests, frendsList, profilePhotoURL) => {
+export const createUserProfile = (uid, username, email, phoneNumber, password, role = 'user', status, fiendsRequests, frendsList ) => {
   const readableDate = format(new Date(), 'yyyy-MM-dd HH:mm:ss');
 
   return set(ref(db, `users/${username}`), {

@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { AppContext } from "../../appContext/AppContext";
 import { uploadProfileImage } from "../../service/auth.service";
-import { updateUserData } from "../../service/users.service";
 import { useNavigate } from "react-router-dom";
 
 export function Profile() {
@@ -40,7 +39,7 @@ export function Profile() {
   function handleClick() {
     uploadProfileImage(photo, user, setLoading)
       .then((photoURL) => {
-        if (user && user.username) {
+        if (user) {
           setUser((prevUser) => ({ ...prevUser, profilePhotoURL: photoURL }));
           console.log(photoURL);
         } else {
@@ -107,6 +106,9 @@ export function Profile() {
             </button>
             <img src={ photo ? URL.createObjectURL(photo) : photoURL || "https://thinksport.com.au/wp-content/uploads/2020/01/avatar-.jpg"}  className="w-24 h-24 p-1 mx-auto border border-gray-100 rounded-full dark:border-zinc-800" alt="Avatar"/>
           </div>
+
+          <h5 className="mb-1 text-16 dark:text-gray-50">{userData ? userData.username : "N/A"}</h5>
+
           {/* End profile picture */}
           {/* Profile Status */}
           <div className="relative mb-1 dropdown">
