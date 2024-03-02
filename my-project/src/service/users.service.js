@@ -19,7 +19,7 @@ export const createUserProfile = (uid, username, email, phoneNumber, password, r
     role,
     status,
     fiendsRequests,
-    friendsList,
+    frendsList,
     profilePhotoURL: '',
   });
 };
