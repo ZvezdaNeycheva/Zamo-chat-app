@@ -105,11 +105,7 @@ export function Profile() {
             <button disabled={loading || !photo} onClick={handleClick}>
               Upload
             </button>
-            <img
-              src={photo ? URL.createObjectURL(photo) : user.profilePhotoURL || "https://thinksport.com.au/wp-content/uploads/2020/01/avatar-.jpg"}
-              className="w-24 h-24 p-1 mx-auto border border-gray-100 rounded-full dark:border-zinc-800"
-              alt="Avatar"
-            />
+            <img src={ photo ? URL.createObjectURL(photo) : photoURL || "https://thinksport.com.au/wp-content/uploads/2020/01/avatar-.jpg"}  className="w-24 h-24 p-1 mx-auto border border-gray-100 rounded-full dark:border-zinc-800" alt="Avatar"/>
           </div>
           {/* End profile picture */}
           {/* Profile Status */}

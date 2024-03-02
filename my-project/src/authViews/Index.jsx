@@ -12,7 +12,7 @@ import { Login } from "./Login";
 import { Register } from "./Register";
 import { RecoverPassword } from "./RecoverPassword";
 import { useState, useEffect } from "react";
-import { db } from "../../config/firebase-config";
+import { db } from "../config/firebase-config";
 import { get, query, ref, update } from "firebase/database";
 
 // import './assets/libs/magnific-popup/magnific-popup.css';
