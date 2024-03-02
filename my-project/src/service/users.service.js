@@ -2,14 +2,14 @@ import { get, set, ref, query, equalTo, orderByChild, update, getDatabase, push,
 import { db } from '../config/firebase-config';
 import { format } from 'date-fns';
 
-export const getUserByUsername = (username = 'pesho') => {
-  return get(ref(db, `users/${username}`));
+export const getUserByUsername = (uid) => {
+  return get(ref(db, `users/${uid}`));
 };
 
 export const createUserProfile = (uid, username, email, phoneNumber, password, role = 'user', status, friendsRequests, frendsList ) => {
   const readableDate = format(new Date(), 'yyyy-MM-dd HH:mm:ss');
 
-  return set(ref(db, `users/${username}`), {
+  return set(ref(db, `users/${uid}`), {
     uid,
     username,
     email,
@@ -29,8 +29,8 @@ export const getUserData = (uid) => {
   return get(query(ref(db, 'users'), orderByChild('uid'), equalTo(uid)));
 };
 
-export const updateUserData = async (username, data) => {
-  const userRef = ref(db, `users/${username}`);
+export const updateUserData = async (uid, data) => {
+  const userRef = ref(db, `users/${uid}`);
 
   try {
     await update(userRef, data);
@@ -41,15 +41,8 @@ export const updateUserData = async (username, data) => {
   }
 };
 
-export const updateUserRole = async (uid, newRole) => {
-  return update(ref(db, `users/${uid}`), { role: newRole });
-};
 
-export const getUsersCount = async () => {
-  const snapshot = await get(query(ref(db, 'users')));
-  return snapshot.exists() ? Object.keys(snapshot.val()).length : 0;
-};
-
+// Groups
 export const createGroup = async (groupName, isPrivate) => {
   const readableDate = format(new Date(), 'yyyy-MM-dd HH:mm:ss');
   const groupsRef = ref(getDatabase(), 'groups');

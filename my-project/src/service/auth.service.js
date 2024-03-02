@@ -36,20 +36,18 @@ export async function uploadProfileImage(file, user, setLoading) {
   setLoading(true);
 
   try {
-    // Upload the file to Firebase Storage
     await uploadBytes(fileRef, file);
 
-    // Get the download URL of the uploaded file
     const photoURL = await getDownloadURL(fileRef);
 
-    // Update user's profile photo URL in the Realtime Database
-    await updateUserData(user.displayName, { profilePhotoURL: photoURL });
+    console.log(user)
+    await updateUserData(user.uid, { profilePhotoURL: photoURL });
 
     setLoading(false);
     alert('Profile image uploaded successfully.');
+    return photoURL;
   } catch (error) {
     console.error("Error uploading profile image:", error);
     setLoading(false);
-    // Handle the error accordingly
   }
 }

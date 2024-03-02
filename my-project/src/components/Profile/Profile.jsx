@@ -6,7 +6,7 @@ import { updateUserData } from "../../service/users.service";
 
 export function Profile() {
   const navigate = useNavigate();
-  const { user, userData, setUser } = useContext(AppContext);
+  const { user, userData} = useContext(AppContext);
   const [photo, setPhoto] = useState(null);
   const [loading, setLoading] = useState(false);
   const [photoURL, setPhotoURL] = useState("https://thinksport.com.au/wp-content/uploads/2020/01/avatar-.jpg");
@@ -22,7 +22,6 @@ export function Profile() {
   const [newUsername, setNewUsername] = useState(userData ? userData.username : "");
   const [newEmail, setNewEmail] = useState(userData ? userData.email : "");
   const [newLocation, setNewLocation] = useState(userData ? userData.location : "");
-
 
   function toggleDropdown() {
     setOpen((prevOpen) => !prevOpen);
@@ -50,7 +49,8 @@ export function Profile() {
     uploadProfileImage(photo, user, setLoading)
       .then((photoURL) => {
         if (user) {
-          setUser((prevUser) => ({ ...prevUser, profilePhotoURL: photoURL }));
+          userData.profilePhotoURL = photoURL;
+          updateUserData(userData?.uid, userData);
           console.log(photoURL);
         } else {
           console.error('Error updating user data: Username is undefined');
@@ -66,6 +66,36 @@ export function Profile() {
       setPhotoURL(user?.photoURL);
     }
   }, [user, photo]);
+
+  const handleUsernameUpdate = async () => {
+    console.log(newUsername);
+    try {
+      await updateUserData(userData?.uid, { username: newUsername });
+      setEditUsername(false);
+    } catch (error) {
+      console.error("Error updating username:", error);
+    }
+  };
+
+  const handleEmailUpdate = async () => {
+    // Update the email in Firebase
+    try {
+      await updateUserData(userData?.uid, { email: newEmail });
+      setEditEmail(false);
+    } catch (error) {
+      console.error("Error updating email:", error);
+    }
+  };
+
+  const handleLocationUpdate = async () => {
+    // Update the location in Firebase
+    try {
+      await updateUserData(userData?.uid, { location: newLocation });
+      setEditLocation(false);
+    } catch (error) {
+      console.error("Error updating location:", error);
+    }
+  };
 
   return (
     <>
@@ -114,7 +144,7 @@ export function Profile() {
             <button disabled={loading || !photo} onClick={handleClick}>
               Upload
             </button>
-            <img src={ photo ? URL.createObjectURL(photo) : photoURL || "https://thinksport.com.au/wp-content/uploads/2020/01/avatar-.jpg"}  className="w-24 h-24 p-1 mx-auto border border-gray-100 rounded-full dark:border-zinc-800" alt="Avatar"/>
+            <img src={ userData.profilePhotoURL || "https://thinksport.com.au/wp-content/uploads/2020/01/avatar-.jpg"}  className="w-24 h-24 p-1 mx-auto border border-gray-100 rounded-full dark:border-zinc-800" alt="Avatar"/>
           </div>
 
           <h5 className="mb-1 text-16 dark:text-gray-50">{userData ? userData.username : "N/A"}</h5>
@@ -164,6 +194,7 @@ export function Profile() {
                   <i className={`mdi mdi-chevron-down text-lg ${openAboutDropdown ? "group-[.active]:rotate-180" : ""} dark:text-gray-50`} />
                 </button>
               </h2>
+
               <div className={`block bg-white border border-t-0 border-gray-100 accordion-body dark:bg-transparent dark:border-zinc-600 
                 ${openAboutDropdown ? "" : "hidden"}`} >
                 <div className="p-5">
@@ -172,55 +203,54 @@ export function Profile() {
                       <p className="mb-1 text-gray-500 dark:text-gray-300">Name</p>
                       {editUsername ? (
                         <>
-                          <input value={newUsername} onChange={(e) => setNewUsername(e.target.value)} type="text" className="w-full p-2 mb-2 border rounded border-gray-100 dark:border-zinc-600" />
-                          <button  onClick={() => {setEditUsername(false); updateUserData(user.username, { username: newUsername })}} className="py-1.5 btn bg-slate-100 border-transparent rounded hover:bg-gray-50 transition-all ease-in-out dark:bg-zinc-600 dark:text-gray-50 dark:hover:bg-zinc-500/50">
+                          <input value={newUsername} onChange={(e) => setNewUsername(e.target.value)} type="text" className="w-full p-2 mb-2 border rounded border-gray-100 dark:border-zinc-600"/>
+                          <button onClick={handleUsernameUpdate} className="py-1.5 btn bg-slate-100 border-transparent rounded hover:bg-gray-50 transition-all ease-in-out dark:bg-zinc-600 dark:text-gray-50 dark:hover:bg-zinc-500/50">
                             Save
                           </button>
-                          <button onClick={() => {setEditUsername(false); setNewUsername(userData ? userData.username : "")}} className="ml-2 py-1.5 btn bg-slate-100 border-transparent rounded hover:bg-gray-50 transition-all ease-in-out dark:bg-zinc-600 dark:text-gray-50 dark:hover:bg-zinc-500/50">
+                          <button onClick={() => { setEditUsername(false); setNewUsername(userData ? userData.username : "")}} className="ml-2 py-1.5 btn bg-slate-100 border-transparent rounded hover:bg-gray-50 transition-all ease-in-out dark:bg-zinc-600 dark:text-gray-50 dark:hover:bg-zinc-500/50" >
                             Cancel
                           </button>
                         </>
                       ) : (
                         <div className="flex items-center">
                           <h5 className="text-sm dark:text-gray-50">{userData ? userData.username : "N/A"}</h5>
-                          <button onClick={() => setEditUsername(true)} className="ml-2 text-gray-500 hover:text-gray-700 dark:text-gray-300 dark:hover:text-gray-100">
+                          <button onClick={() => setEditUsername(true)} className="ml-2 text-gray-500 hover:text-gray-700 dark:text-gray-300 dark:hover:text-gray-100" >
                             Edit
                           </button>
                         </div>
                       )}
                     </div>
                       
-                    {/* Email */}
-                    <div className="mt-5">
+                   {/* Email */}
+                   <div className="mt-5">
                       <p className="mb-1 text-gray-500 dark:text-gray-300">Email</p>
                       {editEmail ? (
                         <>
                           <input value={newEmail} onChange={(e) => setNewEmail(e.target.value)} type="text" className="w-full p-2 mb-2 border rounded border-gray-100 dark:border-zinc-600"/>
-                          <button onClick={() => {setEditEmail(false); updateUserData(user.username, { email: newEmail })}} className="py-1.5 btn bg-slate-100 border-transparent rounded hover:bg-gray-50 transition-all ease-in-out dark:bg-zinc-600 dark:text-gray-50 dark:hover:bg-zinc-500/50">
+                          <button onClick={handleEmailUpdate} className="py-1.5 btn bg-slate-100 border-transparent rounded hover:bg-gray-50 transition-all ease-in-out dark:bg-zinc-600 dark:text-gray-50 dark:hover:bg-zinc-500/50" >
                             Save
                           </button>
-                          <button onClick={() => {setEditEmail(false); setNewEmail(userData ? userData.email : "");}} className="ml-2 py-1.5 btn bg-slate-100 border-transparent rounded hover:bg-gray-50 transition-all ease-in-out dark:bg-zinc-600 dark:text-gray-50 dark:hover:bg-zinc-500/50">
+                          <button onClick={() => { setEditEmail(false); setNewEmail(userData ? userData.email : "")}} className="ml-2 py-1.5 btn bg-slate-100 border-transparent rounded hover:bg-gray-50 transition-all ease-in-out dark:bg-zinc-600 dark:text-gray-50 dark:hover:bg-zinc-500/50" >
                             Cancel
                           </button>
                         </>
                       ) : (
                         <div className="flex items-center">
                           <h5 className="text-sm dark:text-gray-50">{userData ? userData.email : "N/A"}</h5>
-                          <button onClick={() => setEditEmail(true)} className="ml-2 text-gray-500 hover:text-gray-700 dark:text-gray-300 dark:hover:text-gray-100">
+                          <button onClick={() => setEditEmail(true)} className="ml-2 text-gray-500 hover:text-gray-700 dark:text-gray-300 dark:hover:text-gray-100" >
                             Edit
                           </button>
                         </div>
                       )}
                     </div>
                       
-                    {/* Location */}
-                    <div className="mt-5">
+                   {/* Location */}
+                   <div className="mt-5">
                       <p className="mb-1 text-gray-500 dark:text-gray-300"> Location </p>
                       {editLocation ? (
                         <>
                           <input value={newLocation} onChange={(e) => setNewLocation(e.target.value)} type="text" className="w-full p-2 mb-2 border rounded border-gray-100 dark:border-zinc-600" />
-                          <button onClick={() => { setEditLocation(false); updateUserData(user.username, { location: newLocation })}} className="py-1.5 btn bg-slate-100 border-transparent rounded hover:bg-gray-50 transition-all ease-in-out dark:bg-zinc-600 dark:text-gray-50 dark:hover:bg-zinc-500/50"
-                          >
+                          <button onClick={handleLocationUpdate} className="py-1.5 btn bg-slate-100 border-transparent rounded hover:bg-gray-50 transition-all ease-in-out dark:bg-zinc-600 dark:text-gray-50 dark:hover:bg-zinc-500/50" >
                             Save
                           </button>
                           <button onClick={() => { setEditLocation(false); setNewLocation(userData ? userData.location : "")}} className="ml-2 py-1.5 btn bg-slate-100 border-transparent rounded hover:bg-gray-50 transition-all ease-in-out dark:bg-zinc-600 dark:text-gray-50 dark:hover:bg-zinc-500/50">
@@ -241,7 +271,7 @@ export function Profile() {
               </div>
             </div>
             {/* End About Drop Down menu*/}
-            
+
             {/* Attached Files Drop Down menu*/}
             <div className="mt-2 text-gray-700 accordion-item">
               <h2>
