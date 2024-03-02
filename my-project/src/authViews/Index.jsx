@@ -11,9 +11,13 @@ import { LockScreen } from "./LockScreen";
 import { Login } from "./Login";
 import { Register } from "./Register";
 import { RecoverPassword } from "./RecoverPassword";
-import { useState, useEffect } from "react";
+
+import { useState, useEffect, useContext } from "react";
 import { db } from "../config/firebase-config";
-import { get, query, ref, update } from "firebase/database";
+import { get, query, ref, update, set, onChildAdded, push } from "firebase/database";
+import { RoomContext } from "../appContext/AppContext";
+
+
 
 // import './assets/libs/magnific-popup/magnific-popup.css';
 // import './assets/libs/owl.carousel/assets/owl.carousel.min.css';
@@ -22,8 +26,29 @@ import { get, query, ref, update } from "firebase/database";
 // import './assets/css/tailwind.css';
 
 export function Index() {
+    // Add Message State: Create a state to store messages in the chat room.
     const [newMessage, setNewMessage] = useState("");
-    
+    const [messages, setMessages] = useState([]);
+    const { userId, friendId, roomId, setContext } = useContext(RoomContext);
+    const [room, setRoom] = useState({
+        uid: '',
+        participants: [],
+      });
+
+    //   useEffect(() => {
+    //     if (roomId) {
+    //         const roomRef = ref(db, `rooms/${roomId}/messages`);
+    //         const queryRef = query(roomRef);
+    //         const unsubscribe = onChildAdded(queryRef, (snapshot) => {
+    //             setMessages(prevMessages => [...prevMessages, snapshot.val()]);
+    //         });
+    //         return () => {
+    //             unsubscribe();
+    //         };
+    //     }
+    // }, [roomId]);
+
+
    const handleInputMessage = (e) => {
         e.preventDefault();
         const message = e.target.value;
@@ -36,9 +61,30 @@ export function Index() {
         if(newMessage === ""){
             return;
         }
-
-        
+        // const chatRef = ref(db, `rooms/${roomId}`);
+        // const chatData = {
+        //     uid,
+        //     message: newMessage,
+        //     timestamp: new Date().getTime()
+        // }
+        // const newChatRef = push(chatRef);
+        // set(newChatRef, chatData);
+        // setNewMessage("");
     }   
+    // const handleSendMessage = async () => {
+    //     if (!newMessage.trim()) return;
+
+    //     const message = {
+    //         messageId: "",
+    //         senderId: userId,
+    //         content: newMessage,
+    //         timestamp: db.ServerValue.TIMESTAMP,
+    //     };
+
+    //     const messageRef = ref(db, `rooms/${roomId}/messages`);
+    //     await push(messageRef, message);
+    //     setNewMessage("");
+    // };
 
 
 
