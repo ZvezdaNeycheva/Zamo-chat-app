@@ -26,6 +26,7 @@ export function Register() {
     status: '',
     friendsRequests: '',
     friendsList: '',
+    location: '',
   });
 
   const [errorMessage, setErrorMessage] = useState('');
