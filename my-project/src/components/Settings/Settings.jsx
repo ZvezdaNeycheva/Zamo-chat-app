@@ -5,6 +5,7 @@ export function Settings() {
   const { user, userData } = useContext(AppContext);
   const [photoURL] = useState(user?.photoURL);
 
+
   return (
     <>
       {/* Start profile content */}
@@ -16,7 +17,7 @@ export function Settings() {
 
           {/* Profile Picture */}
           <div className="relative mb-4">
-            <img src={photoURL} className="w-24 h-24 p-1 mx-auto border border-gray-100 rounded-full dark:border-zinc-800" alt="Avatar" />
+            <img src={userData?.profilePhotoURL || "https://thinksport.com.au/wp-content/uploads/2020/01/avatar-.jpg"} className="w-24 h-24 p-1 mx-auto border border-gray-100 rounded-full dark:border-zinc-800" alt="Avatar" />
             <a href="#!" className="absolute bottom-0 w-10 h-10 bg-gray-100 rounded-full ltr:right-28 rtl:left-28dark:bg-zinc-800 dark:text-gray-100">
               <i className="leading-10 ri-pencil-fill text-16" />
             </a>

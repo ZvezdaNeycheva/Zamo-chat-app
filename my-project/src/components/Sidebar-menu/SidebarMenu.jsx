@@ -4,17 +4,21 @@ import { AppContext } from "../../appContext/AppContext";
 import { useContext, useState } from "react";
 
 export function SidebarMenu() {
-    const { user, setContext } = useContext(AppContext);
-    // const [photo, setPhoto] = useState(null);
-    // const [loading, setLoading] = useState(false);
+    const { user, userData, setContext} = useContext(AppContext);
     const [photoURL] = useState(user?.photoURL);
     const [isDarkMode, setIsDarkMode] = useState(false);
+    const [openSidebar, setOpenSidebar] = useState(false);
   
     // const toggleDarkMode = () => {
     //     setIsDarkMode(!isDarkMode);
     //   };
 
     // const darkModeClass = isDarkMode ? 'dark-mode' : '';
+
+    function toggleSidebarDropdown(e) {
+        e.preventDefault();
+        setOpenSidebar((prevOpen) => !prevOpen);
+      }
 
     const logout = async () => {
       try {
@@ -27,7 +31,8 @@ export function SidebarMenu() {
     };
 
     return (
-        <div className="sidebar-menu w-full lg:w-[75px] shadow lg:flex lg:flex-col flex flex-row justify-between items-center fixed lg:relative z-40 bottom-0 bg-white dark:bg-zinc-600 ">
+        <>
+            <div className="sidebar-menu w-full lg:w-[75px] shadow lg:flex lg:flex-col flex flex-row justify-between items-center fixed lg:relative z-40 bottom-0 bg-white dark:bg-zinc-600 ">
             <div className="hidden lg:my-5 lg:block">
                 <NavLink to="../index/index.jsx" className="block dark:hidden">
                     <span>
@@ -124,50 +129,53 @@ export function SidebarMenu() {
                     {/*profile picture need to fix the "to="#""" */}
 
                     <li className="relative lg:mt-4 dropdown lg:dropup">
-                     <NavLink  href="#" className="dropdown-toggle" id="dropdownButton2" data-bs-toggle="dropdown">
-                       <img src={photoURL} alt="Avatar" className="w-10 h-10 p-1 mx-auto rounded-full bg-gray-50 dark:bg-zinc-700"/>
-                     </NavLink>
+                     <button onClick={(e) => toggleSidebarDropdown(e)} className={`${openSidebar ? "group-[.active]:rotate-180" : ""} dropdown-toggle" id="dropdownButton2" data-bs-toggle="dropdown`}>
+                       <img src={userData?.profilePhotoURL || "https://thinksport.com.au/wp-content/uploads/2020/01/avatar-.jpg"} alt="Avatar" className="w-10 h-10 p-1 mx-auto rounded-full bg-gray-50 dark:bg-zinc-700"/>
+                     </button>
 
-                        {/* Dropdown */}  
-                        <ul className="absolute bottom-5 z-40 float-left w-40 py-2 mx-4 mb-12 text-left list-none bg-white border-none rounded-lg shadow-lg dropdown-menu bg-clip-padding dark:bg-zinc-700" aria-labelledby="dropdownButton2">
-                            
-                            {/* Profile */}  
-                            <li>
-                              <NavLink to="/profile" className="block w-full px-4 py-2 text-sm font-normal text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/30 dark:text-gray-100 dark:hover:bg-zinc-600/50">
-                                Profile
-                                <i className="text-gray-500 rtl:float-left ltr:float-right ri-profile-line text-16"></i>
-                              </NavLink>
-                            </li>
+                        {/* Dropdown */} 
+                        <div className={`${openSidebar ? "" : "hidden"}`}> 
+                            <ul className= "absolute bottom-5 z-40 float-left w-40 py-2 mx-4 mb-12 text-left list-none  bg-white border-none rounded-lg shadow-lg dropdown-menu bg-clip-padding dark:bg-zinc-700"    aria-labelledby="dropdownButton2">
 
-                            {/* Setting */}  
-                            <li>
-                                <NavLink to="/setting" className=" block w-full px-4 py-2 text-sm font-normal text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/30 dark:text-gray-100 dark:hover:bg-zinc-600/50 ltr:text-left rtl:text-right">
-                                    Setting
-                                    <i className="text-gray-500 rtl:float-left ltr:float-right ri-settings-3-line text-16"></i>
-                                </NavLink>
-                            </li>
+                                {/* Profile */}  
+                                <li>
+                                  <NavLink to="/profile" className="block w-full px-4 py-2 text-sm font-normal  text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/30    dark:text-gray-100 dark:hover:bg-zinc-600/50">
+                                    Profile
+                                    <i className="text-gray-500 rtl:float-left ltr:float-right ri-profile-line text-16"></i>
+                                  </NavLink>
+                                </li>
 
-                            {/* Lock Screen */}    
-                            <li>
-                                <NavLink to="/lock-screen" className=" block w-full px-4 py-2 text-sm font-normal text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/30 dark:text-gray-100 dark:hover:bg-zinc-600/50 ltr:text-left rtl:text-right">
-                                    Lock Screen 
-                                    <i className="text-gray-500 rtl:float-left ltr:float-right ri-git-repository-private-line text-16"></i>
-                                </NavLink>
-                            </li>
+                                {/* Setting */}  
+                                <li>
+                                    <NavLink to="/setting" className=" block w-full px-4 py-2 text-sm font-normal   text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/30     dark:text-gray-100 dark:hover:bg-zinc-600/50 ltr:text-left rtl:text-right">
+                                        Setting
+                                        <i className="text-gray-500 rtl:float-left ltr:float-right ri-settings-3-line   text-16"></i>
+                                    </NavLink>
+                                </li>
 
-                            <li className="my-2 border-b border-gray-100/20"></li>
+                                {/* Lock Screen */}    
+                                <li>
+                                    <NavLink to="/lock-screen" className=" block w-full px-4 py-2 text-sm font-normal   text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/30     dark:text-gray-100 dark:hover:bg-zinc-600/50 ltr:text-left rtl:text-right">
+                                        Lock Screen 
+                                        <i className="text-gray-500 rtl:float-left ltr:float-right  ri-git-repository-private-line text-16"></i>
+                                    </NavLink>
+                                </li>
 
-                            {/* Log out */}
-                            <li>
-                              <NavLink to="/login" className="block w-full px-4 py-2 text-sm font-normal text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/30 dark:text-gray-100 dark:hover:bg-zinc-600/50 ltr:text-left rtl:text-right">
-                                <button onClick={logout}>Log out</button>
-                                <i className="text-gray-500 rtl:float-left ltr:float-right ri-logout-circle-r-line text-16"></i>
-                              </NavLink>
-                            </li>
-                        </ul>
+                                <li className="my-2 border-b border-gray-100/20"></li>
+
+                                {/* Log out */}
+                                <li>
+                                  <NavLink to="/login" className="block w-full px-4 py-2 text-sm font-normal text-gray-700  bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/30 dark:text-gray-100   dark:hover:bg-zinc-600/50 ltr:text-left rtl:text-right">
+                                    <button onClick={logout}>Log out</button>
+                                    <i className="text-gray-500 rtl:float-left ltr:float-right ri-logout-circle-r-line  text-16"></i>
+                                  </NavLink>
+                                </li>
+                            </ul>
+                        </div>   
                     </li>
                 </ul>
-            </div>    
+            </div>   
         </div>   
+        </>
     );
 }
