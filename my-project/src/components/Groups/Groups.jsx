@@ -88,6 +88,7 @@ export function Groups() {
                   value={groupName}
                   onChange={(e) => setGroupName(e.target.value)}
                   className="mt-1 p-2 w-full border rounded-md"
+                  placeholder="Enter Group Name"
                   required
                 />
                 <div className="flex justify-between items-center mt-4">
@@ -113,13 +114,14 @@ export function Groups() {
         )}
         <div className="mt-4">
           <h3 className="text-lg leading-6 font-medium text-gray-900">Groups</h3>
-          <div className="mt-2 relative">
+          {/* search bar */}
+          <div className="mt-2 relative max-w-md w-full">
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:border-blue-500"
+              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
               placeholder="Search for groups"
             />
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -150,54 +152,3 @@ export function Groups() {
     </>
   );
 }
-
-
-// export function Groups() {
-//   return (
-//     <>
-//       {/* Start chat content */}
-//       <div className="h-screen lg:h-auto">
-//         <div className="p-6">
-//           <div className="ltr:float-right rtl:float-left">
-//             <div className="relative">
-//               {/* Button trigger modal */}
-//               <button
-//                 type="button"
-//                 className="px-4 text-lg text-gray-500 group/tag dark:text-gray-300"
-//                 data-tw-toggle="modal"
-//                 data-tw-target="#modal-id"
-//               >
-//                 <i className="ri-group-line me-1 ms-0" />
-//                 <span className="absolute items-center hidden mb-6 top-8 group-hover/tag:flex ltr:-left-8 rtl:-right-8">
-//                   <span className="relative z-10 p-2 text-xs leading-none text-white whitespace-no-wrap bg-black rounded shadow-lg">
-//                     Create groups
-//                   </span>
-//                   <span className="w-3 h-3 -mt-6 rotate-45 bg-black ltr:-ml-12 rtl:-mr-12" />
-//                 </span>
-//               </button>
-//             </div>
-//           </div>
-//           <h4 className="mb-6 dark:text-gray-50">Groups</h4>
-//           <div className="py-1 mt-5 mb-5 rounded group-data-[theme-color=violet]:bg-slate-100 group-data-[theme-color=green]:bg-green-50 group-data-[theme-color=red]:bg-red-50 group-data-[theme-color=violet]:dark:bg-zinc-600 group-data-[theme-color=green]:dark:bg-zinc-600 group-data-[theme-color=red]:dark:bg-zinc-600">
-//             <span
-//               className="group-data-[theme-color=violet]:bg-slate-100 group-data-[theme-color=green]:bg-green-50 group-data-[theme-color=red]:bg-red-50 group-data-[theme-color=violet]:dark:bg-zinc-600 group-data-[theme-color=green]:dark:bg-zinc-600 group-data-[theme-color=red]:dark:bg-zinc-600 pe-1 ps-3 "
-//               id="basic-addon2"
-//             >
-//               <i className="text-lg text-gray-700 ri-search-line search-icon dark:text-gray-200" />
-//             </span>
-//             <input
-//               type="text"
-//               className="border-0 group-data-[theme-color=violet]:bg-slate-100 group-data-[theme-color=green]:bg-green-50 group-data-[theme-color=red]:bg-red-50 group-data-[theme-color=violet]:dark:bg-zinc-600 group-data-[theme-color=green]:dark:bg-zinc-600 group-data-[theme-color=red]:dark:bg-zinc-600 placeholder:text-[14px] focus:ring-offset-0 focus:outline-none focus:ring-0 dark:text-gray-400"
-//               placeholder="Search messages or users"
-//               aria-label="Search messages or users"
-//               aria-describedby="basic-addon2"
-//             />
-//           </div>
-//           {/* Start chat-group-list */}
-
-//           {/* End chat-group-list */}j
-//         </div>
-//       </div>
-//     </>
-//   );
-// }
