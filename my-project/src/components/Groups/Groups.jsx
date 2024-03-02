@@ -92,9 +92,15 @@ export function Groups() {
           <div className="mt-2">
             {/* Display groups here */}
             {Object.entries(groups).map(([key, group]) => (
-              <div key={key} className="p-4 max-w-md bg-white rounded-lg border shadow-md">
-                <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900">{group.name}</h5>
-                <p className="font-normal text-gray-700">{group.private ? 'Private' : 'Public'}</p>
+              <div key={key} className="p-4 max-w-md bg-white rounded-lg border border-gray-200 shadow-sm hover:shadow-lg transition-shadow duration-200 ease-in-out mb-3">
+                <h5 className="mb-2 text-xl font-semibold tracking-tight text-blue-600">{group.name}</h5>
+                <p className="font-normal text-gray-600">{group.private ? 'Private' : 'Public'}</p>
+                {/* Additional styling for hover effect */}
+                <div className="text-right">
+                  <button className="text-sm text-white bg-blue-500 hover:bg-blue-600 rounded-lg px-3 py-1 transition-colors duration-150 ease-in-out">
+                    Join Group
+                  </button>
+                </div>
               </div>
             ))}
           </div>
