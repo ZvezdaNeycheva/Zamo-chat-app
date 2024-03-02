@@ -56,7 +56,7 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/lock-screen" element={<Authenticated> <LockScreen /> </Authenticated>} />
           <Route path="/recover" element={<RecoverPassword />} />
-          <Route path="/chats" element={<Chats />} />
+          <Route path="/chats/:id" element={<Chats />} />
           <Route path="/contacts" element={<Contacts />} />
           <Route path="/groups" element={<Groups />} />
           <Route path="/meta" element={<Meta />} />
