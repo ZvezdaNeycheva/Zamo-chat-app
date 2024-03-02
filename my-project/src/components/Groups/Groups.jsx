@@ -6,7 +6,29 @@ export function Groups() {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [groupName, setGroupName] = useState('');
   const [isPrivate, setIsPrivate] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
   const [groups, setGroups] = useState({});
+  const [allGroups, setAllGroups] = useState({});
+
+  useEffect(() => {
+    const getGroups = async () => {
+      const fetchedGroups = await fetchGroups();
+      setGroups(fetchedGroups);
+    };
+
+    getGroups();
+  }, []);
+
+  useEffect(() => {
+    // Fetch groups from Firebase and store in `allGroups`
+    const fetchAndSetGroups = async () => {
+      const fetchedGroups = await fetchGroups(); // Your function to fetch groups
+      setAllGroups(fetchedGroups);
+      setGroups(fetchedGroups); // Initially, display all groups
+    };
+
+    fetchAndSetGroups();
+  }, []);
 
   const toggleModal = () => {
     setIsModalVisible(!isModalVisible);
@@ -27,14 +49,16 @@ export function Groups() {
     }
   };
 
-  useEffect(() => {
-    const getGroups = async () => {
-      const fetchedGroups = await fetchGroups();
-      setGroups(fetchedGroups);
-    };
+  const handleSearch = () => {
+    const filteredGroups = Object.entries(allGroups).reduce((acc, [key, group]) => {
+      if (group.name.toLowerCase().includes(searchQuery.toLowerCase())) {
+        acc[key] = group;
+      }
+      return acc;
+    }, {});
 
-    getGroups();
-  }, []);
+    setGroups(filteredGroups); // Update `groups` to only include those that match the search query
+  };
 
   return (
     <>
@@ -89,6 +113,23 @@ export function Groups() {
         )}
         <div className="mt-4">
           <h3 className="text-lg leading-6 font-medium text-gray-900">Groups</h3>
+          <div className="mt-2 relative">
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
+              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:border-blue-500"
+              placeholder="Search for groups"
+            />
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              {/* SVG for magnifying glass icon */}
+            </div>
+            <button onClick={handleSearch} className="absolute inset-y-0 right-0 px-4 text-gray-500 border-l focus:outline-none">
+              {/* Optional: Icon/Button for initiating search */}
+              <i className="ri-search-line"></i>
+            </button>
+          </div>
           <div className="mt-2">
             {/* Display groups here */}
             {Object.entries(groups).map(([key, group]) => (
