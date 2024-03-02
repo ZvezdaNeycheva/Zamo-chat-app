@@ -144,7 +144,7 @@ export function Profile() {
             <button disabled={loading || !photo} onClick={handleClick}>
               Upload
             </button>
-            <img src={ userData.profilePhotoURL || "https://thinksport.com.au/wp-content/uploads/2020/01/avatar-.jpg"}  className="w-24 h-24 p-1 mx-auto border border-gray-100 rounded-full dark:border-zinc-800" alt="Avatar"/>
+            <img src={ userData?.profilePhotoURL || "https://thinksport.com.au/wp-content/uploads/2020/01/avatar-.jpg"}  className="w-24 h-24 p-1 mx-auto border border-gray-100 rounded-full dark:border-zinc-800" alt="Avatar"/>
           </div>
 
           <h5 className="mb-1 text-16 dark:text-gray-50">{userData ? userData.username : "N/A"}</h5>
