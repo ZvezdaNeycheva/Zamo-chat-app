@@ -7,7 +7,7 @@ export const getUserByHandle = (username = 'pesho') => {
 };
 
 
-export const createUserProfile = (uid, username, email, phoneNumber, password, role = 'user', status, fiendsRequests, frendsList, profilePhotoURL) => {
+export const createUserProfile = (uid, username, email, phoneNumber, password, role = 'user', status, fiendsRequests, friendsList, profilePhotoURL) => {
   const readableDate = format(new Date(), 'yyyy-MM-dd HH:mm:ss');
 
   return set(ref(db, `users/${username}`), {
