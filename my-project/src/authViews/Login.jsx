@@ -24,8 +24,7 @@ export function Login() {
   useEffect(() => {
     console.log("User state:", user);
     if (user) {
-      console.log("Redirecting...");
-      navigate(location.state?.from.pathname || "*");
+      navigate(location.state?.from.pathname || "/chats");
     }
   }, [user, navigate, location.state]);
 
@@ -33,7 +32,7 @@ export function Login() {
     try {
       const credentials = await loginUser(form.email, form.password);
       setContext({ user: credentials.user, userData: null });
-      navigate("/");
+      navigate("/chats");
     } catch (error) {
       if (error.code === "auth/invalid-credential") {
         setErrorMsg("The username or/and password you entered is/are incorrect. Please try again.");
