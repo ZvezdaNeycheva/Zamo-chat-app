@@ -136,6 +136,7 @@ export function Profile() {
           <h4 className="mb-0 text-gray-700 dark:text-gray-50"> My Profile </h4>
         </div>
         {/* End profile Header */}
+
         {/* Start user-profile-card */}
         <div className="p-6 text-center border-b border-gray-100 dark:border-zinc-600">
           {/* Profile picture */}
@@ -148,8 +149,8 @@ export function Profile() {
           </div>
 
           <h5 className="mb-1 text-16 dark:text-gray-50">{userData ? userData.username : "N/A"}</h5>
-
           {/* End profile picture */}
+
           {/* Profile Status */}
           <div className="relative mb-1 dropdown">
             <button onClick={toggleStatusDropdown} role="button" className="pb-1 text-gray-500 dropdown-toggle d-block dark:text-gray-300" data-bs-toggle="dropdown" id="dropdownMenuButtonX">
@@ -171,6 +172,7 @@ export function Profile() {
           </div>
         </div>
         {/* End Profile Status */}
+        
         {/* Start user-profile-desc */}
         <div className="p-6 h-[550px]" data-simplebar="">
           <div>
@@ -185,7 +187,8 @@ export function Profile() {
               <h2>
                 <button  onClick={toggleAboutDropdown} type="button" className="flex items-center justify-between w-full px-3 py-2 font-medium text-left border border-gray-100 rounded-t accordion-header group active dark:border-b-zinc-600 dark:bg-zinc-600 dark:border-zinc-600">
                   <span className="m-0 text-[14px] dark:text-gray-50 font-semibold ltr:block rtl:hidden">
-                    <i className="mr-2 align-middle ri-user-2-line d-inline-block" /> About
+                    <i className="mr-2 align-middle ri-user-2-line d-inline-block" />
+                     About
                   </span>
                   <span className="m-0 text-[14px] dark:text-gray-50 font-semibold ltr:hidden rtl:block">
                     About 
@@ -286,8 +289,8 @@ export function Profile() {
                 </button>
               </h2>
               {/* Attached Files */}
-              <div className={`hidden bg-white border border-t-0 border-gray-100 accordion-body dark:bg-transparent dark:border-zinc-600 
-                ${openFilesDropdown ? "" : "hidden"}`}>
+              <div className={`block bg-white border border-t-0 border-gray-100 accordion-body dark:bg-transparent dark:border-zinc-600 
+                ${openFilesDropdown ? "" : "hidden"}`} >
                 <div className="p-5">
                   <div className="p-2 mb-2 border rounded border-gray-100/80 dark:bg-zinc-800 dark:border-transparent">
                     <div className="flex items-center">

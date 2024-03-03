@@ -1,6 +1,7 @@
 import { get, set, ref, query, equalTo, orderByChild, update, getDatabase, push, child } from 'firebase/database';
 import { db } from '../config/firebase-config';
 import { format } from 'date-fns';
+import { auth } from '../config/firebase-config';
 
 export const getUserByUsername = (uid) => {
   return get(ref(db, `users/${uid}`));
@@ -40,3 +41,73 @@ export const updateUserData = async (uid, data) => {
     throw error;
   }
 };
+
+// FRIENDS REQUESTS:      Тhis code is taken from youtube i don't know if it works!!!
+
+// function SendRequest(key) {
+//   const currentUserKey = auth.currentUser.uid; 
+  
+//   let notification = {
+//     sendTo: key,
+//     sendFrom: currentUserKey,
+//     name: auth.currentUser.displayName,
+//     photo: auth.currentUser.photoURL,
+//     dateTime: new Date().toLocaleString(),
+//     status: 'Pending',
+//   };
+
+//   db.ref('notifications').push(notification, function (error) {
+//     if (error) alert(error);
+//     else {
+//       // do something
+//       // PopulateUserList(); // This function is not defined in the provided code
+//     }
+//   });
+// }
+
+// function NotificationCount() {
+//   const currentUserKey = auth.currentUser.uid; // Get the current user's UID
+//   let dbRef = db.ref('notifications');
+
+//   dbRef.orderByChild('sendTo').equalTo(currentUserKey).on('value', function (noti) {
+//     let notiArray = Object.values(noti.val() || {}).filter(n => n.status === 'Pending');
+//     document.getElementById('notification').innerHTML = notiArray.length;
+//   });
+// }
+
+// function Reject(key) {
+//   let dbRef = db.ref('notifications').child(key);
+//   dbRef.once('value', function (noti) {
+//     let obj = noti.val();
+//     obj.status = 'Reject';
+//     dbRef.update(obj, function (error) {
+//       if (error) alert(error);
+//       else {
+//         // do something
+//         // PopulateNotifications(); // This function is not defined in the provided code
+//       }
+//     });
+//   });
+// }
+
+// function Accept(key) {
+//   let dbRef = db.ref('notifications').child(key);
+//   dbRef.once('value', function (noti) {
+//     var obj = noti.val();
+//     obj.status = 'Accept';
+//     dbRef.update(obj, function (error) {
+//       if (error) alert(error);
+//       else {
+//         // do something
+//         // PopulateNotifications(); // This function is not defined in the provided code
+//         var friendList = { friendId: obj.sendFrom, userId: obj.sendTo };
+//         db.ref('friend_list').push(friendList, function (error) {
+//           if (error) alert(error);
+//           else {
+//             //do Something
+//           }
+//         });
+//       }
+//     });
+//   });
+// }
