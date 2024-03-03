@@ -121,7 +121,7 @@ export function Contacts() {
 
   return (
     <>
-     {user ? (
+     {!user ? (
         // User is logged in, display contact list
         <div>
       {/* Start chat content */}

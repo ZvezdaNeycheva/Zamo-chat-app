@@ -28,8 +28,10 @@ export function Login() {
     }
   }, [user, navigate, location.state]);
 
-  const login = async () => {
+  const login = async (event) => {
+    event.preventDefault();
     try {
+      console.log("Logging in...");
       const credentials = await loginUser(form.email, form.password);
       setContext({ user: credentials.user, userData: null });
       navigate("/chats");
