@@ -3,7 +3,7 @@ import { db } from '../config/firebase-config';
 import { format } from 'date-fns';
 import { auth } from '../config/firebase-config';
 
-export const getUserByUsername = (uid) => {
+export const getUserByUid = (uid) => {
   return get(ref(db, `users/${uid}`));
 };
 

@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react';
 import { Meta } from '../components/Meta/Meta';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { registerUser } from '../service/auth.service.js';
-import { createUserProfile, getUserByUsername } from '../service/users.service';
+import { createUserProfile, getUserByUid } from '../service/users.service';
 import { AppContext } from '../appContext/AppContext.js';
 import {format} from 'date-fns';
 
@@ -64,7 +64,7 @@ export function Register() {
         return;
       }
 
-      const user = await getUserByUsername(form.username);
+      const user = await getUserByUid(form.username);
       if (user.exists()) {
         setErrorMessage(`Handle @${form.username} already exists`);
         return;
