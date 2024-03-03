@@ -10,10 +10,12 @@ export function Profile() {
   const [photo, setPhoto] = useState(null);
   const [loading, setLoading] = useState(false);
   const [photoURL, setPhotoURL] = useState("https://thinksport.com.au/wp-content/uploads/2020/01/avatar-.jpg");
+
   const [open, setOpen] = useState(false);
   const [openStatusDropdown, setOpenStatusDropdown] = useState(false);
   const [openAboutDropdown, setOpenAboutDropdown] = useState(false);
   const [openFilesDropdown, setOpenFilesDropdown] = useState(false);
+  const [openFileDetailsDropdown, setFileDetailsDropdown] = useState(false);
 
   const [editUsername, setEditUsername] = useState(false);
   const [editEmail, setEditEmail] = useState(false);
@@ -38,6 +40,10 @@ export function Profile() {
   function toggleFileDropdown() {
     setOpenFilesDropdown((prevOpen) => !prevOpen);
   }
+
+  const toggleFileDetailsDropdown = () => {
+    setFileDetailsDropdown((prevOpen) => !prevOpen);
+  };
 
   function handleChange(e) {
     if (e.target.files[0]) {
@@ -142,8 +148,8 @@ export function Profile() {
           {/* Profile picture */}
           <div className="mb-4">
             <input type="file" onChange={handleChange} id="file" />
-            <button disabled={loading || !photo} onClick={handleClick}>
-              Upload
+            <button disabled={loading || !photo} onClick={handleClick} 
+            className="leading-10 ri-pencil-fill text-16 w-10 h-10 bg-gray-100 rounded-full ltr:right-28 rtl:left-28dark:bg-zinc-800 dark:text-gray-100">
             </button>
             <img src={ userData?.profilePhotoURL || "https://thinksport.com.au/wp-content/uploads/2020/01/avatar-.jpg"}  className="w-24 h-24 p-1 mx-auto border border-gray-100 rounded-full dark:border-zinc-800" alt="Avatar"/>
           </div>
@@ -152,23 +158,30 @@ export function Profile() {
           {/* End profile picture */}
 
           {/* Profile Status */}
+          {/* Dropdown menu for status*/}
           <div className="relative mb-1 dropdown">
-            <button onClick={toggleStatusDropdown} role="button" className="pb-1 text-gray-500 dropdown-toggle d-block dark:text-gray-300" data-bs-toggle="dropdown" id="dropdownMenuButtonX">
-              Available <i className="mdi mdi-chevron-down" />
+            <button onClick={toggleStatusDropdown} className="pb-1 text-gray-500 dropdown-toggle d-block dark:text-gray-300" data-bs-toggle="dropdown" id="dropdownMenuButtonX">
+              Available
+              <i className={`mdi mdi-chevron-down ${openStatusDropdown ? "group-[.active]:rotate-180" : ""}`} />
             </button>
-            {/* Dropdown menu for status*/}
-            <ul className={`absolute z-50 ${openStatusDropdown ? 'visible' : 'invisible'} py-2 mt-2 text-left list-none bg-white border rounded shadow-lg left-20 dropdown-menu w-36 top-6 dark:bg-zinc-700 bg-clip-padding border-gray-50 dark:border-zinc-500`} aria-labelledby="dropdownMenuButtonX">
+          <div className={`${openStatusDropdown ? "" : "hidden"}`} >
+
+            <ul className="absolute z-50 hidden py-2 mt-2 text-left list-none bg-white border rounded shadow-lg left-20 dropdown-menu w-36 top-6 dark:bg-zinc-700 bg-clip-padding border-gray-50 dark:border-zinc-500" aria-labelledby="dropdownMenuButtonX">
               <li>
                 <a className="block w-full px-4 py-2 text-sm font-normal text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/50 dark:text-gray-100 dark:hover:bg-zinc-600/80 ltr:text-left rtl:text-right">
+                {/* //need to add the icon */}
+                <i className="text-green-500 ltr:ml-1 rtl:mr-1 ri-record-circle-fill text-10" /> &nbsp;
                   Available
                 </a>
               </li>
+
               <li>
-                <a href="#" className="block w-full px-4 py-2 text-sm font-normal text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/50 dark:text-gray-100 dark:hover:bg-zinc-600/80 ltr:text-left rtl:text-right">
+                <a  className="block w-full px-4 py-2 text-sm font-normal text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/50 dark:text-gray-100 dark:hover:bg-zinc-600/80 ltr:text-left rtl:text-right">
                   Busy
                 </a>
               </li>
             </ul>
+          </div>
           </div>
         </div>
         {/* End Profile Status */}
@@ -315,27 +328,35 @@ export function Profile() {
                             </a>
                           </li>
                           <li className="relative flex-shrink-0 dropstart">
-                            <a href="#!" className="p-0 text-gray-400 border-0 btn dropdown-toggle dark:text-gray-300" data-bs-toggle="dropdown" id="dropdownMenuButton23">
+                            <button
+                              onClick={toggleFileDetailsDropdown}
+                              className="p-0 text-gray-400 border-0 btn dark:text-gray-300"
+                              aria-haspopup="true"
+                              aria-expanded={openFileDetailsDropdown}>
+
                               <i className="text-lg ri-more-fill" />
-                            </a>
-                            <ul className="absolute z-50 block w-40 py-2 text-left list-none bg-white border border-transparent rounded shadow-lg rtl:left-0 rtl:right-auto ltr:right-0 ltr:left-auto my-7 dropdown-menu bg-clip-padding dark:bg-zinc-700 dark:shadow-sm dark:border-zinc-600" aria-labelledby="dropdownMenuButton23">
-                              <li>
-                                <a className="block w-full px-4 py-2 text-sm font-normal text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/50 dark:text-gray-100 dark:hover:bg-zinc-600 ltr:text-left rtl:text-right" href="#" >
-                                  Action
-                                </a>
-                              </li>
-                              <li>
-                                <a className="block w-full px-4 py-2 text-sm font-normal text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/50 dark:text-gray-100 dark:hover:bg-zinc-600 ltr:text-left rtl:text-right" href="#">
-                                  Another action
-                                </a>
-                              </li>
-                              <li className="my-2 border-b border-gray-100/20 dark:border-zinc-600" />
-                              <li>
-                                <a className="block w-full px-4 py-2 text-sm font-normal text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/50 dark:text-gray-100 dark:hover:bg-zinc-600 ltr:text-left rtl:text-right" href="#">
-                                  Delete
-                                </a>
-                              </li>
-                            </ul>
+                            </button>
+
+                            {openFileDetailsDropdown && (
+                              <ul className="absolute z-50 block w-40 py-2 text-left list-none bg-white border border-transparent rounded                   shadow-lg rtl:left-0 rtl:right-auto ltr:right-0 ltr:left-auto my-7 dropdown-menu bg-clip-padding                  dark:bg-zinc-700 dark:shadow-sm dark:border-zinc-600">
+                                <li>
+                                  <a className="block w-full px-4 py-2 text-sm font-normal text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/50 dark:text-gray-100 dark:hover:bg-zinc-600 ltr:text-left rtl:text-right">
+                                    Action
+                                  </a>
+                                </li>
+                                <li>
+                                  <a className="block w-full px-4 py-2 text-sm font-normal text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/50 dark:text-gray-100 dark:hover:bg-zinc-600 ltr:text-left rtl:text-right">
+                                    Another action
+                                  </a>
+                                </li>
+                                <li className="my-2 border-b border-gray-100/20 dark:border-zinc-600" />
+                                <li>
+                                  <a className="block w-full px-4 py-2 text-sm font-normal text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/50 dark:text-gray-100 dark:hover:bg-zinc-600 ltr:text-left rtl:text-right">
+                                    Delete
+                                  </a>
+                                </li>
+                              </ul>
+                            )}
                           </li>
                         </ul>
                       </div>

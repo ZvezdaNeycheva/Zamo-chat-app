@@ -51,3 +51,24 @@ export async function uploadProfileImage(file, user, setLoading) {
     setLoading(false);
   }
 }
+
+export async function uploadFile(file, user, setLoading) {
+  const fileRef = storageRef(storage, user.uid + '/' + file.name);
+
+  setLoading(true);
+
+  try {
+    await uploadBytes(fileRef, file);
+
+    const fileURL = await getDownloadURL(fileRef);
+
+    await updateUserData(user.uid, { fileURL: fileURL });
+
+    setLoading(false);
+    alert('File uploaded successfully.');
+    return fileURL;
+  } catch (error) {
+    console.error("Error uploading file:", error);
+    setLoading(false);
+  }
+}

@@ -22,6 +22,7 @@ export const createUserProfile = (uid, username, email, phoneNumber, password, r
     friendsRequests,
     frendsList,
     profilePhotoURL: '',
+    fileURL: '',
     location: '',
   });
 };

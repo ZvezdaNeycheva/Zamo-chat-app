@@ -17,15 +17,17 @@ import { db } from "../config/firebase-config";
 import { get, query, ref, update, set, onChildAdded, push } from "firebase/database";
 import { RoomContext } from "../appContext/AppContext";
 
-
-
-// import './assets/libs/magnific-popup/magnific-popup.css';
-// import './assets/libs/owl.carousel/assets/owl.carousel.min.css';
-// import './assets/libs/owl.carousel/assets/owl.theme.default.min.css';
-// import './assets/css/icons.css';
-// import './assets/css/tailwind.css';
+import { uploadFile } from "../service/auth.service";
+import { updateUserData } from "../service/users.service";
+import { AppContext } from "../appContext/AppContext";
 
 export function Index() {
+
+    // Upload File State: Create a state to store the file and loading state.
+    const [loading, setLoading] = useState(false);
+    const [file, setFile] = useState(null);
+    const { user, userData} = useContext(AppContext);
+    
     // Add Message State: Create a state to store messages in the chat room.
     const [newMessage, setNewMessage] = useState("");
     const [messages, setMessages] = useState([]);
@@ -34,6 +36,25 @@ export function Index() {
         uid: '',
         participants: [],
       });
+
+      function handleUploadFile(e) {
+        if (e.target.files[0]) {
+          setFile(e.target.files[0]);
+        }
+      }
+
+      function uploadFileURL() {
+        uploadFile(file, user, setLoading)
+        .then((photoURL) => {
+            if (user) {
+              userData.fileURL = photoURL; // Update with the correct property name (e.g., fileURL)
+              updateUserData(userData?.uid, userData);
+              console.log(photoURL);
+            } else {
+              console.error('Error updating user data: User is undefined');
+            }
+          })
+        }
 
     //   useEffect(() => {
     //     if (roomId) {
@@ -645,17 +666,29 @@ export function Index() {
                                                             <i className="ri-emotion-happy-line"></i>
                                                         </button>
                                                     </li>
+
+                                                    {/* Upload File */}
                                                     <li className="inline-block" title="Attached File">
-                                                        <button type="button" className="border-transparent btn group/tooltip group-data-[theme-color=violet]:dark:text-violet-200 group-data-[theme-color=green]:dark:text-green-200 group-data-[theme-color=red]:dark:text-red-200 group-data-[theme-color=violet]:text-violet-500 group-data-[theme-color=green]:text-green-500 group-data-[theme-color=red]:text-red-500 text-16">
-                                                            <div className="absolute items-center hidden -top-10 ltr:-left-2 group-hover/tooltip:flex rtl:-right-2">
-                                                                <div className="absolute -bottom-1 left-[40%] w-3 h-3 rotate-45 bg-black"></div>
-                                                                <span className="relative z-10 p-2 text-xs leading-none text-white whitespace-no-wrap bg-black rounded shadow-lg">Attached File</span>
-                                                            </div>
-                                                            <i className="ri-attachment-line"></i>
-                                                        </button>
+                                                        <input
+                                                          type="file"
+                                                          onChange={handleUploadFile}
+                                                          className="hidden"
+                                                          id="fileInput"
+                                                        />
+                                                        <label htmlFor="fileInput" className="border-transparent btn group/tooltip group-data-[theme-color=violet]:dark:text-violet-200 group-data-[theme-color=green]:dark:text-green-200 group-data-[theme-color=red]:dark:text-red-200 group-data-[theme-color=violet]:text-violet-500 group-data-[theme-color=green]:text-green-500 group-data-[theme-color=red]:text-red-500 text-16">
+                                                          <div className="absolute items-center hidden -top-10 ltr:-left-2 group-hover/tooltip:flex rtl:-right-2">
+                                                            <div className="absolute -bottom-1 left-[40%] w-3 h-3 rotate-45 bg-black"></div>
+                                                            <span className="relative z-10 p-2 text-xs leading-none text-white whitespace-no-wrap bg-black rounded shadow-lg">
+                                                              Attached File
+                                                            </span>
+                                                          </div>
+                                                          <i className="ri-attachment-line"></i>
+                                                        </label>
                                                     </li>
+
+                                                    {/* Send Message */}
                                                     <li className="inline-block">
-                                                        <button type="submit" className="text-white border-transparent btn group-data-[theme-color=violet]:bg-violet-500 group-data-[theme-color=green]:bg-green-500 group-data-[theme-color=red]:bg-red-500 group-data-[theme-color=violet]:hover:bg-violet-600 group-data-[theme-color=green]:hover:bg-green-600">
+                                                        <button onClick={uploadFileURL} type="submit" className="text-white border-transparent btn group-data-[theme-color=violet]:bg-violet-500 group-data-[theme-color=green]:bg-green-500 group-data-[theme-color=red]:bg-red-500 group-data-[theme-color=violet]:hover:bg-violet-600 group-data-[theme-color=green]:hover:bg-green-600">
                                                             <i className="ri-send-plane-2-fill"></i>
                                                         </button>
                                                     </li>

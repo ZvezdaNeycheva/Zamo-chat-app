@@ -15,9 +15,9 @@ export function SidebarMenu() {
 
     // const darkModeClass = isDarkMode ? 'dark-mode' : '';
 
-    function toggleSidebarDropdown(e) {
-        e.preventDefault();
+    function toggleSidebarDropdown() {
         setOpenSidebar((prevOpen) => !prevOpen);
+        console.log('openSidebar:');
       }
 
     const logout = async () => {
@@ -125,16 +125,14 @@ export function SidebarMenu() {
                         </a>
                     </li>
 
-
-                    {/*profile picture need to fix the "to="#""" */}
-
+                    {/*profile photo*/}
                     <li className="relative lg:mt-4 dropdown lg:dropup">
-                     <button onClick={(e) => toggleSidebarDropdown(e)} className={`${openSidebar ? "group-[.active]:rotate-180" : ""} dropdown-toggle" id="dropdownButton2" data-bs-toggle="dropdown`}>
+                     <button onClick={toggleSidebarDropdown} className={`${openSidebar ? "group-[.active]:rotate-180" : ""} dropdown-toggle" id="dropdownButton2" data-bs-toggle="dropdown`}>
                        <img src={userData?.profilePhotoURL || "https://thinksport.com.au/wp-content/uploads/2020/01/avatar-.jpg"} alt="Avatar" className="w-10 h-10 p-1 mx-auto rounded-full bg-gray-50 dark:bg-zinc-700"/>
                      </button>
 
                         {/* Dropdown */} 
-                        <div className={`${openSidebar ? "" : "hidden"}`}> 
+                        <div className={`${openSidebar ? '' : 'hidden'} absolute bottom-5 z-40 float-left w-40 py-2 mx-4 mb-12 text-left list-none bg-white border-none rounded-lg shadow-lg dropdown-menu bg-clip-padding dark:bg-zinc-700`} aria-labelledby="dropdownButton2">
                             <ul className= "absolute bottom-5 z-40 float-left w-40 py-2 mx-4 mb-12 text-left list-none  bg-white border-none rounded-lg shadow-lg dropdown-menu bg-clip-padding dark:bg-zinc-700"    aria-labelledby="dropdownButton2">
 
                                 {/* Profile */}  
@@ -155,7 +153,7 @@ export function SidebarMenu() {
 
                                 {/* Lock Screen */}    
                                 <li>
-                                    <NavLink to="/lock-screen" className=" block w-full px-4 py-2 text-sm font-normal   text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/30     dark:text-gray-100 dark:hover:bg-zinc-600/50 ltr:text-left rtl:text-right">
+                                    <NavLink to="/lock-screen" className=" block w-full px-4 py-2 text-sm font-normal   text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/30 dark:text-gray-100 dark:hover:bg-zinc-600/50 ltr:text-left rtl:text-right">
                                         Lock Screen 
                                         <i className="text-gray-500 rtl:float-left ltr:float-right  ri-git-repository-private-line text-16"></i>
                                     </NavLink>
