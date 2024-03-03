@@ -47,6 +47,17 @@ export function Register() {
 
   const register = async (event) => {
     event.preventDefault();
+
+    if (form.username.trim() === '') {
+      setErrorMessage('Username cannot be empty');
+      return;
+    }
+
+    if (form.password.length < 6) {
+      setErrorMessage('Password must be at least 6 characters long');
+      return;
+    }
+
     try {
       const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
       if (!emailRegex.test(form.email)) {
@@ -60,15 +71,16 @@ export function Register() {
       }
 
       if (!validateDetails(form.phoneNumber)) {
-        setErrorMessage('PhoneNumber number must be of 10 digits');
+        setErrorMessage('Phone Number number must be of 10 digits');
         return;
       }
 
       const user = await getUserByUid(form.username);
       if (user.exists()) {
-        setErrorMessage(`Handle @${form.username} already exists`);
+        setErrorMessage(`Username @${form.username} already exists`);
         return;
       }
+
       const credentials = await registerUser(form.email, form.password);
       const readableDate = format(new Date(), 'yyyy-MM-dd HH:mm:ss');
       await createUserProfile(
@@ -114,7 +126,17 @@ export function Register() {
                 <div className="p-5">
                   <div className="p-4">
                     <form action="Index.jsx">
-
+                    {errorMessage && (
+                      <div class="flex items-center p-4 mb-4 text-sm text-red-800 border border-red-300 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 dark:border-red-800" role="alert">
+                        <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
+    <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+                        </svg>
+                        {/* <span class="sr-only">Info</span> */}
+                        <div>
+                          {errorMessage}
+                        </div>
+                      </div>
+                    )}
                       {/* Email */}
                       <div className="mb-5">
                         <label className="font-medium text-gray-700 dark:text-gray-200"> Email </label>

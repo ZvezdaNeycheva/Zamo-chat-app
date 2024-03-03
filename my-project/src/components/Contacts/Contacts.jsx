@@ -1,6 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { NavLink, useNavigate  } from 'react-router-dom';
 
 export function Contacts() {
+  const [user, setUser] = useState(null);
+  const navigate = useNavigate();
+
+
+
 
   // function PopulateUserList() {
   //   document.getElementById('lstUsers').innerHTML = 
@@ -115,6 +121,9 @@ export function Contacts() {
 
   return (
     <>
+     {user ? (
+        // User is logged in, display contact list
+        <div>
       {/* Start chat content */}
       <div>
         <div className="p-6 pb-0">
@@ -188,6 +197,31 @@ export function Contacts() {
           </div>
         </div>
       </div>
+      </div>
+      ) : (
+        // User is not logged in, display a message
+        <div className="flex justify-center items-center h-screen bg-blue-100 border-t border-b border-blue-500 text-blue-700 px-4 py-3" role="alert">
+          <div className="text-center">
+            <p className="font-bold text-2xl">Oops! You are not logged in.</p>
+            <p className="text-xl">To explore your contacts, please log in or create an account.</p>
+            <div className="flex mt-6 justify-center">
+              <NavLink to="/login" className="mr-4 inline-block px-6 py-3 bg-blue-500 text-white rounded-full text-lg transition duration-300 transform hover:scale-105 focus:outline-none focus:shadow-outline-blue">
+                Login
+              </NavLink>
+              <NavLink to="/register" className="inline-block px-6 py-3 border border-blue-500 text-blue-500 rounded-full text-lg transition duration-300 transform hover:scale-105 focus:outline-none focus:shadow-outline-blue">
+                Create an account
+              </NavLink>
+              {/* Button to go back to the previous page */}
+              <button
+                className="ml-4 inline-block px-6 py-3 border border-gray-500 text-gray-500 rounded-full text-lg transition duration-300 transform hover:scale-105 focus:outline-none focus:shadow-outline-gray"
+                onClick={() => navigate(-1)}
+              >
+                Go Back
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 }
