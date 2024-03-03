@@ -3,7 +3,7 @@ import { db } from '../config/firebase-config';
 import { format } from 'date-fns';
 
 // Groups
-export const createGroup = async (groupName, isPrivate, creatorUid) => {
+export const createGroup = async (groupName, isPrivate, creatorId) => {
   const readableDate = format(new Date(), 'yyyy-MM-dd HH:mm:ss');
   const groupsRef = ref(getDatabase(), 'groups');
   const newGroupRef = push(groupsRef);
@@ -13,7 +13,7 @@ export const createGroup = async (groupName, isPrivate, creatorUid) => {
     name: groupName,
     createdOnReadable: readableDate,
     private: isPrivate,
-    creatorUid,
+    creatorId,
   };
 
   try {
