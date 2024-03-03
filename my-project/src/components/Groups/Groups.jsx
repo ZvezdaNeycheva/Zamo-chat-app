@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { createGroup } from "../../service/channel.service";
-import { fetchGroups } from "../../service/channel.service";
+import { createGroup, fetchGroups } from "../../service/channel.service";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 export function Groups() {
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -9,6 +9,7 @@ export function Groups() {
   const [searchQuery, setSearchQuery] = useState('');
   const [groups, setGroups] = useState({});
   const [allGroups, setAllGroups] = useState({});
+  const [currentUser, setCurrentUser] = useState(null); // State to hold the current user
 
   useEffect(() => {
     const getGroups = async () => {
@@ -30,14 +31,32 @@ export function Groups() {
     fetchAndSetGroups();
   }, []);
 
+  useEffect(() => {
+    const auth = getAuth();
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setCurrentUser(user); // Set the entire user object
+      } else {
+        // No user is signed in.
+        setCurrentUser(null);
+      }
+    });
+  }, []);
+
   const toggleModal = () => {
     setIsModalVisible(!isModalVisible);
   };
 
   const handleCreateGroup = async (event) => {
     event.preventDefault(); // Prevent the form from submitting in the traditional way
+    if (!currentUser) {
+      console.error("No current user found. Cannot create group.");
+      return; // Exit the function if there's no current user
+    }
+
     try {
-      const newGroup = await createGroup(groupName, isPrivate);
+      const creatorId = currentUser?.uid; // Get the UID from the current user object
+      const newGroup = await createGroup(groupName, isPrivate, creatorId);
       setGroups(prevGroups => ({ ...prevGroups, [newGroup.id]: newGroup }));
       console.log("Group created with privacy setting:", isPrivate);
       setIsModalVisible(false); // Close the modal
@@ -138,12 +157,15 @@ export function Groups() {
               <div key={key} className="p-4 max-w-md bg-white rounded-lg border border-gray-200 shadow-sm hover:shadow-lg transition-shadow duration-200 ease-in-out mb-3">
                 <h5 className="mb-2 text-xl font-semibold tracking-tight text-blue-600">{group.name}</h5>
                 <p className="font-normal text-gray-600">{group.private ? 'Private' : 'Public'}</p>
-                {/* Additional styling for hover effect */}
-                <div className="text-right">
-                  <button className="text-sm text-white bg-blue-500 hover:bg-blue-600 rounded-lg px-3 py-1 transition-colors duration-150 ease-in-out">
-                    Delete the Group
-                  </button>
-                </div>
+                {
+                  group?.creatorId === currentUser?.uid && (
+                    <div className="text-right">
+                      <button className="text-sm text-white bg-blue-500 hover:bg-blue-600 rounded-lg px-3 py-1 transition-colors duration-150 ease-in-out">
+                        Delete the Group
+                      </button>
+                    </div>
+                  )
+                }
               </div>
             ))}
           </div>
