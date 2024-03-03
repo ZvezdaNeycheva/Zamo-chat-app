@@ -1,11 +1,6 @@
 import React from 'react';
 import { Meta } from "../components/Meta/Meta";
 import { NavLink } from 'react-router-dom';
-// import './assets/libs/magnific-popup/magnific-popup.css';
-// import './assets/libs/owl.carousel/assets/owl.carousel.min.css';
-// import './assets/libs/owl.carousel/assets/owl.theme.default.min.css';
-// import './assets/css/icons.css';
-// import './assets/css/tailwind.css';
 
 export function RecoverPassword() {
   return (
@@ -22,7 +17,7 @@ export function RecoverPassword() {
 
                   <img src="assets/images/logo-dark.png" alt="" className="block h-8 mx-auto dark:hidden" />
                   <img src="assets/images/logo-light.png" alt="" className="hidden h-8 mx-auto logo-light dark:block"/>
-                {/* </a> */}</NavLink>
+                </NavLink>
                 <h4 className="mb-2 text-gray-800 text-21 dark:text-gray-50"> Reset Password </h4>
                 <p className="mb-6 text-gray-500 dark:text-gray-300"> Reset Password With Chatvia. </p>
               </div>
@@ -53,22 +48,16 @@ export function RecoverPassword() {
               </div>
               <div className="mt-10 text-center">
                 <p className="mb-5 text-gray-700 dark:text-gray-200">Remember It ?{" "}
-                  {/* <a href="Register.jsx" className="fw-medium text-violet-500"> {" "} Signin {" "} </a>{" "} */}
-                  <NavLink to='/register' className="fw-medium text-violet-500"> Signin{" "}</NavLink>
+                  <NavLink to='/register' className="fw-medium text-violet-500"> Login {" "}</NavLink>
                 </p>
-                <p className="text-gray-700 dark:text-gray-200"> © Chatvia. Crafted with{" "}
-                  <i className="text-red-500 mdi mdi-heart" /> by Themesbrand
+                <p className="text-gray-700 dark:text-gray-200">© ChatApp. Crafted {" "}
+                  <i className="text-red-500 mdi mdi-heart" /> by Andy, Zvezdy, Marty
                 </p>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <script src="./"></script>
-
-      {/* <script src="./assets/libs/jquery/jquery.min.js"></script>
-      <script src="./assets/libs/@popperjs/core/umd/popper.min.js"></script>
-      <script src="./assets/libs/simplebar/simplebar.min.js"></script> */}
     </>
   );
 }

@@ -15,6 +15,7 @@ export function Login() {
   const [errorMsg, setErrorMsg] = useState("");
   const navigate = useNavigate();
   const location = useLocation();
+  const [errorMessage, setErrorMessage] = useState('');
 
   const updateForm = (prop) => (e) => {
     setForm({ ...form, [prop]: e.target.value });
@@ -30,6 +31,17 @@ export function Login() {
 
   const login = async (event) => {
     event.preventDefault();
+
+    if (form.username.trim() === '') {
+      setErrorMessage('Username cannot be empty');
+      return;
+    }
+
+    if (form.password.length < 6) {
+      setErrorMessage('Password must be at least 6 characters long');
+      return;
+    }
+
     try {
       console.log("Logging in...");
       const credentials = await loginUser(form.email, form.password);
