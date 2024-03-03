@@ -30,6 +30,7 @@ export const updateUserEmail = async (newEmail) => {
 };
 
 // Storage
+// uploadProfileImage
 export async function uploadProfileImage(file, user, setLoading) {
   const fileRef = storageRef(storage, user.uid + '.png');
 
@@ -52,6 +53,7 @@ export async function uploadProfileImage(file, user, setLoading) {
   }
 }
 
+// uploadFile
 export async function uploadFile(file, user, setLoading) {
   const fileRef = storageRef(storage, user.uid + '/' + file.name);
 

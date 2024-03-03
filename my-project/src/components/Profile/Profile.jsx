@@ -25,6 +25,8 @@ export function Profile() {
   const [newEmail, setNewEmail] = useState(userData ? userData.email : "");
   const [newLocation, setNewLocation] = useState(userData ? userData.location : "");
 
+  const [attachedFiles, setAttachedFiles] = useState([]);
+
   function toggleDropdown() {
     setOpen((prevOpen) => !prevOpen);
   }
@@ -66,6 +68,13 @@ export function Profile() {
         console.error('Error uploading profile image:', error);
       });
   }
+
+  useEffect(() => {
+    if (userData && userData.fileURL) {
+      const filesArray = Array.isArray(userData.fileURL) ? userData.fileURL : [userData.fileURL];
+      setAttachedFiles(filesArray);
+    }
+  }, [userData]);
 
   useEffect(() => {
     if (user && user.photoURL) {
@@ -315,8 +324,16 @@ export function Profile() {
                       {/* File Name */}
                       <div className="flex-grow">
                         <div className="text-start">
-                          <h5 className="mb-1 text-sm dark:text-gray-50">Admin-A.zip</h5>
-                          <p className="mb-0 text-gray-500 text-13 dark:text-gray-300">12.5 MB</p>
+
+                        {attachedFiles.map((fileURL, index) => (
+                          <div key={index} className="p-2 mb-2 border rounded border-gray-100/80 dark:bg-zinc-800 dark:border-transparent">
+                            <div className="flex items-center">
+                              {/* Display file URL */}
+                              <p className="mb-0 text-gray-500 text-13 dark:text-gray-300">{fileURL}</p>
+                            </div>
+                          </div>
+                        ))}
+                        
                         </div>
                       </div>
                       {/* Drop Down */}
