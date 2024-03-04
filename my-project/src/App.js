@@ -52,16 +52,18 @@ function App() {
       <Router>
         <Routes>
         <Route path="*" element={<Index />} />
+          {/* The routing can be adapted for the master-slave view in a similar way: */}
+          {/* <Route path="/profile" element={<Index selectedTab="profile" />} /> */}
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/lock-screen" element={<Authenticated> <LockScreen /> </Authenticated>} />
           <Route path="/recover" element={<RecoverPassword />} />
           <Route path="/chats/:id" element={<Chats />} />
-          <Route path="/contacts" element={<Contacts />} />
-          <Route path="/groups" element={<Groups />} />
+          {/* <Route path="/contacts" element={<Contacts />} /> */}
+          {/* <Route path="/groups" element={<Groups />} /> */}
           <Route path="/meta" element={<Meta />} />
           <Route path="/profile" element={<Authenticated> <Profile /> </Authenticated>} />
-          <Route path="/settings" element={<Settings />} />
+          {/* <Route path="/settings" element={<Settings />} /> */}
           <Route path="/sidebar-menu" element={<SidebarMenu />} />
           {/* <Route path="/switcher" element={<Switcher />} /> */}
           <Route path="/user-profile-details" element={<UserProfileDetails/> }/>
