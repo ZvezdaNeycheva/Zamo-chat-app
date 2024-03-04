@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { createGroup, fetchGroups } from "../../service/channel.service";
+import { createGroup, fetchGroups, deleteGroup } from "../../service/channel.service";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 export function Groups() {
@@ -77,6 +77,18 @@ export function Groups() {
     }, {});
 
     setGroups(filteredGroups); // Update `groups` to only include those that match the search query
+  };
+
+  const handleDeleteGroup = async (groupId) => {
+    try {
+      await deleteGroup(groupId);
+      console.log("Group deleted successfully");
+      // After deletion, you might want to refresh the list of groups
+      const updatedGroups = await fetchGroups();
+      setGroups(updatedGroups);
+    } catch (error) {
+      console.error("Error deleting group:", error);
+    }
   };
 
   return (
@@ -160,7 +172,7 @@ export function Groups() {
                 {
                   group?.creatorId === currentUser?.uid && (
                     <div className="text-right">
-                      <button className="text-sm text-white bg-blue-500 hover:bg-blue-600 rounded-lg px-3 py-1 transition-colors duration-150 ease-in-out">
+                      <button onClick={() => handleDeleteGroup(key)} className="text-sm text-white bg-blue-500 hover:bg-blue-600 rounded-lg px-3 py-1 transition-colors duration-150 ease-in-out">
                         Delete the Group
                       </button>
                     </div>

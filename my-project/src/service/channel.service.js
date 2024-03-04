@@ -1,4 +1,4 @@
-import { get, set, ref, getDatabase, push, child } from 'firebase/database';
+import { get, set, ref, getDatabase, push, child, remove } from 'firebase/database';
 import { db } from '../config/firebase-config';
 import { format } from 'date-fns';
 
@@ -38,6 +38,18 @@ export const fetchGroups = async () => {
     }
   } catch (error) {
     console.error("Error fetching groups:", error);
+    throw error;
+  }
+};
+
+export const deleteGroup = async (groupId) => {
+  const groupRef = ref(getDatabase(), `groups/${groupId}`);
+
+  try {
+    await remove(groupRef);
+    console.log('Group deleted successfully.');
+  } catch (error) {
+    console.error('Error deleting group:', error);
     throw error;
   }
 };
