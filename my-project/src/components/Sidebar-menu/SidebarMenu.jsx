@@ -124,7 +124,7 @@ export function SidebarMenu({ onProfileClick, onChatsClick, onGroupsClick, onCon
                                 <i className="text-2xl ri-moon-clear-line"></i>
                             </a>
                         </li>
-
+                        <button onClick={logout}>Log out</button>
                         {/*profile photo*/}
                         <li className="relative lg:mt-4 dropdown lg:dropup">
                             <button onClick={toggleSidebarDropdown} className={`${openSidebar ? "group-[.active]:rotate-180" : ""} dropdown-toggle" id="dropdownButton2" data-bs-toggle="dropdown`}>
