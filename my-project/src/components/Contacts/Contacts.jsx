@@ -25,23 +25,24 @@ export function Contacts() {
     try {
       const usersSnapshot = await get(query(ref(db, 'users')));
       const users = usersSnapshot.val();
-
+  
       // Find the user by email locally
       const userByEmail = Object.values(users).find(u => u.email === emailInputValue);
-
+  
       if (userByEmail) {
         const recipientUid = userByEmail.uid;
         const senderUid = user.uid;
-
-        // Set the pending request details in state
-        setPendingRequest({
-          senderUid,
-          recipientUid,
-          senderName: user.displayName, // You might need to adjust this based on your user object
-        });
-
-        // Open the modal after setting the pending request
-        setIsContactModalVisible(true);
+  
+        // Use nullish coalescing to handle undefined or null userData.sentRequests and userByEmail.pendingRequests
+        const updatedSentRequests = [...(userData.sentRequests ?? []), recipientUid];
+        await updateUserData(senderUid, { sentRequests: updatedSentRequests });
+  
+        const updatedPendingRequests = [...(userByEmail.pendingRequests ?? []), senderUid];
+        await updateUserData(recipientUid, { pendingRequests: updatedPendingRequests });
+  
+        console.log('Friend request sent successfully.');
+        // Close the modal after sending the friend request
+        setIsContactModalVisible(false);
       } else {
         console.log('User not found with the provided email.');
       }
@@ -86,25 +87,7 @@ export function Contacts() {
         <div>
           {/* Start chat content */}
           <div>
-          {pendingRequest && (
-            <div className="p-4 bg-white rounded-lg border border-gray-200 shadow-sm">
-              <p>{`${pendingRequest.senderName} wants to connect with you!`}</p>
-              <div className="mt-4 flex justify-between items-center">
-                <button
-                  onClick={() => handleAcceptRequest(pendingRequest.senderUid)}
-                  className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600"
-                >
-                  Accept
-                </button>
-                <button
-                  onClick={handleRejectRequest}
-                  className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
-                >
-                  Reject
-                </button>
-              </div>
-            </div>
-          )}
+          
             <div className="p-6 pb-0">
               <div className="ltr:float-right rtl:float-left">
                 <div className="relative">
@@ -182,12 +165,29 @@ export function Contacts() {
                   </div>
                 )}
               </div>
+
+              {/* Search bar */}
               <div className="py-1 mt-5 mb-5 group-data-[theme-color=violet]:bg-slate-100 group-data-[theme-color=green]:bg-green-50 group-data-[theme-color=red]:bg-red-50 rounded group-data-[theme-color=violet]:dark:bg-zinc-600 group-data-[theme-color=green]:dark:bg-zinc-600 group-data-[theme-color=red]:dark:bg-zinc-600">
                 <span className="group-data-[theme-color=violet]:bg-slate-100 group-data-[theme-color=green]:bg-green-50 group-data-[theme-color=red]:bg-red-50 pe-1 ps-3 group-data-[theme-color=violet]:dark:bg-zinc-600 group-data-[theme-color=green]:dark:bg-zinc-600 group-data-[theme-color=red]:dark:bg-zinc-600" id="basic-addon">
                   <i className="text-lg text-gray-700 ri-search-line search-icon dark:text-gray-200" />
                 </span>
                 <input type="text" className="border-0 group-data-[theme-color=violet]:bg-slate-100 group-data-[theme-color=green]:bg-green-50 group-data-[theme-color=red]:bg-red-50 group-data-[theme-color=violet]:dark:bg-zinc-600 group-data-[theme-color=green]:dark:bg-zinc-600 group-data-[theme-color=red]:dark:bg-zinc-600 placeholder:text-[14px] focus:ring-offset-0 focus:outline-none focus:ring-0 placeholder:dark:text-gray-300" placeholder="Search users.." aria-describedby="basic-addon" />
               </div>
+                
+              {/* Accept or Reject */}
+              {pendingRequest && (
+                <div className="p-4 bg-white rounded-lg border border-gray-200 shadow-sm">
+                  <p>{`${pendingRequest.senderName} wants to connect with you!`}</p>
+                  <div className="mt-4 flex justify-between items-center">
+                    <button onClick={() => handleAcceptRequest(pendingRequest.senderUid)} className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600">
+                      Accept
+                    </button>
+                    <button onClick={handleRejectRequest} className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600">
+                      Reject
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>
