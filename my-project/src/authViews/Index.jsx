@@ -118,7 +118,7 @@ export function Index() {
     //     // const chatData = {
     //     //     uid,
     //     //     message: newMessage,
-    //     //     timestamp: new Date().getTime()
+    //     //     timestamp: db.ServerValue.TIMESTAMP,
     //     // }
     //     // const newChatRef = push(chatRef);
     //     // set(newChatRef, chatData);
@@ -390,8 +390,9 @@ export function Index() {
                                     }
                                 </ul>
                                 {/* {End of fetching Messages} */}
+
                                 <ul className="mb-0">
-                                    <li className="clear-both py-4">
+                                    {/* <li className="clear-both py-4">
                                         <div className="flex items-end gap-3">
                                             <div>
                                                 <img src="assets/images/users/avatar-4.jpg" alt="" className="rounded-full h-9 w-9" />
@@ -421,7 +422,7 @@ export function Index() {
                                                 <div className="font-medium text-gray-700 text-14 dark:text-gray-300">Doris Brown</div>
                                             </div>
                                         </div>
-                                    </li>
+                                    </li> */}
 
                                     <li className="clear-both py-4">
                                         <div className="relative inline-flex items-end mb-6 text-right ltr:rtl:float-left ltr:float-right rtl:float-left">
