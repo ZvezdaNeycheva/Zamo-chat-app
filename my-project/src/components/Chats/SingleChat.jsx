@@ -1,11 +1,11 @@
 import { Link } from "react-router-dom"
 
 
-export function SingleChat({ user, roomId }) {
+export function SingleChat({ user, roomId, onClick }) {
 
   return (
     <>
-    <Link to={`/chats/${roomId}`}>
+    <div onClick={onClick}>
         <div className="flex">
             <div className="relative self-center ltr:mr-3 rtl:ml-3">
                 <img src="./assets/images/users/avatar-2.jpg" className="rounded-full w-9 h-9" alt="" />
@@ -18,7 +18,7 @@ export function SingleChat({ user, roomId }) {
             </div>
             <div className="text-gray-500 text-11 dark:text-gray-300">05 min</div>
         </div>
-    </Link>
+    </div>
     </>
     )
   }
