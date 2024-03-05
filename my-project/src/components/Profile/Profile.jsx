@@ -4,6 +4,7 @@ import { uploadProfileImage } from "../../service/auth.service";
 import { useNavigate } from "react-router-dom";
 import { updateUserData } from "../../service/users.service";
 
+
 export function Profile() {
   const navigate = useNavigate();
   const { user, userData} = useContext(AppContext);
@@ -112,6 +113,15 @@ export function Profile() {
     }
   };
 
+  const handleStatusChange = async (status) => {
+    try {
+      await updateUserData(userData.uid, { status });
+      setOpenStatusDropdown(false);
+    } catch (error) {
+      console.error("Error updating user status:", error);
+    }
+  };
+
   return (
     <>
       {/* Start profile Header */}
@@ -154,45 +164,42 @@ export function Profile() {
 
         {/* Start user-profile-card */}
         <div className="p-6 text-center border-b border-gray-100 dark:border-zinc-600">
-          {/* Profile picture */}
-          <div className="mb-4">
-            <input type="file" onChange={handleChange} id="file" />
-            <button disabled={loading || !photo} onClick={handleClick} 
-            className="leading-10 ri-pencil-fill text-16 w-10 h-10 bg-gray-100 rounded-full ltr:right-28 rtl:left-28dark:bg-zinc-800 dark:text-gray-100">
-            </button>
-            <img src={ userData?.profilePhotoURL || "https://thinksport.com.au/wp-content/uploads/2020/01/avatar-.jpg"}  className="w-24 h-24 p-1 mx-auto border border-gray-100 rounded-full dark:border-zinc-800" alt="Avatar"/>
-          </div>
+      {/* Profile picture */}
+      <div className="mb-4">
+        <input type="file" onChange={handleChange} id="file" />
+        <button disabled={loading || !photo} onClick={handleClick} className="leading-10 ri-pencil-fill text-16 w-10 h-10 bg-gray-100 rounded-full dark:bg-zinc-800 dark:text-gray-100"></button>
+        <img src={userData?.profilePhotoURL || "https://thinksport.com.au/wp-content/uploads/2020/01/avatar-.jpg"} className="w-24 h-24 p-1 mx-auto border border-gray-100 rounded-full dark:border-zinc-800" alt="Avatar"/>
+      </div>
 
-          <h5 className="mb-1 text-16 dark:text-gray-50">{userData ? userData.username : "N/A"}</h5>
-          {/* End profile picture */}
+      <h5 className="mb-1 text-16 dark:text-gray-50">{userData ? userData.username : "N/A"}</h5>
+      {/* End profile picture */}
 
-          {/* Profile Status */}
-          {/* Dropdown menu for status*/}
-          <div className="relative mb-1 dropdown">
-            <button onClick={toggleStatusDropdown} className="pb-1 text-gray-500 dropdown-toggle d-block dark:text-gray-300" data-bs-toggle="dropdown" id="dropdownMenuButtonX">
-              Available
-              <i className={`mdi mdi-chevron-down ${openStatusDropdown ? "group-[.active]:rotate-180" : ""}`} />
-            </button>
-          <div className={`${openStatusDropdown ? "" : "hidden"}`} >
-
-            <ul className="absolute z-50 hidden py-2 mt-2 text-left list-none bg-white border rounded shadow-lg left-20 dropdown-menu w-36 top-6 dark:bg-zinc-700 bg-clip-padding border-gray-50 dark:border-zinc-500" aria-labelledby="dropdownMenuButtonX">
-              <li>
-                <a className="block w-full px-4 py-2 text-sm font-normal text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/50 dark:text-gray-100 dark:hover:bg-zinc-600/80 ltr:text-left rtl:text-right">
-                {/* //need to add the icon */}
-                <i className="text-green-500 ltr:ml-1 rtl:mr-1 ri-record-circle-fill text-10" /> &nbsp;
-                  Available
-                </a>
-              </li>
-
-              <li>
-                <a  className="block w-full px-4 py-2 text-sm font-normal text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/50 dark:text-gray-100 dark:hover:bg-zinc-600/80 ltr:text-left rtl:text-right">
-                  Busy
-                </a>
-              </li>
-            </ul>
-          </div>
-          </div>
-        </div>
+      {/* Profile Status */}
+      {/* Dropdown menu for status*/}
+      <div className="relative mb-1 dropdown">
+  <button onClick={toggleStatusDropdown} className="pb-1 text-gray-500 d-block dark:text-gray-300" data-bs-toggle="dropdown" id="dropdownMenuButtonX">
+    <a className="pb-1 text-gray-500 dropdown-toggle d-block dark:text-gray-300" href="#" role="button" data-bs-toggle="dropdown" id="dropdownMenuButtonX">
+      {userData ? userData.status : ""} <i className={`mdi mdi-chevron-down ${openStatusDropdown ? "group-[.active]:rotate-180" : ""}`}></i>
+    </a>
+  </button>
+  <div className={`${openStatusDropdown ? "" : "hidden"}`}>
+    <ul className="absolute z-50 py-2 mt-2 text-left list-none bg-white border rounded shadow-lg left-20 w-36 top-6 dark:bg-zinc-700 bg-clip-padding border-gray-50 dark:border-zinc-500" aria-labelledby="dropdownMenuButtonX">
+      <li>
+        <button onClick={() => handleStatusChange('Available')} className="block w-full px-4 py-2 text-sm font-normal text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/50 dark:text-gray-100 dark:hover:bg-zinc-600/80 ltr:text-left rtl:text-right">
+          <i className="text-green-500 ltr:ml-1 rtl:mr-1 ri-record-circle-fill text-10" /> &nbsp;
+          Available
+        </button>
+      </li>
+      <li>
+        <button onClick={() => handleStatusChange('Busy')} className="block w-full px-4 py-2 text-sm font-normal text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/50 dark:text-gray-100 dark:hover:bg-zinc-600/80 ltr:text-left rtl:text-right">
+          <i className="text-red-500 ltr:ml-1 rtl:mr-1 ri-record-circle-fill text-10" /> &nbsp;
+          Busy
+        </button>
+      </li>
+    </ul>
+  </div>
+</div>
+    </div>
         {/* End Profile Status */}
         
         {/* Start user-profile-desc */}

@@ -15,7 +15,7 @@ export function SidebarMenu({
   const [photoURL] = useState(user?.photoURL);
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [openSidebar, setOpenSidebar] = useState(false);
-
+  const [selectedTab, setSelectedTab] = useState('chats');
   // const toggleDarkMode = () => {
   //     setIsDarkMode(!isDarkMode);
   //   };
@@ -168,7 +168,7 @@ export function SidebarMenu({
                 <i className="text-2xl ri-moon-clear-line"></i>
               </a>
             </li>
-            <button onClick={logout}>Log out</button>
+
             {/*profile photo*/}
             <li className="relative lg:mt-4 dropdown lg:dropup">
               <button
@@ -191,7 +191,7 @@ export function SidebarMenu({
               <div
                 className={`${
                   openSidebar ? "block" : "hidden"
-                } absolute bottom-5 z-40 float-left w-40 py-2 mx-4 mb-12 text-left list-none bg-white border-none rounded-lg shadow-lg bg-clip-padding dark:bg-zinc-700`}
+                }`}
                 aria-labelledby="dropdownButton2"
               >
                 <ul
@@ -201,7 +201,7 @@ export function SidebarMenu({
                   {/* Profile */}
                   <li>
                     <NavLink
-                      to="/profile"
+                      onClick={() => onProfileClick?.()}
                       className="block w-full px-4 py-2 text-sm font-normal  text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/30    dark:text-gray-100 dark:hover:bg-zinc-600/50"
                     >
                       Profile
@@ -212,7 +212,7 @@ export function SidebarMenu({
                   {/* Setting */}
                   <li>
                     <NavLink
-                      to="/setting"
+                      onClick={() => onSettingsClick?.()}
                       className=" block w-full px-4 py-2 text-sm font-normal   text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/30     dark:text-gray-100 dark:hover:bg-zinc-600/50 ltr:text-left rtl:text-right"
                     >
                       Setting
