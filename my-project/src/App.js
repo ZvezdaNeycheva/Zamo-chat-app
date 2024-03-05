@@ -8,18 +8,19 @@ import { LockScreen } from "./authViews/LockScreen";
 import { Login } from "./authViews/Login";
 import { Register } from "./authViews/Register";
 import { Chats } from "./components/Chats/Chats";
-import { Contacts } from "./components/Contacts/Contacts";
-import { Groups } from "./components/Groups/Groups";
 import { Meta } from "./components/Meta/Meta";
 import { Profile } from "./components/Profile/Profile";
-import { Settings } from "./components/Settings/Settings";
 import { SidebarMenu } from "./components/Sidebar-menu/SidebarMenu";
 import { UserProfileDetails } from "./components/UserProfileDetails/UserProfileDetails";
-import { Switcher } from "./components/Switcher/Switcher"
 import { AppContext } from "./appContext/AppContext";
 import Authenticated from "./authenticated/Authenticated";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { getUserData } from "./service/users.service";
+import { Switcher } from "./components/Switcher/Switcher"
+
+import { Settings } from "./components/Settings/Settings";
+import { Contacts } from "./components/Contacts/Contacts";
+import { Groups } from "./components/Groups/Groups";
 
 
 function App() {
@@ -52,21 +53,22 @@ function App() {
       <Router>
         <Routes>
         <Route path="*" element={<Index />} />
-          {/* The routing can be adapted for the master-slave view in a similar way: */}
-          {/* <Route path="/profile" element={<Index selectedTab="profile" />} /> */}
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/lock-screen" element={<Authenticated> <LockScreen /> </Authenticated>} />
           <Route path="/recover" element={<RecoverPassword />} />
           <Route path="/chats/:id" element={<Chats />} />
-          {/* <Route path="/contacts" element={<Contacts />} /> */}
-          {/* <Route path="/groups" element={<Groups />} /> */}
           <Route path="/meta" element={<Meta />} />
           <Route path="/profile" element={<Authenticated> <Profile /> </Authenticated>} />
-          {/* <Route path="/settings" element={<Settings />} /> */}
           <Route path="/sidebar-menu" element={<SidebarMenu />} />
           {/* <Route path="/switcher" element={<Switcher />} /> */}
           <Route path="/user-profile-details" element={<UserProfileDetails/> }/>
+          
+          {/* The routing can be adapted for the master-slave view in a similar way: */}
+          {/* <Route path="/profile" element={<Index selectedTab="profile" />} /> */}
+          {/* <Route path="/groups" element={<Groups />} /> */}
+          {/* <Route path="/contacts" element={<Contacts />} /> */}
+          {/* <Route path="/settings" element={<Settings />} /> */}
         </Routes>
         <div className="App">{/* <Index /> */}</div>
       </Router>

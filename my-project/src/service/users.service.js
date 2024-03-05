@@ -7,7 +7,7 @@ export const getUserByUid = (uid) => {
   return get(ref(db, `users/${uid}`));
 };
 
-export const createUserProfile = (uid, username, email, phoneNumber, password, role = 'user', status, friendsRequests, frendsList ) => {
+export const createUserProfile = (uid, username, email, phoneNumber, password, role = 'user', status, friendsList, sentRequests, pendingRequests ) => {
   const readableDate = format(new Date(), 'yyyy-MM-dd HH:mm:ss');
 
   return set(ref(db, `users/${uid}`), {
@@ -19,8 +19,9 @@ export const createUserProfile = (uid, username, email, phoneNumber, password, r
     createdOnReadable: readableDate,
     role,
     status,
-    friendsRequests,
-    frendsList,
+    friendsList,
+    sentRequests,
+    pendingRequests,
     profilePhotoURL: '',
     fileURL: '',
     location: '',
@@ -39,6 +40,18 @@ export const updateUserData = async (uid, data) => {
     console.log("User data updated successfully.");
   } catch (error) {
     console.error("Error updating user data:", error);
+    throw error;
+  }
+};
+
+export const getUserByEmail = async (email) => {
+  try {
+    const userSnapshot = await get(
+      query(ref(db, 'users'), orderByChild('email'), equalTo(email))
+    );
+    return userSnapshot;
+  } catch (error) {
+    console.error('Error getting user by email:', error.message);
     throw error;
   }
 };
