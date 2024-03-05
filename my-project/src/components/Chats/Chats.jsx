@@ -46,32 +46,69 @@ export function Chats() {
         }
     }
 
+    // const getRoom = async (participants) => {
+    //     try {
+    //         // console.log(participants);
+
+    //         const roomsRef = ref(db, `rooms`);
+
+    //         const snapshotAll = await get(roomsRef)
+
+    //         const allRooms = snapshotAll.val();
+    //         console.log('AllRooms:', allRooms);
+
+    //         const filteredRooms = Object.keys(allRooms).filter(roomId => {
+    //             const room = allRooms[roomId];
+    //             const roomParticipants = Object.keys(room.participants);
+    //             console.log({ roomParticipants });
+    //             return roomParticipants.length === 2 &&
+    //                 participants.every(participant => roomParticipants.includes(participant));
+    //         });
+
+    //         console.log({ filteredRooms });
+    // if (filteredRooms) {
+    //     return filteredRooms;  
+    // }else{
+    //     return null;
+    // }
+    //        // return filteredRooms;
+    //     } catch (error) {
+    //         console.error('Error fetching room:', error);
+    //         return null;
+    //     }
+    // }
+
     const getRoom = async (participants) => {
         try {
-            // console.log(participants);
-
-            const roomsRef = ref(db, `rooms`);
-
-            const snapshotAll = await get(roomsRef)
-
-            const allRooms = snapshotAll.val();
-            console.log('AllRooms:', allRooms);
-
-            const filteredRooms = Object.keys(allRooms).filter(roomId => {
-                const room = allRooms[roomId];
-                const roomParticipants = Object.keys(room.participants);
-                console.log({ roomParticipants });
-                return roomParticipants.length === 2 &&
-                    participants.every(participant => roomParticipants.includes(participant));
-            });
-
-            console.log({ filteredRooms });
-            return filteredRooms;
+            const roomsRef = ref(db, 'rooms');
+            const snapshot = await get(roomsRef);
+    
+            if (snapshot.exists()) {
+                const allRooms = snapshot.val();
+                const roomId = Object.keys(allRooms).find(roomId => {
+                    const room = allRooms[roomId];
+                    const roomParticipants = Object.keys(room.participants);
+                    return (
+                        roomParticipants.length === participants.length &&
+                        roomParticipants.every(participant => participants.includes(participant))
+                    );
+                });
+    
+                if (roomId) {
+                    return {
+                        id: roomId,
+                        ...allRooms[roomId]
+                    };
+                }
+            }
+            
+            return null; // Return null if no matching room found
         } catch (error) {
             console.error('Error fetching room:', error);
             return null;
         }
-    }
+    };
+    
 
     const createRoom = async (participants) => {
         const newRoom = {
