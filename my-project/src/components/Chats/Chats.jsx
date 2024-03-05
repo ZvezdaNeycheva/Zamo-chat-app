@@ -5,6 +5,8 @@ import { get, query, ref, push, update, orderByChild, equalTo } from "firebase/d
 import { useNavigate, useParams } from "react-router-dom";
 import { SingleChat } from "./SingleChat";
 import { getAllUsers } from "../../service/users.service";
+import { useRecoilState } from 'recoil';
+import { currentRoomId } from "../../atom/atom";
 
 
 export function Chats() {
@@ -15,19 +17,22 @@ export function Chats() {
     const navigate = useNavigate();
     let { id } = useParams();
 
+    const [currentRoom, setCurrentRoom] = useRecoilState(currentRoomId);
+
     const { userId, friendId, roomId, setContext } = useContext(RoomContext);
     const [room, setRoom] = useState({
         id: '',
         participants: [],
         messages: [{ messageId: "", },],
     });
-    setContext({ userId, friendId, roomId: room.id });
-    
+
     const selectFriend = async (friend) => {
         const participants = [user?.uid, friend.uid];
         const room = await getRoom(participants);
         console.log({ room });
-
+        setContext({ userId, friendId, roomId: room.id });
+        console.log({roomId});
+        
         if (!room) {
             const newRoom = await createRoom(participants);
             console.log({ newRoom });
@@ -45,7 +50,12 @@ export function Chats() {
                 roomId: room.id,
             });
         }
+        setCurrentRoom(room.id);
+        console.log({currentRoom});
     }
+    // useEffect(() => {
+    //     console.log("Current Room in useEffect:", currentRoom);
+    // }, [currentRoom]);
 
     const getRoom = async (participants) => {
         try {

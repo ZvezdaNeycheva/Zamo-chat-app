@@ -19,9 +19,11 @@ import { useState, useEffect, useContext } from "react";
 import { uploadFile } from "../service/auth.service";
 import { updateUserData } from "../service/users.service";
 import { AppContext } from "../appContext/AppContext";
+import { useRecoilValue } from 'recoil';
+import { currentRoomId } from "../atom/atom";
 
 export function Index() {
-
+    const currentRoom = useRecoilValue(currentRoomId);
     // Upload File State: Create a state to store the file and loading state.
     const [loading, setLoading] = useState(false);
     const [file, setFile] = useState(null);

@@ -35,3 +35,24 @@ export const RoomContext = createContext({
   roomId: null,
   setContext: () => { },
 });
+
+// export const RoomProvider = ({ children }) => {
+//   const [roomId, setRoomId] = useState(null);
+
+//   return (
+//     <RoomContext.Provider
+//       value={{
+//         userId: null, // Your initial values
+//         friendId: null, // Your initial values
+//         roomId: roomId,
+//         setRoomId: setRoomId,
+//       }}
+//     >
+//       {children}
+//     </RoomContext.Provider>
+//   );
+// };
+
+// const { setRoomId } = useContext(RoomContext);
+// Somewhere in your component, when you want to update roomId
+// setRoomId(newRoomId);

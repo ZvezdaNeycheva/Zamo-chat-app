@@ -17,7 +17,7 @@ import Authenticated from "./authenticated/Authenticated";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { getUserData } from "./service/users.service";
 import { Switcher } from "./components/Switcher/Switcher"
-
+import { RecoilRoot } from 'recoil';
 import { Settings } from "./components/Settings/Settings";
 import { Contacts } from "./components/Contacts/Contacts";
 import { Groups } from "./components/Groups/Groups";
@@ -50,6 +50,8 @@ function App() {
 
   return (
     <AppContext.Provider value={{ ...context, setContext }}>
+      {/* <RoomContext.Provider value={{ ...roomId,  setRoomId: setRoomId }}> */}
+      <RecoilRoot>
       <Router>
         <Routes>
         <Route path="*" element={<Index />} />
@@ -72,6 +74,8 @@ function App() {
         </Routes>
         <div className="App">{/* <Index /> */}</div>
       </Router>
+      </RecoilRoot>
+      {/* </RoomContext.Provider> */}
     </AppContext.Provider>
   );
 }
