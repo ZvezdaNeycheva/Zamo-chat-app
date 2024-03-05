@@ -2,8 +2,9 @@ import { useContext, useEffect, useState } from "react";
 import { AppContext, RoomContext } from "../../appContext/AppContext";
 import { db } from "../../config/firebase-config";
 import { get, query, ref, push, update, orderByChild, equalTo } from "firebase/database";
-import { useNavigate,useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { SingleChat } from "./SingleChat";
+import { getAllUsers } from "../../service/users.service";
 
 
 export function Chats() {
@@ -13,33 +14,22 @@ export function Chats() {
     const [newMessage, setNewMessage] = useState("");
     const navigate = useNavigate();
     let { id } = useParams();
-    const [rooms, setRooms] = useState(undefined);
 
     const { userId, friendId, roomId, setContext } = useContext(RoomContext);
     const [room, setRoom] = useState({
         id: '',
         participants: [],
-        messages: [
-            {
-                messageId: "",
-            },
-        ],
+        messages: [{ messageId: "", },],
     });
 
-
-    //select friend, check if room exists, if not create room
-    // instead of participants, use friendId and onClick useParams to find the room???
-
     const selectFriend = async (friend) => {
-        console.log({ friend });
-        // console.log(`Rendering SingleChat with roomId: ${room?.id}`);
         const participants = [user?.uid, friend.uid];
-        console.log({ participants });
-        // const newRoom = await createRoom();
         const room = await getRoom(participants);
+        // console.log({ participants });
         console.log({ room });
         if (!room) {
             const newRoom = await createRoom(participants);
+            console.log({ newRoom });
             setRoom(newRoom);
             setContext({
                 userId: user.uid,
@@ -56,68 +46,27 @@ export function Chats() {
         }
     }
 
-// const getRoom2 = async () => {
-//     console.log("hi");
-//     try {
-//         if (roomId) {
-//             // const roomsRef = ref(db, `rooms/${room?.id}`);
-//             navigate(`/rooms/${roomId}`)
-//             return;
-//         }else{
-//             console.log("hi2");
-//             // await createRoom(participants)
-//             navigate(`/rooms/${roomId}`)
-//         }
-//     } catch (error) {
-//         console.log('Error fetching room:', error);
-//     }
-// }
-        
-
     const getRoom = async (participants) => {
         try {
-            const participantIds = participants.participants;
-            console.log({ participantIds });
+            // console.log(participants);
 
-            const roomsRef = ref(db, `rooms/${room?.id}`);
-            const roomsUser = ref(db, `users/${user.uid}/rooms`);
+            const roomsRef = ref(db, `rooms`);
 
-            // const snapshot = await get(query(roomsRef, orderByChild("id").equalTo(roomsUser)));
-             const snapshotAll = await get(roomsRef)
-             const snapshotUser = await get(roomsUser)
+            const snapshotAll = await get(roomsRef)
 
+            const allRooms = snapshotAll.val();
+            console.log('AllRooms:', allRooms);
 
-            console.log('SnapshotAll:', snapshotAll.val());
-            console.log('Snapshot:', snapshotUser.val());
+            const filteredRooms = Object.keys(allRooms).filter(roomId => {
+                const room = allRooms[roomId];
+                const roomParticipants = Object.keys(room.participants);
+                console.log({ roomParticipants });
+                return roomParticipants.length === 2 &&
+                    participants.every(participant => roomParticipants.includes(participant));
+            });
 
-            
-            const filteredRooms = Object.keys(snapshotAll.val()).filter((key) => {
-                if (key === snapshotUser.val()) {
-                    return key;
-                }
-            })
-            console.log('FilteredRooms:', filteredRooms);
-            const filteredByParticipants = filteredRooms.filter((key) => { 
-                if (key.participants === participantIds & key.length === 2) {
-                    return key;
-                }
-            })
-            console.log('FilteredByParticipants:', filteredByParticipants);
-
-            if (filteredByParticipants.length === 0) {
-                console.log('Room does not exist');
-                return null;
-            }
-
-            // if participantIds are the same as the participants in the room return the room
-            // const room = Object.keys(filteredByParticipants.val()).map((key) => ({
-            //     id: key,
-            //     ...filteredByParticipants.val()[key],
-            // }))[0];
-            // console.log('Room:', room);
-            // roomId = room.id;
-
-            return filteredByParticipants;
+            console.log({ filteredRooms });
+            return filteredRooms;
         } catch (error) {
             console.error('Error fetching room:', error);
             return null;
@@ -126,11 +75,11 @@ export function Chats() {
 
     const createRoom = async (participants) => {
         const newRoom = {
-            participants:participants.reduce((acc, key)=>({
+            participants: participants.reduce((acc, key) => ({
                 ...acc,
                 [key]: true
-            
-            }),{}),
+
+            }), {}),
         };
 
         const roomRef = push(ref(db, "rooms"));
@@ -143,8 +92,8 @@ export function Chats() {
             });
         }
         // const { userId, friendId, roomId, setContext } = useContext(RoomContext);
-        setContext({userId, friendId, roomId:roomRef.key, setContext})
-        
+        setContext({ userId, friendId, roomId: roomRef.key, setContext })
+
         return {
             id: roomRef.key,
             ...newRoom
@@ -155,19 +104,6 @@ export function Chats() {
         getAllUsers().then((users) => setUsers(users));
     }, []);
 
-    // later to change it to friends list not all users
-    const getAllUsers = async () => {
-        const snapshot = await get(query(ref(db, "users")));
-        if (!snapshot.exists()) {
-            return [];
-        }
-        const users = Object.keys(snapshot.val()).map((key) => ({
-            id: key,
-            ...snapshot.val()[key],
-        }));
-
-        return users;
-    }
     const handleSearchChange = async (e) => {
         const value = e.target.value.toLowerCase();
         setSearch(value);
@@ -214,10 +150,7 @@ export function Chats() {
                             {users.length > 0 &&
                                 users.map((user) => (
                                     <li className="px-5 py-[15px] group-data-[theme-color=violet]:hover:bg-slate-100 group-data-[theme-color=green]:hover:bg-green-50/50 group-data-[theme-color=red]:hover:bg-red-50/50 transition-all ease-in-out border-b border-white/20 dark:border-zinc-700 group-data-[theme-color=violet]:dark:hover:bg-zinc-600 group-data-[theme-color=green]:dark:hover:bg-zinc-600 group-data-[theme-color=red]:dark:hover:bg-zinc-600 dark:hover:border-zinc-700">
-                                        
                                         <SingleChat user={user} roomId={room?.id} key={user.id} onClick={() => (selectFriend(user))} />
-                                        {/* onClick={() => { navigate(`/rooms/${roomId}`) }} */}
-                                        {/* <SingleChat user={user} roomId={room?.id} key={user.id} onClick={getRoom2} /> */}
                                     </li>
                                 ))}
                         </ul>

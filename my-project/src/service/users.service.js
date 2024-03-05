@@ -3,6 +3,19 @@ import { db } from '../config/firebase-config';
 import { format } from 'date-fns';
 import { auth } from '../config/firebase-config';
 
+export const getAllUsers = async () => {
+  const snapshot = await get(query(ref(db, "users")));
+  if (!snapshot.exists()) {
+      return [];
+  }
+  const users = Object.keys(snapshot.val()).map((key) => ({
+      id: key,
+      ...snapshot.val()[key],
+  }));
+
+  return users;
+}
+
 export const getUserByUid = (uid) => {
   return get(ref(db, `users/${uid}`));
 };
