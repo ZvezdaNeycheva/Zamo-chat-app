@@ -93,6 +93,7 @@ console.log({currentRoom});
           const unsubscribe = onChildAdded(queryRef, (snapshot) => {
             const messageData = snapshot.val();
             // Check if message data is available
+            console.log({ messageData});
             if (messageData) {
               setMessages((prevMessages) => [...prevMessages, messageData]);
             }
@@ -106,28 +107,30 @@ console.log({currentRoom});
         }
       }, [currentRoom]);
       
-
-  const handleInputMessage = (e) => {
-    e.preventDefault();
+      const handleInputMessage = (e) => {
+          e.preventDefault();
     const message = e.target.value;
     setNewMessage(message);
   };
-
+  
   const sendMessage = async () => {
-    if (!newMessage.trim()) return;
+      if (!newMessage.trim()) return;
   
     const message = {
       senderId: userData.uid,
+      senderName: userData.username,
       content: newMessage,
       timestamp: serverTimestamp(),
+      avatar: userData?.photoURL || null,
     };
   
     // Log the message object to verify its structure
     console.log("Message to be sent:", message);
-  
+    
     await push(ref(db, `rooms/${currentRoom}/messages`), message);
     setNewMessage("");
-  };
+};
+
   
     return (
         <>
@@ -345,7 +348,8 @@ console.log({currentRoom});
                                             <li key={message.messageId} className="clear-both py-4" >
                                                 <div className="flex items-end gap-3">
                                                     <div>
-                                                        <img src="assets/images/users/avatar-4.jpg" alt="" className="rounded-full h-9 w-9" />
+                                                        {/* <img src="assets/images/users/avatar-4.jpg" alt="" className="rounded-full h-9 w-9" /> */}
+                                                        <img src={message?.avatar} alt="" className="rounded-full h-9 w-9" />
                                                     </div>
 
                                                     <div>
@@ -354,7 +358,7 @@ console.log({currentRoom});
                                                                 <p className="mb-0">
                                                                     {message.content}
                                                                 </p>
-                                                                <p className="mt-1 mb-0 text-xs text-right text-white/50"><i className="align-middle ri-time-line"></i> <span className="align-middle">10:00</span></p>
+                                                                <p className="mt-1 mb-0 text-xs text-right text-white/50"><i className="align-middle ri-time-line"></i> <span className="align-middle">    {`${new Date(message.timestamp).toLocaleDateString()} ${new Date(message.timestamp).toLocaleTimeString()}`}</span></p>
                                                                 <div className="before:content-[''] before:absolute before:border-[5px] before:border-transparent group-data-[theme-color=violet]:ltr:before:border-l-violet-500 group-data-[theme-color=violet]:ltr:before:border-t-violet-500 group-data-[theme-color=green]:ltr:before:border-l-green-500 group-data-[theme-color=green]:ltr:before:border-t-green-500 group-data-[theme-color=red]:ltr:before:border-l-red-500 group-data-[theme-color=red]:ltr:before:border-t-red-500 group-data-[theme-color=violet]:rtl:before:border-r-violet-500 group-data-[theme-color=violet]:rtl:before:border-t-violet-500 group-data-[theme-color=green]:rtl:before:border-r-green-500 group-data-[theme-color=green]:rtl:before:border-t-green-500 group-data-[theme-color=red]:rtl:before:border-r-red-500 group-data-[theme-color=red]:rtl:before:border-t-red-500 ltr:before:left-0 rtl:before:right-0 before:-bottom-2"></div>
                                                             </div>
                                                             <div className="relative self-start dropdown">
@@ -369,7 +373,7 @@ console.log({currentRoom});
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <div className="font-medium text-gray-700 text-14 dark:text-gray-300">Doris Brown</div>
+                                                        <div className="font-medium text-gray-700 text-14 dark:text-gray-300">{message.senderName}</div>
                                                     </div>
                                                 </div>
                                             </li>
