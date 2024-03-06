@@ -32,11 +32,11 @@ console.log({currentRoom});
     // Add Message State: Create a state to store messages in the chat room.
     const [newMessage, setNewMessage] = useState("");
     const [messages, setMessages] = useState([]);
-    const { userId, friendId, roomId, setContext } = useContext(RoomContext);
-    const [room, setRoom] = useState({
-        uid: '',
-        participants: [],
-    });
+    // const { userId, friendId, roomId, setContext } = useContext(RoomContext);
+    // const [room, setRoom] = useState({
+    //     uid: '',
+    //     participants: [],
+    // });
     const [selectedTab, setSelectedTab] = useState('chats');
 
     function handleUploadFile(e) {
