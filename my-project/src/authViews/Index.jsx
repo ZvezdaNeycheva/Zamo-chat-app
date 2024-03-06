@@ -126,7 +126,7 @@ console.log({currentRoom});
     console.log("Message to be sent:", message);
   
     await push(ref(db, `rooms/${currentRoom}/messages`), message);
-    // setNewMessage("");
+    setNewMessage("");
   };
   
     return (
