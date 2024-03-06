@@ -11,52 +11,52 @@ export function Contacts() {
   const { userData } = useContext(AppContext);
   const [user] = useAuthState(auth);
   const navigate = useNavigate();
-  const [friendRequests, setFriendRequests] = useState([]); // {uid: string, username: string, type: 'sent' | 'received'}
-  const [friendsList, setFriendsList] = useState([]);
+  const [friendRequests, setFriendRequests] = useState([]);
+  const [emailInputValue, setEmailInputValue] = useState('');
+  const [isContactModalVisible, setIsContactModalVisible] = useState(false);
 
-  // uid, name, type
 
   useEffect(() => {
     if (!user) return;
-  
-    const currentUser = getUserByUid(user.uid).then(r => r.val());
-  
-    currentUser
-      .then(user => {
-        const sentRequests = user.sentRequests || {};
-  
-        if (!Array.isArray(sentRequests)) {
-          // Convert object to array
-          const sentRequestsArray = Object.values(sentRequests);
-  
-          const sentRequestsPromise = Promise.all(
-            sentRequestsArray.map((uid) => getUserByUid(user.uid).then(r => ({ ...r.val(), type: 'sent' })))
-          );
-  
-          return sentRequestsPromise;
-        } else {
-          return [];
-        }
-      })
-      .then(sentRequestsData => {
-        // Handle the case when sentRequestsData is not an array
-        if (!Array.isArray(sentRequestsData)) {
-          console.error('sentRequestsData is not an array:', sentRequestsData);
+
+    const fetchFriendRequests = async () => {
+      try {
+        const currentUser = await getUserByUid(user.uid).then((r) => r.val());
+
+        if (!currentUser) {
+          console.error('User data not found.');
           return;
         }
-  
-        setFriendRequests(sentRequestsData.map(({ uid, username, type }) => ({ uid, username, type })));
-      })
-      .catch(error => {
+
+        const receivedRequests = currentUser.pendingRequests || {};
+
+        if (!Array.isArray(receivedRequests)) {
+          const receivedRequestsArray = Object.values(receivedRequests);
+
+          const receivedRequestsPromise = Promise.all(
+            receivedRequestsArray.map((uid) => getUserByUid(uid).then((r) => ({ ...r.val(), type: 'received' })))
+          );
+
+          const receivedRequestsData = await receivedRequestsPromise;
+
+          if (!Array.isArray(receivedRequestsData)) {
+            console.error('receivedRequestsData is not an array:', receivedRequestsData);
+            return;
+          }
+
+          setFriendRequests(receivedRequestsData);
+        } else {
+          setFriendRequests([]);
+        }
+      } catch (error) {
         console.error('Error fetching friend requests:', error);
-      });
+      }
+    };
+
+    fetchFriendRequests();
   }, [user]);
 
   // const [messageInputValue, setMessageInputValue] = useState('');
-  const [emailInputValue, setEmailInputValue] = useState('');
-  const [isContactModalVisible, setIsContactModalVisible] = useState(false);
-  const [pendingRequest, setPendingRequest] = useState(null);
-
   const toggleModal = () => {
     setIsContactModalVisible(!isContactModalVisible);
   };
@@ -66,14 +66,12 @@ export function Contacts() {
       const usersSnapshot = await get(query(ref(db, 'users')));
       const users = usersSnapshot.val();
 
-      // Find the user by email locally
       const userByEmail = Object.values(users).find(u => u.email === emailInputValue);
 
       if (userByEmail) {
         const recipientUid = userByEmail.uid;
         const senderUid = user.uid;
 
-        // Use nullish coalescing to handle undefined or null userData.sentRequests and userByEmail.pendingRequests
         const updatedSentRequests = [...(userData.sentRequests ?? []), recipientUid];
         await updateUserData(senderUid, { sentRequests: updatedSentRequests });
 
@@ -83,10 +81,9 @@ export function Contacts() {
         console.log('Friend request sent successfully.');
         setFriendRequests((prev) => {
           if (prev.find(u => u.uid === recipientUid)) return prev.at;
-          const {uid, username} = userByEmail;
-          return [...prev, {uid, username, type: 'sent'}];
+          const { uid, username } = userByEmail;
+          return [...prev, { uid, username, type: 'sent' }];
         })
-        // Close the modal after sending the friend request
         setIsContactModalVisible(false);
       } else {
         console.log('User not found with the provided email.');
@@ -101,14 +98,12 @@ export function Contacts() {
       const senderUserData = await getUserByUid(senderUid);
       const recipientUid = user.uid;
 
-      // Add both user IDs to each other's friendsList
       const updatedSenderFriendsList = [...senderUserData.friendsList, recipientUid];
       await updateUserData(senderUid, { friendsList: updatedSenderFriendsList });
 
       const updatedRecipientFriendsList = [...userData.friendsList, senderUid];
       await updateUserData(recipientUid, { friendsList: updatedRecipientFriendsList });
 
-      // Remove the request from the recipient's pendingRequests
       const updatedPendingRequests = userData.pendingRequests.filter(request => request !== senderUid);
       await updateUserData(recipientUid, { pendingRequests: updatedPendingRequests });
 
@@ -118,11 +113,15 @@ export function Contacts() {
     }
   };
 
-  const handleRejectRequest = () => {
-    // Clear the pending request state when rejecting
-    setPendingRequest(null);
-    // Close the modal
-    setIsContactModalVisible(false);
+  const handleRejectRequest = async (senderUid) => {
+    try {
+      const updatedPendingRequests = userData.pendingRequests.filter(request => request !== senderUid);
+      await updateUserData(user.uid, { pendingRequests: updatedPendingRequests });
+
+      console.log('Friend request rejected successfully.');
+    } catch (error) {
+      console.error('Error rejecting friend request:', error);
+    }
   };
 
   return (
@@ -150,65 +149,68 @@ export function Contacts() {
               </div>
               <h4 className="mb-6 dark:text-gray-50">Contacts</h4>
               <div className="relative z-50 modal" id="modal-id2" aria-modal="true" role="modal-fifth">
-                {isContactModalVisible && (
-                  <div className="fixed inset-0 z-50">
-                    <div className="absolute inset-0 transition-opacity bg-black bg-opacity-50 modal-overlay" />
-                    <div className="flex items-center justify-center max-w-lg min-h-screen p-4 mx-auto text-center animate-translate">
-                      <div className="relative w-full max-w-lg my-8 text-left transition-all transform bg-white rounded-lg shadow-xl -top-10 dark:bg-zinc-700">
-                        <div className="bg-violet-800/10 dark:bg-zinc-700">
-                          <div className="flex items-center justify-between p-4 border-b border-gray-100 dark:border-zinc-500">
-                            <h5 className="mb-0 text-gray-800 text-16 dark:text-gray-50" id="addgroup-exampleModaL">
-                              Add Contact
-                            </h5>
+              {isContactModalVisible && (
+            <div className="fixed inset-0 z-50">
+              <div className="absolute inset-0 transition-opacity bg-black bg-opacity-50 modal-overlay" />
+              <div className="flex items-center justify-center max-w-lg min-h-screen p-4 mx-auto text-center animate-translate">
+                <div className="relative w-full max-w-lg my-8 text-left transition-all transform bg-white rounded-lg shadow-xl -top-10 dark:bg-zinc-700">
+                  {/* Modal content */}
+                  <div className="bg-violet-800/10 dark:bg-zinc-700">
+                    {/* Modal header */}
+                    <div className="flex items-center justify-between p-4 border-b border-gray-100 dark:border-zinc-500">
+                      <h5 className="mb-0 text-gray-800 text-16 dark:text-gray-50" id="addgroup-exampleModaL">
+                        Add Contact
+                      </h5>
+                      <button
+                        type="button"
+                        className="absolute top-3 ltr:right-2.5 rtl:left-2.5 text-gray-400 border-transparent hover:bg-gray-50/50/50 hover:text-gray-900 rounded-lg text-sm px-2 py-1 ml-auto inline-flex items-center dark:hover:bg-zinc-600 dark:text-gray-100"
+                        onClick={toggleModal}
+                      >
+                        <i className="text-xl text-gray-500 mdi mdi-close dark:text-zinc-100/60" />
+                      </button>
+                    </div>
+
+                    {/* Modal body */}
+                    <div className="p-4">
+                      <form>
+                        <div className="mb-5 ltr:text-left rtl:text-right">
+                          <label className="block mb-2 dark:text-gray-300"> Email </label>
+                          <input
+                            type="text"
+                            className="py-1.5 bg-transparent border-gray-100 rounded placeholder:text-13 w-full focus:border-violet-500 focus:ring-0 focus:ring-offset-0 dark:border-zinc-500 dark:placeholder:text-gray-300"
+                            id="addgroupname-input1"
+                            placeholder="Enter Email"
+                            value={emailInputValue}
+                            onChange={(e) => setEmailInputValue(e.target.value)}
+                          />
+                        </div>
+                        {/* Other input fields can be added here */}
+
+                        <div className="flex justify-end p-4 border-t border-gray-100 dark:border-zinc-500">
+                          <div>
                             <button
                               type="button"
-                              className="absolute top-3 ltr:right-2.5 rtl:left-2.5 text-gray-400 border-transparent hover:bg-gray-50/50/50 hover:text-gray-900 rounded-lg text-sm px-2 py-1 ml-auto inline-flex items-center dark:hover:bg-zinc-600 dark:text-gray-100"
+                              className="border-0 btn hover:underline group-data-[theme-color=violet]:text-violet-500 group-data-[theme-color=green]:text-green-500 group-data-[theme-color=red]:text-red-500"
                               onClick={toggleModal}
                             >
-                              <i className="text-xl text-gray-500 mdi mdi-close dark:text-zinc-100/60" />
+                              Close
+                            </button>
+                            <button
+                              type="button"
+                              className="text-white border-transparent btn group-data-[theme-color=violet]:bg-violet-500 group-data-[theme-color=violet]:hover:bg-violet-600 group-data-[theme-color=green]:bg-green-500 group-data-[theme-color=green]:hover:bg-green-600 group-data-[theme-color=red]:bg-red-500 group-data-[theme-color=red]:hover:bg-red-600"
+                              onClick={handleSendInvitation}
+                            >
+                              Invite Contact
                             </button>
                           </div>
-
-                          <div className="p-4">
-                            <form>
-                              <div className="mb-5 ltr:text-left rtl:text-right">
-                                <label className="block mb-2 dark:text-gray-300"> Email </label>
-                                <input
-                                  type="text"
-                                  className="py-1.5 bg-transparent border-gray-100 rounded placeholder:text-13 w-full focus:border-violet-500 focus:ring-0 focus:ring-offset-0 dark:border-zinc-500 dark:placeholder:text-gray-300"
-                                  id="addgroupname-input1"
-                                  placeholder="Enter Email"
-                                  value={emailInputValue}
-                                  onChange={(e) => setEmailInputValue(e.target.value)}
-                                />
-                              </div>
-                              {/* Other input fields can be added here */}
-
-                              <div className="flex justify-end p-4 border-t border-gray-100 dark:border-zinc-500">
-                                <div>
-                                  <button
-                                    type="button"
-                                    className="border-0 btn hover:underline group-data-[theme-color=violet]:text-violet-500 group-data-[theme-color=green]:text-green-500 group-data-[theme-color=red]:text-red-500"
-                                    onClick={toggleModal}
-                                  >
-                                    Close
-                                  </button>
-                                  <button
-                                    type="button"
-                                    className="text-white border-transparent btn group-data-[theme-color=violet]:bg-violet-500 group-data-[theme-color=violet]:hover:bg-violet-600 group-data-[theme-color=green]:bg-green-500 group-data-[theme-color=green]:hover:bg-green-600 group-data-[theme-color=red]:bg-red-500 group-data-[theme-color=red]:hover:bg-red-600"
-                                    onClick={handleSendInvitation}
-                                  >
-                                    Invite Contact
-                                  </button>
-                                </div>
-                              </div>
-                            </form>
-                          </div>
                         </div>
-                      </div>
+                      </form>
                     </div>
                   </div>
-                )}
+                </div>
+              </div>
+            </div>
+          )}
               </div>
 
               {/* Search bar */}
@@ -222,46 +224,43 @@ export function Contacts() {
               {/* Contacts list */}
               <h5 className="px-6 mt-8 mb-4 text-16 dark:text-gray-50">Friend requests</h5>
               <ul className="list-unstyled contact-list">
-              {friendRequests && friendRequests.length > 0 && friendRequests.map(({ uid, username, type }) => (
-  <li key={uid} className="px-5 py-[15px] group-data-[theme-color=violet]:hover:bg-slate-100 group-data-[theme-color=green]:hover:bg-green-50/50 group-data-[theme-color=red]:hover:bg-red-50/50 transition-all ease-in-out border-b border-white/20 dark:border-zinc-700 group-data-[theme-color=violet]:dark:hover:bg-zinc-600 group-data-[theme-color=green]:dark:hover:bg-zinc-600 group-data-[theme-color=red]:dark:hover:bg-zinc-600 dark:hover:border-zinc-700">
-    <div className="flex">
-      <div className="relative self-center ltr:mr-3 rtl:ml-3">
-        <div className="flex items-center justify-center rounded-full w-9 h-9 group-data-[theme-color=violet]:bg-violet-500/20 group-data-[theme-color=green]:bg-green-500/20 group-data-[theme-color=red]:bg-red-500/20">
-          <span className="group-data-[theme-color=violet]:text-violet-500 group-data-[theme-color=green]:text-green-500 group-data-[theme-color=red]:text-red-500">
-            {username[0].toUpperCase()}
-          </span>
+              {friendRequests && friendRequests.length > 0 ? (
+  friendRequests.map((request) => (
+    <li key={request.uid} className="px-5 py-[15px] group-data-[theme-color=violet]:hover:bg-slate-100 group-data-[theme-color=green]:hover:bg-green-50/50 group-data-[theme-color=red]:hover:bg-red-50/50 transition-all ease-in-out border-b border-white/20 dark:border-zinc-700 group-data-[theme-color=violet]:dark:hover:bg-zinc-600 group-data-[theme-color=green]:dark:hover:bg-zinc-600 group-data-[theme-color=red]:dark:hover:bg-zinc-600 dark:hover:border-zinc-700">
+      <div className="flex">
+        <div className="relative self-center ltr:mr-3 rtl:ml-3">
+          <div className="flex items-center justify-center rounded-full w-9 h-9 group-data-[theme-color=violet]:bg-violet-500/20 group-data-[theme-color=green]:bg-green-500/20 group-data-[theme-color=red]:bg-red-500/20">
+            <span className="group-data-[theme-color=violet]:text-violet-500 group-data-[theme-color=green]:text-green-500 group-data-[theme-color=red]:text-red-500">
+              {request.username[0].toUpperCase()}
+            </span>
+          </div>
+        </div>
+        <div className="flex-grow overflow-hidden">
+          <h5 className="mb-1 text-base truncate dark:text-gray-50">{request.username}</h5>
+          {request.type === 'sent' ? (
+            <p className="mb-0 text-gray-500 truncate dark:text-gray-300 text-14">Pending</p>
+          ) : request.type === 'received' ? (
+            <div className="flex">
+              <button
+                className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600"
+                onClick={() => handleAcceptRequest(request.uid)}
+              >
+                Accept
+              </button>
+              {/* Add a button for rejecting the friend request if needed */}
+            </div>
+          ) : null}
         </div>
       </div>
-      <div className="flex-grow overflow-hidden">
-        <h5 className="mb-1 text-base truncate dark:text-gray-50">{username}</h5>
-        {type === 'sent' ? (
-          <p className="mb-0 text-gray-500 truncate dark:text-gray-300 text-14">Pending</p>
-        ) : type === 'received' ? (
-          <button className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600">
-            Accept
-          </button>
-        ) : null}
-      </div>
-    </div>
-  </li>
-))}
+    </li>
+  ))
+) : (
+  <div>
+    <p className="text-gray-500 dark:text-gray-300 text-center">You don't have any friend requests.</p>
+  </div>
+)}
               </ul>
               <h5 className="px-6 mt-8 mb-4 text-16 dark:text-gray-50">Friends</h5>
-
-              {/* Accept or Reject */}
-              {pendingRequest && (
-                <div className="p-4 bg-white rounded-lg border border-gray-200 shadow-sm">
-                  {/* <p>{`${pendingRequest.senderName} wants to connect with you!`}</p>
-                  <div className="mt-4 flex justify-between items-center">
-                    <button onClick={() => handleAcceptRequest(pendingRequest.senderUid)} className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600">
-                      Accept
-                    </button>
-                    <button onClick={handleRejectRequest} className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600">
-                      Reject
-                    </button>
-                  </div> */}
-                </div>
-              )}
             </div>
           </div>
         </div>
