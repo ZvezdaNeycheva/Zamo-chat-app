@@ -1,5 +1,5 @@
 import React, { useState, useEffect} from "react";
-import { BrowserRouter as Router, Routes, Route, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Switch, useParams } from "react-router-dom";
 import { auth } from "./config/firebase-config";
 import "./App.css";
 import { Index } from "./authViews/Index";
@@ -29,6 +29,7 @@ function App() {
     userData: null,
   });
   const [user, loading, error] = useAuthState(auth);
+  let { id } = useParams();
 
   useEffect(() => {
     if (user) {

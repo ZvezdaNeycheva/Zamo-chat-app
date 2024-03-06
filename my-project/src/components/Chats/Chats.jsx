@@ -52,6 +52,7 @@ export function Chats() {
         }
         setCurrentRoom(room.id);
         // console.log({currentRoom});
+        navigate(`/rooms/${room.id}`);
     }
     // useEffect(() => {
     //     console.log("Current Room in useEffect:", currentRoom);
