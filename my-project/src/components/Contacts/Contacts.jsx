@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { AppContext } from '../../appContext/AppContext';
 import { auth } from '../../config/firebase-config';
@@ -9,8 +9,26 @@ import { db } from '../../config/firebase-config';
 
 export function Contacts() {
   const { userData } = useContext(AppContext);
-  const [user, ] = useAuthState(auth);
+  const [user] = useAuthState(auth);
   const navigate = useNavigate();
+  const [friendRequests, setFriendRequests] = useState([]); // {uid: string, username: string, type: 'sent' | 'received'}
+  const [friendsList, setFriendsList] = useState([]);
+
+  // uid, name, type
+
+  useEffect(() => {
+    if (!user) return;
+    const currentUser = getUserByUid(user.uid).then(r => r.val());
+    currentUser
+      .then(user => {
+        Promise.all([
+          ...(user.sentRequests ?? []).map((uid) => getUserByUid(user.uid).then(r => ({...r.val(), type: 'sent'}))),
+          ...(user.pendingRequests ?? []).map((uid) => getUserByUid(user.uid).then(r => ({...r.val(), type: 'received'})))
+        ]).then((invitedUsers) => {
+          setFriendRequests(invitedUsers.map(({uid, username, type}) => ({uid, username, type})));
+        })
+      });
+  }, [user]);
 
   // const [messageInputValue, setMessageInputValue] = useState('');
   const [emailInputValue, setEmailInputValue] = useState('');
@@ -25,22 +43,27 @@ export function Contacts() {
     try {
       const usersSnapshot = await get(query(ref(db, 'users')));
       const users = usersSnapshot.val();
-  
+
       // Find the user by email locally
       const userByEmail = Object.values(users).find(u => u.email === emailInputValue);
-  
+
       if (userByEmail) {
         const recipientUid = userByEmail.uid;
         const senderUid = user.uid;
-  
+
         // Use nullish coalescing to handle undefined or null userData.sentRequests and userByEmail.pendingRequests
         const updatedSentRequests = [...(userData.sentRequests ?? []), recipientUid];
         await updateUserData(senderUid, { sentRequests: updatedSentRequests });
-  
+
         const updatedPendingRequests = [...(userByEmail.pendingRequests ?? []), senderUid];
         await updateUserData(recipientUid, { pendingRequests: updatedPendingRequests });
-  
+
         console.log('Friend request sent successfully.');
+        setFriendRequests((prev) => {
+          if (prev.find(u => u.uid === recipientUid)) return prev.at;
+          const {uid, username} = userByEmail;
+          return [...prev, {uid, username, type: 'sent'}];
+        })
         // Close the modal after sending the friend request
         setIsContactModalVisible(false);
       } else {
@@ -87,7 +110,7 @@ export function Contacts() {
         <div>
           {/* Start chat content */}
           <div>
-          
+
             <div className="p-6 pb-0">
               <div className="ltr:float-right rtl:float-left">
                 <div className="relative">
@@ -123,7 +146,7 @@ export function Contacts() {
                               <i className="text-xl text-gray-500 mdi mdi-close dark:text-zinc-100/60" />
                             </button>
                           </div>
-  
+
                           <div className="p-4">
                             <form>
                               <div className="mb-5 ltr:text-left rtl:text-right">
@@ -138,7 +161,7 @@ export function Contacts() {
                                 />
                               </div>
                               {/* Other input fields can be added here */}
-  
+
                               <div className="flex justify-end p-4 border-t border-gray-100 dark:border-zinc-500">
                                 <div>
                                   <button
@@ -173,11 +196,40 @@ export function Contacts() {
                 </span>
                 <input type="text" className="border-0 group-data-[theme-color=violet]:bg-slate-100 group-data-[theme-color=green]:bg-green-50 group-data-[theme-color=red]:bg-red-50 group-data-[theme-color=violet]:dark:bg-zinc-600 group-data-[theme-color=green]:dark:bg-zinc-600 group-data-[theme-color=red]:dark:bg-zinc-600 placeholder:text-[14px] focus:ring-offset-0 focus:outline-none focus:ring-0 placeholder:dark:text-gray-300" placeholder="Search users.." aria-describedby="basic-addon" />
               </div>
-                
+
+              {/* Contacts list */}
+              <h5 className="px-6 mt-8 mb-4 text-16 dark:text-gray-50">Friend requests</h5>
+              <ul class="list-unstyled contact-list">
+                {friendRequests.map(({username, type}) => (
+                  <li class="px-5 py-[15px] group-data-[theme-color=violet]:hover:bg-slate-100 group-data-[theme-color=green]:hover:bg-green-50/50 group-data-[theme-color=red]:hover:bg-red-50/50 transition-all ease-in-out border-b border-white/20 dark:border-zinc-700 group-data-[theme-color=violet]:dark:hover:bg-zinc-600 group-data-[theme-color=green]:dark:hover:bg-zinc-600 group-data-[theme-color=red]:dark:hover:bg-zinc-600 dark:hover:border-zinc-700">
+                    <div class="flex">
+                      <div class="relative self-center ltr:mr-3 rtl:ml-3">
+                        <div class="flex items-center justify-center rounded-full w-9 h-9 group-data-[theme-color=violet]:bg-violet-500/20 group-data-[theme-color=green]:bg-green-500/20 group-data-[theme-color=red]:bg-red-500/20">
+                          <span class="group-data-[theme-color=violet]:text-violet-500 group-data-[theme-color=green]:text-green-500 group-data-[theme-color=red]:text-red-500">
+                            {username[0].toUpperCase()}
+                          </span>
+                        </div>
+                      </div>
+                      <div class="flex-grow overflow-hidden">
+                        <h5 class="mb-1 text-base truncate dark:text-gray-50">{username}</h5>
+                        {type === 'sent' ? (
+                          <p class="mb-0 text-gray-500 truncate dark:text-gray-300 text-14">Pending</p>
+                        ) : type === 'received' ? (
+                          <button className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600">
+                            Accept
+                          </button>
+                        ) : null}
+                      </div>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+              <h5 className="px-6 mt-8 mb-4 text-16 dark:text-gray-50">Friends</h5>
+
               {/* Accept or Reject */}
               {pendingRequest && (
                 <div className="p-4 bg-white rounded-lg border border-gray-200 shadow-sm">
-                  <p>{`${pendingRequest.senderName} wants to connect with you!`}</p>
+                  {/* <p>{`${pendingRequest.senderName} wants to connect with you!`}</p>
                   <div className="mt-4 flex justify-between items-center">
                     <button onClick={() => handleAcceptRequest(pendingRequest.senderUid)} className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600">
                       Accept
@@ -185,7 +237,7 @@ export function Contacts() {
                     <button onClick={handleRejectRequest} className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600">
                       Reject
                     </button>
-                  </div>
+                  </div> */}
                 </div>
               )}
             </div>
@@ -210,4 +262,4 @@ export function Contacts() {
       )}
     </>
   );
-}  
+}
