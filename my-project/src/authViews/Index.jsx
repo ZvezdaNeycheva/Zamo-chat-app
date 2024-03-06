@@ -14,13 +14,13 @@ import { RecoverPassword } from "./RecoverPassword";
 import { db } from "../config/firebase-config";
 import { get, query, ref, update, set, onChildAdded, push } from "firebase/database";
 import { RoomContext } from "../appContext/AppContext";
-
 import { useState, useEffect, useContext } from "react";
 import { uploadFile } from "../service/auth.service";
 import { updateUserData } from "../service/users.service";
 import { AppContext } from "../appContext/AppContext";
 import { useRecoilValue } from 'recoil';
 import { currentRoomId } from "../atom/atom";
+import { serverTimestamp } from "firebase/database";
 
 export function Index() {
     const currentRoom = useRecoilValue(currentRoomId);
@@ -28,7 +28,7 @@ export function Index() {
     const [loading, setLoading] = useState(false);
     const [file, setFile] = useState(null);
     const { user, userData, updateUserData } = useContext(AppContext);
-
+console.log({currentRoom});
     // Add Message State: Create a state to store messages in the chat room.
     const [newMessage, setNewMessage] = useState("");
     const [messages, setMessages] = useState([]);
@@ -85,64 +85,50 @@ export function Index() {
     //         };
     //     }
     // }, [roomId]);
+   
     useEffect(() => {
-        const fetchMessages = async () => {
-            if (!user || !roomId) return;
-    
-            try {
-                const messagesRef = ref(db, `rooms/${roomId}/messages`);
-                const snapshot = await get(messagesRef);
-    
-                if (snapshot.exists()) {
-                    setMessages(snapshot.val());
-                }
-            } catch (error) {
-                console.error("Error fetching messages:", error);
+        if (currentRoom) {
+          const roomRef = ref(db, `rooms/${currentRoom}/messages`);
+          const queryRef = query(roomRef);
+          const unsubscribe = onChildAdded(queryRef, (snapshot) => {
+            const messageData = snapshot.val();
+            // Check if message data is available
+            if (messageData) {
+              setMessages((prevMessages) => [...prevMessages, messageData]);
             }
-        };
-    
-        fetchMessages();
-    }, [user, roomId]);
+          });
+          return () => {
+            unsubscribe();
+          };
+        } else {
+          // If there's no current room, clear the messages
+          setMessages([]);
+        }
+      }, [currentRoom]);
+      
 
-    const handleInputMessage = (e) => {
-        e.preventDefault();
-        const message = e.target.value;
-        setNewMessage(message);
-        // console.log({message});
-    }
-    // const handleSendMessage = (e) => {
-    //     e.preventDefault();
-    //     console.log({ newMessage });
-    //     if (newMessage === "") {
-    //         return;
-    //     }
-    //     // const chatRef = ref(db, `rooms/${roomId}`);
-    //     // const chatData = {
-    //     //     uid,
-    //     //     message: newMessage,
-    //     //     timestamp: db.ServerValue.TIMESTAMP,
-    //     // }
-    //     // const newChatRef = push(chatRef);
-    //     // set(newChatRef, chatData);
-    //     // setNewMessage("");
-    // }
-    const handleSendMessage = async () => {
-        if (!newMessage.trim()) return;
+  const handleInputMessage = (e) => {
+    e.preventDefault();
+    const message = e.target.value;
+    setNewMessage(message);
+  };
 
-        const message = {
-            messageId: "",
-            senderId: userId,
-            content: newMessage,
-            timestamp: db.ServerValue.TIMESTAMP,
-        };
-
-        const messageRef = ref(db, `rooms/${roomId}/messages`);
-        await push(messageRef, message);
-        setNewMessage("");
+  const sendMessage = async () => {
+    if (!newMessage.trim()) return;
+  
+    const message = {
+      senderId: userData.uid,
+      content: newMessage,
+      timestamp: serverTimestamp(),
     };
-
-
-
+  
+    // Log the message object to verify its structure
+    console.log("Message to be sent:", message);
+  
+    await push(ref(db, `rooms/${currentRoom}/messages`), message);
+    // setNewMessage("");
+  };
+  
     return (
         <>
             <Meta title={'Chat App'}></Meta>
@@ -731,11 +717,16 @@ export function Index() {
                             </div>
                             {/* <!-- end chat conversation end --> */}
 
+
+
+
+
                             {/* <!-- start chat input section --> */}
                             <div className="z-40 w-full p-6 mb-0 bg-white border-t lg:mb-1 border-gray-50 dark:bg-zinc-800 dark:border-zinc-700">
                                 <div className="flex gap-2">
                                     <div className="flex-grow">
-                                        <input type="text" value={newMessage} onChange={handleInputMessage} onClick={handleSendMessage} className="w-full border-transparent rounded bg-gray-50 placeholder:text-14 text-14 dark:bg-zinc-700 dark:placeholder:text-gray-300 dark:text-gray-300" placeholder="Enter Message..." />
+                                    {/* handleSendMessage    sendMessage(messages) */}
+                                        <input type="text" value={newMessage} onChange={handleInputMessage} onClick={()=>{sendMessage(messages)}} className="w-full border-transparent rounded bg-gray-50 placeholder:text-14 text-14 dark:bg-zinc-700 dark:placeholder:text-gray-300 dark:text-gray-300" placeholder="Enter Message..." />
                                     </div>
                                     <div>
                                         <div>
@@ -771,7 +762,7 @@ export function Index() {
                                                 </li>
                                                 {/* Send Message */}
                                                 <li className="inline-block">
-                                                    <button type="submit" className="text-white border-transparent btn group-data-[theme-color=violet]:bg-violet-500 group-data-[theme-color=green]:bg-green-500 group-data-[theme-color=red]:bg-red-500 group-data-[theme-color=violet]:hover:bg-violet-600 group-data-[theme-color=green]:hover:bg-green-600">
+                                                    <button type="submit" onClick={() => {sendMessage()}} className="text-white border-transparent btn group-data-[theme-color=violet]:bg-violet-500 group-data-[theme-color=green]:bg-green-500 group-data-[theme-color=red]:bg-red-500 group-data-[theme-color=violet]:hover:bg-violet-600 group-data-[theme-color=green]:hover:bg-green-600">
                                                         <i className="ri-send-plane-2-fill"></i>
                                                     </button>
                                                 </li>

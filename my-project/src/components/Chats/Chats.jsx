@@ -19,7 +19,7 @@ export function Chats() {
 
     const [currentRoom, setCurrentRoom] = useRecoilState(currentRoomId);
 
-    const { userId, friendId, roomId, setContext } = useContext(RoomContext);
+    // const { userId, friendId, roomId, setContext } = useContext(RoomContext);
     const [room, setRoom] = useState({
         id: '',
         participants: [],
@@ -30,28 +30,28 @@ export function Chats() {
         const participants = [user?.uid, friend.uid];
         const room = await getRoom(participants);
         console.log({ room });
-        setContext({ userId, friendId, roomId: room.id });
-        console.log({roomId});
+        // setContext({ userId, friendId, roomId: room.id });
+        // console.log({roomId});
         
         if (!room) {
             const newRoom = await createRoom(participants);
             console.log({ newRoom });
             setRoom(newRoom);
-            setContext({
-                userId: user.uid,
-                friendId: friend.uid,
-                roomId: newRoom.id,
-            });
+            // setContext({
+            //     userId: user.uid,
+            //     friendId: friend.uid,
+            //     roomId: newRoom.id,
+            // });
         } else {
             setRoom(room);
-            setContext({
-                userId: user.uid,
-                friendId: friend.uid,
-                roomId: room.id,
-            });
+            // setContext({
+            //     userId: user.uid,
+            //     friendId: friend.uid,
+            //     roomId: room.id,
+            // });
         }
         setCurrentRoom(room.id);
-        console.log({currentRoom});
+        // console.log({currentRoom});
     }
     // useEffect(() => {
     //     console.log("Current Room in useEffect:", currentRoom);
@@ -106,7 +106,7 @@ export function Chats() {
         }
         // const { userId, friendId, roomId, setContext } = useContext(RoomContext);
         // setContext({ userId, friendId, roomId: roomRef.key, setContext })
-        setContext({ userId, friendId, roomId: room.id });
+        // setContext({ userId, friendId, roomId: room.id });
 
         return {
             id: roomRef.key,
