@@ -18,15 +18,37 @@ export function Contacts() {
 
   useEffect(() => {
     if (!user) return;
+  
     const currentUser = getUserByUid(user.uid).then(r => r.val());
+  
     currentUser
       .then(user => {
-        Promise.all([
-          ...(user.sentRequests ?? []).map((uid) => getUserByUid(user.uid).then(r => ({...r.val(), type: 'sent'}))),
-          ...(user.pendingRequests ?? []).map((uid) => getUserByUid(user.uid).then(r => ({...r.val(), type: 'received'})))
-        ]).then((invitedUsers) => {
-          setFriendRequests(invitedUsers.map(({uid, username, type}) => ({uid, username, type})));
-        })
+        const sentRequests = user.sentRequests || {};
+  
+        if (!Array.isArray(sentRequests)) {
+          // Convert object to array
+          const sentRequestsArray = Object.values(sentRequests);
+  
+          const sentRequestsPromise = Promise.all(
+            sentRequestsArray.map((uid) => getUserByUid(user.uid).then(r => ({ ...r.val(), type: 'sent' })))
+          );
+  
+          return sentRequestsPromise;
+        } else {
+          return [];
+        }
+      })
+      .then(sentRequestsData => {
+        // Handle the case when sentRequestsData is not an array
+        if (!Array.isArray(sentRequestsData)) {
+          console.error('sentRequestsData is not an array:', sentRequestsData);
+          return;
+        }
+  
+        setFriendRequests(sentRequestsData.map(({ uid, username, type }) => ({ uid, username, type })));
+      })
+      .catch(error => {
+        console.error('Error fetching friend requests:', error);
       });
   }, [user]);
 
@@ -200,29 +222,29 @@ export function Contacts() {
               {/* Contacts list */}
               <h5 className="px-6 mt-8 mb-4 text-16 dark:text-gray-50">Friend requests</h5>
               <ul className="list-unstyled contact-list">
-                {friendRequests.map(({username, type}) => (
-                  <li className="px-5 py-[15px] group-data-[theme-color=violet]:hover:bg-slate-100 group-data-[theme-color=green]:hover:bg-green-50/50 group-data-[theme-color=red]:hover:bg-red-50/50 transition-all ease-in-out border-b border-white/20 dark:border-zinc-700 group-data-[theme-color=violet]:dark:hover:bg-zinc-600 group-data-[theme-color=green]:dark:hover:bg-zinc-600 group-data-[theme-color=red]:dark:hover:bg-zinc-600 dark:hover:border-zinc-700">
-                    <div className="flex">
-                      <div className="relative self-center ltr:mr-3 rtl:ml-3">
-                        <div className="flex items-center justify-center rounded-full w-9 h-9 group-data-[theme-color=violet]:bg-violet-500/20 group-data-[theme-color=green]:bg-green-500/20 group-data-[theme-color=red]:bg-red-500/20">
-                          <span className="group-data-[theme-color=violet]:text-violet-500 group-data-[theme-color=green]:text-green-500 group-data-[theme-color=red]:text-red-500">
-                            {username[0].toUpperCase()}
-                          </span>
-                        </div>
-                      </div>
-                      <div className="flex-grow overflow-hidden">
-                        <h5 className="mb-1 text-base truncate dark:text-gray-50">{username}</h5>
-                        {type === 'sent' ? (
-                          <p className="mb-0 text-gray-500 truncate dark:text-gray-300 text-14">Pending</p>
-                        ) : type === 'received' ? (
-                          <button className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600">
-                            Accept
-                          </button>
-                        ) : null}
-                      </div>
-                    </div>
-                  </li>
-                ))}
+              {friendRequests && friendRequests.length > 0 && friendRequests.map(({ uid, username, type }) => (
+  <li key={uid} className="px-5 py-[15px] group-data-[theme-color=violet]:hover:bg-slate-100 group-data-[theme-color=green]:hover:bg-green-50/50 group-data-[theme-color=red]:hover:bg-red-50/50 transition-all ease-in-out border-b border-white/20 dark:border-zinc-700 group-data-[theme-color=violet]:dark:hover:bg-zinc-600 group-data-[theme-color=green]:dark:hover:bg-zinc-600 group-data-[theme-color=red]:dark:hover:bg-zinc-600 dark:hover:border-zinc-700">
+    <div className="flex">
+      <div className="relative self-center ltr:mr-3 rtl:ml-3">
+        <div className="flex items-center justify-center rounded-full w-9 h-9 group-data-[theme-color=violet]:bg-violet-500/20 group-data-[theme-color=green]:bg-green-500/20 group-data-[theme-color=red]:bg-red-500/20">
+          <span className="group-data-[theme-color=violet]:text-violet-500 group-data-[theme-color=green]:text-green-500 group-data-[theme-color=red]:text-red-500">
+            {username[0].toUpperCase()}
+          </span>
+        </div>
+      </div>
+      <div className="flex-grow overflow-hidden">
+        <h5 className="mb-1 text-base truncate dark:text-gray-50">{username}</h5>
+        {type === 'sent' ? (
+          <p className="mb-0 text-gray-500 truncate dark:text-gray-300 text-14">Pending</p>
+        ) : type === 'received' ? (
+          <button className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600">
+            Accept
+          </button>
+        ) : null}
+      </div>
+    </div>
+  </li>
+))}
               </ul>
               <h5 className="px-6 mt-8 mb-4 text-16 dark:text-gray-50">Friends</h5>
 

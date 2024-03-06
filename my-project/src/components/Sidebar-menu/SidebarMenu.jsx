@@ -2,6 +2,7 @@ import { NavLink } from "react-router-dom";
 import { logoutUser } from "../../service/auth.service";
 import { AppContext } from "../../appContext/AppContext";
 import { useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export function SidebarMenu({
   onProfileClick,
@@ -16,6 +17,7 @@ export function SidebarMenu({
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [openSidebar, setOpenSidebar] = useState(false);
   const [selectedTab, setSelectedTab] = useState('chats');
+  const navigate = useNavigate();
   // const toggleDarkMode = () => {
   //     setIsDarkMode(!isDarkMode);
   //   };
@@ -33,6 +35,7 @@ export function SidebarMenu({
       setContext({ user: null, userData: null });
       console.log("User logged out successfully.");
       alert("Logout successful!");
+      navigate("/login");
     } catch (error) {
       console.error("Error logging out:", error);
     }
