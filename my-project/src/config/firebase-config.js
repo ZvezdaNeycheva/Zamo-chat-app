@@ -1,10 +1,8 @@
-// Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getDatabase } from "firebase/database";
-import { getStorage, ref } from "firebase/storage";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+import { getStorage } from "firebase/storage";
+import { getMessaging, onMessage} from "firebase/messaging";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -17,16 +15,19 @@ const firebaseConfig = {
   databaseURL: "https://final-project-chat-cd4de-default-rtdb.europe-west1.firebasedatabase.app/",
 };
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
+// Get Firebase Auth, Database, and Storage instances
 export const auth = getAuth(app);
-
 export const db = getDatabase(app);
-
 export const storage = getStorage(app);
 
-// copilot suggetion
-// export const messaging = getMessaging(app);
-// export const functions = getFunctions(app);
+// Get Firebase Cloud Messaging (FCM) instance
+export const messaging = getMessaging(app);
 
+
+// Optional: If you want to receive messages when your web app is in the foreground
+onMessage(messaging, (payload) => {
+  console.log('Message received. ', payload);
+  // Handle the incoming message
+});

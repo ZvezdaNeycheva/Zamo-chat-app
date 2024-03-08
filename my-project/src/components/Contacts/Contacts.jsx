@@ -6,6 +6,7 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import { updateUserData, getUserByUid } from '../../service/users.service';
 import { get, query, orderByChild, equalTo, ref, update } from 'firebase/database';
 import { db } from '../../config/firebase-config';
+import { messaging } from '../../config/firebase-config';
 
 export function Contacts() {
   const { userData } = useContext(AppContext);
@@ -106,6 +107,17 @@ export function Contacts() {
 
       const updatedPendingRequests = userData.pendingRequests.filter(request => request !== senderUid);
       await updateUserData(recipientUid, { pendingRequests: updatedPendingRequests });
+
+      const payload = {
+        notification: {
+          title: 'Friend Request Accepted',
+          body: `${user.displayName} has accepted your friend request!`,
+        },
+        token: senderUserData.fcmToken, // Use the FCM token of the sender
+      };
+  
+      // Send the notification
+      await messaging().send(payload);
 
       console.log('Friend request accepted successfully.');
     } catch (error) {

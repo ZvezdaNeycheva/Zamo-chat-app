@@ -134,24 +134,10 @@ export function Profile() {
                 <i className="text-lg ri-more-2-fill" />
                 Drop
               </button>
-              <ul className={`${open ? "visible" : "invisible"} absolute z-50 block w-40 py-2 text-left list-none bg-white border border-transparent rounded shadow-lg rtl:right-auto rtl:left-0 ltr:left-auto ltr:right-0 my-7 bg-clip-padding dark:bg-zinc-700 dark:shadow-sm dark:border-zinc-600`} aria-labelledby="dropdownMenuButtonA">
-                {/* Action */}
+              <ul className={`${open ? "visible" : "invisible"} absolute z-50 block w-40 py-2 text-left list-none bg-red-700 border border-transparent rounded shadow-lg rtl:right-auto rtl:left-0 ltr:left-auto ltr:right-0 my-7 bg-clip-padding dark:bg-zinc-700 dark:shadow-sm dark:border-zinc-600`} aria-labelledby="dropdownMenuButtonA">
                 <li>
-                  <a className="block w-full px-4 py-2 text-sm font-normal text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/50 dark:text-gray-100 dark:hover:bg-zinc-600 ltr:text-left rtl:text-right" href="#">
-                    Action
-                  </a>
-                </li>
-                {/* Another action */}
-                <li>
-                  <a className="block w-full px-4 py-2 text-sm font-normal text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/50 dark:text-gray-100 dark:hover:bg-zinc-600 ltr:text-left rtl:text-right" href="#" >
-                    Another action
-                  </a>
-                </li>
-                <li className="my-2 border-b border-gray-100/20 dark:border-zinc-600" />
-                {/* Delete */}
-                <li>
-                  <a className="block w-full px-4 py-2 text-sm font-normal text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/50 dark:text-gray-100 dark:hover:bg-zinc-600 ltr:text-left rtl:text-right" href="#">
-                    Delete
+                  <a className="block w-full px-4 py-2 text-sm font-normal text-white bg-transparent dropdown-item whitespace-nowrap hover:bg-red-800 dark:text-gray-100 dark:hover:bg-zinc-600 ltr:text-left rtl:text-right" href="#">
+                    Delete your account
                   </a>
                 </li>
               </ul>
@@ -297,6 +283,12 @@ export function Profile() {
                           </button>
                         </div>
                       )}
+                    </div>
+                    
+                    {/* Time */}
+                    <div className="mt-5">
+                      <p className="mb-1 text-gray-500 dark:text-gray-300">Create Profile Date</p>
+                      <h5 className="text-sm dark:text-gray-50">{userData ? userData.createdOnReadable : "N/A"}</h5>
                     </div>
                   </div>
                 </div>
