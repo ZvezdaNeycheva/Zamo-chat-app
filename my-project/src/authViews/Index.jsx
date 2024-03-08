@@ -1,4 +1,4 @@
-import { Chats } from "../components/Chats/Chats";
+import { Chats } from "../components/Chats/Chats"; 
 import { Contacts } from "../components/Contacts/Contacts";
 import { Groups } from "../components/Groups/Groups";
 import { Meta } from "../components/Meta/Meta";
@@ -118,12 +118,6 @@ console.log({currentRoom});
             console.error("Error accessing roomRef:", error);
         }
     }
-
-    // Call the function with the ID of the room you want to check
-    // const roomId = "yo_room_id";
-    // checkRoomMessages(roomId);ur
-
-
 
 
 

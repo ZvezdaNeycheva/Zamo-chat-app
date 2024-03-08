@@ -8,6 +8,7 @@ import { LockScreen } from "./authViews/LockScreen";
 import { Login } from "./authViews/Login";
 import { Register } from "./authViews/Register";
 import { Chats } from "./components/Chats/Chats";
+import { ChatsView } from "./views/Chats/ChatsView";
 import { Meta } from "./components/Meta/Meta";
 import { Profile } from "./components/Profile/Profile";
 import { SidebarMenu } from "./components/Sidebar-menu/SidebarMenu";
@@ -55,11 +56,12 @@ function App() {
       <Router>
         <Routes>
         <Route path="*" element={<Index />} />
+                {/* <Route path="/layout/*" element={<Layout />} /> */}
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/lock-screen" element={<Authenticated> <LockScreen /> </Authenticated>} />
           <Route path="/recover" element={<RecoverPassword />} />
-          <Route path="/chats/:id" element={<Chats />} />
+          <Route path="/chats/:id" element={<ChatsView />} />
           <Route path="/meta" element={<Meta />} />
           <Route path="/profile" element={<Authenticated> <Profile /> </Authenticated>} />
           <Route path="/sidebar-menu" element={<SidebarMenu />} />
@@ -71,6 +73,11 @@ function App() {
           {/* <Route path="/groups" element={<Groups />} /> */}
           {/* <Route path="/contacts" element={<Contacts />} /> */}
           {/* <Route path="/settings" element={<Settings />} /> */}
+
+           {/* <Route path="/profile" element={<ProfileView />} /> */}
+          {/* <Route path="/groups" element={<GroupsView />} /> */}
+          {/* <Route path="/contacts" element={<ContactsView />} /> */}
+          {/* <Route path="/settings" element={<SettingsView />} /> */}
         </Routes>
         <div className="App">{/* <Index /> */}</div>
       </Router>

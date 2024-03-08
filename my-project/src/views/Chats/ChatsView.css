@@ -1,0 +1,36 @@
+body, html {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    overflow: scroll;
+}
+
+.container {
+    display: flex;
+    height: 100%;
+    width: fit-content;
+}
+
+.sidebar {
+    flex: 0 0 6%; /* Flex shorthand: flex-grow, flex-shrink, flex-basis */
+    max-width: 10%;
+}
+
+.content {
+    display: flex;
+    flex-direction: row;
+    flex: 10; /* Expand to fill remaining space */
+    width: 100%;
+}
+
+.chats {
+    flex-grow: 1;
+    max-width: 40%; /* Adjust the size of the second element as desired */
+}
+
+.part {
+    flex-grow: 9; /* Make the third element take up twice as much space as the second element */
+    min-width: 50%; /* Ensure content inside .part can shrink */
+    overflow: auto; 
+    width: 100%;
+}
