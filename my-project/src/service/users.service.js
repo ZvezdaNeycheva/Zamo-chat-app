@@ -68,3 +68,77 @@ export const getUserByEmail = async (email) => {
     throw error;
   }
 };
+
+// Friends List Management
+export const addFriend = async (currentUserUid, friendUid) => {
+  try {
+    const currentUserData = await getUserByUid(currentUserUid);
+    const updatedFriendsList = [...currentUserData.friendsList, friendUid];
+    await updateUserData(currentUserUid, { friendsList: updatedFriendsList });
+    console.log(`Friend added to ${currentUserUid}'s friendsList successfully.`);
+  } catch (error) {
+    console.error(`Error adding friend to ${currentUserUid}'s friendsList:`, error);
+  }
+};
+
+export const removeFriend = async (currentUserUid, friendUid) => {
+  try {
+    const currentUserData = await getUserByUid(currentUserUid);
+    const updatedFriendsList = currentUserData.friendsList.filter(id => id !== friendUid);
+    await updateUserData(currentUserUid, { friendsList: updatedFriendsList });
+    console.log(`Friend removed from ${currentUserUid}'s friendsList successfully.`);
+  } catch (error) {
+    console.error(`Error removing friend from ${currentUserUid}'s friendsList:`, error);
+  }
+};
+
+export const handleAcceptFriendRequest = async (currentUserUid, senderUid) => {
+  try {
+    console.log('Attempting to accept friend request...');
+    const senderUserData = await getUserByUid(senderUid);
+    const currentUserData = await getUserByUid(currentUserUid);
+
+    // Update sender's friendsList
+    await addFriend(senderUid, currentUserUid);
+
+    // Update recipient's friendsList
+    await addFriend(currentUserUid, senderUid);
+
+    // Remove the accepted request from recipient's pendingRequests
+    const updatedPendingRequests = currentUserData.pendingRequests.filter(request => request !== senderUid);
+    await updateUserData(currentUserUid, { pendingRequests: updatedPendingRequests });
+
+    console.log('Friend request accepted successfully.');
+  } catch (error) {
+    console.error('Error accepting friend request:', error);
+  }
+};
+
+export const handleRejectFriendRequest = async (currentUserUid, senderUid) => {
+  try {
+    // Remove the rejected request from recipient's pendingRequests
+    const updatedPendingRequests = currentUserData.pendingRequests.filter(request => request !== senderUid);
+    await updateUserData(currentUserUid, { pendingRequests: updatedPendingRequests });
+
+    console.log('Friend request rejected successfully.');
+  } catch (error) {
+    console.error('Error rejecting friend request:', error);
+  }
+};
+
+
+export const handleRemoveFriend = async (currentUserUid, friendUid) => {
+  try {
+    console.log('Removing friend...');
+
+    // Remove friendUid from user's friendsList
+    await removeFriend(currentUserUid, friendUid);
+
+    // Remove currentUserUid from friend's friendsList
+    await removeFriend(friendUid, currentUserUid);
+
+    console.log('Friend removed successfully.');
+  } catch (error) {
+    console.error('Error removing friend:', error);
+  }
+};

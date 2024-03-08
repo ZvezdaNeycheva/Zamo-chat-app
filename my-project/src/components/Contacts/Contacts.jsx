@@ -4,9 +4,9 @@ import { AppContext } from '../../appContext/AppContext';
 import { auth } from '../../config/firebase-config';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { updateUserData, getUserByUid } from '../../service/users.service';
-import { get, query, orderByChild, equalTo, ref, update } from 'firebase/database';
+import { get, query, orderByChild, equalTo, ref, update, onValue } from 'firebase/database';
 import { db } from '../../config/firebase-config';
-import { messaging } from '../../config/firebase-config';
+import { addFriend, removeFriend, handleAcceptFriendRequest, handleRejectFriendRequest } from '../../service/users.service';
 
 export function Contacts() {
   const { userData } = useContext(AppContext);
@@ -16,6 +16,7 @@ export function Contacts() {
   const [emailInputValue, setEmailInputValue] = useState('');
   const [isContactModalVisible, setIsContactModalVisible] = useState(false);
   const [hasPendingRequests, setHasPendingRequests] = useState(false);
+  const [subscriptionMessage, setSubscriptionMessage] = useState('');
 
   useEffect(() => {
     if (!user) return;
@@ -29,32 +30,30 @@ export function Contacts() {
           return;
         }
 
-        const receivedRequests = currentUser.pendingRequests || {};
-
-        if (!Array.isArray(receivedRequests)) {
+        // Set up real-time listener for pendingRequests
+        const userRef = ref(db, `users/${user.uid}`);
+        onValue(userRef, (snapshot) => {
+          const updatedUser = snapshot.val();
+          const receivedRequests = updatedUser.pendingRequests || {};
           const receivedRequestsArray = Object.values(receivedRequests);
 
           const receivedRequestsPromise = Promise.all(
             receivedRequestsArray.map((uid) => getUserByUid(uid).then((r) => ({ ...r.val(), type: 'received' })))
           );
 
-          const receivedRequestsData = await receivedRequestsPromise;
-
-          if (!Array.isArray(receivedRequestsData)) {
-            console.error('receivedRequestsData is not an array:', receivedRequestsData);
-            return;
-          }
-
-          setFriendRequests(receivedRequestsData);
-        } else {
-          setFriendRequests([]);
-        }
+          receivedRequestsPromise.then((receivedRequestsData) => {
+            setFriendRequests(receivedRequestsData);
+            setHasPendingRequests(receivedRequestsData.length > 0);
+          });
+        });
       } catch (error) {
         console.error('Error fetching friend requests:', error);
       }
     };
 
-    setHasPendingRequests(friendRequests.length > 0);
+    if (user) {
+      fetchFriendRequests();
+    }
   }, [user]);
 
   // const [messageInputValue, setMessageInputValue] = useState('');
@@ -85,41 +84,28 @@ export function Contacts() {
           const { uid, username } = userByEmail;
           return [...prev, { uid, username, type: 'sent' }];
         })
+
+        setSubscriptionMessage(`Invitation sent to ${emailInputValue}`);
         setIsContactModalVisible(false);
+        setTimeout(clearSubscriptionMessage, 2000);
       } else {
         console.log('User not found with the provided email.');
       }
     } catch (error) {
       console.error('Error sending friend request:', error);
+      setSubscriptionMessage('Error sending invitation. Please try again.');
+      setTimeout(clearSubscriptionMessage, 2000);
     }
   };
-
+  
+  const clearSubscriptionMessage = () => {
+    setSubscriptionMessage('');
+  };
+  
   const handleAcceptRequest = async (senderUid) => {
     try {
-      const senderUserData = await getUserByUid(senderUid);
-      const recipientUid = user.uid;
-
-      const updatedSenderFriendsList = [...senderUserData.friendsList, recipientUid];
-      await updateUserData(senderUid, { friendsList: updatedSenderFriendsList });
-
-      const updatedRecipientFriendsList = [...userData.friendsList, senderUid];
-      await updateUserData(recipientUid, { friendsList: updatedRecipientFriendsList });
-
-      const updatedPendingRequests = userData.pendingRequests.filter(request => request !== senderUid);
-      await updateUserData(recipientUid, { pendingRequests: updatedPendingRequests });
-
-      const payload = {
-        notification: {
-          title: 'Friend Request Accepted',
-          body: `${user.username} has accepted your friend request!`,
-        },
-        token: senderUserData.fcmToken, // Use the FCM token of the sender
-      };
-  
-      // Send the notification
-      await messaging().send(payload);
-
-      console.log('Friend request accepted successfully.');
+      console.log('Attempting to accept friend request...');
+      await handleAcceptFriendRequest(user.uid, senderUid);
     } catch (error) {
       console.error('Error accepting friend request:', error);
     }
@@ -127,12 +113,18 @@ export function Contacts() {
 
   const handleRejectRequest = async (senderUid) => {
     try {
-      const updatedPendingRequests = userData.pendingRequests.filter(request => request !== senderUid);
-      await updateUserData(user.uid, { pendingRequests: updatedPendingRequests });
-
-      console.log('Friend request rejected successfully.');
+      console.log('Rejecting friend request...');
+      await handleRejectFriendRequest(user.uid, senderUid);
     } catch (error) {
       console.error('Error rejecting friend request:', error);
+    }
+  };
+
+  const handleRemoveFriend = async (friendUid) => {
+    try {
+      await removeFriend(user.uid, friendUid);
+    } catch (error) {
+      console.error('Error removing friend:', error);
     }
   };
 
@@ -238,9 +230,15 @@ export function Contacts() {
               <ul className="list-unstyled contact-list">
               {hasPendingRequests && (
                 <div className="bg-yellow-200 p-4 mb-4">
-                  You have pending friend requests! Check them in the friend requests section.
+                  You have {friendRequests.length} new pending requests. 
                 </div>
               )}
+          {subscriptionMessage && (
+            <div className="bg-blue-200 p-4 mb-4">
+              {subscriptionMessage}
+            </div>
+          )}
+
                 {friendRequests && friendRequests.length > 0 ? (
                   friendRequests.map((request) => (
                     <li key={request.uid} className="px-5 py-[15px] group-data-[theme-color=violet]:hover:bg-slate-100 group-data-[theme-color=green]:hover:bg-green-50/50 group-data-[theme-color=red]:hover:bg-red-50/50 transition-all ease-in-out border-b border-white/20 dark:border-zinc-700 group-data-[theme-color=violet]:dark:hover:bg-zinc-600 group-data-[theme-color=green]:dark:hover:bg-zinc-600 group-data-[theme-color=red]:dark:hover:bg-zinc-600 dark:hover:border-zinc-700">
@@ -256,17 +254,24 @@ export function Contacts() {
                           <h5 className="mb-1 text-base truncate dark:text-gray-50">{request.username}</h5>
                           {request.type === 'sent' ? (
                             <p className="mb-0 text-gray-500 truncate dark:text-gray-300 text-14">Pending</p>
-                          ) : request.type === 'received' ? (
-                            <div className="flex">
-                              <button
-                                className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600"
-                                onClick={() => handleAcceptRequest(request.uid)}
-                              >
-                                Accept
-                              </button>
-                              {/* Add a button for rejecting the friend request if needed */}
-                            </div>
-                          ) : null}
+                            ) : request.type === 'received' ? (
+                              <div className="flex">
+                                <button
+                                  onClick={() => handleAcceptRequest(request.uid)}
+                                  className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600"
+                                >
+                                  Accept
+                                </button> &nbsp;
+                                <button
+                                  onClick={() => handleRejectRequest(request.uid)}
+                                  className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600"
+                                >
+                                  Reject
+                                </button>
+                                {/* Add a button for rejecting the friend request if needed */}
+                              </div>
+                            ) : null}
+
                         </div>
                       </div>
                     </li>
