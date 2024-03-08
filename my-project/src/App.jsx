@@ -1,5 +1,5 @@
 import React, { useState, useEffect} from "react";
-import { BrowserRouter as Router, Routes, Route, Switch, useParams } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, useParams } from "react-router-dom";
 import { auth } from "./config/firebase-config";
 import "./App.css";
 import { Index } from "./authViews/Index";
@@ -16,7 +16,6 @@ import { AppContext } from "./appContext/AppContext";
 import Authenticated from "./authenticated/Authenticated";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { getUserData } from "./service/users.service";
-import { Switcher } from "./components/Switcher/Switcher"
 import { RecoilRoot } from 'recoil';
 import { Settings } from "./components/Settings/Settings";
 import { Contacts } from "./components/Contacts/Contacts";
@@ -66,7 +65,7 @@ function App() {
           <Route path="/sidebar-menu" element={<SidebarMenu />} />
           {/* <Route path="/switcher" element={<Switcher />} /> */}
           <Route path="/user-profile-details" element={<UserProfileDetails/> }/>
-          
+
           {/* The routing can be adapted for the master-slave view in a similar way: */}
           {/* <Route path="/profile" element={<Index selectedTab="profile" />} /> */}
           {/* <Route path="/groups" element={<Groups />} /> */}

@@ -2,7 +2,7 @@ import { bottom } from '@popperjs/core'
 import plugin from 'tailwindcss/plugin'
 
 export const darkMode = ['class', '[data-mode="dark"]']
-export const content = ["./src/**/*.{html,scss,js,jsx}"]
+export const content = ["./index.html", "./src/**/*.{html,scss,js,jsx}"]
 export const important = true
 export const theme = {
   screens: {
