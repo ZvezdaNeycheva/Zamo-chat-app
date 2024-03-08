@@ -21,8 +21,11 @@ import { AppContext } from "../appContext/AppContext";
 import { useRecoilValue } from 'recoil';
 import { currentRoomId } from "../atom/atom";
 import { serverTimestamp } from "firebase/database";
+import { useNavigate, useParams } from "react-router-dom";
 
 export function Index() {
+    const navigate = useNavigate();
+    let { id } = useParams();
     const currentRoom = useRecoilValue(currentRoomId);
     // Upload File State: Create a state to store the file and loading state.
     const [loading, setLoading] = useState(false);
@@ -86,50 +89,99 @@ console.log({currentRoom});
     //     }
     // }, [roomId]);
    
-    useEffect(() => {
-        if (currentRoom) {
-          const roomRef = ref(db, `rooms/${currentRoom}/messages`);
-          const queryRef = query(roomRef);
-          const unsubscribe = onChildAdded(queryRef, (snapshot) => {
-            const messageData = snapshot.val();
-            // Check if message data is available
-            // console.log({ messageData});
-            if (messageData) {
-              setMessages((prevMessages) => [...prevMessages, messageData]);
+    const checkRoomMessages = async (id = id) => {
+        const roomRef = ref(db, `rooms/${id}`);
+
+        try {
+            // Attempt to read data from roomRef
+            const snapshot = await get(roomRef);
+
+            // Check if the data exists
+            if (snapshot.exists()) {
+                // Data exists, you can proceed
+                console.log("Data exists:", snapshot.val());
+
+                // If you need to check for the messages node
+                const messagesRef = child(roomRef, 'messages');
+                const messagesSnapshot = await get(messagesRef);
+                if (messagesSnapshot.exists()) {
+                    console.log("Messages exist:", messagesSnapshot.val());
+                } else {
+                    console.log("No messages yet in this room.");
+                }
+            } else {
+                console.log("Room does not exist.");
+                // Handle the case where the room doesn't exist yet
             }
-          });
-          return () => {
-            unsubscribe();
-          };
-        } else {
-          // If there's no current room, clear the messages
-          setMessages([]);
+        } catch (error) {
+            // Handle any errors
+            console.error("Error accessing roomRef:", error);
         }
-      }, [currentRoom]);
-      
-      const handleInputMessage = (e) => {
-          e.preventDefault();
-    const message = e.target.value;
-    setNewMessage(message);
-  };
-  
-  const sendMessage = async () => {
-      if (!newMessage.trim()) return;
-  
-    const message = {
-      senderId: userData.uid,
-      senderName: userData.username,
-      content: newMessage,
-      timestamp: serverTimestamp(),
-      avatar: userData?.photoURL || null,
+    }
+
+    // Call the function with the ID of the room you want to check
+    // const roomId = "yo_room_id";
+    // checkRoomMessages(roomId);ur
+
+
+
+
+
+
+
+
+
+    useEffect(() => {
+        try {
+            if (id) {
+
+                //   const roomRef = ref(db, `rooms/${currentRoom}/messages`);
+                const roomRef = ref(db, `rooms/${id}/messages`);// useParams
+                const queryRef = query(roomRef);
+                const unsubscribe = onChildAdded(queryRef, (snapshot) => {
+                    const messageData = snapshot.val();
+                    // Check if message data is available
+                    // console.log({ messageData});
+                    if (messageData) {
+                        setMessages((prevMessages) => [...prevMessages, messageData]);
+                    }
+                });
+                return () => {
+                    unsubscribe();
+                };
+
+            } else {
+                // If there's no current room, clear the messages
+                setMessages([]);
+            }
+        } catch (error) {
+            console.log("Error accessing roomRef:", error);
+        }
+    }, [currentRoom]);
+
+    const handleInputMessage = (e) => {
+        e.preventDefault();
+        const message = e.target.value;
+        setNewMessage(message);
     };
-  
-    // Log the message object to verify its structure
-    console.log("Message to be sent:", message);
-    
-    await push(ref(db, `rooms/${currentRoom}/messages`), message);
-    setNewMessage("");
-};
+
+    const sendMessage = async () => {
+        if (!newMessage.trim()) return;
+
+        const message = {
+            senderId: userData.uid,
+            senderName: userData.username,
+            content: newMessage,
+            timestamp: serverTimestamp(),
+            avatar: userData?.photoURL || null,
+        };
+
+        // Log the message object to verify its structure
+        console.log("Message to be sent:", message);
+
+        await push(ref(db, `rooms/${currentRoom}/messages`), message);
+        setNewMessage("");
+    };
 
   
     return (

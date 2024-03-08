@@ -18,6 +18,8 @@ export function Chats() {
     let { id } = useParams();
 
     const [currentRoom, setCurrentRoom] = useRecoilState(currentRoomId);
+//if :id is present in the URL, then set the currentRoom to that id
+//if not, then display Select a friend to chat with
 
     // const { userId, friendId, roomId, setContext } = useContext(RoomContext);
     const [room, setRoom] = useState({
@@ -28,8 +30,12 @@ export function Chats() {
 
     const selectFriend = async (friend) => {
         const participants = [user?.uid, friend.uid];
+        try {
+            
+        
         const room = await getRoom(participants);
         console.log({ room });
+       
         // setContext({ userId, friendId, roomId: room.id });
         // console.log({roomId});
         
@@ -51,8 +57,13 @@ export function Chats() {
             // });
         }
         setCurrentRoom(room.id);
-        // console.log({currentRoom});
-        navigate(`/rooms/${room.id}`);
+        console.log({currentRoom});
+        if (room.id) {
+            navigate(`/chats/${room.id}`);
+        }
+    } catch (error) {
+        console.error("Error selecting friend:", error);
+    }
     }
     // useEffect(() => {
     //     console.log("Current Room in useEffect:", currentRoom);
@@ -108,12 +119,13 @@ export function Chats() {
         // const { userId, friendId, roomId, setContext } = useContext(RoomContext);
         // setContext({ userId, friendId, roomId: roomRef.key, setContext })
         // setContext({ userId, friendId, roomId: room.id });
-
+        
         return {
             id: roomRef.key,
             ...newRoom
         };
     };
+
 
     useEffect(() => {
         getAllUsers().then((users) => setUsers(users));
