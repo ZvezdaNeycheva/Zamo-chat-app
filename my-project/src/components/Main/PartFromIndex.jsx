@@ -21,6 +21,7 @@ export function PartFromIndex() {
     const [messages, setMessages] = useState([]);
     const [selectedTab, setSelectedTab] = useState('chats');
     const [loadingMessages, setLoadingMessages] = useState(true); // Add loading state
+    // console.log('This is PartFromIndex');
 
     // navigate(`/rooms/${room.id}`);
     const checkRoomMessages = async (id = id) => {

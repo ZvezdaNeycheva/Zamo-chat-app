@@ -16,14 +16,13 @@ export function Chats() {
     const [newMessage, setNewMessage] = useState("");
     const navigate = useNavigate();
     let { id } = useParams();
-    const [room, setRoom] = useState({
+    const [currentRoomState, setCurrentRoomState] = useState({
         id: '',
         participants: [],
         messages: [{ messageId: "", },],
     });
     // const [currentRoom, setCurrentRoom] = useRecoilState(currentRoomId);
     // const { userId, friendId, roomId, setContext } = useContext(RoomContext);
-
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged((user) => {
             if (!user) {
@@ -35,6 +34,7 @@ export function Chats() {
         // Unsubscribe from auth state changes when component unmounts
         return () => unsubscribe();
     }, [auth, navigate]);
+
     const selectFriend = async (friend) => {
         const participants = [user?.uid, friend.uid];
         try {
@@ -42,28 +42,15 @@ export function Chats() {
         
         const room = await getRoom(participants);
         console.log({ room });
-       
-        // setContext({ userId, friendId, roomId: room.id });
-        // console.log({roomId});
-        
+               
         if (!room) {
             const newRoom = await createRoom(participants);
             console.log({ newRoom });
-            setRoom(newRoom);
-            // setContext({
-            //     userId: user.uid,
-            //     friendId: friend.uid,
-            //     roomId: newRoom.id,
-            // });
-        } else {
-            setRoom(room);
-            // setContext({
-            //     userId: user.uid,
-            //     friendId: friend.uid,
-            //     roomId: room.id,
-            // });
-        }
-        // setCurrentRoom(room.id);
+
+            if (newRoom.id) {
+                navigate(`/chats/${newRoom.id}`);
+            }
+        } 
         console.log({room});
         if (room.id) {
             navigate(`/chats/${room.id}`);
@@ -72,9 +59,9 @@ export function Chats() {
         console.error("Error selecting friend:", error);
     }
     }
-    // useEffect(() => {
-    //     console.log("Current Room in useEffect:", currentRoom);
-    // }, [currentRoom]);
+    useEffect(() => {
+        console.log("Current Room in useEffect:", id);
+    }, [id]);
 
     const getRoom = async (participants) => {
         try {
@@ -123,10 +110,7 @@ export function Chats() {
                 [roomRef.key]: true
             });
         }
-        // const { userId, friendId, roomId, setContext } = useContext(RoomContext);
-        // setContext({ userId, friendId, roomId: roomRef.key, setContext })
-        // setContext({ userId, friendId, roomId: room.id });
-        
+
         return {
             id: roomRef.key,
             ...newRoom

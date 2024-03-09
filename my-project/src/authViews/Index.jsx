@@ -42,7 +42,7 @@ export function Index() {
     //     participants: [],
     // });
     const [selectedTab, setSelectedTab] = useState('chats');
-
+console.log('This is Index.jsx from authViews');
     function handleUploadFile(e) {
         if (e.target.files[0]) {
             setFile(e.target.files[0]);
