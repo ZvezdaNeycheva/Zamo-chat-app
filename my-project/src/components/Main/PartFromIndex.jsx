@@ -65,26 +65,32 @@ export function PartFromIndex() {
         const fetchData = async () => {
             try {
                 if (id) {
-                    const roomRef = ref(db, `rooms/${id}/messages`);// useParams
+                    const roomRef = ref(db, `rooms/${id}/messages`);
                     const queryRef = query(roomRef);
-                    const unsubscribe = onChildAdded(queryRef, (snapshot) => {
-                        const messageData = snapshot.val();
-                        if (messageData) {
-                            setMessages((prevMessages) => [...prevMessages, messageData]);
-                        }
-                    });
-                    unsubscribe();
-                    setLoadingMessages(false); // Set loading to false once messages are loaded
+                    const snapshot = await get(queryRef);
+                    const messageList = [];
+    
+                    if (snapshot.exists()) {
+                        snapshot.forEach((childSnapshot) => {
+                            messageList.push(childSnapshot.val());
+                        });
+                        setMessages(messageList);
+                    } else {
+                        console.log("No messages found in this room.");
+                    }
+                    setLoadingMessages(false);
                 } else {
                     setMessages([]);
+                    setLoadingMessages(false);
                 }
             } catch (error) {
-                console.log("Error accessing roomRef:", error);
-                setLoadingMessages(false); // Handle loading state when error occurs
+                console.error("Error fetching messages:", error);
+                setLoadingMessages(false);
             }
         };
         fetchData();
     }, [id]);
+    
 
     const handleInputMessage = (e) => {
         e.preventDefault();
