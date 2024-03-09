@@ -7,7 +7,7 @@ import { RecoverPassword } from "./authViews/RecoverPassword";
 import { LockScreen } from "./authViews/LockScreen";
 import { Login } from "./authViews/Login";
 import { Register } from "./authViews/Register";
-import { Chats } from "./components/Chats/Chats";
+// import { Chats } from "./components/Chats/Chats";
 import { ChatsView } from "./views/Chats/ChatsView";
 import { Meta } from "./components/Meta/Meta";
 import { Profile } from "./components/Profile/Profile";

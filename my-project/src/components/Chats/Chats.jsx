@@ -7,7 +7,7 @@ import { AppContext, RoomContext } from "../../appContext/AppContext";
 import { db } from "../../config/firebase-config";
 import { SingleChat } from "./SingleChat";
 import { getAllUsers } from "../../service/users.service";
-import { currentRoomId } from "../../atom/atom";
+// import { currentRoomId } from "../../atom/atom";
 
 
 export function Chats() {

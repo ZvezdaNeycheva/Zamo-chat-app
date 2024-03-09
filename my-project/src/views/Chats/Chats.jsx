@@ -2,11 +2,12 @@ import { useContext, useEffect, useState } from "react";
 import { get, query, ref, push, update, orderByChild, equalTo } from "firebase/database";
 import { useNavigate, useParams } from "react-router-dom";
 import { useRecoilState } from 'recoil';
-import { db } from "../../config/firebase-config";
+import { auth, db } from "../../config/firebase-config";
 import { AppContext, RoomContext } from "../../appContext/AppContext";
 import { SingleChat } from "./SingleChat";
 import { getAllUsers } from "../../service/users.service";
-import { currentRoomId } from "../../atom/atom";
+// import { currentRoomId } from "../../atom/atom";
+
 
 export function Chats() {
     const { user, userData } = useContext(AppContext);
@@ -15,18 +16,25 @@ export function Chats() {
     const [newMessage, setNewMessage] = useState("");
     const navigate = useNavigate();
     let { id } = useParams();
-
-    const [currentRoom, setCurrentRoom] = useRecoilState(currentRoomId);
-//if :id is present in the URL, then set the currentRoom to that id
-//if not, then display Select a friend to chat with
-
-    // const { userId, friendId, roomId, setContext } = useContext(RoomContext);
     const [room, setRoom] = useState({
         id: '',
         participants: [],
         messages: [{ messageId: "", },],
     });
+    // const [currentRoom, setCurrentRoom] = useRecoilState(currentRoomId);
+    // const { userId, friendId, roomId, setContext } = useContext(RoomContext);
 
+    useEffect(() => {
+        const unsubscribe = auth.onAuthStateChanged((user) => {
+            if (!user) {
+                // If user is not logged in, redirect to login page or do something else
+                navigate('/login');
+            }
+        });
+
+        // Unsubscribe from auth state changes when component unmounts
+        return () => unsubscribe();
+    }, [auth, navigate]);
     const selectFriend = async (friend) => {
         const participants = [user?.uid, friend.uid];
         try {
@@ -55,8 +63,8 @@ export function Chats() {
             //     roomId: room.id,
             // });
         }
-        setCurrentRoom(room.id);
-        console.log({currentRoom});
+        // setCurrentRoom(room.id);
+        console.log({room});
         if (room.id) {
             navigate(`/chats/${room.id}`);
         }

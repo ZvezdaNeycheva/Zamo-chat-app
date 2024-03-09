@@ -1,4 +1,4 @@
-import { Chats } from "../components/Chats/Chats"; 
+// import { Chats } from "../components/Chats/Chats"; 
 import { Contacts } from "../components/Contacts/Contacts";
 import { Groups } from "../components/Groups/Groups";
 import { Meta } from "../components/Meta/Meta";
@@ -19,19 +19,20 @@ import { uploadFile } from "../service/auth.service";
 import { updateUserData } from "../service/users.service";
 import { AppContext } from "../appContext/AppContext";
 import { useRecoilValue } from 'recoil';
-import { currentRoomId } from "../atom/atom";
+// import { currentRoomId } from "../atom/atom";
 import { serverTimestamp } from "firebase/database";
 import { useNavigate, useParams } from "react-router-dom";
+import { Chats } from "../views/Chats/Chats";
 
 export function Index() {
     const navigate = useNavigate();
     let { id } = useParams();
-    const currentRoom = useRecoilValue(currentRoomId);
+    // const currentRoom = useRecoilValue(currentRoomId);
     // Upload File State: Create a state to store the file and loading state.
     const [loading, setLoading] = useState(false);
     const [file, setFile] = useState(null);
     const { user, userData, updateUserData } = useContext(AppContext);
-console.log({currentRoom});
+// console.log({currentRoom});
     // Add Message State: Create a state to store messages in the chat room.
     const [newMessage, setNewMessage] = useState("");
     const [messages, setMessages] = useState([]);
@@ -151,7 +152,7 @@ console.log({currentRoom});
         } catch (error) {
             console.log("Error accessing roomRef:", error);
         }
-    }, [currentRoom]);
+    }, [id]);
 
     const handleInputMessage = (e) => {
         e.preventDefault();
@@ -173,7 +174,7 @@ console.log({currentRoom});
         // Log the message object to verify its structure
         console.log("Message to be sent:", message);
 
-        await push(ref(db, `rooms/${currentRoom}/messages`), message);
+        await push(ref(db, `rooms/${id}/messages`), message);
         setNewMessage("");
     };
 
