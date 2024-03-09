@@ -42,7 +42,7 @@ export function LockScreen() {
                       <img src={photoURL} className="w-24 h-24 mx-auto border-4 rounded-full border-gray-50 dark:border-zinc-600" alt="thumbnail" />
                       <h5 className="mt-3 text-base text-gray-700 dark:text-gray-200"> {userData.username} </h5>
                     </div>
-                    <form action="Index.jsx">
+                    <form action="/">
                       <div className="mb-5">
                         <label className="font-medium text-gray-700 dark:text-gray-200"> {userData.password} </label>
                         <div className="flex items-center mt-2 mb-3 rounded-3 bg-slate-50/50 dark:bg-transparent">

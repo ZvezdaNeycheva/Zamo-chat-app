@@ -4,14 +4,7 @@ import { AppContext } from "../../appContext/AppContext";
 import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-export function SidebarMenu({
-  onProfileClick,
-  onChatsClick,
-  onGroupsClick,
-  onContactsClick,
-  onSettingsClick,
-  selected,
-}) {
+export function SidebarMenu({ selected }) {
   const { user, userData, setContext } = useContext(AppContext);
   const [photoURL] = useState(user?.photoURL);
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -45,13 +38,13 @@ export function SidebarMenu({
     <>
       <div className="sidebar-menu w-full lg:w-[75px] shadow lg:flex lg:flex-col flex flex-row justify-between items-center fixed lg:relative z-40 bottom-0 bg-white dark:bg-zinc-600 ">
         <div className="hidden lg:my-5 lg:block">
-          <NavLink to="../index/index.jsx" className="block dark:hidden">
+          <NavLink to="/" className="block dark:hidden">
             <span>
               {/* <img src="../../../public/assets/images/logo.svg" alt="" className="h-[30px]" /> */}
             </span>
           </NavLink>
 
-          <NavLink to="../index/index.jsx" className="hidden dark:block">
+          <NavLink to="/" className="hidden dark:block">
             <span>
               {/* <img src="../../../public/assets/images/logo.svg" alt="" className="h-[30px]" /> */}
             </span>
@@ -68,8 +61,8 @@ export function SidebarMenu({
           >
             {/*profile*/}
             <li className="flex-grow lg:flex-grow-0">
-              <div
-                onClick={() => onProfileClick?.()}
+              <NavLink
+                to="/profile"
                 id="default-tab"
                 className={`tab-button flex relative items-center justify-center mx-auto h-14 w-14 leading-[14px] group/tab my-2 rounded-lg cursor-pointer ${
                   selected === "profile" ? "active" : ""
@@ -82,13 +75,13 @@ export function SidebarMenu({
                   </span>
                 </div>
                 <i className="text-2xl ri-user-2-line"></i>
-              </div>
+              </NavLink>
             </li>
 
             {/*chats*/}
             <li className="flex-grow lg:flex-grow-0">
-              <div
-                onClick={() => onChatsClick?.()}
+              <NavLink
+                to="/chats"
                 className={`tab-button relative flex items-center justify-center mx-auto h-14 w-14 leading-[14px] group/tab my-2 rounded-lg cursor-pointer ${
                   selected === "chats" ? "active" : ""
                 }`}
@@ -100,13 +93,13 @@ export function SidebarMenu({
                   </span>
                 </div>
                 <i className="text-2xl ri-message-3-line"></i>
-              </div>
+              </NavLink>
             </li>
 
             {/*groups*/}
             <li className="flex-grow lg:flex-grow-0">
-              <div
-                onClick={() => onGroupsClick?.()}
+              <NavLink
+                to="/groups"
                 className={`tab-button relative flex items-center justify-center mx-auto h-14 w-14 leading-[14px] group/tab my-2 rounded-lg cursor-pointer ${
                   selected === "groups" ? "active" : ""
                 }`}
@@ -118,13 +111,13 @@ export function SidebarMenu({
                   </span>
                 </div>
                 <i className="text-2xl ri-group-line"></i>
-              </div>
+              </NavLink>
             </li>
 
             {/*contacts*/}
             <li className="flex-grow lg:flex-grow-0">
-              <div
-                onClick={() => onContactsClick?.()}
+              <NavLink
+                to="/contacts"
                 className={`tab-button relative flex items-center justify-center mx-auto h-14 w-14 leading-[14px] group/tab my-2 rounded-lg cursor-pointer ${
                   selected === "contacts" ? "active" : ""
                 }`}
@@ -136,13 +129,13 @@ export function SidebarMenu({
                   </span>
                 </div>
                 <i className="text-2xl ri-contacts-line"></i>
-              </div>
+              </NavLink>
             </li>
 
             {/*settings*/}
             <li className="flex-grow lg:flex-grow-0">
-              <div
-                onClick={() => onSettingsClick?.()}
+              <NavLink
+                to="/settings"
                 className={`tab-button relative flex items-center justify-center mx-auto h-14 w-14 leading-[14px] group/tab my-2 rounded-lg cursor-pointer ${
                   selected === "settings" ? "active" : ""
                 }`}
@@ -154,7 +147,7 @@ export function SidebarMenu({
                   </span>
                 </div>
                 <i className="text-2xl ri-settings-2-line"></i>
-              </div>
+              </NavLink>
             </li>
           </ul>
         </div>

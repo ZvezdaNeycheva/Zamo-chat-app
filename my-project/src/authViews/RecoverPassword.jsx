@@ -12,7 +12,6 @@ export function RecoverPassword() {
           <div className="grid items-center justify-center grid-cols-1 lg:grid-cols-12 auth-bg">
             <div className="mx-5 lg:mx-20 lg:col-start-5 lg:col-span-4">
               <div className="text-center">
-                {/* <a href="Index.jsx" className="block mb-10"> */}
                 <NavLink to='/' className="block mb-10">
 
                   <img src="assets/images/logo-dark.png" alt="" className="block h-8 mx-auto dark:hidden" />
@@ -27,7 +26,7 @@ export function RecoverPassword() {
                     <div className="px-8 py-5 mb-4 text-center text-green-800 border rounded border-green-500/30 bg-green-500/20 dark:text-green-400" role="alert">
                       Enter your Email and instructions will be sent to you!
                     </div>
-                    <form action="Index.jsx">
+                    <form action="/">
                       <div className="mb-5">
                         <label className="font-medium text-gray-700 dark:text-gray-200"> Email </label>
                         <div className="flex items-center mt-2 mb-3 rounded-3 bg-slate-50/50 dark:bg-transparent">

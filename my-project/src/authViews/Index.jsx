@@ -1,25 +1,15 @@
-// import { Chats } from "../components/Chats/Chats"; 
 import { Contacts } from "../components/Contacts/Contacts";
 import { Groups } from "../components/Groups/Groups";
 import { Meta } from "../components/Meta/Meta";
 import { Profile } from "../components/Profile/Profile";
 import { Settings } from "../components/Settings/Settings";
 import { SidebarMenu } from "../components/Sidebar-menu/SidebarMenu";
-// import { Switcher } from "../components/Switcher/Switcher";
 import { UserProfileDetails } from "../components/UserProfileDetails/UserProfileDetails";
-import { LockScreen } from "./LockScreen";
-import { Login } from "./Login";
-import { Register } from "./Register";
-import { RecoverPassword } from "./RecoverPassword";
 import { db } from "../config/firebase-config";
-import { get, query, ref, update, set, onChildAdded, push } from "firebase/database";
-import { RoomContext } from "../appContext/AppContext";
+import { query, ref, onChildAdded, push } from "firebase/database";
 import { useState, useEffect, useContext } from "react";
 import { uploadFile } from "../service/auth.service";
-import { updateUserData } from "../service/users.service";
 import { AppContext } from "../appContext/AppContext";
-import { useRecoilValue } from 'recoil';
-// import { currentRoomId } from "../atom/atom";
 import { serverTimestamp } from "firebase/database";
 import { useNavigate, useParams } from "react-router-dom";
 import { Chats } from "../views/Chats/Chats";
@@ -27,22 +17,13 @@ import { Chats } from "../views/Chats/Chats";
 export function Index() {
     const navigate = useNavigate();
     let { id } = useParams();
-    // const currentRoom = useRecoilValue(currentRoomId);
-    // Upload File State: Create a state to store the file and loading state.
     const [loading, setLoading] = useState(false);
     const [file, setFile] = useState(null);
     const { user, userData, updateUserData } = useContext(AppContext);
-// console.log({currentRoom});
-    // Add Message State: Create a state to store messages in the chat room.
     const [newMessage, setNewMessage] = useState("");
     const [messages, setMessages] = useState([]);
-    // const { userId, friendId, roomId, setContext } = useContext(RoomContext);
-    // const [room, setRoom] = useState({
-    //     uid: '',
-    //     participants: [],
-    // });
     const [selectedTab, setSelectedTab] = useState('chats');
-console.log('This is Index.jsx from authViews');
+    console.log('This is Index.jsx from authViews');
     function handleUploadFile(e) {
         if (e.target.files[0]) {
             setFile(e.target.files[0]);
@@ -76,55 +57,6 @@ console.log('This is Index.jsx from authViews');
                 setLoading(false);
             });
     }
-
-    //   useEffect(() => {
-    //     if (roomId) {
-    //         const roomRef = ref(db, `rooms/${roomId}/messages`);
-    //         const queryRef = query(roomRef);
-    //         const unsubscribe = onChildAdded(queryRef, (snapshot) => {
-    //             setMessages(prevMessages => [...prevMessages, snapshot.val()]);
-    //         });
-    //         return () => {
-    //             unsubscribe();
-    //         };
-    //     }
-    // }, [roomId]);
-   
-    const checkRoomMessages = async (id = id) => {
-        const roomRef = ref(db, `rooms/${id}`);
-
-        try {
-            // Attempt to read data from roomRef
-            const snapshot = await get(roomRef);
-
-            // Check if the data exists
-            if (snapshot.exists()) {
-                // Data exists, you can proceed
-                console.log("Data exists:", snapshot.val());
-
-                // If you need to check for the messages node
-                const messagesRef = child(roomRef, 'messages');
-                const messagesSnapshot = await get(messagesRef);
-                if (messagesSnapshot.exists()) {
-                    console.log("Messages exist:", messagesSnapshot.val());
-                } else {
-                    console.log("No messages yet in this room.");
-                }
-            } else {
-                console.log("Room does not exist.");
-                // Handle the case where the room doesn't exist yet
-            }
-        } catch (error) {
-            // Handle any errors
-            console.error("Error accessing roomRef:", error);
-        }
-    }
-
-
-
-
-
-
 
     useEffect(() => {
         try {
@@ -178,7 +110,7 @@ console.log('This is Index.jsx from authViews');
         setNewMessage("");
     };
 
-  
+
     return (
         <>
             <Meta title={'Chat App'}></Meta>
@@ -430,7 +362,7 @@ console.log('This is Index.jsx from authViews');
                                 </ul>
                                 {/* {End of fetching Messages} */}
 
-                                
+
                             </div>
                             {/* <!-- end chat conversation end --> */}
 

@@ -2,13 +2,11 @@ import React, { useState, useEffect} from "react";
 import { BrowserRouter as Router, Routes, Route, useParams } from "react-router-dom";
 import { auth } from "./config/firebase-config";
 import "./App.css";
-import { Index } from "./authViews/Index";
+import { Layout } from "./Layout/Layout";
 import { RecoverPassword } from "./authViews/RecoverPassword";
 import { LockScreen } from "./authViews/LockScreen";
 import { Login } from "./authViews/Login";
 import { Register } from "./authViews/Register";
-// import { Chats } from "./components/Chats/Chats";
-import { ChatsView } from "./views/Chats/ChatsView";
 import { Meta } from "./components/Meta/Meta";
 import { Profile } from "./components/Profile/Profile";
 import { SidebarMenu } from "./components/Sidebar-menu/SidebarMenu";
@@ -21,6 +19,8 @@ import { RecoilRoot } from 'recoil';
 import { Settings } from "./components/Settings/Settings";
 import { Contacts } from "./components/Contacts/Contacts";
 import { Groups } from "./components/Groups/Groups";
+import { Chats } from "./views/Chats/Chats";
+import { PartFromIndex } from "./components/Main/PartFromIndex";
 
 
 function App() {
@@ -55,15 +55,19 @@ function App() {
       <RecoilRoot>
       <Router>
         <Routes>
-        <Route path="*" element={<Index />} />
+          <Route path="*" element={<Layout selectedAppBarButton={'chats'} sideBarContent={<Chats />} />} />
                 {/* <Route path="/layout/*" element={<Layout />} /> */}
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/lock-screen" element={<Authenticated> <LockScreen /> </Authenticated>} />
           <Route path="/recover" element={<RecoverPassword />} />
-          <Route path="/chats/:id" element={<ChatsView />} />
+          <Route path="/chats" element={<Layout selectedAppBarButton={'chats'} sideBarContent={<Chats />} />} />
+          <Route path="/chats/:id" element={<Layout selectedAppBarButton={'chats'} sideBarContent={<Chats />} mainContent={<PartFromIndex />}/>} />
+          <Route path="/groups" element={<Layout selectedAppBarButton={'groups'} sideBarContent={<Groups />} />} />
+          <Route path="/contacts" element={<Layout selectedAppBarButton={'contacts'} sideBarContent={<Contacts />} />} />
+          <Route path="/settings" element={<Layout selectedAppBarButton={'settings'} mainContent={<Settings />} />} />
           <Route path="/meta" element={<Meta />} />
-          <Route path="/profile" element={<Authenticated> <Profile /> </Authenticated>} />
+          <Route path="/profile" element={<Layout selectedAppBarButton={'profile'} mainContent={<Authenticated> <Profile /> </Authenticated>} /> } />
           <Route path="/sidebar-menu" element={<SidebarMenu />} />
           {/* <Route path="/switcher" element={<Switcher />} /> */}
           <Route path="/user-profile-details" element={<UserProfileDetails/> }/>

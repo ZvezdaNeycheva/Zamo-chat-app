@@ -80,7 +80,7 @@ export function Login() {
               <div className="bg-white card dark:bg-zinc-800 dark:border-transparent">
                 <div className="p-5">
                   <div className="p-4">
-                    <form action="Index.jsx">
+                    <form action="/">
 
                       {/* Username*/}
                       <div className="mb-5">
