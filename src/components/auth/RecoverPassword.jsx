@@ -14,8 +14,8 @@ export function RecoverPassword() {
               <div className="text-center">
                 <NavLink to='/' className="block mb-10">
 
-                  <img src="assets/images/logo-dark.png" alt="" className="block h-8 mx-auto dark:hidden" />
-                  <img src="assets/images/logo-light.png" alt="" className="hidden h-8 mx-auto logo-light dark:block"/>
+                  <img src="/assets/images/logo-dark.png" alt="" className="block h-8 mx-auto dark:hidden" />
+                  <img src="/assets/images/logo-light.png" alt="" className="hidden h-8 mx-auto logo-light dark:block"/>
                 </NavLink>
                 <h4 className="mb-2 text-gray-800 text-21 dark:text-gray-50"> Reset Password </h4>
                 <p className="mb-6 text-gray-500 dark:text-gray-300"> Reset Password With Chatvia. </p>

@@ -8,7 +8,7 @@ export function Meta({ title }) {
       <meta content="" name="Themesbrand" />
       <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
       {/* App favicon */}
-      <link rel="shortcut icon" href="./assets/images/favicon.ico" />
+      <link rel="shortcut icon" href="/assets/images/favicon.ico" />
     </>
   );
 }

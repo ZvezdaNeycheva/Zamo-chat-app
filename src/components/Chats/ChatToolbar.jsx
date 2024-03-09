@@ -12,7 +12,7 @@ export function ChatToolbar({ userData }) {
                                             <a href="#" onClick={() => { }} className="p-2 text-gray-500 user-chat-remove text-16"><i className="ri-arrow-left-s-line"></i></a>
                                         </div>
                                         <div className="rtl:ml-3 ltr:mr-3">
-                                            <img src="assets/images/users/avatar-4.jpg" className="rounded-full h-9 w-9" alt="" />
+                                            <img src="/assets/images/users/avatar-4.jpg" className="rounded-full h-9 w-9" alt="" />
                                         </div>
                                         <div className="flex-grow overflow-hidden">
                                             <h5 className="mb-0 truncate text-16 ltr:block rtl:hidden"><a href="#" className="text-gray-800 dark:text-gray-50">{userData?.username}</a> <i className="text-green-500 ltr:ml-1 rtl:mr-1 ri-record-circle-fill text-10 "></i></h5>

@@ -14,8 +14,9 @@ export function Chats() {
     const [users, setUsers] = useState([]);
     const [search, setSearch] = useState("");
     const [newMessage, setNewMessage] = useState("");
+    const [selectedFriend, setSelectedFriend] = useState();
     const navigate = useNavigate();
-    let { id } = useParams();
+    const { id } = useParams();
     const [currentRoomState, setCurrentRoomState] = useState({
         id: '',
         participants: [],
@@ -41,7 +42,6 @@ export function Chats() {
 
 
         const room = await getRoom(participants);
-        console.log({ room });
 
         if (!room) {
             const newRoom = await createRoom(participants);
@@ -50,17 +50,17 @@ export function Chats() {
             if (newRoom.id) {
                 navigate(`/chats/${newRoom.id}`);
             }
-        }
-        console.log({room});
-        if (room.id) {
+        } else if (room.id) {
             navigate(`/chats/${room.id}`);
         }
+        setSelectedFriend(friend);
     } catch (error) {
         console.error("Error selecting friend:", error);
     }
     }
     useEffect(() => {
         console.log("Current Room in useEffect:", id);
+        if (!id) setSelectedFriend(undefined);
     }, [id]);
 
     const getRoom = async (participants) => {
@@ -166,9 +166,9 @@ export function Chats() {
                     <div className="h-[610px] px-2" data-simplebar>
                         <ul className="chat-user-list">
                             {users.length > 0 &&
-                                users.map((user) => (
-                                    <li key={user.id} className="px-5 py-[15px] group-data-[theme-color=violet]:hover:bg-slate-100 group-data-[theme-color=green]:hover:bg-green-50/50 group-data-[theme-color=red]:hover:bg-red-50/50 transition-all ease-in-out border-b border-white/20 dark:border-zinc-700 group-data-[theme-color=violet]:dark:hover:bg-zinc-600 group-data-[theme-color=green]:dark:hover:bg-zinc-600 group-data-[theme-color=red]:dark:hover:bg-zinc-600 dark:hover:border-zinc-700">
-                                        <ChatButton user={user} key={user.id} onClick={() => (selectFriend(user))} />
+                                users.filter(u => u.id !== user?.uid).map((user) => (
+                                    <li key={user.id}>
+                                        <ChatButton selected={selectedFriend === user} user={user} key={user.id} onClick={() => (selectFriend(user))} />
                                     </li>
                                 ))}
                         </ul>

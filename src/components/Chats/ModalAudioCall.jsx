@@ -10,7 +10,7 @@ export function ModalAudioCall() {
                         <div className="p-6">
                             <div className="p-4 text-center">
                                 <div className="mb-6">
-                                    <img src="assets/images/users/avatar-4.jpg" alt="" className="w-24 h-24 mx-auto rounded-full" />
+                                    <img src="/assets/images/users/avatar-4.jpg" alt="" className="w-24 h-24 mx-auto rounded-full" />
                                 </div>
 
                                 <h5 className="mb-1 text-gray-800 truncate dark:text-gray-50">Doris Brown</h5>

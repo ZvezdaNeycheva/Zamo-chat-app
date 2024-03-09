@@ -73,6 +73,7 @@ export function Chat() {
                         });
                         setMessages(messageList);
                     } else {
+                        setMessages([]);
                         console.log("No messages found in this room.");
                     }
                     setLoadingMessages(false);
@@ -89,6 +90,11 @@ export function Chat() {
     }, [id]);
 
 
+    useEffect(() => {
+        console.log({messages});
+    }, [messages]);
+
+
     const handleInputMessage = (e) => {
         e.preventDefault();
         const message = e.target.value;
@@ -102,7 +108,7 @@ export function Chat() {
             senderId: userData.uid,
             senderName: userData.username,
             content: newMessage,
-            timestamp: serverTimestamp(),
+            timestamp: Date.now(),
             avatar: userData?.photoURL || null,
         };
 
@@ -111,6 +117,7 @@ export function Chat() {
 
         await push(ref(db, `rooms/${id}/messages`), message);
         setNewMessage("");
+        setMessages((prevMessages) => [...prevMessages, message]);
     };
 
 
@@ -122,20 +129,21 @@ export function Chat() {
                     {/* <!-- start chat conversation section --> */}
 
                     <div className="relative w-full overflow-hidden ">
-                    <ChatToolbar  user={userData} ></ChatToolbar>
+                        {id ? <ChatToolbar user={userData} /> : null}
                         {/* <!-- end chat user head --> */}
 
                         {/* <!-- start chat conversation --> */}
                         <div className="h-[80vh] p-4 lg:p-6">
                             {/* {fetching Messages} */}
                             <ul className="mb-0">
-                                { id ? () => checkRoomMessages(id) : <p>Select a friend to start a chat.</p>}
+                                {!id ? <p>Select a friend to start a chat.</p> : null}
+                                {id && !messages.length ? <p>The messages with your friend will appear here.</p> : null}
                                 {messages.length > 0 &&
                                     messages.map((message) => (
                                         <li key={message.messageId} className="clear-both py-4" >
                                             <div className="flex items-end gap-3">
                                                 <div>
-                                                    {/* <img src="assets/images/users/avatar-4.jpg" alt="" className="rounded-full h-9 w-9" /> */}
+                                                    {/* <img src="/assets/images/users/avatar-4.jpg" alt="" className="rounded-full h-9 w-9" /> */}
                                                     <img src={message?.avatar} alt="" className="rounded-full h-9 w-9" />
                                                 </div>
 
@@ -171,42 +179,43 @@ export function Chat() {
                         </div>
                         {/* <!-- end chat conversation end --> */}
                         {/* <!-- start chat input section --> */}
-                        <div className="z-40 w-full p-6 mb-0 bg-white border-t lg:mb-1 border-gray-50 dark:bg-zinc-800 dark:border-zinc-700">
-                            <div className="flex gap-2">
-                                <div className="flex-grow">
-                                    {/* handleSendMessage    sendMessage(messages) */}
-                                    <input type="text" value={newMessage} onChange={handleInputMessage} onClick={() => { sendMessage(messages) }} onKeyDown={(e) => {
-                                        if (e.key === 'Enter') {
-                                            e.preventDefault();
-                                            sendMessage(messages);
-                                        }
-                                    }} className="w-full border-transparent rounded bg-gray-50 placeholder:text-14 text-14 dark:bg-zinc-700 dark:placeholder:text-gray-300 dark:text-gray-300" placeholder="Enter Message..." />
-                                </div>
-                                <div>
+                        {id ?
+                            <div className="z-40 w-full p-6 mb-0 bg-white border-t lg:mb-1 border-gray-50 dark:bg-zinc-800 dark:border-zinc-700">
+                                <div className="flex gap-2">
+                                    <div className="flex-grow">
+                                        {/* handleSendMessage    sendMessage(messages) */}
+                                        <input type="text" value={newMessage} onChange={handleInputMessage} onClick={() => { sendMessage(messages) }} onKeyDown={(e) => {
+                                            if (e.key === 'Enter') {
+                                                e.preventDefault();
+                                                sendMessage(messages);
+                                            }
+                                        }} className="w-full border-transparent rounded bg-gray-50 placeholder:text-14 text-14 dark:bg-zinc-700 dark:placeholder:text-gray-300 dark:text-gray-300" placeholder="Enter Message..." />
+                                    </div>
                                     <div>
-                                        <ul className="mb-0">
-                                            <li className="inline-block" title="Emoji">
-                                                <button type="button" className="border-transparent group/tooltip btn relative group-data-[theme-color=violet]:dark:text-violet-200 group-data-[theme-color=green]:dark:text-green-200 group-data-[theme-color=red]:dark:text-red-200 group-data-[theme-color=violet]:text-violet-500 group-data-[theme-color=green]:text-green-500 group-data-[theme-color=red]:text-red-500 text-16">
-                                                    <div className="absolute items-center hidden -top-10 ltr:-left-2 group-hover/tooltip:flex rtl:-right-2">
-                                                        <div className="absolute -bottom-1 left-[40%] w-3 h-3 rotate-45 bg-black"></div>
-                                                        <span className="relative z-10 p-2 text-xs leading-none text-white whitespace-no-wrap bg-black rounded shadow-lg">Emoji</span>
-                                                    </div>
-                                                    <i className="ri-emotion-happy-line"></i>
-                                                </button>
-                                            </li>
+                                        <div>
+                                            <ul className="mb-0">
+                                                <li className="inline-block" title="Emoji">
+                                                    <button type="button" className="border-transparent group/tooltip btn relative group-data-[theme-color=violet]:dark:text-violet-200 group-data-[theme-color=green]:dark:text-green-200 group-data-[theme-color=red]:dark:text-red-200 group-data-[theme-color=violet]:text-violet-500 group-data-[theme-color=green]:text-green-500 group-data-[theme-color=red]:text-red-500 text-16">
+                                                        <div className="absolute items-center hidden -top-10 ltr:-left-2 group-hover/tooltip:flex rtl:-right-2">
+                                                            <div className="absolute -bottom-1 left-[40%] w-3 h-3 rotate-45 bg-black"></div>
+                                                            <span className="relative z-10 p-2 text-xs leading-none text-white whitespace-no-wrap bg-black rounded shadow-lg">Emoji</span>
+                                                        </div>
+                                                        <i className="ri-emotion-happy-line"></i>
+                                                    </button>
+                                                </li>
 
-                                            <ChatUploadFile />
-                                            {/* Send Message */}
-                                            <li className="inline-block">
-                                                <button type="submit" onClick={() => { sendMessage() }} className="text-white border-transparent btn group-data-[theme-color=violet]:bg-violet-500 group-data-[theme-color=green]:bg-green-500 group-data-[theme-color=red]:bg-red-500 group-data-[theme-color=violet]:hover:bg-violet-600 group-data-[theme-color=green]:hover:bg-green-600">
-                                                    <i className="ri-send-plane-2-fill"></i>
-                                                </button>
-                                            </li>
-                                        </ul>
+                                                <ChatUploadFile />
+                                                {/* Send Message */}
+                                                <li className="inline-block">
+                                                    <button type="submit" onClick={() => { sendMessage() }} className="text-white border-transparent btn group-data-[theme-color=violet]:bg-violet-500 group-data-[theme-color=green]:bg-green-500 group-data-[theme-color=red]:bg-red-500 group-data-[theme-color=violet]:hover:bg-violet-600 group-data-[theme-color=green]:hover:bg-green-600">
+                                                        <i className="ri-send-plane-2-fill"></i>
+                                                    </button>
+                                                </li>
+                                            </ul>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
+                            </div> : null}
                         {/* <!-- end chat input section --> */}
 
                     </div>

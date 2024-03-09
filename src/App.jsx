@@ -61,7 +61,7 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/lock-screen" element={<Authenticated> <LockScreen /> </Authenticated>} />
           <Route path="/recover" element={<RecoverPassword />} />
-          <Route path="/chats" element={<Layout selectedAppBarButton={'chats'} sideBarContent={<Chats />} />} />
+          <Route path="/chats" element={<Layout selectedAppBarButton={'chats'} sideBarContent={<Chats />} mainContent={<Chat />} />} />
           <Route path="/chats/:id" element={<Layout selectedAppBarButton={'chats'} sideBarContent={<Chats />} mainContent={<Chat />}/>} />
           <Route path="/groups" element={<Layout selectedAppBarButton={'groups'} sideBarContent={<Groups />} />} />
           <Route path="/contacts" element={<Layout selectedAppBarButton={'contacts'} sideBarContent={<Contacts />} />} />
