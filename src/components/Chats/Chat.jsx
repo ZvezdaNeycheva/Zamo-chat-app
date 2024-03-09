@@ -133,7 +133,7 @@ export function Chat() {
                         {/* <!-- end chat user head --> */}
 
                         {/* <!-- start chat conversation --> */}
-                        <div className="h-[80vh] p-4 lg:p-6">
+                        <div className="h-[80vh] overflow-scroll p-4 lg:p-6">
                             {/* {fetching Messages} */}
                             <ul className="mb-0">
                                 {!id ? <p>Select a friend to start a chat.</p> : null}
