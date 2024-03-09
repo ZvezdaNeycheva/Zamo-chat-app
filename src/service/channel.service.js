@@ -1,5 +1,5 @@
 import { get, set, ref, getDatabase, push, child, remove } from 'firebase/database';
-import { db } from '../config/firebase-config';
+import { db } from './firebase-config';
 import { format } from 'date-fns';
 
 // Groups

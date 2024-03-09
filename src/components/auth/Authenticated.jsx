@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import { useContext } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
-import { AppContext } from '../appContext/AppContext';
+import { AppContext } from '../../AppContext';
 
 export default function Authenticated({ children }) {
   const { user } = useContext(AppContext);

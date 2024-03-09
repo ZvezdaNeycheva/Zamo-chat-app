@@ -1,10 +1,10 @@
 import { NavLink } from "react-router-dom";
-import { logoutUser } from "../../service/auth.service";
-import { AppContext } from "../../appContext/AppContext";
+import { logoutUser } from "../service/auth.service";
+import { AppContext } from "../AppContext";
 import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-export function SidebarMenu({ selected }) {
+export function AppBar({ selected }) {
   const { user, userData, setContext } = useContext(AppContext);
   const [photoURL] = useState(user?.photoURL);
   const [isDarkMode, setIsDarkMode] = useState(false);

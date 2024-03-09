@@ -1,9 +1,9 @@
 import React, { useContext, useState } from 'react';
-import { Meta } from '../components/Meta/Meta';
+import { Meta } from '../Meta.jsx';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { registerUser } from '../service/auth.service.js';
-import { createUserProfile, getUserByUid } from '../service/users.service';
-import { AppContext } from '../appContext/AppContext.js';
+import { registerUser } from '../../service/auth.service.js';
+import { createUserProfile, getUserByUid } from '../../service/users.service.js';
+import { AppContext } from '../../AppContext.js';
 import {format} from 'date-fns';
 
 export function Register() {

@@ -1,5 +1,5 @@
-import { Meta } from "../components/Meta/Meta";
-import { SidebarMenu } from "../components/Sidebar-menu/SidebarMenu";
+import { Meta } from "./Meta";
+import { AppBar } from "./AppBar";
 
 export function Layout({selectedAppBarButton, sideBarContent, mainContent}) {
     return (
@@ -8,7 +8,7 @@ export function Layout({selectedAppBarButton, sideBarContent, mainContent}) {
 
             <div className="lg:flex">
                 {/* <!-- Start left sidebar-menu --> */}
-                <SidebarMenu selected={selectedAppBarButton} />
+                <AppBar selected={selectedAppBarButton} />
                 {/* <!-- end left sidebar-menu --> */}
 
                 {sideBarContent && (

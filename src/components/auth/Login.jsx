@@ -1,9 +1,9 @@
-import { Meta } from "../components/Meta/Meta";
+import { Meta } from "../Meta";
 import { NavLink } from 'react-router-dom';
 import React, { useContext, useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { AppContext } from "../appContext/AppContext";
-import { loginUser } from "../service/auth.service";
+import { AppContext } from "../../AppContext";
+import { loginUser } from "../../service/auth.service";
 
 export function Login() {
 

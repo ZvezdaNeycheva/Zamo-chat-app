@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { AppContext } from "../../appContext/AppContext";
+import { AppContext } from "../../AppContext";
 import { uploadProfileImage } from "../../service/auth.service";
 import { useNavigate } from "react-router-dom";
 import { updateUserData } from "../../service/users.service";
@@ -187,7 +187,7 @@ export function Profile() {
 </div>
     </div>
         {/* End Profile Status */}
-        
+
         {/* Start user-profile-desc */}
         <div className="p-6 h-[550px]" data-simplebar="">
           <div>
@@ -206,14 +206,14 @@ export function Profile() {
                      About
                   </span>
                   <span className="m-0 text-[14px] dark:text-gray-50 font-semibold ltr:hidden rtl:block">
-                    About 
+                    About
                     <i className="ml-2 align-middle ri-user-2-line d-inline-block" />
                   </span>
                   <i className={`mdi mdi-chevron-down text-lg ${openAboutDropdown ? "group-[.active]:rotate-180" : ""} dark:text-gray-50`} />
                 </button>
               </h2>
 
-              <div className={`block bg-white border border-t-0 border-gray-100 accordion-body dark:bg-transparent dark:border-zinc-600 
+              <div className={`block bg-white border border-t-0 border-gray-100 accordion-body dark:bg-transparent dark:border-zinc-600
                 ${openAboutDropdown ? "" : "hidden"}`} >
                 <div className="p-5">
                   <div>
@@ -238,7 +238,7 @@ export function Profile() {
                         </div>
                       )}
                     </div>
-                      
+
                    {/* Email */}
                    <div className="mt-5">
                       <p className="mb-1 text-gray-500 dark:text-gray-300">Email</p>
@@ -261,7 +261,7 @@ export function Profile() {
                         </div>
                       )}
                     </div>
-                      
+
                    {/* Location */}
                    <div className="mt-5">
                       <p className="mb-1 text-gray-500 dark:text-gray-300"> Location </p>
@@ -284,7 +284,7 @@ export function Profile() {
                         </div>
                       )}
                     </div>
-                    
+
                     {/* Time */}
                     <div className="mt-5">
                       <p className="mb-1 text-gray-500 dark:text-gray-300">Create Profile Date</p>
@@ -310,7 +310,7 @@ export function Profile() {
                 </button>
               </h2>
               {/* Attached Files */}
-              <div className={`block bg-white border border-t-0 border-gray-100 accordion-body dark:bg-transparent dark:border-zinc-600 
+              <div className={`block bg-white border border-t-0 border-gray-100 accordion-body dark:bg-transparent dark:border-zinc-600
                 ${openFilesDropdown ? "" : "hidden"}`} >
                 <div className="p-5">
                   <div className="p-2 mb-2 border rounded border-gray-100/80 dark:bg-zinc-800 dark:border-transparent">
@@ -332,7 +332,7 @@ export function Profile() {
                             </div>
                           </div>
                         ))}
-                        
+
                         </div>
                       </div>
                       {/* Drop Down */}

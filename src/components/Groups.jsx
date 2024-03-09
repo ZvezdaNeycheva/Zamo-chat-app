@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { createGroup, fetchGroups, deleteGroup } from "../../service/channel.service";
+import { createGroup, fetchGroups, deleteGroup } from "../service/channel.service";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 export function Groups() {

@@ -1,26 +1,26 @@
 import React, { useState, useEffect} from "react";
 import { BrowserRouter as Router, Routes, Route, useParams } from "react-router-dom";
-import { auth } from "./config/firebase-config";
+import { auth } from "./service/firebase-config";
 import "./App.css";
-import { Layout } from "./Layout/Layout";
-import { RecoverPassword } from "./authViews/RecoverPassword";
-import { LockScreen } from "./authViews/LockScreen";
-import { Login } from "./authViews/Login";
-import { Register } from "./authViews/Register";
-import { Meta } from "./components/Meta/Meta";
-import { Profile } from "./components/Profile/Profile";
-import { SidebarMenu } from "./components/Sidebar-menu/SidebarMenu";
-import { UserProfileDetails } from "./components/UserProfileDetails/UserProfileDetails";
-import { AppContext } from "./appContext/AppContext";
-import Authenticated from "./authenticated/Authenticated";
+import { Layout } from "./components/Layout";
+import { RecoverPassword } from "./components/auth/RecoverPassword";
+import { LockScreen } from "./components/auth/LockScreen";
+import { Login } from "./components/auth/Login";
+import { Register } from "./components/auth/Register";
+import { Meta } from "./components/Meta";
+import { Profile } from "./components/auth/Profile";
+import { AppBar } from "./components/AppBar";
+import { UserProfileDetails } from "./components/chats/UserProfileDetails";
+import { AppContext } from "./AppContext";
+import Authenticated from "./components/auth/Authenticated";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { getUserData } from "./service/users.service";
 import { RecoilRoot } from 'recoil';
-import { Settings } from "./components/Settings/Settings";
-import { Contacts } from "./components/Contacts/Contacts";
-import { Groups } from "./components/Groups/Groups";
-import { Chats } from "./views/Chats/Chats";
-import { PartFromIndex } from "./components/Main/PartFromIndex";
+import { Settings } from "./components/Settings";
+import { Contacts } from "./components/Contacts";
+import { Groups } from "./components/Groups";
+import { Chats } from "./components/chats/Chats";
+import { Chat } from "./components/chats/Chat";
 
 
 function App() {
@@ -62,13 +62,13 @@ function App() {
           <Route path="/lock-screen" element={<Authenticated> <LockScreen /> </Authenticated>} />
           <Route path="/recover" element={<RecoverPassword />} />
           <Route path="/chats" element={<Layout selectedAppBarButton={'chats'} sideBarContent={<Chats />} />} />
-          <Route path="/chats/:id" element={<Layout selectedAppBarButton={'chats'} sideBarContent={<Chats />} mainContent={<PartFromIndex />}/>} />
+          <Route path="/chats/:id" element={<Layout selectedAppBarButton={'chats'} sideBarContent={<Chats />} mainContent={<Chat />}/>} />
           <Route path="/groups" element={<Layout selectedAppBarButton={'groups'} sideBarContent={<Groups />} />} />
           <Route path="/contacts" element={<Layout selectedAppBarButton={'contacts'} sideBarContent={<Contacts />} />} />
           <Route path="/settings" element={<Layout selectedAppBarButton={'settings'} mainContent={<Settings />} />} />
           <Route path="/meta" element={<Meta />} />
           <Route path="/profile" element={<Layout selectedAppBarButton={'profile'} mainContent={<Authenticated> <Profile /> </Authenticated>} /> } />
-          <Route path="/sidebar-menu" element={<SidebarMenu />} />
+          <Route path="/sidebar-menu" element={<AppBar />} />
           {/* <Route path="/switcher" element={<Switcher />} /> */}
           <Route path="/user-profile-details" element={<UserProfileDetails/> }/>
 

@@ -1,4 +1,4 @@
-import { AppContext } from "../../appContext/AppContext";
+import { AppContext } from "../AppContext";
 import { useContext, useState } from "react";
 
 export function Settings() {

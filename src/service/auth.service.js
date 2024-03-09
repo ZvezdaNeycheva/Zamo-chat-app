@@ -1,6 +1,6 @@
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, getAuth, updateEmail } from 'firebase/auth';
-import { auth } from '../config/firebase-config';
-import { storage } from '../config/firebase-config';
+import { auth } from './firebase-config';
+import { storage } from './firebase-config';
 import { uploadBytes, ref as storageRef, getDownloadURL } from "firebase/storage";
 import { updateUserData, getUserByEmail } from './users.service';
 

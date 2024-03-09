@@ -3,17 +3,14 @@ import { useRecoilValue } from 'recoil';
 import { serverTimestamp } from "firebase/database";
 import { get, query, ref, update, set, onChildAdded, push, child } from "firebase/database";
 import { useNavigate, useParams } from "react-router-dom";
-import { AppContext, RoomContext } from "../../appContext/AppContext";
-import { db } from "../../config/firebase-config";
-import { UploadFileComponent } from "./UploadFileComponent";
-import { ChatUserHead } from "./ChatUserHead";
-import { currentRoomId } from "../../atom/atom";
+import { AppContext, RoomContext } from "../../AppContext";
+import { db } from "../../service/firebase-config";
+import { ChatUploadFile } from "./ChatUploadFile";
+import { ChatToolbar } from "./ChatToolbar";
 
-export function PartFromIndex() {
+export function Chat() {
     const navigate = useNavigate();
     let { id } = useParams();
-
-    const currentRoom = useRecoilValue(currentRoomId);
     const { user, userData, updateUserData } = useContext(AppContext);
     // console.log({ currentRoom });
     // Add Message State: Create a state to store messages in the chat room.
@@ -69,7 +66,7 @@ export function PartFromIndex() {
                     const queryRef = query(roomRef);
                     const snapshot = await get(queryRef);
                     const messageList = [];
-    
+
                     if (snapshot.exists()) {
                         snapshot.forEach((childSnapshot) => {
                             messageList.push(childSnapshot.val());
@@ -90,7 +87,7 @@ export function PartFromIndex() {
         };
         fetchData();
     }, [id]);
-    
+
 
     const handleInputMessage = (e) => {
         e.preventDefault();
@@ -125,7 +122,7 @@ export function PartFromIndex() {
                     {/* <!-- start chat conversation section --> */}
 
                     <div className="relative w-full overflow-hidden ">
-                    <ChatUserHead  user={userData} ></ChatUserHead>
+                    <ChatToolbar  user={userData} ></ChatToolbar>
                         {/* <!-- end chat user head --> */}
 
                         {/* <!-- start chat conversation --> */}
@@ -198,7 +195,7 @@ export function PartFromIndex() {
                                                 </button>
                                             </li>
 
-                                            <UploadFileComponent />
+                                            <ChatUploadFile />
                                             {/* Send Message */}
                                             <li className="inline-block">
                                                 <button type="submit" onClick={() => { sendMessage() }} className="text-white border-transparent btn group-data-[theme-color=violet]:bg-violet-500 group-data-[theme-color=green]:bg-green-500 group-data-[theme-color=red]:bg-red-500 group-data-[theme-color=violet]:hover:bg-violet-600 group-data-[theme-color=green]:hover:bg-green-600">

@@ -1,16 +1,16 @@
 import { useState, useEffect, useContext } from "react";
 import { serverTimestamp } from "firebase/database";
 import { get, query, ref, update, set, onChildAdded, push } from "firebase/database";
-import { db } from "../../config/firebase-config";
-import { AppContext } from "../../appContext/AppContext";
+import { db } from "../../service/firebase-config";
+import { AppContext } from "../../AppContext";
 import { updateUserData } from "../../service/users.service";
 import { uploadFile } from "../../service/auth.service";
 
-export function UploadFileComponent() {
+export function ChatUploadFile() {
   // Upload File State: Create a state to store the file and loading state.
   const [loading, setLoading] = useState(false);
   const [file, setFile] = useState(null);
-  const { user, userData, updateUserData } = useContext(AppContext);   
+  const { user, userData, updateUserData } = useContext(AppContext);
 
   function handleUploadFile(e) {
     if (e.target.files[0]) {
