@@ -6,12 +6,6 @@ import { createUserProfile, getUserByUid } from '../service/users.service';
 import { AppContext } from '../appContext/AppContext.js';
 import {format} from 'date-fns';
 
-// import './assets/libs/magnific-popup/magnific-popup.css';
-// import './assets/libs/owl.carousel/assets/owl.carousel.min.css';
-// import './assets/libs/owl.carousel/assets/owl.theme.default.min.css';
-// import './assets/css/icons.css';
-// import './assets/css/tailwind.css';
-
 export function Register() {
   const { setContext } = useContext(AppContext);
   const [form, setForm] = useState({
