@@ -20,7 +20,7 @@ export function Layout({selectedAppBarButton, sideBarContent, mainContent}) {
                 )}
 
                 {/* <!-- Start User chat --> */}
-                <div className={`w-full overflow-hidden transition-all duration-150 bg-white user-chat dark:bg-zinc-800 ${mainContent && !sideBarContent ? 'bg-slate-50' : ''}`}>
+                <div className={`w-full overflow-hidden transition-all duration-150 user-chat dark:bg-zinc-800 ${mainContent && !sideBarContent ? 'bg-slate-50' : ''}`}>
                     {mainContent}
                 </div>
                 {/* <!-- End User chat --> */}
