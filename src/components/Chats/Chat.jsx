@@ -12,50 +12,12 @@ export function Chat() {
     const navigate = useNavigate();
     let { id } = useParams();
     const { user, userData, updateUserData } = useContext(AppContext);
-    // console.log({ currentRoom });
     // Add Message State: Create a state to store messages in the chat room.
     const [newMessage, setNewMessage] = useState("");
     const [messages, setMessages] = useState([]);
-    const [selectedTab, setSelectedTab] = useState('chats');
-    const [loadingMessages, setLoadingMessages] = useState(true); // Add loading state
-    // console.log('This is PartFromIndex');
-
-    // navigate(`/rooms/${room.id}`);
-    const checkRoomMessages = async (id = id) => {
-        const roomRef = ref(db, `rooms/${id}`);
-
-        try {
-            // Attempt to read data from roomRef
-            const snapshot = await get(roomRef);
-
-            // Check if the data exists
-            if (snapshot.exists()) {
-                // Data exists, you can proceed
-                console.log("Data exists:", snapshot.val());
-
-                // If you need to check for the messages node
-                const messagesRef = child(roomRef, 'messages');
-                const messagesSnapshot = await get(messagesRef);
-                if (messagesSnapshot.exists()) {
-                    console.log("Messages exist:", messagesSnapshot.val());
-                } else {
-                    console.log("No messages yet in this room.");
-                }
-            } else {
-                console.log("Room does not exist.");
-                // Handle the case where the room doesn't exist yet
-            }
-        } catch (error) {
-            // Handle any errors
-            console.error("Error accessing roomRef:", error);
-        }
-    }
-
-
-
-
-
-
+    const [loadingMessages, setLoadingMessages] = useState(true);
+    const [editMessage, setEditMessage] = useState(null);
+    const [editedMessageContent, setEditedMessageContent] = useState(''); 
 
 
     useEffect(() => {
@@ -109,11 +71,8 @@ export function Chat() {
             senderName: userData.username,
             content: newMessage,
             timestamp: Date.now(),
-            avatar: userData?.photoURL || null,
+            avatar: userData?.profilePhotoURL || null,
         };
-
-        // Log the message object to verify its structure
-        console.log("Message to be sent:", message);
 
         const newMessageRef = await push(ref(db, `rooms/${id}/messages`), message);
         const messageId = newMessageRef.key;
@@ -135,9 +94,49 @@ export function Chat() {
           setShowOptions(!showOptions);
         };
       
-        const handleEdit = (mId) => {
-          // Implement your edit logic here
-          console.log('Edit option clicked');
+const startEdit = (message) => {
+    setEditMessage(message.id);
+    setEditedMessageContent(message.content);
+};
+
+const handleEditKeyDown = (e, messageId) => {
+    if (e.key === 'Enter') {
+        e.preventDefault();
+        if (editedMessageContent.trim() !== '') {
+            handleEdit(messageId, editedMessageContent);
+        }
+    } else if (e.key === 'Escape') {
+        cancelEdit();
+    }
+};
+
+const cancelEdit = () => {
+    setEditMessage(null);
+    setEditedMessageContent('');
+};
+        const handleEdit = async(mId, newContent) => {
+            setEditMessage(mId);
+            try {
+                const messageRef = ref(db, `rooms/${id}/messages/${mId}`);
+
+                // await update(messageRef, newContent);
+                // await messageRef.update({
+                //     content: newContent,
+                //   },function(error) {
+                //     if (error) {
+                //       console.error("Msg could not be updated:", error);
+                //     } else {
+                //       console.log("Msg updated successfully.");
+                //     }
+                //   }); 
+                await update(messageRef, {
+                    content: newContent,
+                });
+                setMessages((prevMessages) => [...prevMessages, message]);
+                console.log('Message deleted successfully.');
+            } catch (error) {
+                console.error('Error deleting message:', error);
+            }
         };
       
         const handleDelete = async(mId) => {
@@ -182,8 +181,26 @@ export function Chat() {
                                                 <div>
                                                     <div className="flex gap-2 mb-2">
                                                         <div className="relative px-5 py-3 text-white rounded-lg ltr:rounded-bl-none rtl:rounded-br-none group-data-[theme-color=violet]:bg-violet-500 group-data-[theme-color=green]:bg-green-500 group-data-[theme-color=red]:bg-red-500">
-                                                            <p className="mb-0">
-                                                                {message.content}
+                                                            <p className="mb-0" >
+                                                                {/* {message.content} */}
+                                                                {editMessage === message.id ? (
+                                                                    <div>
+                                    <input
+                                        type="text"
+                                        value={editedMessageContent}
+                                        onChange={(e) => setEditedMessageContent(e.target.value)}
+                                        onKeyDown={(e) => handleEditKeyDown(e, message.id)}
+                                        onBlur={() => cancelEdit()}
+                                        autoFocus // Focus the input field when editing starts
+                                        className="w-full border-transparent bg-transparent focus:outline-none focus:ring-0"
+                                    />
+                                    <button onClick={() => cancelEdit()}>Cancel</button>
+                                    {/* Currently, the "Save" button is not functional. Instead use Enter */}
+                                    <button onClick={() => handleEdit(message.id, editedMessageContent)}>Save</button>
+                                    </div>
+                                ) : (
+                                    message.content
+                                )}
                                                             </p>
                                                             <p className="mt-1 mb-0 text-xs text-right text-white/50"><i className="align-middle ri-time-line"></i> <span className="align-middle">    {`${new Date(message.timestamp).toLocaleDateString()} ${new Date(message.timestamp).toLocaleTimeString()}`}</span></p>
                                                             <div className="before:content-[''] before:absolute before:border-[5px] before:border-transparent group-data-[theme-color=violet]:ltr:before:border-l-violet-500 group-data-[theme-color=violet]:ltr:before:border-t-violet-500 group-data-[theme-color=green]:ltr:before:border-l-green-500 group-data-[theme-color=green]:ltr:before:border-t-green-500 group-data-[theme-color=red]:ltr:before:border-l-red-500 group-data-[theme-color=red]:ltr:before:border-t-red-500 group-data-[theme-color=violet]:rtl:before:border-r-violet-500 group-data-[theme-color=violet]:rtl:before:border-t-violet-500 group-data-[theme-color=green]:rtl:before:border-r-green-500 group-data-[theme-color=green]:rtl:before:border-t-green-500 group-data-[theme-color=red]:rtl:before:border-r-red-500 group-data-[theme-color=red]:rtl:before:border-t-red-500 ltr:before:left-0 rtl:before:right-0 before:-bottom-2"></div>
@@ -197,7 +214,8 @@ export function Chat() {
       {showOptions && (
         <div>
             <div>
-          <button onClick={() =>handleEdit(message.id)}>Edit</button>
+          {/* <button onClick={() =>handleEdit(message.id)}>Edit</button> */}
+          <button onClick={() =>startEdit(message)}>Edit</button>
           </div>
           <button onClick={() =>handleDelete(message.id)}>Delete</button>
         </div>
