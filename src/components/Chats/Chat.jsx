@@ -18,7 +18,7 @@ export function Chat() {
     const [loadingMessages, setLoadingMessages] = useState(true);
     const [editMessage, setEditMessage] = useState(null);
     const [editedMessageContent, setEditedMessageContent] = useState(''); 
-
+    
 
     useEffect(() => {
         const fetchData = async () => {
@@ -89,7 +89,6 @@ export function Chat() {
 
     
         const [showOptions, setShowOptions] = useState(false);
-      
         const handleIconClick = (mId) => {
           setShowOptions(!showOptions);
         };
@@ -119,20 +118,13 @@ const cancelEdit = () => {
             try {
                 const messageRef = ref(db, `rooms/${id}/messages/${mId}`);
 
-                // await update(messageRef, newContent);
-                // await messageRef.update({
-                //     content: newContent,
-                //   },function(error) {
-                //     if (error) {
-                //       console.error("Msg could not be updated:", error);
-                //     } else {
-                //       console.log("Msg updated successfully.");
-                //     }
-                //   }); 
                 await update(messageRef, {
                     content: newContent,
                 });
-                setMessages((prevMessages) => [...prevMessages, message]);
+                const updatedMessages = messages.map(message =>
+                    message.id === mId ? {...message, content: newContent} : message
+                );
+                setMessages(updatedMessages);
                 console.log('Message deleted successfully.');
             } catch (error) {
                 console.error('Error deleting message:', error);
