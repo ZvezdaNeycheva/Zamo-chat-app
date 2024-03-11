@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext } from "react";
 import { useRecoilValue } from 'recoil';
-import { serverTimestamp } from "firebase/database";
+import { remove, serverTimestamp } from "firebase/database";
 import { get, query, ref, update, set, onChildAdded, push, child } from "firebase/database";
 import { useNavigate, useParams } from "react-router-dom";
 import { AppContext, RoomContext } from "../../AppContext";
@@ -115,12 +115,44 @@ export function Chat() {
         // Log the message object to verify its structure
         console.log("Message to be sent:", message);
 
-        await push(ref(db, `rooms/${id}/messages`), message);
+        const newMessageRef = await push(ref(db, `rooms/${id}/messages`), message);
+        const messageId = newMessageRef.key;
+        message.id = messageId;
+
         setNewMessage("");
+        await set(ref(db, `rooms/${id}/messages/${messageId}`), message);
         setMessages((prevMessages) => [...prevMessages, message]);
+        return {
+            id: messageId,
+            ...newMessageRef
+        };
     };
 
-
+    
+        const [showOptions, setShowOptions] = useState(false);
+      
+        const handleIconClick = (mId) => {
+          setShowOptions(!showOptions);
+        };
+      
+        const handleEdit = (mId) => {
+          // Implement your edit logic here
+          console.log('Edit option clicked');
+        };
+      
+        const handleDelete = async(mId) => {
+            try {
+                const messageRef = ref(db, `rooms/${id}/messages/${mId}`);
+                await remove(messageRef);
+                setMessages((prevMessages) => prevMessages.filter((message) => message.id !== mId));
+                console.log('Message deleted successfully.');
+            } catch (error) {
+                console.error('Error deleting message:', error);
+                // Handle error, show error message to the user, etc.
+            }
+          console.log('Delete option clicked');
+        };
+    
     return (
         <>
             {/* <!-- Start User chat --> */}
@@ -140,7 +172,7 @@ export function Chat() {
                                 {id && !messages.length ? <p>The messages with your friend will appear here.</p> : null}
                                 {messages.length > 0 &&
                                     messages.map((message) => (
-                                        <li key={message.messageId} className="clear-both py-4" >
+                                        <li key={message.id} className="clear-both py-4" >
                                             <div className="flex items-end gap-3">
                                                 <div>
                                                     {/* <img src="/assets/images/users/avatar-4.jpg" alt="" className="rounded-full h-9 w-9" /> */}
@@ -158,7 +190,20 @@ export function Chat() {
                                                         </div>
                                                         <div className="relative self-start dropdown">
                                                             <a className="p-0 text-gray-400 border-0 btn dropdown-toggle dark:text-gray-100" href="#" role="button" data-bs-toggle="dropdown" id="dropdownMenuButton12">
-                                                                <i className="ri-more-2-fill"></i>
+                                                            <div>
+      <div onClick={() => handleIconClick(message.id)}>
+        <i className="ri-more-2-fill"></i>
+      </div>
+      {showOptions && (
+        <div>
+            <div>
+          <button onClick={() =>handleEdit(message.id)}>Edit</button>
+          </div>
+          <button onClick={() =>handleDelete(message.id)}>Delete</button>
+        </div>
+      )}
+    </div>
+                                                                
                                                             </a>
                                                             <div className="absolute z-50 hidden w-40 py-2 my-6 text-left list-none bg-white border-none rounded shadow-lg ltr:left-auto ltr:right-0 xl:ltr:left-0 xl:ltr:right-auto rtl:left-0 rtl:right-auto xl:rtl:right-0 xl:rtl:left-auto dropdown-menu bg-clip-padding dark:bg-zinc-700 dark:border-gray-600/50" aria-labelledby="dropdownMenuButton12">
                                                                 <a className="block w-full px-4 py-2 text-sm font-normal text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/50 dark:text-gray-100 dark:hover:bg-zinc-600 ltr:text-left rtl:text-right" href="#">Copy <i className="text-gray-500 rtl:float-left ltr:float-right dark:text-gray-200 ri-file-copy-line"></i></a>
