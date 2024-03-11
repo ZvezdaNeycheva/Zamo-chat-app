@@ -1,8 +1,13 @@
 import { ModalVideoCall } from "./ModalVideoCall";
 import { ModalAudioCall } from "./ModalAudioCall";
+import { useState } from "react";
 
 export function ChatToolbar({ userData }) {
+    const [showModalAudio, setShowModalAudio] = useState(false);
 
+    const toggleModalAudio = () => {
+        setShowModalAudio(!showModalAudio);
+    };
     return (
         <div className="p-4 border-b border-gray-100 lg:p-6 dark:border-zinc-600">
                             <div className="grid items-center grid-cols-12">
@@ -36,9 +41,10 @@ export function ChatToolbar({ userData }) {
                                         </li>
 
                                         <li>
-                                            <button type="button" className="hidden text-xl text-gray-500 border-0 btn dark:text-gray-300 lg:block" data-tw-toggle="modal" data-tw-target="#audiCallModal">
-                                                <i className="ri-phone-line"></i>
+                                            <button onClick={toggleModalAudio} type="button" className="hidden text-xl text-gray-500 border-0 btn dark:text-gray-300 lg:block" data-tw-toggle="modal" data-tw-target="#audiCallModal">
+                                                <i className="ri-phone-line"></i> 
                                             </button>
+                                            {toggleModalAudio && <ModalAudioCall />}
                                         </li>
 
                                         {/* <!-- Modal start --> */}

@@ -103,6 +103,7 @@ const handleEditKeyDown = (e, messageId) => {
         e.preventDefault();
         if (editedMessageContent.trim() !== '') {
             handleEdit(messageId, editedMessageContent);
+            cancelEdit()
         }
     } else if (e.key === 'Escape') {
         cancelEdit();
@@ -206,7 +207,6 @@ const cancelEdit = () => {
       {showOptions && (
         <div>
             <div>
-          {/* <button onClick={() =>handleEdit(message.id)}>Edit</button> */}
           <button onClick={() =>startEdit(message)}>Edit</button>
           </div>
           <button onClick={() =>handleDelete(message.id)}>Delete</button>
