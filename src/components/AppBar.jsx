@@ -140,7 +140,7 @@ export function AppBar({ selected }) {
                 <ul className="absolute bottom-5 z-40 float-left w-40 py-2 mx-4 mb-12 text-left list-none  bg-white border-none rounded-lg shadow-lg bg-clip-padding dark:bg-zinc-700" aria-labelledby="dropdownButton2" >
                   {/* Profile */}
                   <li>
-                    <NavLink onClick={() => onProfileClick?.()} className="block w-full px-4 py-2 text-sm font-normal  text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/30    dark:text-gray-100 dark:hover:bg-zinc-600/50" >
+                    <NavLink to="/profile" className="block w-full px-4 py-2 text-sm font-normal  text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/30    dark:text-gray-100 dark:hover:bg-zinc-600/50" >
                       Profile
                       <i className="text-gray-500 rtl:float-left ltr:float-right ri-profile-line text-16"></i>
                     </NavLink>
@@ -148,7 +148,7 @@ export function AppBar({ selected }) {
 
                   {/* Setting */}
                   <li>
-                    <NavLink onClick={() => onSettingsClick?.()} className=" block w-full px-4 py-2 text-sm font-normal   text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/30     dark:text-gray-100 dark:hover:bg-zinc-600/50 ltr:text-left rtl:text-right" >
+                    <NavLink to="/settings" className=" block w-full px-4 py-2 text-sm font-normal   text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/30     dark:text-gray-100 dark:hover:bg-zinc-600/50 ltr:text-left rtl:text-right" >
                       Setting
                       <i className="text-gray-500 rtl:float-left ltr:float-right ri-settings-3-line   text-16"></i>
                     </NavLink>
