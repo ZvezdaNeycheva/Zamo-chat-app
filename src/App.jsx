@@ -10,7 +10,7 @@ import { Register } from "./components/auth/Register";
 import { Meta } from "./components/Meta";
 import { Profile } from "./components/auth/Profile";
 import { AppBar } from "./components/AppBar";
-import { UserProfileDetails } from "./components/Chats/UserProfileDetails";
+import { UserProfileDetails } from "./components/chats/UserProfileDetails";
 import { AppContext } from "./AppContext";
 import Authenticated from "./components/auth/Authenticated";
 import { useAuthState } from "react-firebase-hooks/auth";
@@ -19,8 +19,8 @@ import { RecoilRoot } from 'recoil';
 import { Settings } from "./components/Settings";
 import { Contacts } from "./components/Contacts";
 import { Groups } from "./components/Groups";
-import { Chats } from "./components/Chats/Chats";
-import { Chat } from "./components/Chats/Chat";
+import { Chats } from "./components/chats/Chats";
+import { Chat } from "./components/chats/Chat";
 // import { DyteMeeting } from "./components/DyteMeeting";
 
 
