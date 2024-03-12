@@ -49,9 +49,8 @@ export function Chat() {
             }
         };
         fetchData();
-    }, [id]);
-
-
+    }, [id, messages]);
+    
     useEffect(() => {
         console.log({ messages });
     }, [messages]);
