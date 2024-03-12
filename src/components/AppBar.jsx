@@ -6,8 +6,8 @@ import { useContext, useState } from "react";
 export function AppBar({ selected }) {
   const { user, userData, setContext } = useContext(AppContext);
   const [photoURL] = useState(user?.photoURL);
-  const [isDarkMode, setIsDarkMode] = useState(false);
   const [openSidebar, setOpenSidebar] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(false);
   const [selectedTab, setSelectedTab] = useState('chats');
   const navigate = useNavigate();
   // const toggleDarkMode = () => {
@@ -48,18 +48,10 @@ export function AppBar({ selected }) {
         {/* <!-- Start side-menu nav --> */}
         {/* <!-- Tabs --> */}
         <div className="w-full mx-auto lg:my-auto">
-          <ul
-            id="tabs"
-            className="flex flex-row justify-center w-full lg:flex-col lg:flex nav-tabs"
-          >
+          <ul id="tabs" className="flex flex-row justify-center w-full lg:flex-col lg:flex nav-tabs" >
             {/*profile*/}
             <li className="flex-grow lg:flex-grow-0">
-              <NavLink
-                to="/profile"
-                id="default-tab"
-                className={`tab-button flex relative items-center justify-center mx-auto h-14 w-14 leading-[14px] group/tab my-2 rounded-lg cursor-pointer ${selected === "profile" ? "active" : ""
-                  }`}
-              >
+              <NavLink to="/profile" id="default-tab" className={`tab-button flex relative items-center justify-center mx-auto h-14 w-14 leading-[14px] group/tab my-2 rounded-lg cursor-pointer ${selected === "profile" ? "active" : ""   }`} >
                 <div className="absolute items-center hidden -top-10 ltr:left-0 group-hover/tab:flex rtl:right-0">
                   <div className="absolute -bottom-1 left-[40%] w-3 h-3 rotate-45 bg-black"></div>
                   <span className="relative z-10 p-2 text-xs leading-none text-white whitespace-no-wrap bg-black rounded shadow-lg">
@@ -72,11 +64,7 @@ export function AppBar({ selected }) {
 
             {/*chats*/}
             <li className="flex-grow lg:flex-grow-0">
-              <NavLink
-                to="/chats"
-                className={`tab-button relative flex items-center justify-center mx-auto h-14 w-14 leading-[14px] group/tab my-2 rounded-lg cursor-pointer ${selected === "chats" ? "active" : ""
-                  }`}
-              >
+              <NavLink to="/chats" className={`tab-button relative flex items-center justify-center mx-auto h-14 w-14 leading-[14px] group/tab my-2 rounded-lg cursor-pointer ${selected === "chats" ? "active" : ""   }`} >
                 <div className="absolute items-center hidden -top-10 ltr:left-0 group-hover/tab:flex rtl:right-0">
                   <div className="absolute -bottom-1 left-[40%] w-3 h-3 rotate-45 bg-black"></div>
                   <span className="relative z-10 p-2 text-xs leading-none text-white whitespace-no-wrap bg-black rounded shadow-lg">
@@ -89,11 +77,7 @@ export function AppBar({ selected }) {
 
             {/*groups*/}
             <li className="flex-grow lg:flex-grow-0">
-              <NavLink
-                to="/groups"
-                className={`tab-button relative flex items-center justify-center mx-auto h-14 w-14 leading-[14px] group/tab my-2 rounded-lg cursor-pointer ${selected === "groups" ? "active" : ""
-                  }`}
-              >
+              <NavLink to="/groups" className={`tab-button relative flex items-center justify-center mx-auto h-14 w-14 leading-[14px] group/tab my-2 rounded-lg cursor-pointer ${selected === "groups" ? "active" : ""   }`} >
                 <div className="absolute items-center hidden -top-10 ltr:left-0 group-hover/tab:flex rtl:right-0">
                   <div className="absolute -bottom-1 left-[40%] w-3 h-3 rotate-45 bg-black"></div>
                   <span className="relative z-10 p-2 text-xs leading-none text-white whitespace-no-wrap bg-black rounded shadow-lg">
@@ -106,11 +90,7 @@ export function AppBar({ selected }) {
 
             {/*contacts*/}
             <li className="flex-grow lg:flex-grow-0">
-              <NavLink
-                to="/contacts"
-                className={`tab-button relative flex items-center justify-center mx-auto h-14 w-14 leading-[14px] group/tab my-2 rounded-lg cursor-pointer ${selected === "contacts" ? "active" : ""
-                  }`}
-              >
+              <NavLink to="/contacts" className={`tab-button relative flex items-center justify-center mx-auto h-14 w-14 leading-[14px] group/tab my-2 rounded-lg cursor-pointer ${selected === "contacts" ? "active" : ""}`}>
                 <div className="absolute items-center hidden -top-10 ltr:left-0 group-hover/tab:flex rtl:right-0">
                   <div className="absolute -bottom-1 left-[40%] w-3 h-3 rotate-45 bg-black"></div>
                   <span className="relative z-10 p-2 text-xs leading-none text-white whitespace-no-wrap bg-black rounded shadow-lg">
@@ -123,11 +103,7 @@ export function AppBar({ selected }) {
 
             {/*settings*/}
             <li className="flex-grow lg:flex-grow-0">
-              <NavLink
-                to="/settings"
-                className={`tab-button relative flex items-center justify-center mx-auto h-14 w-14 leading-[14px] group/tab my-2 rounded-lg cursor-pointer ${selected === "settings" ? "active" : ""
-                  }`}
-              >
+              <NavLink to="/settings" className={`tab-button relative flex items-center justify-center mx-auto h-14 w-14 leading-[14px] group/tab my-2 rounded-lg cursor-pointer ${selected === "settings" ? "active" : ""   }`} >
                 <div className="absolute items-center hidden -top-10 ltr:left-0 group-hover/tab:flex rtl:right-0">
                   <div className="absolute -bottom-1 left-[40%] w-3 h-3 rotate-45 bg-black"></div>
                   <span className="relative z-10 p-2 text-xs leading-none text-white whitespace-no-wrap bg-black rounded shadow-lg">
@@ -155,37 +131,16 @@ export function AppBar({ selected }) {
 
             {/*profile photo*/}
             <li className="relative lg:mt-4 dropdown lg:dropup">
-              <button
-                onClick={toggleSidebarDropdown}
-                className={`${openSidebar ? "group-[.active]:rotate-180" : ""
-                  } dropdown-toggle" id="dropdownButton2" data-bs-toggle="dropdown`}
-              >
-                <img
-                  src={
-                    userData?.profilePhotoURL ||
-                    "https://thinksport.com.au/wp-content/uploads/2020/01/avatar-.jpg"
-                  }
-                  alt="Avatar"
-                  className="w-10 h-10 p-1 mx-auto rounded-full bg-gray-50 dark:bg-zinc-700"
-                />
+              <button onClick={toggleSidebarDropdown} className={`${openSidebar ? "group-[.active]:rotate-180" : ""   } dropdown-toggle" id="dropdownButton2" data-bs-toggle="dropdown`} >
+                <img src={userData?.profilePhotoURL || "https://thinksport.com.au/wp-content/uploads/2020/01/avatar-.jpg"} alt="Avatar" className="w-10 h-10 p-1 mx-auto rounded-full bg-gray-50 dark:bg-zinc-700" />
               </button>
 
               {/* Dropdown */}
-              <div
-                className={`${openSidebar ? "block" : "hidden"
-                  }`}
-                aria-labelledby="dropdownButton2"
-              >
-                <ul
-                  className="absolute bottom-5 z-40 float-left w-40 py-2 mx-4 mb-12 text-left list-none  bg-white border-none rounded-lg shadow-lg bg-clip-padding dark:bg-zinc-700"
-                  aria-labelledby="dropdownButton2"
-                >
+              <div className={`${openSidebar ? "block" : "hidden"}`} aria-labelledby="dropdownButton2" >
+                <ul className="absolute bottom-5 z-40 float-left w-40 py-2 mx-4 mb-12 text-left list-none  bg-white border-none rounded-lg shadow-lg bg-clip-padding dark:bg-zinc-700" aria-labelledby="dropdownButton2" >
                   {/* Profile */}
                   <li>
-                    <NavLink
-                      onClick={() => onProfileClick?.()}
-                      className="block w-full px-4 py-2 text-sm font-normal  text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/30    dark:text-gray-100 dark:hover:bg-zinc-600/50"
-                    >
+                    <NavLink onClick={() => onProfileClick?.()} className="block w-full px-4 py-2 text-sm font-normal  text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/30    dark:text-gray-100 dark:hover:bg-zinc-600/50" >
                       Profile
                       <i className="text-gray-500 rtl:float-left ltr:float-right ri-profile-line text-16"></i>
                     </NavLink>
@@ -193,10 +148,7 @@ export function AppBar({ selected }) {
 
                   {/* Setting */}
                   <li>
-                    <NavLink
-                      onClick={() => onSettingsClick?.()}
-                      className=" block w-full px-4 py-2 text-sm font-normal   text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/30     dark:text-gray-100 dark:hover:bg-zinc-600/50 ltr:text-left rtl:text-right"
-                    >
+                    <NavLink onClick={() => onSettingsClick?.()} className=" block w-full px-4 py-2 text-sm font-normal   text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/30     dark:text-gray-100 dark:hover:bg-zinc-600/50 ltr:text-left rtl:text-right" >
                       Setting
                       <i className="text-gray-500 rtl:float-left ltr:float-right ri-settings-3-line   text-16"></i>
                     </NavLink>
@@ -204,10 +156,7 @@ export function AppBar({ selected }) {
 
                   {/* Lock Screen */}
                   <li>
-                    <NavLink
-                      to="/lock-screen"
-                      className=" block w-full px-4 py-2 text-sm font-normal   text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/30 dark:text-gray-100 dark:hover:bg-zinc-600/50 ltr:text-left rtl:text-right"
-                    >
+                    <NavLink to="/lock-screen" className=" block w-full px-4 py-2 text-sm font-normal   text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/30 dark:text-gray-100 dark:hover:bg-zinc-600/50 ltr:text-left rtl:text-right" >
                       Lock Screen
                       <i className="text-gray-500 rtl:float-left ltr:float-right  ri-git-repository-private-line text-16"></i>
                     </NavLink>
@@ -217,10 +166,7 @@ export function AppBar({ selected }) {
 
                   {/* Log out */}
                   <li>
-                    <button
-                      onClick={logout}
-                      className="block w-full px-4 py-2 text-sm font-normal text-gray-700  bg-transparent hover:bg-gray-100/30 dark:text-gray-100 dark:hover:bg-zinc-600/50 ltr:text-left rtl:text-right"
-                    >
+                    <button onClick={logout} className="block w-full px-4 py-2 text-sm font-normal text-gray-700  bg-transparent hover:bg-gray-100/30 dark:text-gray-100 dark:hover:bg-zinc-600/50 ltr:text-left rtl:text-right" >
                       Log out
                       <i className="text-gray-500 rtl:float-left ltr:float-right ri-logout-circle-r-line  text-16"></i>
                     </button>
