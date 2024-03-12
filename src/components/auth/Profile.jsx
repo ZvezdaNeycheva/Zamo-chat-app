@@ -26,7 +26,14 @@ export function Profile() {
   const [newEmail, setNewEmail] = useState(userData ? userData.email : "");
   const [newLocation, setNewLocation] = useState(userData ? userData.location : "");
 
+  const [editedUsername, setEditedUsername] = useState(userData ? userData.username : "");
+  const [editedEmail, setEditedEmail] = useState(userData ? userData.email : "");
+  const [editedLocation, setEditedLocation] = useState(userData ? userData.location : "");
+
+
   const [attachedFiles, setAttachedFiles] = useState([]);
+
+  const [localStatus, setLocalStatus] = useState(userData ? userData.status : "Loading...");
 
   function toggleDropdown() {
     setOpen((prevOpen) => !prevOpen);
@@ -84,9 +91,8 @@ export function Profile() {
   }, [user, photo]);
 
   const handleUsernameUpdate = async () => {
-    console.log(newUsername);
     try {
-      await updateUserData(userData?.uid, { username: newUsername });
+      await updateUserData(userData?.uid, { username: editedUsername });
       setEditUsername(false);
     } catch (error) {
       console.error("Error updating username:", error);
@@ -94,9 +100,8 @@ export function Profile() {
   };
 
   const handleEmailUpdate = async () => {
-    // Update the email in Firebase
     try {
-      await updateUserData(userData?.uid, { email: newEmail });
+      await updateUserData(userData?.uid, { email: editedEmail });
       setEditEmail(false);
     } catch (error) {
       console.error("Error updating email:", error);
@@ -104,9 +109,8 @@ export function Profile() {
   };
 
   const handleLocationUpdate = async () => {
-    // Update the location in Firebase
     try {
-      await updateUserData(userData?.uid, { location: newLocation });
+      await updateUserData(userData?.uid, { location: editedLocation });
       setEditLocation(false);
     } catch (error) {
       console.error("Error updating location:", error);
@@ -115,6 +119,7 @@ export function Profile() {
 
   const handleStatusChange = async (status) => {
     try {
+      setLocalStatus(status);
       await updateUserData(userData.uid, { status });
       setOpenStatusDropdown(false);
     } catch (error) {
@@ -150,42 +155,42 @@ export function Profile() {
 
         {/* Start user-profile-card */}
         <div className="p-6 text-center border-b border-gray-100 dark:border-zinc-600">
-      {/* Profile picture */}
-      <div className="mb-4">
-        <input type="file" onChange={handleChange} id="file" />
-        <button disabled={loading || !photo} onClick={handleClick} className="leading-10 ri-pencil-fill text-16 w-10 h-10 bg-gray-100 rounded-full dark:bg-zinc-800 dark:text-gray-100"></button>
-        <img src={userData?.profilePhotoURL || "https://thinksport.com.au/wp-content/uploads/2020/01/avatar-.jpg"} className="w-24 h-24 p-1 mx-auto border border-gray-100 rounded-full dark:border-zinc-800" alt="Avatar"/>
+        {/* Profile picture */}
+        <div className="mb-4">
+          <input type="file" onChange={handleChange} id="file" />
+          <button disabled={loading || !photo} onClick={handleClick} className="leading-10 ri-pencil-fill text-16 w-10 h-10 bg-gray-100 rounded-full dark:bg-zinc-800 dark:text-gray-100"></button>
+          <img src={userData?.profilePhotoURL || "https://thinksport.com.au/wp-content/uploads/2020/01/avatar-.jpg"} className="w-24 h-24 p-1 mx-auto border border-gray-100 rounded-full dark:border-zinc-800" alt="Avatar"/>
+        </div>
+
+        <h5 className="mb-1 text-16 dark:text-gray-50">{userData ? userData.username : "N/A"}</h5>
+        {/* End profile picture */}
+
+        {/* Profile Status */}
+        {/* Dropdown menu for status*/}
+        <div className="relative mb-1 dropdown">
+          <button onClick={toggleStatusDropdown} className="pb-1 text-gray-500 d-block dark:text-gray-300" data-bs-toggle="dropdown" id="dropdownMenuButtonX">
+          <a className={`pb-1 text-${localStatus === 'Available' ? 'text-green-500 ltr:ml-1 rtl:mr-1 ri-record-circle-fill green-500' : 'text-red-500 ltr:ml-1 rtl:mr-1          ri-record-circle-fill red-500'} dropdown-toggle d-block dark:text-gray-300`} href="#" role="button" data-bs-toggle="dropdown" id="dropdownMenuButtonX">
+          &nbsp;{localStatus} <i className={`mdi mdi-chevron-down ${openStatusDropdown ? "group-[.active]:rotate-180" : ""}`}></i>
+          </a>
+          </button>
+          <div className={`${openStatusDropdown ? "" : "hidden"}`}>
+            <ul className="absolute z-50 py-2 mt-2 text-left list-none bg-white border rounded shadow-lg left-20 w-36 top-6 dark:bg-zinc-700 bg-clip-padding border-gray-50 dark:border-zinc-500" aria-labelledby="dropdownMenuButtonX">
+              <li>
+                <button onClick={() => handleStatusChange('Available')} className="block w-full px-4 py-2 text-sm font-normal text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/50 dark:text-gray-100 dark:hover:bg-zinc-600/80 ltr:text-left rtl:text-right">
+                  <i className="text-green-500 ltr:ml-1 rtl:mr-1 ri-record-circle-fill text-10" /> &nbsp;
+                  Available
+                </button>
+              </li>
+              <li>
+                <button onClick={() => handleStatusChange('Busy')} className="block w-full px-4 py-2 text-sm font-normal text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/50 dark:text-gray-100 dark:hover:bg-zinc-600/80 ltr:text-left rtl:text-right">
+                  <i className="text-red-500 ltr:ml-1 rtl:mr-1 ri-record-circle-fill text-10" /> &nbsp;
+                  Busy
+                </button>
+              </li>
+            </ul>
+          </div>
+        </div>
       </div>
-
-      <h5 className="mb-1 text-16 dark:text-gray-50">{userData ? userData.username : "N/A"}</h5>
-      {/* End profile picture */}
-
-      {/* Profile Status */}
-      {/* Dropdown menu for status*/}
-      <div className="relative mb-1 dropdown">
-  <button onClick={toggleStatusDropdown} className="pb-1 text-gray-500 d-block dark:text-gray-300" data-bs-toggle="dropdown" id="dropdownMenuButtonX">
-    <a className="pb-1 text-gray-500 dropdown-toggle d-block dark:text-gray-300" href="#" role="button" data-bs-toggle="dropdown" id="dropdownMenuButtonX">
-      {userData ? userData.status : ""} <i className={`mdi mdi-chevron-down ${openStatusDropdown ? "group-[.active]:rotate-180" : ""}`}></i>
-    </a>
-  </button>
-  <div className={`${openStatusDropdown ? "" : "hidden"}`}>
-    <ul className="absolute z-50 py-2 mt-2 text-left list-none bg-white border rounded shadow-lg left-20 w-36 top-6 dark:bg-zinc-700 bg-clip-padding border-gray-50 dark:border-zinc-500" aria-labelledby="dropdownMenuButtonX">
-      <li>
-        <button onClick={() => handleStatusChange('Available')} className="block w-full px-4 py-2 text-sm font-normal text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/50 dark:text-gray-100 dark:hover:bg-zinc-600/80 ltr:text-left rtl:text-right">
-          <i className="text-green-500 ltr:ml-1 rtl:mr-1 ri-record-circle-fill text-10" /> &nbsp;
-          Available
-        </button>
-      </li>
-      <li>
-        <button onClick={() => handleStatusChange('Busy')} className="block w-full px-4 py-2 text-sm font-normal text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/50 dark:text-gray-100 dark:hover:bg-zinc-600/80 ltr:text-left rtl:text-right">
-          <i className="text-red-500 ltr:ml-1 rtl:mr-1 ri-record-circle-fill text-10" /> &nbsp;
-          Busy
-        </button>
-      </li>
-    </ul>
-  </div>
-</div>
-    </div>
         {/* End Profile Status */}
 
         {/* Start user-profile-desc */}
@@ -218,25 +223,25 @@ export function Profile() {
                 <div className="p-5">
                   <div>
                     <div>
-                      <p className="mb-1 text-gray-500 dark:text-gray-300">Name</p>
-                      {editUsername ? (
-                        <>
-                          <input value={newUsername} onChange={(e) => setNewUsername(e.target.value)} type="text" className="w-full p-2 mb-2 border rounded border-gray-100 dark:border-zinc-600"/>
-                          <button onClick={handleUsernameUpdate} className="py-1.5 btn bg-slate-100 border-transparent rounded hover:bg-gray-50 transition-all ease-in-out dark:bg-zinc-600 dark:text-gray-50 dark:hover:bg-zinc-500/50">
-                            Save
-                          </button>
-                          <button onClick={() => { setEditUsername(false); setNewUsername(userData ? userData.username : "")}} className="ml-2 py-1.5 btn bg-slate-100 border-transparent rounded hover:bg-gray-50 transition-all ease-in-out dark:bg-zinc-600 dark:text-gray-50 dark:hover:bg-zinc-500/50" >
-                            Cancel
-                          </button>
-                        </>
-                      ) : (
-                        <div className="flex items-center">
-                          <h5 className="text-sm dark:text-gray-50">{userData ? userData.username : "N/A"}</h5>
-                          <button onClick={() => setEditUsername(true)} className="ml-2 text-gray-500 hover:text-gray-700 dark:text-gray-300 dark:hover:text-gray-100" >
-                            Edit
-                          </button>
-                        </div>
-                      )}
+                    <p className="mb-1 text-gray-500 dark:text-gray-300">Name</p>
+              {editUsername ? (
+                <>
+                  <input value={editedUsername} onChange={(e) => setEditedUsername(e.target.value)} type="text" className="w-full p-2 mb-2 border rounded border-gray-100 dark:border-zinc-600"/>
+                  <button onClick={handleUsernameUpdate} className="py-1.5 btn bg-slate-100 border-transparent rounded hover:bg-gray-50 transition-all ease-in-out dark:bg-zinc-600 dark:text-gray-50 dark:hover:bg-zinc-500/50">
+                    Save
+                  </button>
+                  <button onClick={() => { setEditUsername(false); setEditedUsername(userData ? userData.username : "")}} className="ml-2 py-1.5 btn bg-slate-100 border-transparent rounded hover:bg-gray-50 transition-all ease-in-out dark:bg-zinc-600 dark:text-gray-50 dark:hover:bg-zinc-500/50" >
+                    Cancel
+                  </button>
+                </>
+              ) : (
+                <div className="flex items-center">
+                  <h5 className="text-sm dark:text-gray-50">{userData ? userData.username : "N/A"}</h5>
+                  <button onClick={() => setEditUsername(true)} className="ml-2 text-gray-500 hover:text-gray-700 dark:text-gray-300 dark:hover:text-gray-100" >
+                    Edit
+                  </button>
+                </div>
+              )}
                     </div>
 
                    {/* Email */}
