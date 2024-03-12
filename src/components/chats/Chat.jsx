@@ -201,17 +201,17 @@ const cancelEdit = () => {
                                                         <div className="relative self-start dropdown">
                                                             <a className="p-0 text-gray-400 border-0 btn dropdown-toggle dark:text-gray-100" href="#" role="button" data-bs-toggle="dropdown" id="dropdownMenuButton12">
                                                             <div>
-      <div onClick={() => handleIconClick(message.id)}>
+     {message?.senderId === userData?.uid && <div onClick={() => handleIconClick(message.id)}>
         <i className="ri-more-2-fill"></i>
+      </div>}
+      {message?.senderId === userData?.uid && showOptions && (
+    <div>
+      <div>
+        <button onClick={() => startEdit(message)}>Edit</button>
       </div>
-      {showOptions && (
-        <div>
-            <div>
-          <button onClick={() =>startEdit(message)}>Edit</button>
-          </div>
-          <button onClick={() =>handleDelete(message.id)}>Delete</button>
-        </div>
-      )}
+      <button onClick={() => handleDelete(message.id)}>Delete</button>
+    </div>
+  )}
     </div>
                                                                 
                                                             </a>
