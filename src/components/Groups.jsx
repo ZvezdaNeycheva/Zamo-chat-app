@@ -103,7 +103,7 @@ export function Groups() {
 
   return (
     <>
-      <div className="p-6">
+      {idGroup ? <Channels groupId={idGroup}/> :<div className="p-6">
         <button
           onClick={toggleModal}
           className="mb-4 px-4 py-2 bg-blue-500 text-white rounded-lg shadow hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:ring-opacity-50"
@@ -153,7 +153,7 @@ export function Groups() {
             </div>
           </div>
         )}
-        {idGroup ? <Channels groupId={idGroup}/> : <div className="mt-4">
+         <div className="mt-4">
           <h3 className="text-lg leading-6 font-medium text-gray-900">Groups</h3>
           {/* search bar */}
           <div className="mt-2 relative max-w-md w-full">
@@ -191,8 +191,8 @@ export function Groups() {
               </div>
             ))}
           </div>
-        </div>}
-      </div>
+        </div>
+      </div>}
     </>
   );
 }

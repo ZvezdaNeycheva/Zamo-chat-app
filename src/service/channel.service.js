@@ -19,7 +19,7 @@ export const createGroup = async (groupName, isPrivate, creatorId, creatorName) 
   try {
     await set(newGroupRef, groupData);
     console.log("Group created successfully with ID:", newGroupRef.key);
-    await addChannel(newGroupRef.key, true, creatorName, creatorName)
+    await addChannel(newGroupRef.key, true, creatorName, creatorName, channelName='#General')
     return groupData; // Return the full group object
   } catch (error) {
     console.error("Error creating group:", error);
@@ -58,21 +58,21 @@ export const deleteGroup = async (groupId) => {
 };
 
 
-export const addChannel = (groupId, isPublic, creatorName, members) => {
+export const addChannel = (groupId, isPublic, creatorName, members, channelName) => {
 
   return push(ref(db, `groups/${groupId}/channels`), {})
     .then(response => {
       set(ref(db, `channels/${response.key}`),
         isPublic
           ? {
-            name: `#${creatorName}`,
+            name: `#${channelName}`,
             createdOn: Date.now(),
             isPublic: true,
             members: {members},
             id: response.key,
           }
           : {
-            name: `#${creatorName}`,
+            name: `#${channelName}`,
             createdOn: Date.now(),
             isPublic: false,
             members: {
