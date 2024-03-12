@@ -45,9 +45,11 @@ export const fetchGroups = async () => {
 
 export const deleteGroup = async (groupId) => {
   const groupRef = ref(getDatabase(), `groups/${groupId}`);
+  // const channelsRef = ref(getDatabase(), `groups/${groupId}/channels`);
 
   try {
     await remove(groupRef);
+    // await remove(channelsRef);
     console.log('Group deleted successfully.');
   } catch (error) {
     console.error('Error deleting group:', error);
@@ -63,14 +65,14 @@ export const addChannel = (groupId, isPublic, creatorName, members) => {
       set(ref(db, `channels/${response.key}`),
         isPublic
           ? {
-            name: creatorName,
+            name: `#${creatorName}`,
             createdOn: Date.now(),
             isPublic: true,
             members: {members},
             id: response.key,
           }
           : {
-            name: creatorName,
+            name: `#${creatorName}`,
             createdOn: Date.now(),
             isPublic: false,
             members: {
@@ -87,3 +89,35 @@ export const addChannel = (groupId, isPublic, creatorName, members) => {
     })
     .catch(e => console.error(e));
 }
+
+export const fetchChannelsIdsByGroup = async (groupId) => {
+  const dbRef = ref(getDatabase());
+  try {
+    const snapshot = await get(child(dbRef, `groups/${groupId}/channels`));
+    if (snapshot.exists()) {
+      return snapshot.val();
+    } else {
+      console.log("Err! Must have at least one channel");
+      return {};
+    }
+  } catch (error) {
+    console.log("Error fetching channels ids", error);
+    throw error;
+  }
+};
+
+export const fetchChannelsAll = async () => {
+  const dbRef = ref(getDatabase());
+  try {
+    const snapshot = await get(child(dbRef, `channels`));
+    if (snapshot.exists()) {
+      return snapshot.val();
+    } else {
+      console.log("Err! Must have at least one channel");
+      return {};
+    }
+  } catch (error) {
+    console.log("Error fetching channels:", error);
+    throw error;
+  }
+};

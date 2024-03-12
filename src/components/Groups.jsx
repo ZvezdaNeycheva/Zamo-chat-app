@@ -2,6 +2,8 @@ import React, { useState, useEffect, useContext } from "react";
 import { createGroup, fetchGroups, deleteGroup } from "../service/channel.service";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { AppContext } from "../AppContext";
+import { useNavigate, useParams } from "react-router-dom";
+import { Channels } from "./Channels";
 
 export function Groups() {
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -12,6 +14,9 @@ export function Groups() {
   const [allGroups, setAllGroups] = useState({});
   const [currentUser, setCurrentUser] = useState(null); // State to hold the current user
   const { user, userData } = useContext(AppContext);
+  let { idGroup } = useParams();
+  const navigate = useNavigate();
+  
 
   useEffect(() => {
     const getGroups = async () => {
@@ -28,6 +33,7 @@ export function Groups() {
       const fetchedGroups = await fetchGroups(); // Your function to fetch groups
       setAllGroups(fetchedGroups);
       setGroups(fetchedGroups); // Initially, display all groups
+      console.log({fetchedGroups});
     };
 
     fetchAndSetGroups();
@@ -66,6 +72,7 @@ export function Groups() {
       setGroupName(''); // Reset the group name input field
       setIsPrivate(false); // Reset the privacy toggle
       // Optionally refresh the list of groups
+      // navigate(`/groups/${newGroup.idGroup}`)
     } catch (error) {
       console.error("Failed to create group:", error);
     }
@@ -146,7 +153,7 @@ export function Groups() {
             </div>
           </div>
         )}
-        <div className="mt-4">
+        {idGroup ? <Channels groupId={idGroup}/> : <div className="mt-4">
           <h3 className="text-lg leading-6 font-medium text-gray-900">Groups</h3>
           {/* search bar */}
           <div className="mt-2 relative max-w-md w-full">
@@ -169,7 +176,7 @@ export function Groups() {
           <div className="mt-2">
             {/* Display groups here */}
             {Object.entries(groups).map(([key, group]) => (
-              <div key={key} className="p-4 max-w-md bg-white rounded-lg border border-gray-200 shadow-sm hover:shadow-lg transition-shadow duration-200 ease-in-out mb-3">
+              <div key={key} onClick={() => navigate(`/groups/${group.idGroup}`)} className="p-4 max-w-md bg-white rounded-lg border border-gray-200 shadow-sm hover:shadow-lg transition-shadow duration-200 ease-in-out mb-3 cursor-pointer">
                 <h5 className="mb-2 text-xl font-semibold tracking-tight text-blue-600">{group.name}</h5>
                 <p className="font-normal text-gray-600">{group.private ? 'Private' : 'Public'}</p>
                 {
@@ -184,7 +191,7 @@ export function Groups() {
               </div>
             ))}
           </div>
-        </div>
+        </div>}
       </div>
     </>
   );
