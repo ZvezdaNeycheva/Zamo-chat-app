@@ -21,6 +21,7 @@ import { Contacts } from "./components/Contacts";
 import { Groups } from "./components/Groups";
 import { Chats } from "./components/Chats/Chats";
 import { Chat } from "./components/Chats/Chat";
+// import { DyteMeeting } from "./components/DyteMeeting";
 
 
 function App() {
@@ -71,6 +72,7 @@ function App() {
           <Route path="/sidebar-menu" element={<AppBar />} />
           {/* <Route path="/switcher" element={<Switcher />} /> */}
           <Route path="/user-profile-details" element={<UserProfileDetails/> }/>
+          {/* <Route path="/meeting" element={<DyteMeeting/>} /> */}
 
           {/* The routing can be adapted for the master-slave view in a similar way: */}
           {/* <Route path="/profile" element={<Index selectedTab="profile" />} /> */}
