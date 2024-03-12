@@ -1,8 +1,7 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { logoutUser } from "../service/auth.service";
 import { AppContext } from "../AppContext";
 import { useContext, useState } from "react";
-import { useNavigate } from "react-router-dom";
 
 export function AppBar({ selected }) {
   const { user, userData, setContext } = useContext(AppContext);
@@ -58,9 +57,8 @@ export function AppBar({ selected }) {
               <NavLink
                 to="/profile"
                 id="default-tab"
-                className={`tab-button flex relative items-center justify-center mx-auto h-14 w-14 leading-[14px] group/tab my-2 rounded-lg cursor-pointer ${
-                  selected === "profile" ? "active" : ""
-                }`}
+                className={`tab-button flex relative items-center justify-center mx-auto h-14 w-14 leading-[14px] group/tab my-2 rounded-lg cursor-pointer ${selected === "profile" ? "active" : ""
+                  }`}
               >
                 <div className="absolute items-center hidden -top-10 ltr:left-0 group-hover/tab:flex rtl:right-0">
                   <div className="absolute -bottom-1 left-[40%] w-3 h-3 rotate-45 bg-black"></div>
@@ -76,9 +74,8 @@ export function AppBar({ selected }) {
             <li className="flex-grow lg:flex-grow-0">
               <NavLink
                 to="/chats"
-                className={`tab-button relative flex items-center justify-center mx-auto h-14 w-14 leading-[14px] group/tab my-2 rounded-lg cursor-pointer ${
-                  selected === "chats" ? "active" : ""
-                }`}
+                className={`tab-button relative flex items-center justify-center mx-auto h-14 w-14 leading-[14px] group/tab my-2 rounded-lg cursor-pointer ${selected === "chats" ? "active" : ""
+                  }`}
               >
                 <div className="absolute items-center hidden -top-10 ltr:left-0 group-hover/tab:flex rtl:right-0">
                   <div className="absolute -bottom-1 left-[40%] w-3 h-3 rotate-45 bg-black"></div>
@@ -94,9 +91,8 @@ export function AppBar({ selected }) {
             <li className="flex-grow lg:flex-grow-0">
               <NavLink
                 to="/groups"
-                className={`tab-button relative flex items-center justify-center mx-auto h-14 w-14 leading-[14px] group/tab my-2 rounded-lg cursor-pointer ${
-                  selected === "groups" ? "active" : ""
-                }`}
+                className={`tab-button relative flex items-center justify-center mx-auto h-14 w-14 leading-[14px] group/tab my-2 rounded-lg cursor-pointer ${selected === "groups" ? "active" : ""
+                  }`}
               >
                 <div className="absolute items-center hidden -top-10 ltr:left-0 group-hover/tab:flex rtl:right-0">
                   <div className="absolute -bottom-1 left-[40%] w-3 h-3 rotate-45 bg-black"></div>
@@ -112,9 +108,8 @@ export function AppBar({ selected }) {
             <li className="flex-grow lg:flex-grow-0">
               <NavLink
                 to="/contacts"
-                className={`tab-button relative flex items-center justify-center mx-auto h-14 w-14 leading-[14px] group/tab my-2 rounded-lg cursor-pointer ${
-                  selected === "contacts" ? "active" : ""
-                }`}
+                className={`tab-button relative flex items-center justify-center mx-auto h-14 w-14 leading-[14px] group/tab my-2 rounded-lg cursor-pointer ${selected === "contacts" ? "active" : ""
+                  }`}
               >
                 <div className="absolute items-center hidden -top-10 ltr:left-0 group-hover/tab:flex rtl:right-0">
                   <div className="absolute -bottom-1 left-[40%] w-3 h-3 rotate-45 bg-black"></div>
@@ -130,9 +125,8 @@ export function AppBar({ selected }) {
             <li className="flex-grow lg:flex-grow-0">
               <NavLink
                 to="/settings"
-                className={`tab-button relative flex items-center justify-center mx-auto h-14 w-14 leading-[14px] group/tab my-2 rounded-lg cursor-pointer ${
-                  selected === "settings" ? "active" : ""
-                }`}
+                className={`tab-button relative flex items-center justify-center mx-auto h-14 w-14 leading-[14px] group/tab my-2 rounded-lg cursor-pointer ${selected === "settings" ? "active" : ""
+                  }`}
               >
                 <div className="absolute items-center hidden -top-10 ltr:left-0 group-hover/tab:flex rtl:right-0">
                   <div className="absolute -bottom-1 left-[40%] w-3 h-3 rotate-45 bg-black"></div>
@@ -163,9 +157,8 @@ export function AppBar({ selected }) {
             <li className="relative lg:mt-4 dropdown lg:dropup">
               <button
                 onClick={toggleSidebarDropdown}
-                className={`${
-                  openSidebar ? "group-[.active]:rotate-180" : ""
-                } dropdown-toggle" id="dropdownButton2" data-bs-toggle="dropdown`}
+                className={`${openSidebar ? "group-[.active]:rotate-180" : ""
+                  } dropdown-toggle" id="dropdownButton2" data-bs-toggle="dropdown`}
               >
                 <img
                   src={
@@ -179,9 +172,8 @@ export function AppBar({ selected }) {
 
               {/* Dropdown */}
               <div
-                className={`${
-                  openSidebar ? "block" : "hidden"
-                }`}
+                className={`${openSidebar ? "block" : "hidden"
+                  }`}
                 aria-labelledby="dropdownButton2"
               >
                 <ul
@@ -225,13 +217,13 @@ export function AppBar({ selected }) {
 
                   {/* Log out */}
                   <li>
-                    <NavLink
-                      to="/login"
-                      className="block w-full px-4 py-2 text-sm font-normal text-gray-700  bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/30 dark:text-gray-100   dark:hover:bg-zinc-600/50 ltr:text-left rtl:text-right"
+                    <button
+                      onClick={logout}
+                      className="block w-full px-4 py-2 text-sm font-normal text-gray-700  bg-transparent hover:bg-gray-100/30 dark:text-gray-100 dark:hover:bg-zinc-600/50 ltr:text-left rtl:text-right"
                     >
-                      <button onClick={logout}>Log out</button>
+                      Log out
                       <i className="text-gray-500 rtl:float-left ltr:float-right ri-logout-circle-r-line  text-16"></i>
-                    </NavLink>
+                    </button>
                   </li>
                 </ul>
               </div>
