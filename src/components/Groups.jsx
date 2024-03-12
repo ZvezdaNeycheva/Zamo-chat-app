@@ -73,6 +73,10 @@ export function Groups() {
       setIsPrivate(false); // Reset the privacy toggle
       // Optionally refresh the list of groups
       // navigate(`/groups/${newGroup.idGroup}`)
+
+      if (newGroup.id) {
+        navigate(`/groups/${newGroup.id}`);
+    }
     } catch (error) {
       console.error("Failed to create group:", error);
     }
