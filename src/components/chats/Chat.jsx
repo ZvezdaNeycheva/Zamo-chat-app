@@ -17,8 +17,8 @@ export function Chat() {
     const [messages, setMessages] = useState([]);
     const [loadingMessages, setLoadingMessages] = useState(true);
     const [editMessage, setEditMessage] = useState(null);
-    const [editedMessageContent, setEditedMessageContent] = useState(''); 
-    
+    const [editedMessageContent, setEditedMessageContent] = useState('');
+    const [activeOptionsMessageId, setActiveOptionsMessageId] = useState(null);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -53,7 +53,7 @@ export function Chat() {
 
 
     useEffect(() => {
-        console.log({messages});
+        console.log({ messages });
     }, [messages]);
 
 
@@ -87,64 +87,63 @@ export function Chat() {
         };
     };
 
-    
-        const [showOptions, setShowOptions] = useState(false);
-        const handleIconClick = (mId) => {
-          setShowOptions(!showOptions);
-        };
-      
-const startEdit = (message) => {
-    setEditMessage(message.id);
-    setEditedMessageContent(message.content);
-};
+    const handleIconClick = (messageId) => {
+        // Toggle the options visibility specifically for the clicked message
+        setActiveOptionsMessageId(activeOptionsMessageId === messageId ? null : messageId);
+    };
 
-const handleEditKeyDown = (e, messageId) => {
-    if (e.key === 'Enter') {
-        e.preventDefault();
-        if (editedMessageContent.trim() !== '') {
-            handleEdit(messageId, editedMessageContent);
-            cancelEdit()
+    const startEdit = (message) => {
+        setEditMessage(message.id);
+        setEditedMessageContent(message.content);
+    };
+
+    const handleEditKeyDown = (e, messageId) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            if (editedMessageContent.trim() !== '') {
+                handleEdit(messageId, editedMessageContent);
+                cancelEdit()
+            }
+        } else if (e.key === 'Escape') {
+            cancelEdit();
         }
-    } else if (e.key === 'Escape') {
-        cancelEdit();
-    }
-};
+    };
 
-const cancelEdit = () => {
-    setEditMessage(null);
-    setEditedMessageContent('');
-};
-        const handleEdit = async(mId, newContent) => {
-            setEditMessage(mId);
-            try {
-                const messageRef = ref(db, `rooms/${id}/messages/${mId}`);
+    const cancelEdit = () => {
+        setEditMessage(null);
+        setEditedMessageContent('');
+    };
+    const handleEdit = async (mId, newContent) => {
+        setEditMessage(mId);
+        try {
+            const messageRef = ref(db, `rooms/${id}/messages/${mId}`);
 
-                await update(messageRef, {
-                    content: newContent,
-                });
-                const updatedMessages = messages.map(message =>
-                    message.id === mId ? {...message, content: newContent} : message
-                );
-                setMessages(updatedMessages);
-                console.log('Message deleted successfully.');
-            } catch (error) {
-                console.error('Error deleting message:', error);
-            }
-        };
-      
-        const handleDelete = async(mId) => {
-            try {
-                const messageRef = ref(db, `rooms/${id}/messages/${mId}`);
-                await remove(messageRef);
-                setMessages((prevMessages) => prevMessages.filter((message) => message.id !== mId));
-                console.log('Message deleted successfully.');
-            } catch (error) {
-                console.error('Error deleting message:', error);
-                // Handle error, show error message to the user, etc.
-            }
-          console.log('Delete option clicked');
-        };
-    
+            await update(messageRef, {
+                content: newContent,
+            });
+            const updatedMessages = messages.map(message =>
+                message.id === mId ? { ...message, content: newContent } : message
+            );
+            setMessages(updatedMessages);
+            console.log('Message deleted successfully.');
+        } catch (error) {
+            console.error('Error deleting message:', error);
+        }
+    };
+
+    const handleDelete = async (mId) => {
+        try {
+            const messageRef = ref(db, `rooms/${id}/messages/${mId}`);
+            await remove(messageRef);
+            setMessages((prevMessages) => prevMessages.filter((message) => message.id !== mId));
+            console.log('Message deleted successfully.');
+        } catch (error) {
+            console.error('Error deleting message:', error);
+            // Handle error, show error message to the user, etc.
+        }
+        console.log('Delete option clicked');
+    };
+
     return (
         <>
             {/* <!-- Start User chat --> */}
@@ -178,42 +177,42 @@ const cancelEdit = () => {
                                                                 {/* {message.content} */}
                                                                 {editMessage === message.id ? (
                                                                     <div>
-                                    <input
-                                        type="text"
-                                        value={editedMessageContent}
-                                        onChange={(e) => setEditedMessageContent(e.target.value)}
-                                        onKeyDown={(e) => handleEditKeyDown(e, message.id)}
-                                        onBlur={() => cancelEdit()}
-                                        autoFocus // Focus the input field when editing starts
-                                        className="w-full border-transparent bg-transparent focus:outline-none focus:ring-0"
-                                    />
-                                    <button onClick={() => cancelEdit()}>Cancel</button>
-                                    {/* Currently, the "Save" button is not functional. Instead use Enter */}
-                                    <button onClick={() => handleEdit(message.id, editedMessageContent)}>Save</button>
-                                    </div>
-                                ) : (
-                                    message.content
-                                )}
+                                                                        <input
+                                                                            type="text"
+                                                                            value={editedMessageContent}
+                                                                            onChange={(e) => setEditedMessageContent(e.target.value)}
+                                                                            onKeyDown={(e) => handleEditKeyDown(e, message.id)}
+                                                                            onBlur={() => cancelEdit()}
+                                                                            autoFocus // Focus the input field when editing starts
+                                                                            className="w-full border-transparent bg-transparent focus:outline-none focus:ring-0"
+                                                                        />
+                                                                        <button onClick={() => cancelEdit()}>Cancel</button>
+                                                                        {/* Currently, the "Save" button is not functional. Instead use Enter */}
+                                                                        <button onClick={() => handleEdit(message.id, editedMessageContent)}>Save</button>
+                                                                    </div>
+                                                                ) : (
+                                                                    message.content
+                                                                )}
                                                             </p>
                                                             <p className="mt-1 mb-0 text-xs text-right text-white/50"><i className="align-middle ri-time-line"></i> <span className="align-middle">    {`${new Date(message.timestamp).toLocaleDateString()} ${new Date(message.timestamp).toLocaleTimeString()}`}</span></p>
                                                             <div className="before:content-[''] before:absolute before:border-[5px] before:border-transparent group-data-[theme-color=violet]:ltr:before:border-l-violet-500 group-data-[theme-color=violet]:ltr:before:border-t-violet-500 group-data-[theme-color=green]:ltr:before:border-l-green-500 group-data-[theme-color=green]:ltr:before:border-t-green-500 group-data-[theme-color=red]:ltr:before:border-l-red-500 group-data-[theme-color=red]:ltr:before:border-t-red-500 group-data-[theme-color=violet]:rtl:before:border-r-violet-500 group-data-[theme-color=violet]:rtl:before:border-t-violet-500 group-data-[theme-color=green]:rtl:before:border-r-green-500 group-data-[theme-color=green]:rtl:before:border-t-green-500 group-data-[theme-color=red]:rtl:before:border-r-red-500 group-data-[theme-color=red]:rtl:before:border-t-red-500 ltr:before:left-0 rtl:before:right-0 before:-bottom-2"></div>
                                                         </div>
                                                         <div className="relative self-start dropdown">
                                                             <a className="p-0 text-gray-400 border-0 btn dropdown-toggle dark:text-gray-100" href="#" role="button" data-bs-toggle="dropdown" id="dropdownMenuButton12">
-                                                            <div>
-     {message?.senderId === userData?.uid && <div onClick={() => handleIconClick(message.id)}>
-        <i className="ri-more-2-fill"></i>
-      </div>}
-      {message?.senderId === userData?.uid && showOptions && (
-    <div>
-      <div>
-        <button onClick={() => startEdit(message)}>Edit</button>
-      </div>
-      <button onClick={() => handleDelete(message.id)}>Delete</button>
-    </div>
-  )}
-    </div>
-                                                                
+                                                                <div>
+                                                                    {message?.senderId === userData?.uid && <div onClick={() => handleIconClick(message.id)}>
+                                                                        <i className="ri-more-2-fill"></i>
+                                                                    </div>}
+                                                                    {message?.senderId === userData?.uid && activeOptionsMessageId === message.id && (
+                                                                        <div>
+                                                                            <div>
+                                                                                <button onClick={() => startEdit(message)}>Edit</button>
+                                                                            </div>
+                                                                            <button onClick={() => handleDelete(message.id)}>Delete</button>
+                                                                        </div>
+                                                                    )}
+                                                                </div>
+
                                                             </a>
                                                             <div className="absolute z-50 hidden w-40 py-2 my-6 text-left list-none bg-white border-none rounded shadow-lg ltr:left-auto ltr:right-0 xl:ltr:left-0 xl:ltr:right-auto rtl:left-0 rtl:right-auto xl:rtl:right-0 xl:rtl:left-auto dropdown-menu bg-clip-padding dark:bg-zinc-700 dark:border-gray-600/50" aria-labelledby="dropdownMenuButton12">
                                                                 <a className="block w-full px-4 py-2 text-sm font-normal text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/50 dark:text-gray-100 dark:hover:bg-zinc-600 ltr:text-left rtl:text-right" href="#">Copy <i className="text-gray-500 rtl:float-left ltr:float-right dark:text-gray-200 ri-file-copy-line"></i></a>
