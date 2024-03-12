@@ -31,13 +31,15 @@ function App() {
   });
   const [user, loading, error] = useAuthState(auth);
   let { id } = useParams();
+  let { idGroup } = useParams();
+  let { idCannel } = useParams();
 
   useEffect(() => {
     if (user) {
       getUserData(user.uid)
         .then((snapshot) => {
           if (snapshot.exists()) {
-            console.log(snapshot.val());
+           
             setContext({
               user,
               userData: snapshot.val()[Object.keys(snapshot.val())[0]],
@@ -65,6 +67,9 @@ function App() {
           <Route path="/chats" element={<Layout selectedAppBarButton={'chats'} sideBarContent={<Chats />} mainContent={<Chat />} />} />
           <Route path="/chats/:id" element={<Layout selectedAppBarButton={'chats'} sideBarContent={<Chats />} mainContent={<Chat />}/>} />
           <Route path="/groups" element={<Layout selectedAppBarButton={'groups'} sideBarContent={<Groups />} />} />
+          <Route path="/groups/:idGroup" element={<Layout selectedAppBarButton={'groups'} sideBarContent={<Groups />} />} />
+          <Route path="/groups/:idGroup/channels/:idCannel" element={<Layout selectedAppBarButton={'groups'} sideBarContent={<Groups />} />} />
+
           <Route path="/contacts" element={<Layout selectedAppBarButton={'contacts'} sideBarContent={<Contacts />} />} />
           <Route path="/settings" element={<Layout selectedAppBarButton={'settings'} mainContent={<Settings />} />} />
           <Route path="/meta" element={<Meta />} />
