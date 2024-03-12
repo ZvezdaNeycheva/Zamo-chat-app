@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { createGroup, fetchGroups, deleteGroup } from "../service/channel.service";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { AppContext } from "../AppContext";
 
 export function Groups() {
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -10,6 +11,7 @@ export function Groups() {
   const [groups, setGroups] = useState({});
   const [allGroups, setAllGroups] = useState({});
   const [currentUser, setCurrentUser] = useState(null); // State to hold the current user
+  const { user, userData } = useContext(AppContext);
 
   useEffect(() => {
     const getGroups = async () => {
@@ -56,7 +58,8 @@ export function Groups() {
 
     try {
       const creatorId = currentUser?.uid; // Get the UID from the current user object
-      const newGroup = await createGroup(groupName, isPrivate, creatorId);
+      const creatorName = userData.username
+      const newGroup = await createGroup(groupName, isPrivate, creatorId, creatorName);
       setGroups(prevGroups => ({ ...prevGroups, [newGroup.id]: newGroup }));
       console.log("Group created with privacy setting:", isPrivate);
       setIsModalVisible(false); // Close the modal
