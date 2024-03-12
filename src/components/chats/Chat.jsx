@@ -163,14 +163,14 @@ export function Chat() {
                                 {messages.length > 0 &&
                                     messages.map((message) => (
                                         <li key={message.id} className="clear-both py-4" >
-                                            <div className={`flex mr-7 items-end gap-3 ${message.senderId === userData.uid ? 'justify-end' : ''}`}>
+                                            <div className={`flex mr-7 items-end gap-3 ${message.senderId === userData.uid ? 'justify-start' : 'justify-end'}`}>
                                                 <div>
                                                     <img src={message?.avatar} alt="" className="rounded-full h-9 w-9" />
                                                 </div>
 
                                                 <div>
                                                     <div className="flex gap-2 mb-2  ">
-                                                    <div className={`relative px-5 py-3 text-white rounded-lg ${message.senderName === userData.username ? 'ltr:rounded-br-none' : 'ltr:rounded-bl-none'} bg-violet-500`}>
+                                                    <div className={`relative px-5 py-3 text-white rounded-lg ${message.senderName === userData.username ? 'ltr:rounded-bl-none' : 'ltr:rounded-br-none'} bg-violet-500`}>
                                                             <p className="mb-0" >
                                                                 {/* {message.content} */}
                                                                 {editMessage === message.id ? (
@@ -213,7 +213,7 @@ export function Chat() {
                                                            
                                                         </div>
                                                     </div>
-                                                    <div className={`font-medium ${message.senderName === userData.username ? 'text-right mr-4' : ''} text-gray-700 text-14 dark:text-gray-300`}>{message.senderName}</div>                                                </div>
+                                                    <div className={`font-medium ${message.senderName === userData.username ? '' : 'text-right mr-4'} text-gray-700 text-14 dark:text-gray-300`}>{message.senderName}</div>                                                </div>
                                             </div>
                                         </li>
                                     ))
