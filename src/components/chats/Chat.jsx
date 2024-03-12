@@ -50,7 +50,7 @@ export function Chat() {
         };
         fetchData();
     }, [id]);
-    // [id, messages] is the dependency array.
+    // [id, messages] is the dependency array. 
     useEffect(() => {
         console.log({ messages });
     }, [messages]);
@@ -160,22 +160,19 @@ export function Chat() {
                             <ul className="mb-0">
                                 {!id ? <p>Select a friend to start a chat.</p> : null}
                                 {id && !messages.length ? <p>The messages with your friend will appear here.</p> : null}
-                                {
-                                    messages.length > 0 &&
+                                {messages.length > 0 &&
                                     messages.map((message) => (
-                                        <li key={message.id} className="clear-both py-4">
-                                            <div className={`flex items-end gap-3 ${message.senderId === userData.uid ? 'justify-start' : 'justify-end'}`}>
-                                                {message.senderId !== userData.uid && (
-                                                    <div>
-                                                        <img src={message?.avatar} alt="" className="rounded-full h-9 w-9" />
-                                                    </div>
-                                                )}
+                                        <li key={message.id} className="clear-both py-4" >
+                                            <div className={`flex mr-30 items-end gap-3 ${message.senderId === userData.uid ? 'justify-end' : ''}`}>
+                                                <div>
+                                                    {/* <img src="/assets/images/users/avatar-4.jpg" alt="" className="rounded-full h-9 w-9" /> */}
+                                                    <img src={message?.avatar} alt="" className="rounded-full h-9 w-9" />
+                                                </div>
 
                                                 <div>
-                                                    <div className={`flex gap-2 mb-2 ${message.senderId === userData.uid ? 'flex-row-reverse' : ''}`}>
-                                                        <div className="relative px-5 py-3 text-white rounded-lg bg-blue-500">
-                                                            <p className="mb-0">
-                                                                {/* Message content and editing logic */}
+                                                    <div className="flex gap-2 mb-2  ">
+                                                    <div className={`relative px-5 py-3 text-white rounded-lg ${message.senderName === userData.username ? 'ltr:rounded-br-none' : 'ltr:rounded-bl-none'} bg-violet-500`}>
+                                                            <p className="mb-0" >
                                                                 {/* {message.content} */}
                                                                 {editMessage === message.id ? (
                                                                     <div>
@@ -196,18 +193,28 @@ export function Chat() {
                                                                     message.content
                                                                 )}
                                                             </p>
-                                                            {/* Timestamp and more options logic */}
                                                             <p className="mt-1 mb-0 text-xs text-right text-white/50"><i className="align-middle ri-time-line"></i> <span className="align-middle">    {`${new Date(message.timestamp).toLocaleDateString()} ${new Date(message.timestamp).toLocaleTimeString()}`}</span></p>
-                                                            <div className="before:content-[''] before:absolute before:border-[5px] before:border-transparent group-data-[theme-color=violet]:ltr:before:border-l-violet-500 group-data-[theme-color=violet]:ltr:before:border-t-violet-500 group-data-[theme-color=green]:ltr:before:border-l-green-500 group-data-[theme-color=green]:ltr:before:border-t-green-500 group-data-[theme-color=red]:ltr:before:border-l-red-500 group-data-[theme-color=red]:ltr:before:border-t-red-500 group-data-[theme-color=violet]:rtl:before:border-r-violet-500 group-data-[theme-color=violet]:rtl:before:border-t-violet-500 group-data-[theme-color=green]:rtl:before:border-r-green-500 group-data-[theme-color=green]:rtl:before:border-t-green-500 group-data-[theme-color=red]:rtl:before:border-r-red-500 group-data-[theme-color=red]:rtl:before:border-t-red-500 ltr:before:left-0 rtl:before:right-0 before:-bottom-2"></div>
+                                                         </div>
+                                                        <div className={`relative self-start dropdown ${message.senderId === userData.uid ? 'right-0' : 'left-auto'}`}>                                                            <a className="p-0 text-gray-400 border-0 btn dropdown-toggle dark:text-gray-100" href="#" role="button" data-bs-toggle="dropdown" id="dropdownMenuButton12">
+                                                                <div>
+                                                                    {message?.senderId === user?.uid && <div onClick={() => handleIconClick(message.id)}>
+                                                                        <i className="ri-more-2-fill"></i>
+                                                                    </div>}
+                                                                    {message?.senderId === user?.uid && activeOptionsMessageId === message.id && (
+                                                                        <div>
+                                                                            <div>
+                                                                                <button onClick={() => startEdit(message)}>Edit</button>
+                                                                            </div>
+                                                                            <button onClick={() => handleDelete(message.id)}>Delete</button>
+                                                                        </div>
+                                                                    )}
+                                                                </div>
+
+                                                            </a>
+                                                           
                                                         </div>
-                                                        {message.senderId === userData.uid && (
-                                                            <div>
-                                                                <img src={message?.avatar} alt="" className="rounded-full h-9 w-9" />
-                                                            </div>
-                                                        )}
                                                     </div>
-                                                    <div className="font-medium text-gray-700 text-14 dark:text-gray-300">{message.senderName}</div>
-                                                </div>
+                                                    <div className={`font-medium ${message.senderName === userData.username ? 'text-right' : ''} text-gray-700 text-14 dark:text-gray-300`}>{message.senderName}</div>                                                </div>
                                             </div>
                                         </li>
                                     ))
