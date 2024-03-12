@@ -49,8 +49,8 @@ export function Chat() {
             }
         };
         fetchData();
-    }, [id, messages]);
-    
+    }, [id]);
+    // [id, messages] is the dependency array. 
     useEffect(() => {
         console.log({ messages });
     }, [messages]);
@@ -151,7 +151,7 @@ export function Chat() {
                     {/* <!-- start chat conversation section --> */}
 
                     <div className="relative w-full overflow-hidden ">
-                        {id ? <ChatToolbar user={userData} /> : null}
+                        {id ? <ChatToolbar userData={userData} /> : null}
                         {/* <!-- end chat user head --> */}
 
                         {/* <!-- start chat conversation --> */}
