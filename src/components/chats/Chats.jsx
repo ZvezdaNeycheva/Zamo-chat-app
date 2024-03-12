@@ -17,11 +17,11 @@ export function Chats() {
     const [selectedFriend, setSelectedFriend] = useState();
     const navigate = useNavigate();
     const { id } = useParams();
-    const [currentRoomState, setCurrentRoomState] = useState({
-        id: '',
-        participants: [],
-        messages: [{ messageId: "", },],
-    });
+    // const [currentRoomState, setCurrentRoomState] = useState({
+    //     id: '',
+    //     participants: [],
+    //     messages: [{ messageId: "", },],
+    // });
     // const [currentRoom, setCurrentRoom] = useRecoilState(currentRoomId);
     // const { userId, friendId, roomId, setContext } = useContext(RoomContext);
     useEffect(() => {
