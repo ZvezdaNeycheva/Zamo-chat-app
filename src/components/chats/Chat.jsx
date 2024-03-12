@@ -163,9 +163,8 @@ export function Chat() {
                                 {messages.length > 0 &&
                                     messages.map((message) => (
                                         <li key={message.id} className="clear-both py-4" >
-                                            <div className={`flex mr-2 items-end gap-3 ${message.senderId === userData.uid ? 'justify-end' : ''}`}>
+                                            <div className={`flex mr-7 items-end gap-3 ${message.senderId === userData.uid ? 'justify-end' : ''}`}>
                                                 <div>
-                                                    {/* <img src="/assets/images/users/avatar-4.jpg" alt="" className="rounded-full h-9 w-9" /> */}
                                                     <img src={message?.avatar} alt="" className="rounded-full h-9 w-9" />
                                                 </div>
 
