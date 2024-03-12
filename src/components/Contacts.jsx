@@ -7,6 +7,7 @@ import { updateUserData, getUserByUid } from '../service/users.service';
 import { get, query, orderByChild, equalTo, ref, update, onValue } from 'firebase/database';
 import { db } from '../service/firebase-config';
 import { addFriend, removeFriend, handleAcceptFriendRequest, handleRejectFriendRequest } from '../service/users.service';
+import { FriendsList } from '../service/users.service';
 
 export function Contacts() {
   const { userData } = useContext(AppContext);
@@ -17,30 +18,29 @@ export function Contacts() {
   const [isContactModalVisible, setIsContactModalVisible] = useState(false);
   const [hasPendingRequests, setHasPendingRequests] = useState(false);
   const [subscriptionMessage, setSubscriptionMessage] = useState('');
+  const [friendsList, setFriendsList] = useState([]);
 
   useEffect(() => {
-    if (!user) return;
-
     const fetchFriendRequests = async () => {
       try {
-        const currentUser = await getUserByUid(user.uid).then((r) => r.val());
-
+        const currentUserSnapshot = await getUserByUid(user.uid);
+        const currentUser = currentUserSnapshot.val();
+  
         if (!currentUser) {
           console.error('User data not found.');
           return;
         }
 
-        // Set up real-time listener for pendingRequests
         const userRef = ref(db, `users/${user.uid}`);
         onValue(userRef, (snapshot) => {
           const updatedUser = snapshot.val();
           const receivedRequests = updatedUser.pendingRequests || {};
           const receivedRequestsArray = Object.values(receivedRequests);
-
+  
           const receivedRequestsPromise = Promise.all(
             receivedRequestsArray.map((uid) => getUserByUid(uid).then((r) => ({ ...r.val(), type: 'received' })))
           );
-
+  
           receivedRequestsPromise.then((receivedRequestsData) => {
             setFriendRequests(receivedRequestsData);
             setHasPendingRequests(receivedRequestsData.length > 0);
@@ -56,15 +56,13 @@ export function Contacts() {
     }
   }, [user]);
 
-  useEffect(() => {
+useEffect(() => {
     if (user) {
       const userRef = ref(db, `users/${user.uid}`);
       onValue(userRef, (snapshot) => {
         const userData = snapshot.val();
-        const friendsList = userData.friendsList || {};
-        // Now you have friendsList which is an array of userIDs
-        // You need to fetch each friend's username from Firebase using these IDs
-        // Then set the friends data to state and map over it to render the friends list
+        const fetchedFriendsList = userData.friendsList || {};
+        setFriendsList(fetchedFriendsList);
       });
     }
   }, [user]);
@@ -256,7 +254,6 @@ export function Contacts() {
                               <button onClick={() => handleRejectRequest(request.uid)} className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600" >
                                 Reject
                               </button>
-                              {/* Add a button for rejecting the friend request if needed */}
                             </div>
                           ) : null}
                         </div>
@@ -269,12 +266,32 @@ export function Contacts() {
                   </div>
                 )}
               </ul>
+
               <h5 className="px-6 mt-8 mb-4 text-16 dark:text-gray-50">Friends</h5>
               <ul>
-                {(userData.friendsList).map(friend => (
-                  <li key={friend.uid}>{friend.username}</li>
-                ))}
-              </ul>
+          {friendsList && friendsList.length > 0 ? (
+            friendsList.map((friend) => (
+              <li key={friend.uid} className="px-5 py-[15px] group-data-[theme-color=violet]:hover:bg-slate-100 group-data-[theme-color=green]:hover:bg-green-50/50 group-data-[theme-color=red]:hover:bg-red-50/50 transition-all ease-in-out border-b border-white/20 dark:border-zinc-700 group-data-[theme-color=violet]:dark:hover:bg-zinc-600 group-data-[theme-color=green]:dark:hover:bg-zinc-600 group-data-[theme-color=red]:dark:hover:bg-zinc-600 dark:hover:border-zinc-700">
+                <div className="flex">
+                  <div className="relative self-center ltr:mr-3 rtl:ml-3">
+                    <div className="flex items-center justify-center rounded-full w-9 h-9 group-data-[theme-color=violet]:bg-violet-500/20 group-data-[theme-color=green]:bg-green-500/20 group-data-[theme-color=red]:bg-red-500/20">
+                      <span className="group-data-[theme-color=violet]:text-violet-500 group-data-[theme-color=green]:text-green-500 group-data-[theme-color=red]:text-red-500">
+                        {friend.username ? friend.username[0].toUpperCase() : ''}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="flex-grow overflow-hidden">
+                    <h5 className="mb-1 text-base truncate dark:text-gray-50">{friend.username}</h5>
+                  </div>
+                </div>
+              </li>
+            ))
+          ) : (
+            <div>
+              <p className="text-gray-500 dark:text-gray-300 text-center">You don't have any friends yet.</p>
+            </div>
+          )}
+        </ul>
             </div>
           </div>
         </div>
