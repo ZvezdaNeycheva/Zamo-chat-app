@@ -1,14 +1,10 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { AppContext } from '../AppContext';
-import { auth } from '../service/firebase-config';
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { updateUserData, getUserByUid } from '../service/users.service';
-import { get, query, orderByChild, equalTo, ref, update, onValue } from 'firebase/database';
-import { db } from '../service/firebase-config';
-import { addFriend, removeFriend, handleAcceptFriendRequest, handleRejectFriendRequest } from '../service/users.service';
-import { FriendsList } from '../service/users.service';
-import { func } from 'prop-types';
+import { get, query, ref, onValue, orderByChild, equalTo, update } from 'firebase/database';
+import { AppContext } from '../AppContext';
+import { auth, db } from '../service/firebase-config';
+import { updateUserData, getUserByUid, removeFriend, handleAcceptFriendRequest, handleRejectFriendRequest, FriendsList, addFriend } from '../service/users.service';
 
 export function Contacts() {
   const { userData } = useContext(AppContext);
@@ -21,11 +17,17 @@ export function Contacts() {
   const [subscriptionMessage, setSubscriptionMessage] = useState('');
   const [friendsList, setFriendsList] = useState([]);
 
+  const [searchInputValue, setSearchInputValue] = useState('');
+
   const [openFriendMenu, setOpenFriendMenu] = useState(false);
 
-  function handleFriendMenu() {
-    setOpenFriendMenu(!openFriendMenu);
-  }
+  const handleFriendMenu = (index) => {
+    const updatedFriendsList = [...friendsList];
+    updatedFriendsList[index].isOpen = !updatedFriendsList[index].isOpen;
+    setFriendsList(updatedFriendsList);
+  };
+
+  const filteredFriends = friendsList.filter(friend => friend.username.toLowerCase().includes(searchInputValue.toLowerCase()));
 
   useEffect(() => {
     const fetchFriendRequests = async () => {
@@ -69,7 +71,6 @@ export function Contacts() {
     }
   }, [user]);
 
-  // const [messageInputValue, setMessageInputValue] = useState('');
   const toggleModal = () => {
     setIsContactModalVisible(!isContactModalVisible);
   };
@@ -136,6 +137,9 @@ export function Contacts() {
   const handleRemoveFriend = async (friendUid) => {
     try {
       await removeFriend(user.uid, friendUid);
+      console.log('Friend removed successfully from Firebase.');
+  
+      setFriendsList(prevFriendsList => prevFriendsList.filter(friend => friend.uid !== friendUid));
     } catch (error) {
       console.error('Error removing friend:', error);
     }
@@ -212,14 +216,14 @@ export function Contacts() {
               </div>
 
               {/* Search bar */}
-              <div className="py-1 mt-5 mb-5 group-data-[theme-color=violet]:bg-slate-100 group-data-[theme-color=green]:bg-green-50 group-data-[theme-color=red]:bg-red-50 rounded group-data-[theme-color=violet]:dark:bg-zinc-600 group-data-[theme-color=green]:dark:bg-zinc-600 group-data-[theme-color=red]:dark:bg-zinc-600">
-                <span className="group-data-[theme-color=violet]:bg-slate-100 group-data-[theme-color=green]:bg-green-50 group-data-[theme-color=red]:bg-red-50 pe-1 ps-3 group-data-[theme-color=violet]:dark:bg-zinc-600 group-data-[theme-color=green]:dark:bg-zinc-600 group-data-[theme-color=red]:dark:bg-zinc-600" id="basic-addon">
-                  <i className="text-lg text-gray-700 ri-search-line search-icon dark:text-gray-200" />
-                </span>
-                <input type="text" className="border-0 group-data-[theme-color=violet]:bg-slate-100 group-data-[theme-color=green]:bg-green-50 group-data-[theme-color=red]:bg-red-50 group-data-[theme-color=violet]:dark:bg-zinc-600 group-data-[theme-color=green]:dark:bg-zinc-600 group-data-[theme-color=red]:dark:bg-zinc-600 placeholder:text-[14px] focus:ring-offset-0 focus:outline-none focus:ring-0 placeholder:dark:text-gray-300" placeholder="Search users.." aria-describedby="basic-addon" />
-              </div>
+            <div className="py-1 mt-5 mb-5 group-data-[theme-color=violet]:bg-slate-100 group-data-[theme-color=green]:bg-green-50 group-data-[theme-color=red]:bg-red-50 rounded group-data-[theme-color=violet]:dark:bg-zinc-600 group-data-[theme-color=green]:dark:bg-zinc-600 group-data-[theme-color=red]:dark:bg-zinc-600">
+              <span className="group-data-[theme-color=violet]:bg-slate-100 group-data-[theme-color=green]:bg-green-50 group-data-[theme-color=red]:bg-red-50 pe-1 ps-3 group-data-[theme-color=violet]:dark:bg-zinc-600 group-data-[theme-color=green]:dark:bg-zinc-600 group-data-[theme-color=red]:dark:bg-zinc-600" id="basic-addon">
+                <i className="text-lg text-gray-700 ri-search-line search-icon dark:text-gray-200" />
+              </span>
+              <input onChange={(e) => setSearchInputValue(e.target.value)} value={searchInputValue} type="text" placeholder="Search users.." aria-describedby="basic-addon" className="border-0 group-data-[theme-color=violet]:bg-slate-100 group-data-[theme-color=green]:bg-green-50 group-data-[theme-color=red]:bg-red-50 group-data-[theme-color=violet]:dark:bg-zinc-600 group-data-[theme-color=green]:dark:bg-zinc-600 group-data-[theme-color=red]:dark:bg-zinc-600 placeholder:text-[14px] focus:ring-offset-0 focus:outline-none focus:ring-0 placeholder:dark:text-gray-300" />
+            </div>
 
-              {/* Contacts list */}
+              {/* Friend requests */}
               <h5 className="px-6 mt-8 mb-4 text-16 dark:text-gray-50">Friend requests</h5>
               <ul className="list-unstyled contact-list">
                 {hasPendingRequests && (
@@ -269,43 +273,55 @@ export function Contacts() {
                 )}
               </ul>
 
+              {/* Friends list */}
               <h5 className="px-6 mt-8 mb-4 text-16 dark:text-gray-50">Friends</h5>
               <ul>
-                {friendsList && friendsList.length > 0 ? (
-                  friendsList.map((friend, index) => (
-                    <li key={`${friend.uid}-${index}`} className="px-5 py-[15px] group-data-[theme-color=violet]:hover:bg-slate-100 group-data-[theme-color=green]:hover:bg-green-50/50 group-data-[theme-color=red]:hover:bg-red-50/50 transition-all ease-in-out border-b border-white/20 dark:border-zinc-700 group-data-[theme-color=violet]:dark:hover:bg-zinc-600 group-data-[theme-color=green]:dark:hover:bg-zinc-600 group-data-[theme-color=red]:dark:hover:bg-zinc-600 dark:hover:border-zinc-700">
-                      <ul className="list-unstyled contact-list">
-                        <li className="px-5 py-[15px]">
-                          <div className="flex items-center">
-                            <div className="relative self-center ltr:mr-3 rtl:ml-3">
-                              <img src={friend?.profilePhotoURL || "https://thinksport.com.au/wp-content/uploads/2020/01/avatar-.jpg"} alt="Avatar" className="rounded-full w-9 h-9" />
-                            </div>
-                            <div className="flex-grow">
-                              <h5 className="mb-1 text-base truncate dark:text-gray-50">{friend.username}</h5>
-                            </div>
-                            <div className="relative flex-shrink-0 ">
-                              <button onClick={handleFriendMenu} className="p-0 text-gray-400 border-0 btn dropdown-toggle dark:text-gray-300" type="button"  >
-                                <i className="text-lg ri-more-2-fill"></i>
-                              </button>
-                              {openFriendMenu && (
-                                <div className="absolute z-50 block w-40 py-2 my-6 text-left list-none bg-white border border-transparent rounded shadow-lg rtl:left-0 rtl:right-auto ltr:left-auto ltr:right-0 bg-clip-padding dark:bg-zinc-700 dark:border-zinc-500/50 dark:shadow-sm">
-                                  <ul>
-                                    <li><a className="block w-full px-6 py-2 text-sm font-normal text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/50 dark:text-gray-300 dark:hover:bg-zinc-500/50" href="#">
-                                      Share <i className="float-right text-gray-500 dark:text-gray-300 ri-share-line"></i></a>
-                                    </li>
-                                    <li><a className="block w-full px-6 py-2 text-sm font-normal text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/50 dark:text-gray-300 dark:hover:bg-zinc-500/50" href="#">Block <i className="float-right text-gray-500 dark:text-gray-300 ri-forbid-line"></i></a>
-                                    </li>
-                                    <li><a className="block w-full px-6 py-2 text-sm font-normal text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/50 dark:text-gray-300 dark:hover:bg-zinc-500/50" href="#">Remove <i className="float-right text-gray-500 dark:text-gray-300 ri-delete-bin-line"></i></a>
-                                    </li>
-                                  </ul>
-                                </div>
-                              )}
-                            </div>
-                          </div>
-                        </li>
-                      </ul>
+              {filteredFriends && filteredFriends.length > 0 ? (
+  filteredFriends.map((friend, index) => (
+    <li key={`${friend.uid}-${index}`} className="px-5 py-[15px] group-data-[theme-color=violet]:hover:bg-slate-100 group-data-[theme-color=green]:hover:bg-green-50/50 group-data-[theme-color=red]:hover:bg-red-50/50 transition-all ease-in-out border-b border-white/20 dark:border-zinc-700 group-data-[theme-color=violet]:dark:hover:bg-zinc-600 group-data-[theme-color=green]:dark:hover:bg-zinc-600 group-data-[theme-color=red]:dark:hover:bg-zinc-600 dark:hover:border-zinc-700">
+      <ul className="list-unstyled contact-list">
+        <li className="px-5 py-[15px]">
+          <div className="flex items-center">
+            <div className="relative self-center ltr:mr-3 rtl:ml-3">
+              <img src={friend?.profilePhotoURL || "https://thinksport.com.au/wp-content/uploads/2020/01/avatar-.jpg"} alt="Avatar" className="rounded-full w-9 h-9" />
+            </div>
+            <div className="flex-grow">
+              <h5 className="mb-1 text-base truncate dark:text-gray-50">{friend.username}</h5>
+            </div>
+            <div className="relative flex-shrink-0 ">
+              <button onClick={() => handleFriendMenu(index)} className="p-0 text-gray-400 border-0 btn dropdown-toggle dark:text-gray-300" type="button"  >
+                <i className="text-lg ri-more-2-fill"></i>
+              </button>
+              {friend.isOpen && (
+                <div className="absolute z-50 block w-40 py-2  text-left list-none bg-white border border-transparent rounded shadow-lg  ltr:left-auto ltr:right-0 bg-clip-padding dark:bg-zinc-700 dark:border-zinc-500/50 dark:shadow-sm">
+                  <ul>
+                    <li>
+                      <button className="block w-full px-6 py-2 text-sm font-normal text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/50 dark:text-gray-300 dark:hover:bg-zinc-500/50"  type="button">
+                        Share 
+                        <i className="float-right text-gray-500 dark:text-gray-300 ri-share-line"></i>
+                      </button>
                     </li>
-                  ))
+                    <li>
+                      <button className="block w-full px-6 py-2 text-sm font-normal text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/50 dark:text-gray-300 dark:hover:bg-zinc-500/50"  type="button">
+                        Block 
+                        <i className="float-right text-gray-500 dark:text-gray-300 ri-forbid-line"></i>
+                      </button>
+                    </li>
+                    <li>
+                      <button onClick={() => handleRemoveFriend(friend.uid)} className="block w-full px-6 py-2 text-sm font-normal text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/50 dark:text-gray-300 dark:hover:bg-zinc-500/50" type="button">
+                        Remove
+                        <i className="float-right text-gray-500 dark:text-gray-300 ri-delete-bin-line"></i>
+                      </button>
+                    </li>
+                  </ul>
+                </div>
+              )}
+            </div>
+          </div>
+        </li>
+      </ul>
+    </li>
+  ))
                 ) : (
                   <div>
                     <p className="text-gray-500 dark:text-gray-300 text-center">You don't have any friends yet.</p>
@@ -316,7 +332,6 @@ export function Contacts() {
           </div>
         </div>
       ) : (
-        // User is not logged in, display a message
         <div className="flex justify-center items-center h-screen bg-blue-100 border-t border-b border-blue-500 text-blue-700 px-4 py-3" role="alert">
           <div className="text-center">
             <p className="font-bold text-2xl">Oops! You are not logged in.</p>

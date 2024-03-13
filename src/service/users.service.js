@@ -84,14 +84,25 @@ export const addFriend = async (currentUserUid, friendUid) => {
 
 export const removeFriend = async (currentUserUid, friendUid) => {
   try {
-    const currentUserData = await getUserByUid(currentUserUid);
-    const updatedFriendsList = currentUserData.friendsList.filter(id => id !== friendUid);
-    await updateUserData(currentUserUid, { friendsList: updatedFriendsList });
-    console.log(`Friend removed from ${currentUserUid}'s friendsList successfully.`);
+    // Remove friendUid from currentUser's friend list
+    const currentUserDataSnapshot = await getUserByUid(currentUserUid);
+    const currentUserData = currentUserDataSnapshot.val();
+    const updatedCurrentUserFriendsList = (currentUserData.friendsList || []).filter(uid => uid !== friendUid);
+    await updateUserData(currentUserUid, { friendsList: updatedCurrentUserFriendsList });
+
+    // Remove currentUserUid from friend's friend list
+    const friendDataSnapshot = await getUserByUid(friendUid);
+    const friendData = friendDataSnapshot.val();
+    const updatedFriendFriendsList = (friendData.friendsList || []).filter(uid => uid !== currentUserUid);
+    await updateUserData(friendUid, { friendsList: updatedFriendFriendsList });
+
+    console.log(`Friend ${friendUid} removed successfully.`);
   } catch (error) {
-    console.error(`Error removing friend from ${currentUserUid}'s friendsList:`, error);
+    console.error('Error deleting friend:', error);
+    throw error;
   }
 };
+
 
 export const handleAcceptFriendRequest = async (currentUserUid, senderUid) => {
   try {
@@ -124,19 +135,6 @@ export const handleRejectFriendRequest = async (currentUserUid, senderUid) => {
   }
 };
 
-export const handleRemoveFriend = async (currentUserUid, friendUid) => {
-  try {
-    console.log('Removing friend...');
-
-    await removeFriend(currentUserUid, friendUid);
-    await removeFriend(friendUid, currentUserUid);
-
-    console.log('Friend removed successfully.');
-  } catch (error) {
-    console.error('Error removing friend:', error);
-  }
-};
-
 export const FriendsList = async (uid, setFriendsList) => {
   try {
     const userRef = ref(db, `users/${uid}`);
@@ -144,21 +142,18 @@ export const FriendsList = async (uid, setFriendsList) => {
       const userData = snapshot.val();
       const friendsList = userData.friendsList || {};
 
-      // Use `Object.values` to get an array of friend IDs
       const friendIds = Object.values(friendsList);
 
-      // Use `Promise.all` to fetch each friend's data
       const friendsData = await Promise.all(friendIds.map(async (friendUid) => {
         try {
           const friendSnapshot = await getUserByUid(friendUid);
           return friendSnapshot.val();
         } catch (error) {
           console.error('Error fetching friend data:', error);
-          return null; // Return null for failed fetches
+          return null;
         }
       }));
 
-      // Filter out null values (failed fetches) and set the friends list state
       const filteredFriendsData = friendsData.filter((friend) => friend !== null);
       setFriendsList(filteredFriendsData);
     });
