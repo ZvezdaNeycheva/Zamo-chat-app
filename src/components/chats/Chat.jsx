@@ -114,7 +114,7 @@ export function Chat() {
 
         setNewMessage("");
         await set(ref(db, `rooms/${id}/messages/${messageId}`), message);
-        setMessages((prevMessages) => [...prevMessages, message]);
+        // setMessages((prevMessages) => [...prevMessages, message]);
         return {
             id: messageId,
             ...newMessageRef
