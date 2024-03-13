@@ -19,7 +19,7 @@ export function Contacts() {
 
   const [searchInputValue, setSearchInputValue] = useState('');
 
-  const [openFriendMenu, setOpenFriendMenu] = useState(false);
+  const [accseptedFriend, setAccseptedFriend] = useState([]);
 
   const handleFriendMenu = (index) => {
     const updatedFriendsList = [...friendsList];
@@ -120,6 +120,7 @@ export function Contacts() {
     try {
       console.log('Attempting to accept friend request...');
       await handleAcceptFriendRequest(user.uid, senderUid);
+      setFriendRequests(prevRequests => prevRequests.filter(request => request.uid !== senderUid));
     } catch (error) {
       console.error('Error accepting friend request:', error);
     }
@@ -194,8 +195,6 @@ export function Contacts() {
                                 <label className="block mb-2 dark:text-gray-300"> Email </label>
                                 <input onChange={(e) => setEmailInputValue(e.target.value)} value={emailInputValue} type="text" className="py-1.5 bg-transparent border-gray-100 rounded placeholder:text-13 w-full focus:border-violet-500 focus:ring-0 focus:ring-offset-0 dark:border-zinc-500 dark:placeholder:text-gray-300" id="addgroupname-input1" placeholder="Enter Email" />
                               </div>
-                              {/* Other input fields can be added here */}
-
                               <div className="flex justify-end p-4 border-t border-gray-100 dark:border-zinc-500">
                                 <div>
                                   <button onClick={toggleModal} type="button" className="border-0 btn hover:underline group-data-[theme-color=violet]:text-violet-500 group-data-[theme-color=green]:text-green-500 group-data-[theme-color=red]:text-red-500" >
@@ -297,20 +296,14 @@ export function Contacts() {
                   <ul>
                     <li>
                       <button className="block w-full px-6 py-2 text-sm font-normal text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/50 dark:text-gray-300 dark:hover:bg-zinc-500/50"  type="button">
-                        Share 
-                        <i className="float-right text-gray-500 dark:text-gray-300 ri-share-line"></i>
-                      </button>
-                    </li>
-                    <li>
-                      <button className="block w-full px-6 py-2 text-sm font-normal text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/50 dark:text-gray-300 dark:hover:bg-zinc-500/50"  type="button">
                         Block 
                         <i className="float-right text-gray-500 dark:text-gray-300 ri-forbid-line"></i>
                       </button>
                     </li>
                     <li>
-                      <button onClick={() => handleRemoveFriend(friend.uid)} className="block w-full px-6 py-2 text-sm font-normal text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/50 dark:text-gray-300 dark:hover:bg-zinc-500/50" type="button">
+                      <button onClick={() => handleRemoveFriend(friend.uid)} className="block w-full px-6 py-2 text-sm font-normal text-red-500 bg-red dropdown-item whitespace-nowrap hover:bg-gray-100/50 dark:text-red-300 dark:hover:bg-zinc-500/50 " type="button">
                         Remove
-                        <i className="float-right text-gray-500 dark:text-gray-300 ri-delete-bin-line"></i>
+                        <i className="float-right text-red-500 dark:text-red-300 ri-delete-bin-line"></i>
                       </button>
                     </li>
                   </ul>
