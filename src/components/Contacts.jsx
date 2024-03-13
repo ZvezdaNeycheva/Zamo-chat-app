@@ -18,8 +18,9 @@ export function Contacts() {
   const [friendsList, setFriendsList] = useState([]);
 
   const [searchInputValue, setSearchInputValue] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
-  const [accseptedFriend, setAccseptedFriend] = useState([]);
+  // const [accseptedFriend, setAccseptedFriend] = useState([]);
 
   const handleFriendMenu = (index) => {
     const updatedFriendsList = [...friendsList];
@@ -79,37 +80,45 @@ export function Contacts() {
     try {
       const usersSnapshot = await get(query(ref(db, 'users')));
       const users = usersSnapshot.val();
-
+  
       const userByEmail = Object.values(users).find(u => u.email === emailInputValue);
-
+  
       if (userByEmail) {
         const recipientUid = userByEmail.uid;
         const senderUid = user.uid;
-
+  
+        if (friendsList.some(friend => friend.uid === recipientUid)) {
+          setErrorMessage('User is already a friend.');
+          return;
+        }
+  
         const updatedSentRequests = [...(userData.sentRequests ?? []), recipientUid];
         await updateUserData(senderUid, { sentRequests: updatedSentRequests });
-
+  
         const updatedPendingRequests = [...(userByEmail.pendingRequests ?? []), senderUid];
         await updateUserData(recipientUid, { pendingRequests: updatedPendingRequests });
-
+  
         console.log('Friend request sent successfully.');
         setFriendRequests((prev) => {
           if (prev.find(u => u.uid === recipientUid)) return prev.at;
           const { uid, username } = userByEmail;
           return [...prev, { uid, username, type: 'sent' }];
         })
-
+  
         setSubscriptionMessage(`Invitation sent to ${emailInputValue}`);
         setIsContactModalVisible(false);
         setTimeout(clearSubscriptionMessage, 2000);
       } else {
-        console.log('User not found with the provided email.');
+        setErrorMessage('You already sent an invitation to this user.');
       }
     } catch (error) {
-      console.error('Error sending friend request:', error);
-      setSubscriptionMessage('Error sending invitation. Please try again.');
-      setTimeout(clearSubscriptionMessage, 2000);
+      setErrorMessage('Error sending invitation. Please try again.');
+      setTimeout(clearErrorMessage, 2000);
     }
+  };
+
+  const clearErrorMessage = () => {
+    setErrorMessage('');
   };
 
   const clearSubscriptionMessage = () => {
@@ -129,7 +138,9 @@ export function Contacts() {
   const handleRejectRequest = async (senderUid) => {
     try {
       console.log('Rejecting friend request...');
-      await handleRejectFriendRequest(user.uid, senderUid);
+      const currentUserDataSnapshot = await getUserByUid(user.uid);
+      const currentUserData = currentUserDataSnapshot.val();
+      await handleRejectFriendRequest(user.uid, senderUid, currentUserData);
     } catch (error) {
       console.error('Error rejecting friend request:', error);
     }
@@ -149,11 +160,8 @@ export function Contacts() {
   return (
     <>
       {user ? (
-        // User is logged in, display contact list
         <div>
-          {/* Start chat content */}
           <div>
-
             <div className="p-6 pb-0">
               <div className="ltr:float-right rtl:float-left">
                 <div className="relative">
@@ -192,6 +200,11 @@ export function Contacts() {
                           <div className="p-4">
                             <form>
                               <div className="mb-5 ltr:text-left rtl:text-right">
+                              {errorMessage && (
+                               <div className="bg-red-200 p-4 mb-4">
+                                 {errorMessage}
+                               </div>
+                              )}
                                 <label className="block mb-2 dark:text-gray-300"> Email </label>
                                 <input onChange={(e) => setEmailInputValue(e.target.value)} value={emailInputValue} type="text" className="py-1.5 bg-transparent border-gray-100 rounded placeholder:text-13 w-full focus:border-violet-500 focus:ring-0 focus:ring-offset-0 dark:border-zinc-500 dark:placeholder:text-gray-300" id="addgroupname-input1" placeholder="Enter Email" />
                               </div>

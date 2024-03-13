@@ -118,22 +118,33 @@ export const handleAcceptFriendRequest = async (currentUserUid, senderUid) => {
     const updatedPendingRequests = (currentUserData.pendingRequests || []).filter(request => request !== senderUid);
     await updateUserData(currentUserUid, { pendingRequests: updatedPendingRequests });
 
+    // Remove current user's UID from sender's sentRequests array
+    const updatedSenderSentRequests = (senderUserData.sentRequests || []).filter(request => request !== currentUserUid);
+    await updateUserData(senderUid, { sentRequests: updatedSenderSentRequests });
+
     console.log('Friend request accepted successfully.');
   } catch (error) {
     console.error('Error accepting friend request:', error);
   }
 };
 
-export const handleRejectFriendRequest = async (currentUserUid, senderUid) => {
+export const handleRejectFriendRequest = async (currentUserUid, senderUid, currentUserData) => {
   try {
     const updatedPendingRequests = currentUserData.pendingRequests.filter(request => request !== senderUid);
     await updateUserData(currentUserUid, { pendingRequests: updatedPendingRequests });
+
+    // Remove current user's UID from sender's sentRequests array
+    const senderUserDataSnapshot = await getUserByUid(senderUid);
+    const senderUserData = senderUserDataSnapshot.val();
+    const updatedSenderSentRequests = (senderUserData.sentRequests || []).filter(request => request !== currentUserUid);
+    await updateUserData(senderUid, { sentRequests: updatedSenderSentRequests });
 
     console.log('Friend request rejected successfully.');
   } catch (error) {
     console.error('Error rejecting friend request:', error);
   }
 };
+
 
 export const FriendsList = async (uid, setFriendsList) => {
   try {

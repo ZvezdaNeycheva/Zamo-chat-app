@@ -1,13 +1,13 @@
 import React, { useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { AppContext } from "../../AppContext";
 import { uploadProfileImage } from "../../service/auth.service";
-import { useNavigate } from "react-router-dom";
 import { updateUserData } from "../../service/users.service";
-
+import { upload } from "@testing-library/user-event/dist/upload";
 
 export function Profile() {
   const navigate = useNavigate();
-  const { user, userData} = useContext(AppContext);
+  const { user, userData } = useContext(AppContext);
   const [photo, setPhoto] = useState(null);
   const [loading, setLoading] = useState(false);
   const [photoURL, setPhotoURL] = useState("https://thinksport.com.au/wp-content/uploads/2020/01/avatar-.jpg");
@@ -57,24 +57,24 @@ export function Profile() {
 
   function handleChange(e) {
     if (e.target.files[0]) {
-      setPhoto(e.target.files[0]);
-    }
-  }
+      const photo = e.target.files[0];
 
-  function handleClick() {
-    uploadProfileImage(photo, user, setLoading)
-      .then((photoURL) => {
-        if (user) {
-          userData.profilePhotoURL = photoURL;
-          updateUserData(userData?.uid, userData);
-          console.log(photoURL);
-        } else {
-          console.error('Error updating user data: Username is undefined');
-        }
-      })
-      .catch((error) => {
-        console.error('Error uploading profile image:', error);
-      });
+      // Upload the selected photo
+      uploadProfileImage(photo, user, setLoading)
+        .then((photoURL) => {
+          if (user) {
+            // Update user data with the new photo URL
+            userData.profilePhotoURL = photoURL;
+            updateUserData(userData?.uid, userData);
+            console.log(photoURL);
+          } else {
+            console.error('Error updating user data: User is undefined');
+          }
+        })
+        .catch((error) => {
+          console.error('Error uploading profile image:', error);
+        });
+    }
   }
 
   useEffect(() => {
@@ -137,7 +137,6 @@ export function Profile() {
             <div className={`relative flex-shrink-0 dropdown `}>
               <button onClick={toggleDropdown} className="p-0 bottom-10 text-gray-400 border-0 btn dark:text-gray-300" data-bs-toggle="dropdown" id="dropdownMenuButtonA">
                 <i className="text-lg ri-more-2-fill" />
-                Drop
               </button>
               <ul className={`${open ? "visible" : "invisible"} absolute z-50 block w-40 py-2 text-left list-none bg-red-700 border border-transparent rounded shadow-lg rtl:right-auto rtl:left-0 ltr:left-auto ltr:right-0 my-7 bg-clip-padding dark:bg-zinc-700 dark:shadow-sm dark:border-zinc-600`} aria-labelledby="dropdownMenuButtonA">
                 <li>
@@ -153,13 +152,14 @@ export function Profile() {
         </div>
         {/* End profile Header */}
 
-        {/* Start user-profile-card */}
         <div className="p-6 text-center border-b border-gray-100 dark:border-zinc-600">
         {/* Profile picture */}
         <div className="mb-4">
-          <input type="file" onChange={handleChange} id="file" />
-          <button disabled={loading || !photo} onClick={handleClick} className="leading-10 ri-pencil-fill text-16 w-10 h-10 bg-gray-100 rounded-full dark:bg-zinc-800 dark:text-gray-100"></button>
-          <img src={userData?.profilePhotoURL || "https://thinksport.com.au/wp-content/uploads/2020/01/avatar-.jpg"} className="w-24 h-24 p-1 mx-auto border border-gray-100 rounded-full dark:border-zinc-800" alt="Avatar"/>
+          <input type="file" onChange={handleChange} id="file" style={{ display: "none" }} />
+          <label htmlFor="file">
+            <button disabled={loading} className="leading-10 ri-pencil-fill text-16 w-10 h-10 bg-gray-100 rounded-full dark:bg-zinc-800 dark:text-gray-100"></button>
+          </label>
+          <img src={userData?.profilePhotoURL || "https://thinksport.com.au/wp-content/uploads/2020/01/avatar-.jpg"} className="w-24 h-24 p-1 mx-auto border border-gray-100 rounded-full dark:border-zinc-800" alt="Avatar" />
         </div>
 
         <h5 className="mb-1 text-16 dark:text-gray-50">{userData ? userData.username : "N/A"}</h5>
@@ -168,21 +168,21 @@ export function Profile() {
         {/* Profile Status */}
         {/* Dropdown menu for status*/}
         <div className="relative mb-1 dropdown">
-          <button onClick={toggleStatusDropdown} className="pb-1 text-gray-500 d-block dark:text-gray-300" data-bs-toggle="dropdown" id="dropdownMenuButtonX">
-          <a className={`pb-1 text-${localStatus === 'Available' ? 'text-green-500 ltr:ml-1 rtl:mr-1 ri-record-circle-fill green-500' : 'text-red-500 ltr:ml-1 rtl:mr-1          ri-record-circle-fill red-500'} dropdown-toggle d-block dark:text-gray-300`} href="#" role="button" data-bs-toggle="dropdown" id="dropdownMenuButtonX">
+          <button onClick={toggleStatusDropdown} className="pb-1 d-block dark:text-gray-300" data-bs-toggle="dropdown" id="dropdownMenuButtonX">
+          <a className={`pb-1 text-${localStatus === 'Available' ? 'text-green-500 ltr:ml-1 rtl:mr-1 ri-record-circle-fill green-500' : 'text-red-500 ltr:ml-1 rtl:mr-1 ri-record-circle-fill red-500'} dropdown-toggle d-block dark:text-gray-300`} href="#" role="button" data-bs-toggle="dropdown" id="dropdownMenuButtonX">
           &nbsp;{localStatus} <i className={`mdi mdi-chevron-down ${openStatusDropdown ? "group-[.active]:rotate-180" : ""}`}></i>
           </a>
           </button>
           <div className={`${openStatusDropdown ? "" : "hidden"}`}>
             <ul className="absolute z-50 py-2 mt-2 text-left list-none bg-white border rounded shadow-lg left-20 w-36 top-6 dark:bg-zinc-700 bg-clip-padding border-gray-50 dark:border-zinc-500" aria-labelledby="dropdownMenuButtonX">
               <li>
-                <button onClick={() => handleStatusChange('Available')} className="block w-full px-4 py-2 text-sm font-normal text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/50 dark:text-gray-100 dark:hover:bg-zinc-600/80 ltr:text-left rtl:text-right">
+                <button onClick={() => handleStatusChange('Available')} className="block w-full px-4 py-2 text-sm font-normal text-black-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/50 dark:text-gray-100 dark:hover:bg-zinc-600/80 ltr:text-left rtl:text-right">
                   <i className="text-green-500 ltr:ml-1 rtl:mr-1 ri-record-circle-fill text-10" /> &nbsp;
                   Available
                 </button>
               </li>
               <li>
-                <button onClick={() => handleStatusChange('Busy')} className="block w-full px-4 py-2 text-sm font-normal text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/50 dark:text-gray-100 dark:hover:bg-zinc-600/80 ltr:text-left rtl:text-right">
+                <button onClick={() => handleStatusChange('Busy')} className="block w-full px-4 py-2 text-sm font-normal text-black-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/50 dark:text-gray-100 dark:hover:bg-zinc-600/80 ltr:text-left rtl:text-right">
                   <i className="text-red-500 ltr:ml-1 rtl:mr-1 ri-record-circle-fill text-10" /> &nbsp;
                   Busy
                 </button>
@@ -195,12 +195,12 @@ export function Profile() {
 
         {/* Start user-profile-desc */}
         <div className="p-6 h-[550px]" data-simplebar="">
-          <div>
+          {/* <div>
             <p className="mb-6 text-gray-500 dark:text-gray-300">
               If several languages coalesce, the grammar of the resulting language is more simple and regular than that
               of the individual.
             </p>
-          </div>
+          </div> */}
           <div data-tw-accordion="collapse">
             {/* About Drop Down menu*/}
             <div className="text-gray-700 accordion-item">
