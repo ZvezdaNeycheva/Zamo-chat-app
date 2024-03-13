@@ -33,7 +33,6 @@ function uploadFileURL() {
             if (user) {
                 userData.fileURL = photoURL; // Update with the correct property name (e.g., fileURL)
                 updateUserData(userData?.uid, userData);
-                console.log(photoURL);
             } else {
                 console.error('Error updating user data: User is undefined');
             }

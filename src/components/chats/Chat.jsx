@@ -165,7 +165,7 @@ export function Chat() {
                                         <li key={message.id} className="clear-both py-4" >
                                             <div className={`flex mr-7 items-end gap-3 ${message.senderId === userData.uid ? 'justify-start' : 'justify-end'}`}>
                                                 <div>
-                                                    <img src={message?.avatar} alt="" className="rounded-full h-9 w-9" />
+                                                    <img src={message?.avatar|| "https://thinksport.com.au/wp-content/uploads/2020/01/avatar-.jpg"} alt="" className="rounded-full h-9 w-9" />
                                                 </div>
 
                                                 <div>

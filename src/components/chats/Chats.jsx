@@ -41,7 +41,6 @@ export function Chats() {
 
         if (!room) {
             const newRoom = await createRoom(participants);
-            console.log({ newRoom });
 
             if (newRoom.id) {
                 navigate(`/chats/${newRoom.id}`);
