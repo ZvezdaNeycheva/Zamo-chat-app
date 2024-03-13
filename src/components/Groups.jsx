@@ -16,7 +16,7 @@ export function Groups() {
   const { user, userData } = useContext(AppContext);
   let { idGroup } = useParams();
   const navigate = useNavigate();
-  
+
 
   useEffect(() => {
     const getGroups = async () => {
@@ -33,7 +33,7 @@ export function Groups() {
       const fetchedGroups = await fetchGroups(); // Your function to fetch groups
       setAllGroups(fetchedGroups);
       setGroups(fetchedGroups); // Initially, display all groups
-      console.log({fetchedGroups});
+      console.log({ fetchedGroups });
     };
 
     fetchAndSetGroups();
@@ -66,7 +66,11 @@ export function Groups() {
       const creatorId = currentUser?.uid; // Get the UID from the current user object
       const creatorName = userData.username
       const newGroup = await createGroup(groupName, isPrivate, creatorId, creatorName);
-      setGroups(prevGroups => ({ ...prevGroups, [newGroup.id]: newGroup }));
+      setGroups(prevGroups => {
+        const updatedGroups = { ...prevGroups }; // Clone the current state
+        updatedGroups[newGroup.id] = newGroup; // Add the new group
+        return updatedGroups; // Return the updated groups object
+      });
       console.log("Group created with privacy setting:", isPrivate);
       setIsModalVisible(false); // Close the modal
       setGroupName(''); // Reset the group name input field
@@ -76,7 +80,7 @@ export function Groups() {
 
       if (newGroup.id) {
         navigate(`/groups/${newGroup.id}`);
-    }
+      }
     } catch (error) {
       console.error("Failed to create group:", error);
     }
@@ -107,7 +111,7 @@ export function Groups() {
 
   return (
     <>
-      {idGroup ? <Channels groupId={idGroup}/> :<div className="p-6">
+      {idGroup ? <Channels groupId={idGroup} /> : <div className="p-6">
         <button
           onClick={toggleModal}
           className="mb-4 px-4 py-2 bg-blue-500 text-white rounded-lg shadow hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:ring-opacity-50"
@@ -157,7 +161,7 @@ export function Groups() {
             </div>
           </div>
         )}
-         <div className="mt-4">
+        <div className="mt-4">
           <h3 className="text-lg leading-6 font-medium text-gray-900">Groups</h3>
           {/* search bar */}
           <div className="mt-2 relative max-w-md w-full">
