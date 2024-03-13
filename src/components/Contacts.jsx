@@ -284,27 +284,28 @@ export function Contacts() {
                               <h5 className="mb-1 text-base truncate dark:text-gray-50">{friend.username}</h5>
                             </div>
                             <div className="relative flex-shrink-0 ">
-  <button onClick={handleFriendMenu} className="p-0 text-gray-400 border-0 btn dropdown-toggle dark:text-gray-300" type="button"  >
-    <i className="text-lg ri-more-2-fill"></i>
-  </button>
-  {openFriendMenu && (
-    <div className="absolute z-50 block w-40 py-2 my-6 text-left list-none bg-white border border-transparent rounded shadow-lg rtl:left-0 rtl:right-auto ltr:left-auto ltr:right-0 bg-clip-padding dark:bg-zinc-700 dark:border-zinc-500/50 dark:shadow-sm">
-      <ul>
-        <li><a className="block w-full px-6 py-2 text-sm font-normal text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/50 dark:text-gray-300 dark:hover:bg-zinc-500/50" href="#">Share <i className="float-right text-gray-500 dark:text-gray-300 ri-share-line"></i></a>
-        </li>
-        <li><a className="block w-full px-6 py-2 text-sm font-normal text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/50 dark:text-gray-300 dark:hover:bg-zinc-500/50" href="#">Block <i className="float-right text-gray-500 dark:text-gray-300 ri-forbid-line"></i></a>
-        </li>
-        <li><a className="block w-full px-6 py-2 text-sm font-normal text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/50 dark:text-gray-300 dark:hover:bg-zinc-500/50" href="#">Remove <i className="float-right text-gray-500 dark:text-gray-300 ri-delete-bin-line"></i></a>
-        </li>
-      </ul>
-    </div>
-  )}
-</div>
+                              <button onClick={handleFriendMenu} className="p-0 text-gray-400 border-0 btn dropdown-toggle dark:text-gray-300" type="button"  >
+                                <i className="text-lg ri-more-2-fill"></i>
+                              </button>
+                              {openFriendMenu && (
+                                <div className="absolute z-50 block w-40 py-2 my-6 text-left list-none bg-white border border-transparent rounded shadow-lg rtl:left-0 rtl:right-auto ltr:left-auto ltr:right-0 bg-clip-padding dark:bg-zinc-700 dark:border-zinc-500/50 dark:shadow-sm">
+                                  <ul>
+                                    <li><a className="block w-full px-6 py-2 text-sm font-normal text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/50 dark:text-gray-300 dark:hover:bg-zinc-500/50" href="#">
+                                      Share <i className="float-right text-gray-500 dark:text-gray-300 ri-share-line"></i></a>
+                                    </li>
+                                    <li><a className="block w-full px-6 py-2 text-sm font-normal text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/50 dark:text-gray-300 dark:hover:bg-zinc-500/50" href="#">Block <i className="float-right text-gray-500 dark:text-gray-300 ri-forbid-line"></i></a>
+                                    </li>
+                                    <li><a className="block w-full px-6 py-2 text-sm font-normal text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/50 dark:text-gray-300 dark:hover:bg-zinc-500/50" href="#">Remove <i className="float-right text-gray-500 dark:text-gray-300 ri-delete-bin-line"></i></a>
+                                    </li>
+                                  </ul>
+                                </div>
+                              )}
+                            </div>
                           </div>
                         </li>
                       </ul>
                     </li>
-                ))
+                  ))
                 ) : (
                   <div>
                     <p className="text-gray-500 dark:text-gray-300 text-center">You don't have any friends yet.</p>
