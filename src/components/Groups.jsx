@@ -78,9 +78,9 @@ export function Groups() {
       // Optionally refresh the list of groups
       // navigate(`/groups/${newGroup.idGroup}`)
 
-      if (newGroup.id) {
-        navigate(`/groups/${newGroup.id}`);
-      }
+      // if (newGroup.id) {
+      //   navigate(`/groups/${newGroup.id}`);
+      // }
     } catch (error) {
       console.error("Failed to create group:", error);
     }
@@ -184,7 +184,7 @@ export function Groups() {
           <div className="mt-2">
             {/* Display groups here */}
             {Object.entries(groups).map(([key, group]) => (
-              <div key={key} onClick={() => navigate(`/groups/${group.idGroup}`)} className="p-4 max-w-md bg-white rounded-lg border border-gray-200 shadow-sm hover:shadow-lg transition-shadow duration-200 ease-in-out mb-3 cursor-pointer">
+              <div key={key} onClick={() => navigate(`/groups/${key}`)} className="p-4 max-w-md bg-white rounded-lg border border-gray-200 shadow-sm hover:shadow-lg transition-shadow duration-200 ease-in-out mb-3 cursor-pointer">
                 <h5 className="mb-2 text-xl font-semibold tracking-tight text-blue-600">{group.name}</h5>
                 <p className="font-normal text-gray-600">{group.private ? 'Private' : 'Public'}</p>
                 {
@@ -200,7 +200,8 @@ export function Groups() {
             ))}
           </div>
         </div>
-      </div>}
+      </div>
+      }
     </>
   );
 }

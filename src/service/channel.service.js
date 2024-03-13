@@ -19,7 +19,7 @@ export const createGroup = async (groupName, isPrivate, creatorId, creatorName) 
   try {
     await set(newGroupRef, groupData);
     console.log("Group created successfully with ID:", newGroupRef.key);
-    await addChannel(newGroupRef.key, true, creatorName, creatorName);
+    await addChannel(newGroupRef.key, true, creatorName, { "creator": creatorId }, '#General');
     return groupData; // Return the full group object
   } catch (error) {
     console.error("Error creating group:", error);
@@ -45,11 +45,9 @@ export const fetchGroups = async () => {
 
 export const deleteGroup = async (groupId) => {
   const groupRef = ref(getDatabase(), `groups/${groupId}`);
-  // const channelsRef = ref(getDatabase(), `groups/${groupId}/channels`);
 
   try {
     await remove(groupRef);
-    // await remove(channelsRef);
     console.log('Group deleted successfully.');
   } catch (error) {
     console.error('Error deleting group:', error);
@@ -58,7 +56,7 @@ export const deleteGroup = async (groupId) => {
 };
 
 
-export const addChannel = (groupId, isPublic, creatorName, members, channelName='#General') => {
+export const addChannel = (groupId, isPublic, creatorName, members, channelName = '#General') => {
 
   return push(ref(db, `groups/${groupId}/channels`), {})
     .then(response => {
@@ -68,7 +66,7 @@ export const addChannel = (groupId, isPublic, creatorName, members, channelName=
             name: `${channelName}`,
             createdOn: Date.now(),
             isPublic: true,
-            members: {members},
+            members: { members },
             id: response.key,
           }
           : {
