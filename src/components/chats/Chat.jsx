@@ -1,116 +1,52 @@
 import { useState, useEffect, useContext } from "react";
-import { useRecoilValue } from 'recoil';
-import { remove, serverTimestamp } from "firebase/database";
-import { get, query, ref, update, set, onChildAdded, push, child, onValue } from "firebase/database";
-import { useNavigate, useParams } from "react-router-dom";
-import { AppContext, RoomContext } from "../../AppContext";
+import { remove } from "firebase/database";
+import { ref, update, set, push, onValue } from "firebase/database";
+import { useParams } from "react-router-dom";
+import { AppContext } from "../../AppContext";
 import { db } from "../../service/firebase-config";
 import { ChatUploadFile } from "./ChatUploadFile";
 import { ChatToolbar } from "./ChatToolbar";
 
 export function Chat() {
-    const navigate = useNavigate();
     let { id } = useParams();
-    const { user, userData, updateUserData } = useContext(AppContext);
-    // Add Message State: Create a state to store messages in the chat room.
+    const { user, userData } = useContext(AppContext);
     const [newMessage, setNewMessage] = useState("");
     const [messages, setMessages] = useState([]);
     const [loadingMessages, setLoadingMessages] = useState(true);
     const [editMessage, setEditMessage] = useState(null);
     const [editedMessageContent, setEditedMessageContent] = useState('');
     const [activeOptionsMessageId, setActiveOptionsMessageId] = useState(null);
-console.log({userData});
 
-useEffect(() => {
-    try {
-        if (!id) {
-            throw new Error("No room ID provided.");
-        }
-        const messagesRef = ref(db, `rooms/${id}/messages`);
-        const unsubscribe = onValue(messagesRef, (snapshot) => {
-            const messageData = snapshot.val();
-            if (messageData) {
-                const messageList = Object.keys(messageData).map((key) => ({
-                    id: key,
-                    ...messageData[key],
-                }));
-                setMessages(messageList);
-            } else {
-                setMessages([]);
+
+    useEffect(() => {
+        try {
+            if (!id) {
+                throw new Error("No room ID provided.");
             }
-            setLoadingMessages(false); // Set loading to false after fetching messages
-        });
+            const messagesRef = ref(db, `rooms/${id}/messages`);
+            const unsubscribe = onValue(messagesRef, (snapshot) => {
+                const messageData = snapshot.val();
+                if (messageData) {
+                    const messageList = Object.keys(messageData).map((key) => ({
+                        id: key,
+                        ...messageData[key],
+                    }));
+                    setMessages(messageList);
+                } else {
+                    setMessages([]);
+                }
+                setLoadingMessages(false);
+            });
 
-        return () => {
-            unsubscribe();
-        };
-    } catch (error) {
-        console.error("Error fetching messages:", error);
-    }
-}, [id]);
+            return () => {
+                unsubscribe();
+            };
+        } catch (error) {
+            console.error("Error fetching messages:", error);
+        }
+    }, [id]);
 
-    // useEffect(() => {
-    //     try {
-
-    //         if (!id) {
-    //             throw new Error("No room ID provided.");
-    //         }
-    //         const messagesRef = ref(db, `rooms/${id}/messages`);
-    //         const unsubscribe = onValue(messagesRef, (snapshot) => {
-    //             const messageData = snapshot.val();
-    //             if (messageData) {
-    //                 const messageList = Object.keys(messageData).map((key) => ({
-    //                     id: key,
-    //                     ...messageData[key],
-    //                 }));
-    //                 setMessages(messageList);
-    //             } else {
-    //                 setMessages([]);
-    //             }
-    //         });
-
-    //         return () => {
-    //             unsubscribe();
-    //         };
-    //     } catch (error) {
-    //         console.error("Error fetching messages:", error);
-    //     }
-
-    // }, [id]);
-    // Andy i Marty don't receive messages in realtime + receive errors in console Chats 166
-
-    // useEffect(() => {
-    //     const fetchData = async () => {
-    //         try {
-    //             if (id) {
-    //                 const roomRef = ref(db, `rooms/${id}/messages`);
-    //                 const queryRef = query(roomRef);
-    //                 const snapshot = await get(queryRef);
-    //                 const messageList = [];
-
-    //                 if (snapshot.exists()) {
-    //                     snapshot.forEach((childSnapshot) => {
-    //                         messageList.push(childSnapshot.val());
-    //                     });
-    //                     setMessages(messageList);
-    //                 } else {
-    //                     setMessages([]);
-    //                     console.log("No messages found in this room.");
-    //                 }
-    //                 setLoadingMessages(false);
-    //             } else {
-    //                 setMessages([]);
-    //                 setLoadingMessages(false);
-    //             }
-    //         } catch (error) {
-    //             console.error("Error fetching messages:", error);
-    //             setLoadingMessages(false);
-    //         }
-    //     };
-    //     fetchData();
-    // }, [id]);
-    // [id, messages] results in recursion. 
-
+    // checking for recursion
     useEffect(() => {
         console.log({ messages });
     }, [messages]);
@@ -139,7 +75,6 @@ useEffect(() => {
 
         setNewMessage("");
         await set(ref(db, `rooms/${id}/messages/${messageId}`), message);
-        // setMessages((prevMessages) => [...prevMessages, message]);
         return {
             id: messageId,
             ...newMessageRef
@@ -184,9 +119,8 @@ useEffect(() => {
                 message.id === mId ? { ...message, content: newContent } : message
             );
             setMessages(updatedMessages);
-            console.log('Message deleted successfully.');
         } catch (error) {
-            console.error('Error deleting message:', error);
+            console.error('Error editing message:', error);
         }
     };
 
@@ -195,12 +129,9 @@ useEffect(() => {
             const messageRef = ref(db, `rooms/${id}/messages/${mId}`);
             await remove(messageRef);
             setMessages((prevMessages) => prevMessages.filter((message) => message.id !== mId));
-            console.log('Message deleted successfully.');
         } catch (error) {
             console.error('Error deleting message:', error);
-            // Handle error, show error message to the user, etc.
         }
-        console.log('Delete option clicked');
     };
 
     return (
