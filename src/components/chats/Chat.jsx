@@ -19,9 +19,13 @@ export function Chat() {
     const [editMessage, setEditMessage] = useState(null);
     const [editedMessageContent, setEditedMessageContent] = useState('');
     const [activeOptionsMessageId, setActiveOptionsMessageId] = useState(null);
-    
-    useEffect(() => {
-        if (!id) return;
+console.log({userData});
+
+useEffect(() => {
+    try {
+        if (!id) {
+            throw new Error("No room ID provided.");
+        }
         const messagesRef = ref(db, `rooms/${id}/messages`);
         const unsubscribe = onValue(messagesRef, (snapshot) => {
             const messageData = snapshot.val();
@@ -34,58 +38,79 @@ export function Chat() {
             } else {
                 setMessages([]);
             }
+            setLoadingMessages(false); // Set loading to false after fetching messages
         });
 
         return () => {
-            unsubscribe(); // Clean up the listener when the component unmounts
+            unsubscribe();
         };
-    }, [id]);
+    } catch (error) {
+        console.error("Error fetching messages:", error);
+    }
+}, [id]);
+
     // useEffect(() => {
-    //     const messagesRef = ref(db, 'messages');
+    //     try {
 
-    //     const unsubscribe = onValue(messagesRef, (snapshot) => {
-    //         const data = snapshot.val();
-    //         console.log('Data:', data);
-    //         // Update local state or perform other actions based on the received data
-    //     });
+    //         if (!id) {
+    //             throw new Error("No room ID provided.");
+    //         }
+    //         const messagesRef = ref(db, `rooms/${id}/messages`);
+    //         const unsubscribe = onValue(messagesRef, (snapshot) => {
+    //             const messageData = snapshot.val();
+    //             if (messageData) {
+    //                 const messageList = Object.keys(messageData).map((key) => ({
+    //                     id: key,
+    //                     ...messageData[key],
+    //                 }));
+    //                 setMessages(messageList);
+    //             } else {
+    //                 setMessages([]);
+    //             }
+    //         });
 
-    //     return () => {
-    //         // Clean up the listener when the component unmounts
-    //         unsubscribe();
+    //         return () => {
+    //             unsubscribe();
+    //         };
+    //     } catch (error) {
+    //         console.error("Error fetching messages:", error);
+    //     }
+
+    // }, [id]);
+    // Andy i Marty don't receive messages in realtime + receive errors in console Chats 166
+
+    // useEffect(() => {
+    //     const fetchData = async () => {
+    //         try {
+    //             if (id) {
+    //                 const roomRef = ref(db, `rooms/${id}/messages`);
+    //                 const queryRef = query(roomRef);
+    //                 const snapshot = await get(queryRef);
+    //                 const messageList = [];
+
+    //                 if (snapshot.exists()) {
+    //                     snapshot.forEach((childSnapshot) => {
+    //                         messageList.push(childSnapshot.val());
+    //                     });
+    //                     setMessages(messageList);
+    //                 } else {
+    //                     setMessages([]);
+    //                     console.log("No messages found in this room.");
+    //                 }
+    //                 setLoadingMessages(false);
+    //             } else {
+    //                 setMessages([]);
+    //                 setLoadingMessages(false);
+    //             }
+    //         } catch (error) {
+    //             console.error("Error fetching messages:", error);
+    //             setLoadingMessages(false);
+    //         }
     //     };
-    // }, [messages]); // Empty dependency array means this effect runs only once when the component mounts
+    //     fetchData();
+    // }, [id]);
+    // [id, messages] results in recursion. 
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                if (id) {
-                    const roomRef = ref(db, `rooms/${id}/messages`);
-                    const queryRef = query(roomRef);
-                    const snapshot = await get(queryRef);
-                    const messageList = [];
-
-                    if (snapshot.exists()) {
-                        snapshot.forEach((childSnapshot) => {
-                            messageList.push(childSnapshot.val());
-                        });
-                        setMessages(messageList);
-                    } else {
-                        setMessages([]);
-                        console.log("No messages found in this room.");
-                    }
-                    setLoadingMessages(false);
-                } else {
-                    setMessages([]);
-                    setLoadingMessages(false);
-                }
-            } catch (error) {
-                console.error("Error fetching messages:", error);
-                setLoadingMessages(false);
-            }
-        };
-        fetchData();
-    }, [id]);
-    // [id, messages] is the dependency array. 
     useEffect(() => {
         console.log({ messages });
     }, [messages]);
@@ -200,12 +225,12 @@ export function Chat() {
                                         <li key={message.id} className="clear-both py-4" >
                                             <div className={`flex mr-7 items-end gap-3 ${message.senderId === userData.uid ? 'justify-start' : 'justify-end'}`}>
                                                 <div>
-                                                    <img src={message?.avatar|| "https://thinksport.com.au/wp-content/uploads/2020/01/avatar-.jpg"} alt="" className="rounded-full h-9 w-9" />
+                                                    <img src={message?.avatar || "https://thinksport.com.au/wp-content/uploads/2020/01/avatar-.jpg"} alt="" className="rounded-full h-9 w-9" />
                                                 </div>
 
                                                 <div>
                                                     <div className="flex gap-2 mb-2  ">
-                                                    <div className={`relative px-5 py-3 text-white rounded-lg ${message.senderName === userData.username ? 'ltr:rounded-bl-none' : 'ltr:rounded-br-none'} bg-violet-500`}>
+                                                        <div className={`relative px-5 py-3 text-white rounded-lg ${message.senderName === userData.username ? 'ltr:rounded-bl-none' : 'ltr:rounded-br-none'} bg-violet-500`}>
                                                             <p className="mb-0" >
                                                                 {/* {message.content} */}
                                                                 {editMessage === message.id ? (
@@ -228,24 +253,24 @@ export function Chat() {
                                                                 )}
                                                             </p>
                                                             <p className="mt-1 mb-0 text-xs text-right text-white/50"><i className="align-middle ri-time-line"></i> <span className="align-middle">    {`${new Date(message.timestamp).toLocaleDateString()} ${new Date(message.timestamp).toLocaleTimeString()}`}</span></p>
-                                                         </div>
+                                                        </div>
                                                         <div className={`relative self-start dropdown ${message.senderId === userData.uid ? 'right-0' : 'left-auto'}`}>                                                            <a className="p-0 text-gray-400 border-0 btn dropdown-toggle dark:text-gray-100" href="#" role="button" data-bs-toggle="dropdown" id="dropdownMenuButton12">
-                                                                <div>
-                                                                    {message?.senderId === user?.uid && <div onClick={() => handleIconClick(message.id)}>
-                                                                        <i className="ri-more-2-fill"></i>
-                                                                    </div>}
-                                                                    {message?.senderId === user?.uid && activeOptionsMessageId === message.id && (
+                                                            <div>
+                                                                {message?.senderId === user?.uid && <div onClick={() => handleIconClick(message.id)}>
+                                                                    <i className="ri-more-2-fill"></i>
+                                                                </div>}
+                                                                {message?.senderId === user?.uid && activeOptionsMessageId === message.id && (
+                                                                    <div>
                                                                         <div>
-                                                                            <div>
-                                                                                <button onClick={() => startEdit(message)}>Edit</button>
-                                                                            </div>
-                                                                            <button onClick={() => handleDelete(message.id)}>Delete</button>
+                                                                            <button onClick={() => startEdit(message)}>Edit</button>
                                                                         </div>
-                                                                    )}
-                                                                </div>
+                                                                        <button onClick={() => handleDelete(message.id)}>Delete</button>
+                                                                    </div>
+                                                                )}
+                                                            </div>
 
-                                                            </a>
-                                                           
+                                                        </a>
+
                                                         </div>
                                                     </div>
                                                     <div className={`font-medium ${message.senderName === userData.username ? '' : 'text-right mr-4'} text-gray-700 text-14 dark:text-gray-300`}>{message.senderName}</div>                                                </div>
