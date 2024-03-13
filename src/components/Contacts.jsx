@@ -56,14 +56,9 @@ export function Contacts() {
     }
   }, [user]);
 
-useEffect(() => {
+  useEffect(() => {
     if (user) {
-      const userRef = ref(db, `users/${user.uid}`);
-      onValue(userRef, (snapshot) => {
-        const userData = snapshot.val();
-        const fetchedFriendsList = userData.friendsList || {};
-        setFriendsList(fetchedFriendsList);
-      });
+      FriendsList(user.uid, setFriendsList);
     }
   }, [user]);
 
@@ -271,7 +266,7 @@ useEffect(() => {
               <ul>
           {friendsList && friendsList.length > 0 ? (
             friendsList.map((friend) => (
-              <li key={friend.uid} className="px-5 py-[15px] group-data-[theme-color=violet]:hover:bg-slate-100 group-data-[theme-color=green]:hover:bg-green-50/50 group-data-[theme-color=red]:hover:bg-red-50/50 transition-all ease-in-out border-b border-white/20 dark:border-zinc-700 group-data-[theme-color=violet]:dark:hover:bg-zinc-600 group-data-[theme-color=green]:dark:hover:bg-zinc-600 group-data-[theme-color=red]:dark:hover:bg-zinc-600 dark:hover:border-zinc-700">
+              <li key={`${friend.uid}-${friend.username}`} className="px-5 py-[15px] group-data-[theme-color=violet]:hover:bg-slate-100 group-data-[theme-color=green]:hover:bg-green-50/50 group-data-[theme-color=red]:hover:bg-red-50/50 transition-all ease-in-out border-b border-white/20 dark:border-zinc-700 group-data-[theme-color=violet]:dark:hover:bg-zinc-600 group-data-[theme-color=green]:dark:hover:bg-zinc-600 group-data-[theme-color=red]:dark:hover:bg-zinc-600 dark:hover:border-zinc-700">
                 <div className="flex">
                   <div className="relative self-center ltr:mr-3 rtl:ml-3">
                     <div className="flex items-center justify-center rounded-full w-9 h-9 group-data-[theme-color=violet]:bg-violet-500/20 group-data-[theme-color=green]:bg-green-500/20 group-data-[theme-color=red]:bg-red-500/20">
@@ -282,6 +277,7 @@ useEffect(() => {
                   </div>
                   <div className="flex-grow overflow-hidden">
                     <h5 className="mb-1 text-base truncate dark:text-gray-50">{friend.username}</h5>
+                    
                   </div>
                 </div>
               </li>

@@ -1,4 +1,4 @@
-import { get, set, ref, query, equalTo, orderByChild, update, getDatabase, push, child } from 'firebase/database';
+import { get, set, ref, query, equalTo, orderByChild, update, getDatabase, push, child, onValue} from 'firebase/database';
 import { db } from './firebase-config';
 import { format } from 'date-fns';
 import { auth } from './firebase-config';
@@ -140,23 +140,27 @@ export const handleRemoveFriend = async (currentUserUid, friendUid) => {
 export const FriendsList = async (uid, setFriendsList) => {
   try {
     const userRef = ref(db, `users/${uid}`);
-
-    onValue(userRef, (snapshot) => {
+    onValue(userRef, async (snapshot) => {
       const userData = snapshot.val();
       const friendsList = userData.friendsList || {};
 
-      const friendsPromises = friendsList.map((friendUid) => {
-        const friendRef = ref(db, `users/${friendUid}`);
-        return onValue(friendRef, (friendSnapshot) => friendSnapshot.val());
-      });
+      // Use `Object.values` to get an array of friend IDs
+      const friendIds = Object.values(friendsList);
 
-      Promise.all(friendsPromises)
-        .then((friendsData) => {
-          setFriendsList(friendsData.filter((friend) => friend !== null));
-        })
-        .catch((error) => {
-          console.error('Error fetching friends list:', error);
-        });
+      // Use `Promise.all` to fetch each friend's data
+      const friendsData = await Promise.all(friendIds.map(async (friendUid) => {
+        try {
+          const friendSnapshot = await getUserByUid(friendUid);
+          return friendSnapshot.val();
+        } catch (error) {
+          console.error('Error fetching friend data:', error);
+          return null; // Return null for failed fetches
+        }
+      }));
+
+      // Filter out null values (failed fetches) and set the friends list state
+      const filteredFriendsData = friendsData.filter((friend) => friend !== null);
+      setFriendsList(filteredFriendsData);
     });
   } catch (error) {
     console.error('Error getting friends list:', error);
