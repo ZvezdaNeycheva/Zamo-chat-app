@@ -1,7 +1,7 @@
 import { useState, useEffect, useContext } from "react";
 import { useRecoilValue } from 'recoil';
 import { remove, serverTimestamp } from "firebase/database";
-import { get, query, ref, update, set, onChildAdded, push, child } from "firebase/database";
+import { get, query, ref, update, set, onChildAdded, push, child, onValue } from "firebase/database";
 import { useNavigate, useParams } from "react-router-dom";
 import { AppContext, RoomContext } from "../../AppContext";
 import { db } from "../../service/firebase-config";
@@ -19,6 +19,41 @@ export function Chat() {
     const [editMessage, setEditMessage] = useState(null);
     const [editedMessageContent, setEditedMessageContent] = useState('');
     const [activeOptionsMessageId, setActiveOptionsMessageId] = useState(null);
+    
+    useEffect(() => {
+        if (!id) return;
+        const messagesRef = ref(db, `rooms/${id}/messages`);
+        const unsubscribe = onValue(messagesRef, (snapshot) => {
+            const messageData = snapshot.val();
+            if (messageData) {
+                const messageList = Object.keys(messageData).map((key) => ({
+                    id: key,
+                    ...messageData[key],
+                }));
+                setMessages(messageList);
+            } else {
+                setMessages([]);
+            }
+        });
+
+        return () => {
+            unsubscribe(); // Clean up the listener when the component unmounts
+        };
+    }, [id]);
+    // useEffect(() => {
+    //     const messagesRef = ref(db, 'messages');
+
+    //     const unsubscribe = onValue(messagesRef, (snapshot) => {
+    //         const data = snapshot.val();
+    //         console.log('Data:', data);
+    //         // Update local state or perform other actions based on the received data
+    //     });
+
+    //     return () => {
+    //         // Clean up the listener when the component unmounts
+    //         unsubscribe();
+    //     };
+    // }, [messages]); // Empty dependency array means this effect runs only once when the component mounts
 
     useEffect(() => {
         const fetchData = async () => {
