@@ -1,12 +1,10 @@
 import { useContext, useEffect, useState } from "react";
 import { get, query, ref, push, update, orderByChild, equalTo } from "firebase/database";
 import { useNavigate, useParams } from "react-router-dom";
-import { useRecoilState } from 'recoil';
 import { auth, db } from "../../service/firebase-config";
-import { AppContext, RoomContext } from "../../AppContext";
+import { AppContext } from "../../AppContext";
 import { ChatButton } from "./ChatButton";
 import { getAllUsers } from "../../service/users.service";
-// import { currentRoomId } from "../../atom/atom";
 
 
 export function Chats() {
@@ -18,8 +16,62 @@ export function Chats() {
     const navigate = useNavigate();
     const { id } = useParams();
 
-    // const [currentRoom, setCurrentRoom] = useRecoilState(currentRoomId);
-    // const { userId, friendId, roomId, setContext } = useContext(RoomContext);
+    const [friends, setFriends] = useState([]);
+
+//     const getAllFriends = async () => {
+//         const friendsRef = ref(db, `users/${user?.uid}/friendsList`);
+//         const snapshot = await get(friendsRef);
+// console.log("Snapshot:", snapshot.val());
+//         if (snapshot.exists()) {
+//             const friends = Object.keys(snapshot.val()).map((key) => ({
+//                 id: key,
+//                 ...snapshot.val()[key],
+//             }));
+//             return friends;
+//         }
+//         return [];
+//     };
+//     useEffect(() => {
+//         getAllFriends().then((f) => setFriends(f));
+//     }, []);
+
+const fetchFriends = async () => {
+    try {
+        const friendsRef = ref(db, `users/${user?.uid}/friendsList`);
+        const snapshot = await get(friendsRef);
+        
+        if (snapshot.exists()) {
+            const friendIds = Object.values(snapshot.val()); // Extract values (friend IDs) from the object
+            console.log("Friend IDs:", friendIds); // Log the friend IDs
+            
+            const friendPromises = friendIds.map(async (friendId) => {
+                console.log("Processing friend ID:", friendId); // Log each friend ID
+                const userRef = ref(db, `users/${friendId}`);
+                const userSnapshot = await get(userRef);
+                if (userSnapshot.exists()) {
+                    return { id: friendId, ...userSnapshot.val() };
+                } else {
+                    console.error(`User with ID ${friendId} does not exist.`);
+                    return null;
+                }
+            });
+
+            const friendData = await Promise.all(friendPromises);
+            console.log("Fetched friends:", friendData); // Log the fetched friend data
+
+            setFriends(friendData.filter(Boolean)); // Filter out null values
+        } else {
+            console.log("User has no friends.");
+            setFriends([]);
+        }
+    } catch (error) {
+        console.error("Error fetching friends:", error);
+    }
+};
+
+
+
+
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged((user) => {
             if (!user) {
@@ -28,7 +80,6 @@ export function Chats() {
             }
         });
 
-        // Unsubscribe from auth state changes when component unmounts
         return () => unsubscribe();
     }, [auth, navigate]);
 
@@ -37,24 +88,24 @@ export function Chats() {
         try {
 
 
-        const room = await getRoom(participants);
+            const room = await getRoom(participants);
 
-        if (!room) {
-            const newRoom = await createRoom(participants);
+            if (!room) {
+                const newRoom = await createRoom(participants);
 
-            if (newRoom.id) {
-                navigate(`/chats/${newRoom.id}`);
+                if (newRoom.id) {
+                    navigate(`/chats/${newRoom.id}`);
+                }
+            } else if (room.id) {
+                navigate(`/chats/${room.id}`);
             }
-        } else if (room.id) {
-            navigate(`/chats/${room.id}`);
+            setSelectedFriend(friend);
+        } catch (error) {
+            console.error("Error selecting friend:", error);
         }
-        setSelectedFriend(friend);
-    } catch (error) {
-        console.error("Error selecting friend:", error);
-    }
     }
     useEffect(() => {
-        console.log("Current Room in useEffect:", id);
+        // console.log("Current Room in useEffect:", id);
         if (!id) setSelectedFriend(undefined);
     }, [id]);
 
@@ -151,7 +202,7 @@ export function Chats() {
                         <span className="group-data-[theme-color=violet]:bg-slate-100 group-data-[theme-color=green]:bg-green-50 group-data-[theme-color=red]:bg-red-50 pe-1 ps-3 group-data-[theme-color=violet]:dark:bg-zinc-600 group-data-[theme-color=green]:dark:bg-zinc-600 group-data-[theme-color=red]:dark:bg-zinc-600" id="basic-addon1">
                             <i className="text-lg text-gray-400 ri-search-line search-icon dark:text-gray-200"></i>
                         </span>
-                        <input type="text" value={search} onChange={handleSearchChange} className="border-0 group-data-[theme-color=violet]:bg-slate-100 group-data-[theme-color=green]:bg-green-50 group-data-[theme-color=red]:bg-red-50 placeholder:text-[14px] focus:ring-offset-0 focus:outline-none focus:ring-0 group-data-[theme-color=violet]:dark:bg-zinc-600 group-data-[theme-color=green]:dark:bg-zinc-600 group-data-[theme-color=red]:dark:bg-zinc-600 placeholder:text-gray-400" placeholder="Search messages or users" aria-label="Search messages or users" aria-describedby="basic-addon1" />
+                        <input type="text" value={search} onChange={handleSearchChange} className="border-0 group-data-[theme-color=violet]:bg-slate-100 group-data-[theme-color=green]:bg-green-50 group-data-[theme-color=red]:bg-red-50 placeholder:text-[14px] focus:ring-offset-0 focus:outline-none focus:ring-0 group-data-[theme-color=violet]:dark:bg-zinc-600 group-data-[theme-color=green]:dark:bg-zinc-600 group-data-[theme-color=red]:dark:bg-zinc-600 placeholder:text-gray-400" placeholder="Search users" aria-label="Search users" aria-describedby="basic-addon1" />
                     </div>
                 </div>
 
@@ -161,8 +212,9 @@ export function Chats() {
 
                     <div className="h-[610px] px-2" data-simplebar>
                         <ul className="chat-user-list">
-                            {users.length > 0 &&
-                                users.filter(u => u.id !== user?.uid).map((user) => (
+                            {/* users */}
+                            {friends.length > 0 &&
+                                friends.filter(u => u.id !== user?.uid).map((user) => (
                                     <li key={user.id}>
                                         <ChatButton selected={selectedFriend === user} user={user} key={user.id} onClick={() => (selectFriend(user))} />
                                     </li>
