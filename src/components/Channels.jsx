@@ -11,7 +11,6 @@ export function Channels({ groupId }) {
   const { user, userData } = useContext(AppContext);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [channelName, setChannelName] = useState('');
-  const [isPrivate, setIsPrivate] = useState(false);
 
   useEffect(() => {
     const getChannels = async () => {
@@ -42,14 +41,13 @@ export function Channels({ groupId }) {
     }
 
     try {
-      await addChannel(groupId, !isPrivate, userData.username, { "creator": userData.uid }, channelName);
+      await addChannel(groupId, userData.username, { "creator": userData.uid }, channelName);
 
       // Now, re-fetch the channels to update the UI
       fetchAndUpdateChannels();
       console.log("Channel created:", channelName);
       setIsModalVisible(false); // Close the modal
       setChannelName(''); // Reset the channel name input field
-      setIsPrivate(false); // Reset the privacy toggle
     } catch (error) {
       console.error("Failed to create channel:", error);
     }
@@ -69,9 +67,9 @@ export function Channels({ groupId }) {
   };
 
   // Call this function inside your useEffect:
-  useEffect(() => {
-    fetchAndUpdateChannels();
-  }, [groupId]); // Re-run this effect if groupId changes
+  // useEffect(() => {
+  //   fetchAndUpdateChannels();
+  // }, [groupId]); // Re-run this effect if groupId changes
 
   return (
     <>
@@ -94,26 +92,17 @@ export function Channels({ groupId }) {
                 </button>
               </div>
               <form onSubmit={handleCreateChannel} className="mt-4 flex flex-col">
-                <label htmlFor="groupName" className="block text-sm font-medium text-gray-700">Channel Name</label>
+                <label htmlFor="channelName" className="block text-sm font-medium text-gray-700">Channel Name</label>
                 <input
-                  id="groupName"
+                  id="channelName"
                   type="text"
-                  value={groupName}
+                  value={channelName}
                   onChange={(e) => setChannelName(e.target.value)}
                   className="mt-1 p-2 w-full border rounded-md"
-                  placeholder="Enter Group Name"
+                  placeholder="Enter Channel Name"
                   required
                 />
                 <div className="flex justify-between items-center mt-4">
-                  <label htmlFor="group-private" className="inline-flex items-center">
-                    <input
-                      id="group-private"
-                      type="checkbox"
-                      checked={isPrivate}
-                      onChange={(e) => setIsPrivate(e.target.checked)}
-                      className="form-checkbox h-5 w-5 text-gray-600"
-                    /><span className="ml-2 text-gray-700">Private Group</span>
-                  </label>
                   <button
                     type="submit"
                     className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600"
@@ -132,7 +121,7 @@ export function Channels({ groupId }) {
             {/* Display channels here */}
             {Object.entries(channels).map(([key, channel]) => (
               <div key={key}
-                // onClick={() => navigate(`/groups/${groupId}/channels/${key}`)} // comment out if you decide to have additional path to the new channel.
+                onClick={() => navigate(`/groups/${groupId}/channels/${key}`)} // comment out if you decide to have additional path to the new channel.
                 className="p-4 max-w-md bg-white rounded-lg border border-gray-200 shadow-sm hover:shadow-lg transition-shadow duration-200 ease-in-out mb-3 cursor-pointer">
                 <h5 className="mb-2 text-xl font-semibold tracking-tight text-blue-600">{channel.name}</h5>
                 <p className="font-normal text-gray-600">{channels.isPublic ? 'Public' : 'Private'}</p>
