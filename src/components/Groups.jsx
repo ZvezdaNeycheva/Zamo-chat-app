@@ -233,6 +233,8 @@ export function Groups() {
                           </div>
                           <div className="flex-grow overflow-hidden">
                             <h5 className="mb-0 text-gray-700 truncate dark:text-gray-50"> {group.name}</h5>
+                            <p className="font-normal text-gray-600">{group.private ? 'Private' : 'Public'}</p>
+                            <p> </p>
                           </div>
                           {/* Dropdown menu */}
                           <button className="p-2 ml-2 text-gray-500 hover:text-gray-800 dark:text-gray-300" onClick={() => handleDropDownMenu(index)}>
