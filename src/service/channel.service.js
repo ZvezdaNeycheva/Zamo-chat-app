@@ -110,3 +110,15 @@ export const fetchChannelsAll = async () => {
     throw error;
   }
 };
+
+export const deleteChannel = async (channelId) => {
+  const channelRef = ref(getDatabase(), `channels/${channelId}`);
+
+  try {
+    await remove(channelRef);
+    console.log('Channel deleted successfully.');
+  } catch (error) {
+    console.error('Error deleting channel:', error);
+    throw error;
+  }
+};

@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { fetchChannelsIdsByGroup, fetchChannelsAll, addChannel } from "../service/channel.service";
+import { fetchChannelsIdsByGroup, fetchChannelsAll, addChannel, deleteChannel } from "../service/channel.service";
 import { AppContext } from "../AppContext";
 
 
@@ -11,6 +11,7 @@ export function Channels({ groupId }) {
   const { user, userData } = useContext(AppContext);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [channelName, setChannelName] = useState('');
+  const [currentUser, setCurrentUser] = useState(null);
 
   useEffect(() => {
     const getChannels = async () => {
@@ -71,6 +72,17 @@ export function Channels({ groupId }) {
   //   fetchAndUpdateChannels();
   // }, [groupId]); // Re-run this effect if groupId changes
 
+  const handleDeleteChannel = async (channelId) => {
+    try {
+      await deleteChannel(channelId);
+      console.log("Channel deleted successfully");
+      const updatedChannels = await fetchChannelsIdsByGroup();
+      setChannels(updatedChannels);
+    } catch (error) {
+      console.error("Error deleting channel:", error);
+    }
+  };
+
   return (
     <>
       <div className="p-6">
@@ -120,15 +132,16 @@ export function Channels({ groupId }) {
           <div className="mt-2">
             {/* Display channels here */}
             {Object.entries(channels).map(([key, channel]) => (
-              <div key={key}
-                onClick={() => navigate(`/groups/${groupId}/channels/${key}`)} // comment out if you decide to have additional path to the new channel.
-                className="p-4 max-w-md bg-white rounded-lg border border-gray-200 shadow-sm hover:shadow-lg transition-shadow duration-200 ease-in-out mb-3 cursor-pointer">
+              <div key={key} onClick={() => navigate(`/channels/${key}`)} className="p-4 max-w-md bg-white rounded-lg border border-gray-200 shadow-sm hover:shadow-lg transition-shadow duration-200 ease-in-out mb-3 cursor-pointer">
                 <h5 className="mb-2 text-xl font-semibold tracking-tight text-blue-600">{channel.name}</h5>
-                <p className="font-normal text-gray-600">{channels.isPublic ? 'Public' : 'Private'}</p>
                 {
-                  channel?.creatorId === userData?.uid && (
+                  channel?.creatorId === currentUser?.uid && (
                     <div className="text-right">
-                      <button onClick={() => handleDeleteChannel(key)} className="text-sm text-white bg-blue-500 hover:bg-blue-600 rounded-lg px-3 py-1 transition-colors duration-150 ease-in-out">
+                      <button onClick={(e) => {
+                        e.stopPropagation();
+                        handleDeleteChannel(key)
+                      }}
+                        className="text-sm text-white bg-blue-500 hover:bg-blue-600 rounded-lg px-3 py-1 transition-colors duration-150 ease-in-out">
                         Delete the Channel
                       </button>
                     </div>
