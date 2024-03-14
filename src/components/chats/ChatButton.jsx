@@ -23,5 +23,6 @@ const { userData } = useContext(AppContext);
             {/* <div className="text-gray-500 text-11 dark:text-gray-300">05 min</div> */}
 
         </div>
+        </div>
     )
 }
