@@ -22,7 +22,6 @@ import { Groups } from "./components/Groups";
 import { Chats } from "./components/chats/Chats";
 import { Chat } from "./components/chats/Chat";
 import { Channels } from "./components/Channels";
-import { Channels2 } from "./components/Channels2";
 import { SingleCannel } from "./components/SingleCannel";
 // import { DyteMeeting } from "./components/DyteMeeting";
 
@@ -68,7 +67,7 @@ function App() {
             <Route path="/recover" element={<RecoverPassword />} />
             <Route path="/chats/:id" element={<Layout selectedAppBarButton={'chats'} sideBarContent={<Chats />} mainContent={<Chat />} />} />
             <Route path="/groups" element={<Layout selectedAppBarButton={'groups'} sideBarContent={<Groups />} />} />
-            <Route path="/groups/:idGroup" element={<Layout selectedAppBarButton={'groups'} sideBarContent={<Channels2 />} />} />
+            <Route path="/groups/:idGroup" element={<Layout selectedAppBarButton={'groups'} sideBarContent={<Channels />} />} />
             
             {/* <Route path="/channels/:idCannel" element={<Layout selectedAppBarButton={'groups'} sideBarContent={<Channels />} mainContent={<SingleCannel />} />} /> */}
             <Route path="/groups/:idGroup/channels/:idCannel" element={<Layout selectedAppBarButton={'groups'} sideBarContent={<Channels />} mainContent={<SingleCannel />} />} />
