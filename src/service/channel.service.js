@@ -57,13 +57,14 @@ export const deleteGroup = async (groupId) => {
 
 
 export const addChannel = (groupId, creatorName, members, channelName = '#General') => {
+  const readableDate = format(new Date(), 'yyyy-MM-dd HH:mm:ss');
 
   return push(ref(db, `groups/${groupId}/channels`), {})
     .then(response => {
       set(ref(db, `channels/${response.key}`),
         {
           name: `${channelName}`,
-          createdOn: Date.now(),
+          createdOnReadable: readableDate,
           members: {
             ...members,
           },
