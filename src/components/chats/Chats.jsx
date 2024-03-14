@@ -208,17 +208,17 @@ const fetchFriends = async () => {
                 <div className="px-6 pt-6">
                     <h4 className="mb-0 text-gray-700 dark:text-gray-50">Chats</h4>
 
-                    <div className="py-1 mt-5 mb-5 rounded group-data-[theme-color=violet]:bg-slate-100 group-data-[theme-color=green]:bg-green-50 group-data-[theme-color=red]:bg-red-50 group-data-[theme-color=violet]:dark:bg-zinc-600 group-data-[theme-color=green]:dark:bg-zinc-600 group-data-[theme-color=red]:dark:bg-zinc-600">
+                    {/* <div className="py-1 mt-5 mb-5 rounded group-data-[theme-color=violet]:bg-slate-100 group-data-[theme-color=green]:bg-green-50 group-data-[theme-color=red]:bg-red-50 group-data-[theme-color=violet]:dark:bg-zinc-600 group-data-[theme-color=green]:dark:bg-zinc-600 group-data-[theme-color=red]:dark:bg-zinc-600">
                         <span className="group-data-[theme-color=violet]:bg-slate-100 group-data-[theme-color=green]:bg-green-50 group-data-[theme-color=red]:bg-red-50 pe-1 ps-3 group-data-[theme-color=violet]:dark:bg-zinc-600 group-data-[theme-color=green]:dark:bg-zinc-600 group-data-[theme-color=red]:dark:bg-zinc-600" id="basic-addon1">
                             <i className="text-lg text-gray-400 ri-search-line search-icon dark:text-gray-200"></i>
                         </span>
                         <input type="text" value={search} onChange={handleSearchChange} className="border-0 group-data-[theme-color=violet]:bg-slate-100 group-data-[theme-color=green]:bg-green-50 group-data-[theme-color=red]:bg-red-50 placeholder:text-[14px] focus:ring-offset-0 focus:outline-none focus:ring-0 group-data-[theme-color=violet]:dark:bg-zinc-600 group-data-[theme-color=green]:dark:bg-zinc-600 group-data-[theme-color=red]:dark:bg-zinc-600 placeholder:text-gray-400" placeholder="Search users" aria-label="Search users" aria-describedby="basic-addon1" />
-                    </div>
+                    </div> */}
                 </div>
 
                 <div className="overflow-scroll">
 
-                    <h5 className="px-6 mb-4 text-16 dark:text-gray-50">Recent</h5>
+                    {/* <h5 className="px-6 mb-4 text-16 dark:text-gray-50">Recent</h5> */}
 
                     <div className="h-[610px] px-2" data-simplebar>
                         <ul className="chat-user-list">
