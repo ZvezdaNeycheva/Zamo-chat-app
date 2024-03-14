@@ -7,6 +7,7 @@ import { AppContext } from "../AppContext";
 export function Channels() {
   const [channels, setChannels] = useState({});
   let { idGroup } = useParams();
+  const groupId  = idGroup;
   let { idChannel } = useParams();
   const navigate = useNavigate();
   const { user, userData } = useContext(AppContext);
