@@ -12,30 +12,12 @@ export function Chats() {
     const { user, userData } = useContext(AppContext);
     const [users, setUsers] = useState([]);
     const [search, setSearch] = useState("");
-    const [newMessage, setNewMessage] = useState("");
     const [selectedFriend, setSelectedFriend] = useState();
     const navigate = useNavigate();
     const { id } = useParams();
 
-    // const [friends, setFriends] = useState([]);
 
-//     const getAllFriends = async () => {
-//         const friendsRef = ref(db, `users/${user?.uid}/friendsList`);
-//         const snapshot = await get(friendsRef);
-// console.log("Snapshot:", snapshot.val());
-//         if (snapshot.exists()) {
-//             const friends = Object.keys(snapshot.val()).map((key) => ({
-//                 id: key,
-//                 ...snapshot.val()[key],
-//             }));
-//             return friends;
-//         }
-//         return [];
-//     };
-//     useEffect(() => {
-//         getAllFriends().then((f) => setFriends(f));
-//     }, []);
-
+// stolen from Andy's friendsList:
 const [friendsList, setFriendsList] = useState([]);
 
 const filteredFriends = friendsList.filter(friend => friend);
