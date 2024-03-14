@@ -153,44 +153,44 @@ export function Profile() {
         {/* End profile Header */}
 
         <div className="p-6 text-center border-b border-gray-100 dark:border-zinc-600">
-        {/* Profile picture */}
-        <div className="mb-4">
-          <input type="file" onChange={handleChange} id="file" style={{ display: "none" }} />
-          <label htmlFor="file">
-            <button disabled={loading} className="leading-10 ri-pencil-fill text-16 w-10 h-10 bg-gray-100 rounded-full dark:bg-zinc-800 dark:text-gray-100"></button>
-          </label>
-          <img src={userData?.profilePhotoURL || "https://thinksport.com.au/wp-content/uploads/2020/01/avatar-.jpg"} className="w-24 h-24 p-1 mx-auto border border-gray-100 rounded-full dark:border-zinc-800" alt="Avatar" />
-        </div>
+          {/* Profile picture */}
+          <div className="mb-4">
+            <input type="file" onChange={handleChange} id="file" style={{ display: "none" }} />
+            <label htmlFor="file">
+              <button disabled={loading} className="leading-10 ri-pencil-fill text-16 w-10 h-10 bg-gray-100 rounded-full dark:bg-zinc-800 dark:text-gray-100"></button>
+            </label>
+            <img src={userData?.profilePhotoURL || "https://thinksport.com.au/wp-content/uploads/2020/01/avatar-.jpg"} className="w-24 h-24 p-1 mx-auto border border-gray-100 rounded-full dark:border-zinc-800" alt="Avatar" />
+          </div>
 
-        <h5 className="mb-1 text-16 dark:text-gray-50">{userData ? userData.username : "N/A"}</h5>
-        {/* End profile picture */}
+          <h5 className="mb-1 text-16 dark:text-gray-50">{userData ? userData.username : "N/A"}</h5>
+          {/* End profile picture */}
 
-        {/* Profile Status */}
-        {/* Dropdown menu for status*/}
-        <div className="relative mb-1 dropdown">
-          <button onClick={toggleStatusDropdown} className="pb-1 d-block dark:text-gray-300" data-bs-toggle="dropdown" id="dropdownMenuButtonX">
-          <a className={`pb-1 text-${localStatus === 'Available' ? 'text-green-500 ltr:ml-1 rtl:mr-1 ri-record-circle-fill green-500' : 'text-red-500 ltr:ml-1 rtl:mr-1 ri-record-circle-fill red-500'} dropdown-toggle d-block dark:text-gray-300`} href="#" role="button" data-bs-toggle="dropdown" id="dropdownMenuButtonX">
-          &nbsp;{localStatus} <i className={`mdi mdi-chevron-down ${openStatusDropdown ? "group-[.active]:rotate-180" : ""}`}></i>
-          </a>
-          </button>
-          <div className={`${openStatusDropdown ? "" : "hidden"}`}>
-            <ul className="absolute z-50 py-2 mt-2 text-left list-none bg-white border rounded shadow-lg left-20 w-36 top-6 dark:bg-zinc-700 bg-clip-padding border-gray-50 dark:border-zinc-500" aria-labelledby="dropdownMenuButtonX">
-              <li>
-                <button onClick={() => handleStatusChange('Available')} className="block w-full px-4 py-2 text-sm font-normal text-black-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/50 dark:text-gray-100 dark:hover:bg-zinc-600/80 ltr:text-left rtl:text-right">
-                  <i className="text-green-500 ltr:ml-1 rtl:mr-1 ri-record-circle-fill text-10" /> &nbsp;
-                  Available
-                </button>
-              </li>
-              <li>
-                <button onClick={() => handleStatusChange('Busy')} className="block w-full px-4 py-2 text-sm font-normal text-black-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/50 dark:text-gray-100 dark:hover:bg-zinc-600/80 ltr:text-left rtl:text-right">
-                  <i className="text-red-500 ltr:ml-1 rtl:mr-1 ri-record-circle-fill text-10" /> &nbsp;
-                  Busy
-                </button>
-              </li>
-            </ul>
+          {/* Profile Status */}
+          {/* Dropdown menu for status*/}
+          <div className="relative mb-1 dropdown">
+            <button onClick={toggleStatusDropdown} className="pb-1 d-block dark:text-gray-300" data-bs-toggle="dropdown" id="dropdownMenuButtonX">
+              <a className={`pb-1 text-${localStatus === 'Available' ? 'text-green-500 ltr:ml-1 rtl:mr-1 ri-record-circle-fill green-500' : 'text-red-500 ltr:ml-1 rtl:mr-1 ri-record-circle-fill red-500'} dropdown-toggle d-block dark:text-gray-300`} href="#" role="button" data-bs-toggle="dropdown" id="dropdownMenuButtonX">
+                &nbsp;{localStatus} <i className={`mdi mdi-chevron-down ${openStatusDropdown ? "group-[.active]:rotate-180" : ""}`}></i>
+              </a>
+            </button>
+            <div className={`${openStatusDropdown ? "" : "hidden"}`}>
+              <ul className="absolute z-50 py-2 mt-2 text-left list-none bg-white border rounded shadow-lg left-20 w-36 top-6 dark:bg-zinc-700 bg-clip-padding border-gray-50 dark:border-zinc-500" aria-labelledby="dropdownMenuButtonX">
+                <li>
+                  <button onClick={() => handleStatusChange('Available')} className="block w-full px-4 py-2 text-sm font-normal text-black-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/50 dark:text-gray-100 dark:hover:bg-zinc-600/80 ltr:text-left rtl:text-right">
+                    <i className="text-green-500 ltr:ml-1 rtl:mr-1 ri-record-circle-fill text-10" /> &nbsp;
+                    Available
+                  </button>
+                </li>
+                <li>
+                  <button onClick={() => handleStatusChange('Busy')} className="block w-full px-4 py-2 text-sm font-normal text-black-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/50 dark:text-gray-100 dark:hover:bg-zinc-600/80 ltr:text-left rtl:text-right">
+                    <i className="text-red-500 ltr:ml-1 rtl:mr-1 ri-record-circle-fill text-10" /> &nbsp;
+                    Busy
+                  </button>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
-      </div>
         {/* End Profile Status */}
 
         {/* Start user-profile-desc */}
@@ -205,10 +205,10 @@ export function Profile() {
             {/* About Drop Down menu*/}
             <div className="text-gray-700 accordion-item">
               <h2>
-                <button  onClick={toggleAboutDropdown} type="button" className="flex items-center justify-between w-full px-3 py-2 font-medium text-left border border-gray-100 rounded-t accordion-header group active dark:border-b-zinc-600 dark:bg-zinc-600 dark:border-zinc-600">
+                <button onClick={toggleAboutDropdown} type="button" className="flex items-center justify-between w-full px-3 py-2 font-medium text-left border border-gray-100 rounded-t accordion-header group active dark:border-b-zinc-600 dark:bg-zinc-600 dark:border-zinc-600">
                   <span className="m-0 text-[14px] dark:text-gray-50 font-semibold ltr:block rtl:hidden">
                     <i className="mr-2 align-middle ri-user-2-line d-inline-block" />
-                     About
+                    About
                   </span>
                   <span className="m-0 text-[14px] dark:text-gray-50 font-semibold ltr:hidden rtl:block">
                     About
@@ -223,37 +223,37 @@ export function Profile() {
                 <div className="p-5">
                   <div>
                     <div>
-                    <p className="mb-1 text-gray-500 dark:text-gray-300">Name</p>
-              {editUsername ? (
-                <>
-                  <input value={editedUsername} onChange={(e) => setEditedUsername(e.target.value)} type="text" className="w-full p-2 mb-2 border rounded border-gray-100 dark:border-zinc-600"/>
-                  <button onClick={handleUsernameUpdate} className="py-1.5 btn bg-slate-100 border-transparent rounded hover:bg-gray-50 transition-all ease-in-out dark:bg-zinc-600 dark:text-gray-50 dark:hover:bg-zinc-500/50">
-                    Save
-                  </button>
-                  <button onClick={() => { setEditUsername(false); setEditedUsername(userData ? userData.username : "")}} className="ml-2 py-1.5 btn bg-slate-100 border-transparent rounded hover:bg-gray-50 transition-all ease-in-out dark:bg-zinc-600 dark:text-gray-50 dark:hover:bg-zinc-500/50" >
-                    Cancel
-                  </button>
-                </>
-              ) : (
-                <div className="flex items-center">
-                  <h5 className="text-sm dark:text-gray-50">{userData ? userData.username : "N/A"}</h5>
-                  <button onClick={() => setEditUsername(true)} className="ml-2 text-gray-500 hover:text-gray-700 dark:text-gray-300 dark:hover:text-gray-100" >
-                    Edit
-                  </button>
-                </div>
-              )}
+                      <p className="mb-1 text-gray-500 dark:text-gray-300">Name</p>
+                      {editUsername ? (
+                        <>
+                          <input value={editedUsername} onChange={(e) => setEditedUsername(e.target.value)} type="text" className="w-full p-2 mb-2 border rounded border-gray-100 dark:border-zinc-600" />
+                          <button onClick={handleUsernameUpdate} className="py-1.5 btn bg-slate-100 border-transparent rounded hover:bg-gray-50 transition-all ease-in-out dark:bg-zinc-600 dark:text-gray-50 dark:hover:bg-zinc-500/50">
+                            Save
+                          </button>
+                          <button onClick={() => { setEditUsername(false); setEditedUsername(userData ? userData.username : "") }} className="ml-2 py-1.5 btn bg-slate-100 border-transparent rounded hover:bg-gray-50 transition-all ease-in-out dark:bg-zinc-600 dark:text-gray-50 dark:hover:bg-zinc-500/50" >
+                            Cancel
+                          </button>
+                        </>
+                      ) : (
+                        <div className="flex items-center">
+                          <h5 className="text-sm dark:text-gray-50">{userData ? userData.username : "N/A"}</h5>
+                          <button onClick={() => setEditUsername(true)} className="ml-2 text-gray-500 hover:text-gray-700 dark:text-gray-300 dark:hover:text-gray-100" >
+                            Edit
+                          </button>
+                        </div>
+                      )}
                     </div>
 
-                   {/* Email */}
-                   <div className="mt-5">
+                    {/* Email */}
+                    <div className="mt-5">
                       <p className="mb-1 text-gray-500 dark:text-gray-300">Email</p>
                       {editEmail ? (
                         <>
-                          <input value={newEmail} onChange={(e) => setNewEmail(e.target.value)} type="text" className="w-full p-2 mb-2 border rounded border-gray-100 dark:border-zinc-600"/>
+                          <input value={newEmail} onChange={(e) => setNewEmail(e.target.value)} type="text" className="w-full p-2 mb-2 border rounded border-gray-100 dark:border-zinc-600" />
                           <button onClick={handleEmailUpdate} className="py-1.5 btn bg-slate-100 border-transparent rounded hover:bg-gray-50 transition-all ease-in-out dark:bg-zinc-600 dark:text-gray-50 dark:hover:bg-zinc-500/50" >
                             Save
                           </button>
-                          <button onClick={() => { setEditEmail(false); setNewEmail(userData ? userData.email : "")}} className="ml-2 py-1.5 btn bg-slate-100 border-transparent rounded hover:bg-gray-50 transition-all ease-in-out dark:bg-zinc-600 dark:text-gray-50 dark:hover:bg-zinc-500/50" >
+                          <button onClick={() => { setEditEmail(false); setNewEmail(userData ? userData.email : "") }} className="ml-2 py-1.5 btn bg-slate-100 border-transparent rounded hover:bg-gray-50 transition-all ease-in-out dark:bg-zinc-600 dark:text-gray-50 dark:hover:bg-zinc-500/50" >
                             Cancel
                           </button>
                         </>
@@ -267,8 +267,8 @@ export function Profile() {
                       )}
                     </div>
 
-                   {/* Location */}
-                   <div className="mt-5">
+                    {/* Location */}
+                    <div className="mt-5">
                       <p className="mb-1 text-gray-500 dark:text-gray-300"> Location </p>
                       {editLocation ? (
                         <>
@@ -276,7 +276,7 @@ export function Profile() {
                           <button onClick={handleLocationUpdate} className="py-1.5 btn bg-slate-100 border-transparent rounded hover:bg-gray-50 transition-all ease-in-out dark:bg-zinc-600 dark:text-gray-50 dark:hover:bg-zinc-500/50" >
                             Save
                           </button>
-                          <button onClick={() => { setEditLocation(false); setNewLocation(userData ? userData.location : "")}} className="ml-2 py-1.5 btn bg-slate-100 border-transparent rounded hover:bg-gray-50 transition-all ease-in-out dark:bg-zinc-600 dark:text-gray-50 dark:hover:bg-zinc-500/50">
+                          <button onClick={() => { setEditLocation(false); setNewLocation(userData ? userData.location : "") }} className="ml-2 py-1.5 btn bg-slate-100 border-transparent rounded hover:bg-gray-50 transition-all ease-in-out dark:bg-zinc-600 dark:text-gray-50 dark:hover:bg-zinc-500/50">
                             Cancel
                           </button>
                         </>
@@ -329,14 +329,14 @@ export function Profile() {
                       <div className="flex-grow">
                         <div className="text-start">
 
-                        {attachedFiles.map((fileURL, index) => (
-                          <div key={index} className="p-2 mb-2 border rounded border-gray-100/80 dark:bg-zinc-800 dark:border-transparent">
-                            <div className="flex items-center">
-                              {/* Display file URL */}
-                              <p className="mb-0 text-gray-500 text-13 dark:text-gray-300">{fileURL}</p>
+                          {attachedFiles.map((fileURL, index) => (
+                            <div key={index} className="p-2 mb-2 border rounded border-gray-100/80 dark:bg-zinc-800 dark:border-transparent">
+                              <div className="flex items-center">
+                                {/* Display file URL */}
+                                <p className="mb-0 text-gray-500 text-13 dark:text-gray-300">{fileURL}</p>
+                              </div>
                             </div>
-                          </div>
-                        ))}
+                          ))}
 
                         </div>
                       </div>

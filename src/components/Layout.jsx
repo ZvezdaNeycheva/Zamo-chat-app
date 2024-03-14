@@ -1,7 +1,7 @@
 import { Meta } from "./Meta";
 import { AppBar } from "./AppBar";
 
-export function Layout({selectedAppBarButton, sideBarContent, mainContent}) {
+export function Layout({ selectedAppBarButton, sideBarContent, mainContent }) {
     return (
         <>
             <Meta title={'Chat App'}></Meta>

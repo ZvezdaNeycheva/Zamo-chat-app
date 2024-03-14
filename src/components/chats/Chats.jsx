@@ -37,21 +37,21 @@ export function Chats() {
         try {
 
 
-        const room = await getRoom(participants);
+            const room = await getRoom(participants);
 
-        if (!room) {
-            const newRoom = await createRoom(participants);
+            if (!room) {
+                const newRoom = await createRoom(participants);
 
-            if (newRoom.id) {
-                navigate(`/chats/${newRoom.id}`);
+                if (newRoom.id) {
+                    navigate(`/chats/${newRoom.id}`);
+                }
+            } else if (room.id) {
+                navigate(`/chats/${room.id}`);
             }
-        } else if (room.id) {
-            navigate(`/chats/${room.id}`);
+            setSelectedFriend(friend);
+        } catch (error) {
+            console.error("Error selecting friend:", error);
         }
-        setSelectedFriend(friend);
-    } catch (error) {
-        console.error("Error selecting friend:", error);
-    }
     }
     useEffect(() => {
         console.log("Current Room in useEffect:", id);

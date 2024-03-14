@@ -132,7 +132,7 @@ export function Channels({ groupId }) {
             {/* Display channels here */}
             {Object.entries(channels).map(([key, channel]) => (
               <div key={key}
-              // onClick={() => navigate(`/groups/${groupId}/channels/${key}`)} // comment out if you decide to have additional path to the new channel.
+                // onClick={() => navigate(`/groups/${groupId}/channels/${key}`)} // comment out if you decide to have additional path to the new channel.
                 className="p-4 max-w-md bg-white rounded-lg border border-gray-200 shadow-sm hover:shadow-lg transition-shadow duration-200 ease-in-out mb-3 cursor-pointer">
                 <h5 className="mb-2 text-xl font-semibold tracking-tight text-blue-600">{channel.name}</h5>
                 <p className="font-normal text-gray-600">{channels.isPublic ? 'Public' : 'Private'}</p>
