@@ -1,7 +1,7 @@
 import { NavLink, useNavigate } from "react-router-dom";
 import { logoutUser } from "../service/auth.service";
 import { AppContext } from "../AppContext";
-import { useContext, useState } from "react";
+import React, { useContext, useState } from "react";
 
 export function AppBar({ selected }) {
   const { user, userData, setContext } = useContext(AppContext);
@@ -10,11 +10,12 @@ export function AppBar({ selected }) {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [selectedTab, setSelectedTab] = useState('chats');
   const navigate = useNavigate();
-  // const toggleDarkMode = () => {
-  //     setIsDarkMode(!isDarkMode);
-  //   };
 
-  // const darkModeClass = isDarkMode ? 'dark-mode' : '';
+const toggleDarkMode = () => {
+  setIsDarkMode(!isDarkMode);
+};
+
+const darkModeClass = isDarkMode ? "dark" : "";
 
   function toggleSidebarDropdown() {
     setOpenSidebar((prevOpen) => !prevOpen);
