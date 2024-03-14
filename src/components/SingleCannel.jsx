@@ -74,7 +74,7 @@ export function SingleCannel() {
         message.id = messageId;
 
         setNewMessage("");
-        await set(ref(db, `channels/${id}/messages/${messageId}`), message);
+        await set(ref(db, `channels/${idCannel}/messages/${messageId}`), message);
         return {
             id: messageId,
             ...newMessageRef
