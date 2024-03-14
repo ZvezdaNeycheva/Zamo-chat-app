@@ -2,20 +2,21 @@ import { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { fetchChannelsIdsByGroup, fetchChannelsAll, addChannel, deleteChannel } from "../service/channel.service";
 import { AppContext } from "../AppContext";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 
 export function Channels() {
   const [channels, setChannels] = useState({});
   let { idGroup } = useParams();
-  const groupId  = idGroup;
+  const groupId = idGroup;
   let { idChannel } = useParams();
   const navigate = useNavigate();
   const { user, userData } = useContext(AppContext);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [channelName, setChannelName] = useState('');
   const [currentUser, setCurrentUser] = useState(null);
-  
-console.log({channels});
+
+  // console.log({channels});
 
   useEffect(() => {
     const getChannels = async () => {
@@ -38,6 +39,18 @@ console.log({channels});
     setIsModalVisible(!isModalVisible);
   };
 
+  useEffect(() => {
+    const auth = getAuth();
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setCurrentUser(user); // Set the entire user object
+      } else {
+        // No user is signed in.
+        setCurrentUser(null);
+      }
+    });
+  }, []);
+
   const handleCreateChannel = async (event) => {
     event.preventDefault(); // Prevent the form from submitting in the traditional way
     if (!userData) {
@@ -46,7 +59,11 @@ console.log({channels});
     }
 
     try {
-      await addChannel(groupId, userData.username, { "creator": userData.uid }, channelName);
+      const creatorId = currentUser?.uid;
+      const creatorName = userData.username;
+      console.log("Creating channel with creator ID:", currentUser?.uid);
+      console.log("Creating channel with creator name:", userData.username);
+      await addChannel(groupId, creatorName, { "creator": userData.uid }, channelName, creatorId);
 
       // Now, re-fetch the channels to update the UI
       fetchAndUpdateChannels();
@@ -141,7 +158,7 @@ console.log({channels});
             {/* Display channels here */}
             {Object.entries(channels).map(([key, channel]) => (
 
-              <div key={key} idChannel={key} onClick={ () => navigate(`/groups/${idGroup}/channels/${key}`)} className="p-4 max-w-md bg-white rounded-lg border border-gray-200 shadow-sm hover:shadow-lg transition-shadow duration-200 ease-in-out mb-3 cursor-pointer">
+              <div key={key} idChannel={key} onClick={() => navigate(`/groups/${idGroup}/channels/${key}`)} className="p-4 max-w-md bg-white rounded-lg border border-gray-200 shadow-sm hover:shadow-lg transition-shadow duration-200 ease-in-out mb-3 cursor-pointer">
 
                 <h5 className="mb-2 text-xl font-semibold tracking-tight text-blue-600">{channel.name}</h5>
                 {

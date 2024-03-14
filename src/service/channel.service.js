@@ -56,7 +56,7 @@ export const deleteGroup = async (groupId) => {
 };
 
 
-export const addChannel = (groupId, creatorName, members, channelName = '#General') => {
+export const addChannel = (groupId, creatorName, members, channelName = '#General', creatorId) => {
   const readableDate = format(new Date(), 'yyyy-MM-dd HH:mm:ss');
 
   return push(ref(db, `groups/${groupId}/channels`), {})
@@ -69,6 +69,8 @@ export const addChannel = (groupId, creatorName, members, channelName = '#Genera
             ...members,
           },
           id: response.key,
+          creatorName,
+          creatorId,
         });
       return update(ref(db), {
         [`groups/${groupId}/channels/${response.key}`]: true,
