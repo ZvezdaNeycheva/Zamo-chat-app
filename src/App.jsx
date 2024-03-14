@@ -21,6 +21,8 @@ import { Contacts } from "./components/Contacts";
 import { Groups } from "./components/Groups";
 import { Chats } from "./components/chats/Chats";
 import { Chat } from "./components/chats/Chat";
+import { Channels } from "./components/Channels";
+import { SingleCannel } from "./components/SingleCannel";
 // import { DyteMeeting } from "./components/DyteMeeting";
 
 
@@ -59,7 +61,6 @@ function App() {
         <Router>
           <Routes>
             <Route path="*" element={<Layout selectedAppBarButton={'chats'} sideBarContent={<Chats />} />} />
-            {/* <Route path="/layout/*" element={<Layout />} /> */}
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/lock-screen" element={<Authenticated> <LockScreen /> </Authenticated>} />
@@ -68,7 +69,8 @@ function App() {
             <Route path="/chats/:id" element={<Layout selectedAppBarButton={'chats'} sideBarContent={<Chats />} mainContent={<Chat />} />} />
             <Route path="/groups" element={<Layout selectedAppBarButton={'groups'} sideBarContent={<Groups />} />} />
             <Route path="/groups/:idGroup" element={<Layout selectedAppBarButton={'groups'} sideBarContent={<Groups />} />} />
-            <Route path="/groups/:idGroup/channels/:idCannel" element={<Layout selectedAppBarButton={'groups'} sideBarContent={<Groups />} />} />
+            {/* <Route path="/groups/:idGroup/channels/:idCannel" element={<Layout selectedAppBarButton={'groups'} sideBarContent={<Groups />} />} /> */}
+            <Route path="/channels/:idCannel" element={<Layout selectedAppBarButton={'groups'} sideBarContent={<Channels />} mainContent={<SingleCannel />} />} />
 
             <Route path="/contacts" element={<Layout selectedAppBarButton={'contacts'} sideBarContent={<Contacts />} />} />
             <Route path="/settings" element={<Layout selectedAppBarButton={'settings'} mainContent={<Settings />} />} />
@@ -79,18 +81,7 @@ function App() {
             <Route path="/user-profile-details" element={<UserProfileDetails />} />
             {/* <Route path="/meeting" element={<DyteMeeting/>} /> */}
 
-            {/* The routing can be adapted for the master-slave view in a similar way: */}
-            {/* <Route path="/profile" element={<Index selectedTab="profile" />} /> */}
-            {/* <Route path="/groups" element={<Groups />} /> */}
-            {/* <Route path="/contacts" element={<Contacts />} /> */}
-            {/* <Route path="/settings" element={<Settings />} /> */}
-
-            {/* <Route path="/profile" element={<ProfileView />} /> */}
-            {/* <Route path="/groups" element={<GroupsView />} /> */}
-            {/* <Route path="/contacts" element={<ContactsView />} /> */}
-            {/* <Route path="/settings" element={<SettingsView />} /> */}
           </Routes>
-          <div className="App">{/* <Index /> */}</div>
         </Router>
       </RecoilRoot>
       {/* </RoomContext.Provider> */}
