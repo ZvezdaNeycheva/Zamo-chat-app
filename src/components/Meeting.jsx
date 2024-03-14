@@ -31,13 +31,13 @@ const MyCalendar = (props) => (
 
 export function Meeting() {
     const [events, setEvents] = useState([]);
-    
+
 
     return (
         <>
             <h1>Meeting</h1>
             <div style={{ height: '95vh' }}>
-            <Calendar events={myEventsList} />
+                <Calendar events={myEventsList} />
             </div>
         </>
     );

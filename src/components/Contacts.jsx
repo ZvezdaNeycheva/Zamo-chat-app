@@ -84,46 +84,46 @@ export function Contacts() {
     try {
       const usersSnapshot = await get(query(ref(db, 'users')));
       const users = usersSnapshot.val();
-    
+
       const userByEmail = Object.values(users).find(u => u.email === emailInputValue);
-    
+
       if (userByEmail) {
         const recipientUid = userByEmail.uid;
         const senderUid = user.uid;
-    
+
         if (friendsList.some(friend => friend.uid === recipientUid)) {
           setErrorMessage('User is already a friend.');
           return;
         }
-  
+
         const currentUserDataSnapshot = await getUserByUid(user.uid);
         const currentUserData = currentUserDataSnapshot.val();
-  
+
         if (currentUserData.sentRequests && currentUserData.sentRequests.includes(recipientUid)) {
           setErrorMessage('You already sent an invitation to this user.');
           return;
         }
-    
+
         if (currentUserData.pendingRequests && currentUserData.pendingRequests.includes(recipientUid)) {
           setErrorMessage('You already have a pending invitation to this user.');
           return;
         }
-    
+
         if (userByEmail.sentRequests && userByEmail.sentRequests.includes(senderUid)) {
           setErrorMessage('This user has already sent you an invitation.');
           return;
         }
-    
+
         const updatedSentRequests = [...(currentUserData.sentRequests ?? []), recipientUid];
         await updateUserData(senderUid, { sentRequests: updatedSentRequests });
-    
+
         const updatedPendingRequests = [...(userByEmail.pendingRequests ?? []), senderUid];
         await updateUserData(recipientUid, { pendingRequests: updatedPendingRequests });
-    
+
         console.log('Friend request sent successfully.');
-        
+
         setFriendRequests(prev => [...prev, { uid: recipientUid, username: userByEmail.username, type: 'sent' }]);
-    
+
         setSubscriptionMessage(`Invitation sent to ${emailInputValue}`);
         setIsContactModalVisible(false);
         setTimeout(clearSubscriptionMessage, 2000);
@@ -169,7 +169,7 @@ export function Contacts() {
     try {
       await removeFriend(user.uid, friendUid);
       console.log('Friend removed successfully from Firebase.');
-  
+
       setFriendsList(prevFriendsList => prevFriendsList.filter(friend => friend.uid !== friendUid));
     } catch (error) {
       console.error('Error removing friend:', error);
@@ -219,11 +219,11 @@ export function Contacts() {
                           <div className="p-4">
                             <form>
                               <div className="mb-5 ltr:text-left rtl:text-right">
-                              {errorMessage && (
-                               <div className="bg-red-200 p-4 mb-4">
-                                 {errorMessage}
-                               </div>
-                              )}
+                                {errorMessage && (
+                                  <div className="bg-red-200 p-4 mb-4">
+                                    {errorMessage}
+                                  </div>
+                                )}
                                 <label className="block mb-2 dark:text-gray-300"> Email </label>
                                 <input onChange={(e) => setEmailInputValue(e.target.value)} value={emailInputValue} type="text" className="py-1.5 bg-transparent border-gray-100 rounded placeholder:text-13 w-full focus:border-violet-500 focus:ring-0 focus:ring-offset-0 dark:border-zinc-500 dark:placeholder:text-gray-300" id="addgroupname-input1" placeholder="Enter Email" />
                               </div>
@@ -247,12 +247,12 @@ export function Contacts() {
               </div>
 
               {/* Search bar */}
-            <div className="py-1 mt-5 mb-5 group-data-[theme-color=violet]:bg-slate-100 group-data-[theme-color=green]:bg-green-50 group-data-[theme-color=red]:bg-red-50 rounded group-data-[theme-color=violet]:dark:bg-zinc-600 group-data-[theme-color=green]:dark:bg-zinc-600 group-data-[theme-color=red]:dark:bg-zinc-600">
-              <span className="group-data-[theme-color=violet]:bg-slate-100 group-data-[theme-color=green]:bg-green-50 group-data-[theme-color=red]:bg-red-50 pe-1 ps-3 group-data-[theme-color=violet]:dark:bg-zinc-600 group-data-[theme-color=green]:dark:bg-zinc-600 group-data-[theme-color=red]:dark:bg-zinc-600" id="basic-addon">
-                <i className="text-lg text-gray-700 ri-search-line search-icon dark:text-gray-200" />
-              </span>
-              <input onChange={(e) => setSearchInputValue(e.target.value)} value={searchInputValue} type="text" placeholder="Search users.." aria-describedby="basic-addon" className="border-0 group-data-[theme-color=violet]:bg-slate-100 group-data-[theme-color=green]:bg-green-50 group-data-[theme-color=red]:bg-red-50 group-data-[theme-color=violet]:dark:bg-zinc-600 group-data-[theme-color=green]:dark:bg-zinc-600 group-data-[theme-color=red]:dark:bg-zinc-600 placeholder:text-[14px] focus:ring-offset-0 focus:outline-none focus:ring-0 placeholder:dark:text-gray-300" />
-            </div>
+              <div className="py-1 mt-5 mb-5 group-data-[theme-color=violet]:bg-slate-100 group-data-[theme-color=green]:bg-green-50 group-data-[theme-color=red]:bg-red-50 rounded group-data-[theme-color=violet]:dark:bg-zinc-600 group-data-[theme-color=green]:dark:bg-zinc-600 group-data-[theme-color=red]:dark:bg-zinc-600">
+                <span className="group-data-[theme-color=violet]:bg-slate-100 group-data-[theme-color=green]:bg-green-50 group-data-[theme-color=red]:bg-red-50 pe-1 ps-3 group-data-[theme-color=violet]:dark:bg-zinc-600 group-data-[theme-color=green]:dark:bg-zinc-600 group-data-[theme-color=red]:dark:bg-zinc-600" id="basic-addon">
+                  <i className="text-lg text-gray-700 ri-search-line search-icon dark:text-gray-200" />
+                </span>
+                <input onChange={(e) => setSearchInputValue(e.target.value)} value={searchInputValue} type="text" placeholder="Search users.." aria-describedby="basic-addon" className="border-0 group-data-[theme-color=violet]:bg-slate-100 group-data-[theme-color=green]:bg-green-50 group-data-[theme-color=red]:bg-red-50 group-data-[theme-color=violet]:dark:bg-zinc-600 group-data-[theme-color=green]:dark:bg-zinc-600 group-data-[theme-color=red]:dark:bg-zinc-600 placeholder:text-[14px] focus:ring-offset-0 focus:outline-none focus:ring-0 placeholder:dark:text-gray-300" />
+              </div>
 
               {/* Friend requests */}
               <h5 className="px-6 mt-8 mb-4 text-16 dark:text-gray-50">Friend requests</h5>
@@ -307,46 +307,46 @@ export function Contacts() {
               {/* Friends list */}
               <h5 className="px-6 mt-8 mb-4 text-16 dark:text-gray-50">Friends</h5>
               <ul>
-              {filteredFriends && filteredFriends.length > 0 ? (
-  filteredFriends.map((friend, index) => (
-    <li key={`${friend.uid}-${index}`} className="px-5 py-[15px] group-data-[theme-color=violet]:hover:bg-slate-100 group-data-[theme-color=green]:hover:bg-green-50/50 group-data-[theme-color=red]:hover:bg-red-50/50 transition-all ease-in-out border-b border-white/20 dark:border-zinc-700 group-data-[theme-color=violet]:dark:hover:bg-zinc-600 group-data-[theme-color=green]:dark:hover:bg-zinc-600 group-data-[theme-color=red]:dark:hover:bg-zinc-600 dark:hover:border-zinc-700">
-      <ul className="list-unstyled contact-list">
-        <li className="px-5 py-[15px]">
-          <div className="flex items-center">
-            <div className="relative self-center ltr:mr-3 rtl:ml-3">
-              <img src={friend?.profilePhotoURL || "https://thinksport.com.au/wp-content/uploads/2020/01/avatar-.jpg"} alt="Avatar" className="rounded-full w-9 h-9" />
-            </div>
-            <div className="flex-grow">
-              <h5 className="mb-1 text-base truncate dark:text-gray-50">{friend.username}</h5>
-            </div>
-            <div className="relative flex-shrink-0 ">
-              <button onClick={() => handleFriendMenu(index)} className="p-0 text-gray-400 border-0 btn dropdown-toggle dark:text-gray-300" type="button"  >
-                <i className="text-lg ri-more-2-fill"></i>
-              </button>
-              {friend.isOpen && (
-                <div className="absolute z-50 block w-40 py-2  text-left list-none bg-white border border-transparent rounded shadow-lg  ltr:left-auto ltr:right-0 bg-clip-padding dark:bg-zinc-700 dark:border-zinc-500/50 dark:shadow-sm">
-                  <ul>
-                    <li>
-                      <button className="block w-full px-6 py-2 text-sm font-normal text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/50 dark:text-gray-300 dark:hover:bg-zinc-500/50"  type="button">
-                        Block 
-                        <i className="float-right text-gray-500 dark:text-gray-300 ri-forbid-line"></i>
-                      </button>
+                {filteredFriends && filteredFriends.length > 0 ? (
+                  filteredFriends.map((friend, index) => (
+                    <li key={`${friend.uid}-${index}`} className="px-5 py-[15px] group-data-[theme-color=violet]:hover:bg-slate-100 group-data-[theme-color=green]:hover:bg-green-50/50 group-data-[theme-color=red]:hover:bg-red-50/50 transition-all ease-in-out border-b border-white/20 dark:border-zinc-700 group-data-[theme-color=violet]:dark:hover:bg-zinc-600 group-data-[theme-color=green]:dark:hover:bg-zinc-600 group-data-[theme-color=red]:dark:hover:bg-zinc-600 dark:hover:border-zinc-700">
+                      <ul className="list-unstyled contact-list">
+                        <li className="px-5 py-[15px]">
+                          <div className="flex items-center">
+                            <div className="relative self-center ltr:mr-3 rtl:ml-3">
+                              <img src={friend?.profilePhotoURL || "https://thinksport.com.au/wp-content/uploads/2020/01/avatar-.jpg"} alt="Avatar" className="rounded-full w-9 h-9" />
+                            </div>
+                            <div className="flex-grow">
+                              <h5 className="mb-1 text-base truncate dark:text-gray-50">{friend.username}</h5>
+                            </div>
+                            <div className="relative flex-shrink-0 ">
+                              <button onClick={() => handleFriendMenu(index)} className="p-0 text-gray-400 border-0 btn dropdown-toggle dark:text-gray-300" type="button"  >
+                                <i className="text-lg ri-more-2-fill"></i>
+                              </button>
+                              {friend.isOpen && (
+                                <div className="absolute z-50 block w-40 py-2  text-left list-none bg-white border border-transparent rounded shadow-lg  ltr:left-auto ltr:right-0 bg-clip-padding dark:bg-zinc-700 dark:border-zinc-500/50 dark:shadow-sm">
+                                  <ul>
+                                    <li>
+                                      <button className="block w-full px-6 py-2 text-sm font-normal text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/50 dark:text-gray-300 dark:hover:bg-zinc-500/50" type="button">
+                                        Block
+                                        <i className="float-right text-gray-500 dark:text-gray-300 ri-forbid-line"></i>
+                                      </button>
+                                    </li>
+                                    <li>
+                                      <button onClick={() => handleRemoveFriend(friend.uid)} className="block w-full px-6 py-2 text-sm font-normal text-red-500 bg-red dropdown-item whitespace-nowrap hover:bg-gray-100/50 dark:text-red-300 dark:hover:bg-zinc-500/50 " type="button">
+                                        Remove
+                                        <i className="float-right text-red-500 dark:text-red-300 ri-delete-bin-line"></i>
+                                      </button>
+                                    </li>
+                                  </ul>
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        </li>
+                      </ul>
                     </li>
-                    <li>
-                      <button onClick={() => handleRemoveFriend(friend.uid)} className="block w-full px-6 py-2 text-sm font-normal text-red-500 bg-red dropdown-item whitespace-nowrap hover:bg-gray-100/50 dark:text-red-300 dark:hover:bg-zinc-500/50 " type="button">
-                        Remove
-                        <i className="float-right text-red-500 dark:text-red-300 ri-delete-bin-line"></i>
-                      </button>
-                    </li>
-                  </ul>
-                </div>
-              )}
-            </div>
-          </div>
-        </li>
-      </ul>
-    </li>
-  ))
+                  ))
                 ) : (
                   <div>
                     <p className="text-gray-500 dark:text-gray-300 text-center">You don't have any friends yet.</p>

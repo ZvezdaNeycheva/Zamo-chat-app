@@ -4,7 +4,7 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import { registerUser } from '../../service/auth.service.js';
 import { createUserProfile, getUserByUid } from '../../service/users.service.js';
 import { AppContext } from '../../AppContext.js';
-import {format} from 'date-fns';
+import { format } from 'date-fns';
 
 export function Register() {
   const { setContext } = useContext(AppContext);
@@ -30,7 +30,7 @@ export function Register() {
     setForm({ ...form, [prop]: e.target.value });
   };
 
-  function validateDetails (phoneNumber) {
+  function validateDetails(phoneNumber) {
     const phoneNumberRegex = /^\d{10}$/;
     if (!phoneNumberRegex.test(phoneNumber)) {
       setErrorMessage('Phone number must be of 10 digits');
@@ -121,17 +121,17 @@ export function Register() {
                 <div className="p-5">
                   <div className="p-4">
                     <form action="/">
-                    {errorMessage && (
-                      <div className="flex items-center p-4 mb-4 text-sm text-red-800 border border-red-300 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 dark:border-red-800" role="alert">
-                        <svg className="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
-    <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
-                        </svg>
-                        {/* <span class="sr-only">Info</span> */}
-                        <div>
-                          {errorMessage}
+                      {errorMessage && (
+                        <div className="flex items-center p-4 mb-4 text-sm text-red-800 border border-red-300 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 dark:border-red-800" role="alert">
+                          <svg className="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
+                          </svg>
+                          {/* <span class="sr-only">Info</span> */}
+                          <div>
+                            {errorMessage}
+                          </div>
                         </div>
-                      </div>
-                    )}
+                      )}
                       {/* Email */}
                       <div className="mb-5">
                         <label className="font-medium text-gray-700 dark:text-gray-200"> Email </label>

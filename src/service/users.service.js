@@ -1,4 +1,4 @@
-import { get, set, ref, query, equalTo, orderByChild, update, getDatabase, push, child, onValue} from 'firebase/database';
+import { get, set, ref, query, equalTo, orderByChild, update, getDatabase, push, child, onValue } from 'firebase/database';
 import { db } from './firebase-config';
 import { format } from 'date-fns';
 import { auth } from './firebase-config';
