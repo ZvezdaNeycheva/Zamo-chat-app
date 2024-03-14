@@ -21,7 +21,8 @@ export function Chat() {
     useEffect(() => {
         try {
             if (!id) {
-                throw new Error("No room ID provided.");
+                // throw new Error("No room ID provided.");
+                console.log("No room ID provided.");
             }
             const messagesRef = ref(db, `rooms/${id}/messages`);
             const unsubscribe = onValue(messagesRef, (snapshot) => {
