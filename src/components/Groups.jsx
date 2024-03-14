@@ -190,7 +190,11 @@ export function Groups() {
                 {
                   group?.creatorId === currentUser?.uid && (
                     <div className="text-right">
-                      <button onClick={() => handleDeleteGroup(key)} className="text-sm text-white bg-blue-500 hover:bg-blue-600 rounded-lg px-3 py-1 transition-colors duration-150 ease-in-out">
+                      <button onClick={(e) => {
+                        e.stopPropagation();
+                        handleDeleteGroup(key)
+                      }}
+                        className="text-sm text-white bg-blue-500 hover:bg-blue-600 rounded-lg px-3 py-1 transition-colors duration-150 ease-in-out">
                         Delete the Group
                       </button>
                     </div>
