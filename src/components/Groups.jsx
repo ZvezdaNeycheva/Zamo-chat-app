@@ -16,7 +16,7 @@ export function Groups() {
   const { user, userData } = useContext(AppContext);
   let { idGroup } = useParams();
   const navigate = useNavigate();
-
+  const [GroupList, setGroupList] = useState([]);
 
   useEffect(() => {
     const getGroups = async () => {
@@ -33,7 +33,6 @@ export function Groups() {
       const fetchedGroups = await fetchGroups(); // Your function to fetch groups
       setAllGroups(fetchedGroups);
       setGroups(fetchedGroups); // Initially, display all groups
-      console.log({ fetchedGroups });
     };
 
     fetchAndSetGroups();
@@ -71,16 +70,9 @@ export function Groups() {
         updatedGroups[newGroup.id] = newGroup; // Add the new group
         return updatedGroups; // Return the updated groups object
       });
-      console.log("Group created with privacy setting:", isPrivate);
       setIsModalVisible(false); // Close the modal
       setGroupName(''); // Reset the group name input field
       setIsPrivate(false); // Reset the privacy toggle
-      // Optionally refresh the list of groups
-      // navigate(`/groups/${newGroup.idGroup}`)
-
-      // if (newGroup.id) {
-      //   navigate(`/groups/${newGroup.id}`);
-      // }
     } catch (error) {
       console.error("Failed to create group:", error);
     }
@@ -100,8 +92,6 @@ export function Groups() {
   const handleDeleteGroup = async (groupId) => {
     try {
       await deleteGroup(groupId);
-      console.log("Group deleted successfully");
-      // After deletion, you might want to refresh the list of groups
       const updatedGroups = await fetchGroups();
       setGroups(updatedGroups);
     } catch (error) {
@@ -109,99 +99,164 @@ export function Groups() {
     }
   };
 
+  const handleDropDownMenu = (index) => {
+    const updatedGroupList = [...GroupList];
+    updatedGroupList[index].isOpen = !updatedGroupList[index].isOpen;
+    setGroupList(updatedGroupList);
+  };
+
   return (
     <>
-      {idGroup ? <Channels groupId={idGroup} /> : <div className="p-6">
-        <button
-          onClick={toggleModal}
-          className="mb-4 px-4 py-2 bg-blue-500 text-white rounded-lg shadow hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:ring-opacity-50"
-        >
-          Create New Group
-        </button>
-
-        {/* Modal */}
-        {isModalVisible && (
-          <div className="fixed inset-0 z-50 overflow-auto bg-gray-600 bg-opacity-50 flex">
-            <div className="relative p-8 bg-white w-full max-w-md m-auto flex-col flex rounded-lg shadow-lg">
-              <div className="flex justify-between items-center">
-                <h2 className="text-xl font-bold">Create New Group</h2>
-                <button onClick={toggleModal} className="text-gray-600 hover:text-gray-900">
-                  &times;
+      {idGroup ? <Channels groupId={idGroup} /> : <div className="">
+        {/* Start chat content */}
+        <div className="h-screen lg:h-auto">
+          <div className="p-6">
+            <div className="ltr:float-right rtl:float-left">
+              <div className="relative">
+                {/* Button trigger modal */}
+                <button onClick={toggleModal} type="button" className="px-4 text-lg text-gray-500 group/tag dark:text-gray-300" data-tw-toggle="modal" data-tw-target="#modal-id" >
+                  <i className="ri-group-line me-1 ms-0" />
+                  <span className="absolute items-center hidden mb-6 top-8 group-hover/tag:flex ltr:-left-8 rtl:-right-8">
+                    <span className="relative z-10 p-2 text-xs leading-none text-white whitespace-no-wrap bg-black rounded shadow-lg">
+                      Create groups
+                    </span>
+                    <span className="w-3 h-3 -mt-6 rotate-45 bg-black ltr:-ml-12 rtl:-mr-12" />
+                  </span>
                 </button>
               </div>
-              <form onSubmit={handleCreateGroup} className="mt-4 flex flex-col">
-                <label htmlFor="groupName" className="block text-sm font-medium text-gray-700">Group Name</label>
-                <input
-                  id="groupName"
-                  type="text"
-                  value={groupName}
-                  onChange={(e) => setGroupName(e.target.value)}
-                  className="mt-1 p-2 w-full border rounded-md"
-                  placeholder="Enter Group Name"
-                  required
-                />
-                <div className="flex justify-between items-center mt-4">
-                  <label htmlFor="group-private" className="inline-flex items-center">
-                    <input
-                      id="group-private"
-                      type="checkbox"
-                      checked={isPrivate}
-                      onChange={(e) => setIsPrivate(e.target.checked)}
-                      className="form-checkbox h-5 w-5 text-gray-600"
-                    /><span className="ml-2 text-gray-700">Private Group</span>
-                  </label>
-                  <button
-                    type="submit"
-                    className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600"
-                  >
-                    Create Group
-                  </button>
-                </div>
-              </form>
             </div>
-          </div>
-        )}
-        <div className="mt-4">
-          <h3 className="text-lg leading-6 font-medium text-gray-900">Groups</h3>
-          {/* search bar */}
-          <div className="mt-2 relative max-w-md w-full">
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
-              placeholder="Search for groups"
-            />
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              {/* SVG for magnifying glass icon */}
-            </div>
-            <button onClick={handleSearch} className="absolute inset-y-0 right-0 px-4 text-gray-500 border-l focus:outline-none">
-              {/* Optional: Icon/Button for initiating search */}
-              <i className="ri-search-line"></i>
-            </button>
-          </div>
-          <div className="mt-2">
-            {/* Display groups here */}
-            {Object.entries(groups).map(([key, group]) => (
-              <div key={key} onClick={() => navigate(`/groups/${key}`)} className="p-4 max-w-md bg-white rounded-lg border border-gray-200 shadow-sm hover:shadow-lg transition-shadow duration-200 ease-in-out mb-3 cursor-pointer">
-                <h5 className="mb-2 text-xl font-semibold tracking-tight text-blue-600">{group.name}</h5>
-                <p className="font-normal text-gray-600">{group.private ? 'Private' : 'Public'}</p>
-                {
-                  group?.creatorId === currentUser?.uid && (
-                    <div className="text-right">
-                      <button onClick={(e) => {
-                        e.stopPropagation();
-                        handleDeleteGroup(key)
-                      }}
-                        className="text-sm text-white bg-blue-500 hover:bg-blue-600 rounded-lg px-3 py-1 transition-colors duration-150 ease-in-out">
-                        Delete the Group
-                      </button>
+
+            <h4 className="mb-6 dark:text-gray-50">Groups</h4>
+
+            {/* Modal */}
+            {isModalVisible && (
+              <div className="relative z-50  modal" id="modal-id">
+                <div className="fixed inset-0 z-50 ">
+                  <div className="absolute inset-0 transition-opacity bg-black bg-opacity-50 modal-overlay" />
+                  <div className="flex items-center justify-center max-w-lg min-h-screen p-4 mx-auto text-center animate-translate">
+                    <div className="relative w-full max-w-lg my-8 text-left transition-all transform bg-white rounded-lg shadow-xl -top-10 dark:bg-zinc-700">
+                      <div className="group-data-[theme-color=violet]:bg-violet-800/10 group-data-[theme-color=green]:bg-green-800/10 group-data-[theme-color=red]:bg-red-800/10 group-data-[theme-color=violet]:dark:bg-zinc-700 group-data-[theme-color=red]:dark:bg-zinc-700 group-data-[theme-color=green]:dark:bg-zinc-700">
+                        <div className="flex items-center justify-between p-4 border-b border-gray-100 dark:border-zinc-500">
+                          <h5 className="mb-0 text-gray-800 text-16 dark:text-gray-50" id="addgroup-exampleModalLabel" >
+                            Create New Group
+                          </h5>
+                          <button onClick={toggleModal} className="text-gray-600 hover:text-gray-900"> &times; </button>
+                        </div>
+                        <div className="p-4">
+                          <form onSubmit={handleCreateGroup}>
+                            {/* Group Name */}
+                            <div className="mb-8">
+                              <label htmlFor="groupName" className="block mb-2 ltr:text-left dark:text-gray-200 rtl:text-right">Group Name</label>
+                              <input id="groupName" type="text" value={groupName} onChange={(e) => setGroupName(e.target.value)} className="py-1.5 bg-transparent border-gray-100 rounded placeholder:text-13 w-full focus:border-violet-500 focus:ring-0 focus:ring-offset-0 placeholder:dark:text-gray-200 dark:border-zinc-500" placeholder="Enter Group Name" required />
+                            </div>
+
+                            {/* Group Members */}
+                            <div className="mb-8 ltr:text-left rtl:text-right">
+                              <label className="dark:text-gray-300 "> Group Members </label>
+                              <div className="mt-2 mb-3">
+                                <button className="group-data-[theme-color=violet]:bg-slate-200 group-data-[theme-color=green]:bg-white group-data-[theme-color=red]:bg-white border-0 btn group-data-[theme-color=violet]:dark:bg-zinc-600 group-data-[theme-color=green]:dark:bg-zinc-600 group-data-[theme-color=red]:dark:bg-zinc-600 dark:text-gray-50" type="button" id="toggleButton" >
+                                  Select Members
+                                </button>
+                              </div>
+                              <div className="hidden" id="collapseElement">
+                                <div className="border border-gray-100 rounded dark:border-zinc-500">
+                                  <div className="px-3 py-2 rounded bg-gray-100/50 dark:bg-zinc-600">
+                                    <h5 className="mb-0 text-base text-gray-800 dark:text-gray-50">
+                                      Contacts
+                                    </h5>
+                                  </div>
+                                  <div className="p-2 bg-white dark:bg-zinc-800">
+                                    <div data-simplebar="" className="h-[150px]">
+                                      <div>
+                                        <ul>
+                                          <li className="px-5 py-[10px]">
+                                            <div className="flex items-center gap-3">
+                                              <input type="checkbox" d="memberCheck1" efaultChecked="" lassName="border-gray-100 rounded group-data-[theme-color=violet]:bg-violet-50 group-data-[theme-color=green]:bg-green-50 group-data-[theme-color=red]:bg-red-50 focus:ring-1 group-data-[theme-color=violet]:focus:ring-violet-500/20 group-data-[theme-color=green]:focus:ring-green-500/20 group-data-[theme-color=red]:focus:ring-red-500/20 group-data-[theme-color=violet]:checked:bg-violet-500 group-data-[theme-color=green]:checked:bg-green-500 group-data-[theme-color=red]:checked:bg-red-500 checked:ring-1 group-data-[theme-color=red]:checked:ring-violet-500/20 focus:ring-offset-0 focus:outline-0 group-data-[theme-color=violet]:dark:border-zinc-500 group-data-[theme-color=green]:dark:border-zinc-500 group-data-[theme-color=red]:dark:border-zinc-500" />
+                                              <label htmlFor="memberCheck1" className="dark:text-gray-300" >
+                                                Albert Rodarte
+                                              </label>
+                                            </div>
+                                          </li>
+                                        </ul>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div className="flex justify-between items-center mt-4">
+                              <label htmlFor="group-private" className="inline-flex items-center">
+                                <input id="group-private" type="checkbox" checked={isPrivate} onChange={(e) => setIsPrivate(e.target.checked)} className="form-checkbox h-5 w-5 text-gray-600" /><span className="ml-2 text-gray-700">Private Group</span>
+                              </label>
+                              <div className="flex p-4 border-t border-gray-100 ltr:justify-end dark:border-zinc-500 rtl:justify-start">
+                                <button type="button" className="border-0 btn hover:underline group-data-[theme-color=violet]:text-violet-500 group-data-[theme-color=green]:text-green-500 group-data-[theme-color=red]:text-red-500" data-tw-dismiss="modal">
+                                  Close
+                                </button>
+                                <button type="submit" className="text-white border-transparent btn group-data-[theme-color=violet]:bg-violet-500 group-data-[theme-color=violet]:hover:bg-violet-600 group-data-[theme-color=green]:bg-green-500 group-data-[theme-color=green]:hover:bg-green-600 group-data-[theme-color=red]:bg-red-500 group-data-[theme-color=red]:hover:bg-red-600">
+                                  Create Groups
+                                </button>
+                              </div>
+                            </div>
+                          </form>
+                        </div>
+                      </div>
                     </div>
-                  )
-                }
+                  </div>
+                </div>
               </div>
-            ))}
+            )}
+
+            {/* search bar */}
+            <div className="py-1 mt-5 mb-5 rounded group-data-[theme-color=violet]:bg-slate-100 group-data-[theme-color=green]:bg-green-50 group-data-[theme-color=red]:bg-red-50 group-data-[theme-color=violet]:dark:bg-zinc-600 group-data-[theme-color=green]:dark:bg-zinc-600 group-data-[theme-color=red]:dark:bg-zinc-600">
+              <span className="group-data-[theme-color=violet]:bg-slate-100 group-data-[theme-color=green]:bg-green-50 group-data-[theme-color=red]:bg-red-50 group-data-[theme-color=violet]:dark:bg-zinc-600 group-data-[theme-color=green]:dark:bg-zinc-600 group-data-[theme-color=red]:dark:bg-zinc-600 pe-1 ps-3 " id="basic-addon2">
+                <i className="text-lg text-gray-700 ri-search-line search-icon dark:text-gray-200"></i>
+              </span>
+              <input type="text" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} onKeyPress={(e) => e.key === 'Enter' && handleSearch()} className="border-0 group-data-[theme-color=violet]:bg-slate-100 group-data-[theme-color=green]:bg-green-50 group-data-[theme-color=red]:bg-red-50 group-data-[theme-color=violet]:dark:bg-zinc-600 group-data-[theme-color=green]:dark:bg-zinc-600 group-data-[theme-color=red]:dark:bg-zinc-600 placeholder:text-[14px] focus:ring-offset-0 focus:outline-none focus:ring-0 dark:text-gray-400" placeholder="Search messages or users" aria-label="Search messages or users" aria-describedby="basic-addon2" />
+            </div>
+
+            <div className="chat-message-list chat-group-list" data-simplebar>
+              <div className="mt-2">
+                <ul>
+                  {/* Display groups here */}
+                  {Object.entries(groups).map(([key, group], index) => (
+                    <li key={key} className="px-5 py-[15px] group-data-[theme-color=violet]:hover:bg-slate-100 group-data-[theme-color=green]:hover:bg-green-50/50 group-data-[theme-color=red]:hover:bg-red-50/50 group-data-[theme-color=violet]:dark:hover:bg-zinc-600 group-data-[theme-color=green]:dark:hover:bg-zinc-600 group-data-[theme-color=red]:dark:hover:bg-zinc-600 transition-all ease-in-out rounded">
+                      <a href="#" onClick={(e) => { e.preventDefault(); navigate(`/groups/${key}`) }}>
+                        <div className="flex items-center relative">
+                          <div className="ltr:mr-5 rtl:ml-5">
+                            <div className="flex items-center justify-center rounded-full w-10 h-10 group-data-[theme-color=violet]:bg-violet-500/20 group-data-[theme-color=green]:bg-green-500/20 group-data-[theme-color=red]:bg-red-500/20">
+                              <span className="font-medium text-lg group-data-[theme-color=violet]:text-violet-500 group-data-[theme-color=green]:text-green-500 group-data-[theme-color=red]:text-red-500">
+                                {group.name[0].toUpperCase()}
+                              </span>
+                            </div>
+                          </div>
+                          <div className="flex-grow overflow-hidden">
+                            <h5 className="mb-0 text-gray-700 truncate dark:text-gray-50"> {group.name}</h5>
+                          </div>
+                          {/* Dropdown menu */}
+                          <button className="p-2 ml-2 text-gray-500 hover:text-gray-800 dark:text-gray-300" onClick={() => handleDropDownMenu(index)}>
+                            <i className="ri-more-2-fill"></i>
+                          </button>
+                          {GroupList[index]?.isOpen && (
+                            <div className="absolute z-50 block w-40 py-2 text-left list-none bg-white border border-transparent rounded shadow-lg ltr:left-auto ltr:right-0 bg-clip-padding dark:bg-zinc-700 dark:border-zinc-500/50 dark:shadow-sm">
+                              <ul>
+                                <li>
+                                  <button onClick={() => handleDeleteGroup(key)} className="block w-full px-6 py-2 text-sm font-normal text-red-500 bg-red dropdown-item whitespace-nowrap hover:bg-gray-100/50 dark:text-red-300 dark:hover:bg-zinc-500/50" type="button">
+                                    Remove
+                                    <i className="float-right text-red-500 dark:text-red-300 ri-delete-bin-line"></i>
+                                  </button>
+                                </li>
+                              </ul>
+                            </div>
+                          )}
+                          {/* End of dropdown menu */}
+                        </div>
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+
           </div>
         </div>
       </div>
