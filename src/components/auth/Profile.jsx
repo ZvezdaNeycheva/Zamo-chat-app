@@ -183,13 +183,13 @@ export function Profile() {
                 </li>
                 <li>
                   <button onClick={() => handleStatusChange('Busy')} className="block w-full px-4 py-2 text-sm font-normal text-black-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/50 dark:text-gray-100 dark:hover:bg-zinc-600/80 ltr:text-left rtl:text-right">
-                    <i className="text-red-500 ltr:ml-1 rtl:mr-1 ri-record-circle-fill text-10" /> &nbsp;
+                    <i className="text-orange-500 ltr:ml-1 rtl:mr-1 ri-error-warning-fill text-10" /> &nbsp;
                     Busy
                   </button>
                 </li>
                 <li>
                   <button onClick={() => handleStatusChange('Away')} className="block w-full px-4 py-2 text-sm font-normal text-black-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/50 dark:text-gray-100 dark:hover:bg-zinc-600/80 ltr:text-left rtl:text-right">
-                    <i className="text-red-500 ltr:ml-1 rtl:mr-1 ri-record-circle-fill text-10" /> &nbsp;
+                    <i className="text-yellow-500 ltr:ml-1 rtl:mr-1 ri-time-fill text-10" /> &nbsp;
                     Away
                   </button>
                 </li>
