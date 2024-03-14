@@ -17,7 +17,7 @@ export function Chats() {
     const navigate = useNavigate();
     const { id } = useParams();
 
-    const [friends, setFriends] = useState([]);
+    // const [friends, setFriends] = useState([]);
 
 //     const getAllFriends = async () => {
 //         const friendsRef = ref(db, `users/${user?.uid}/friendsList`);
@@ -45,39 +45,7 @@ useEffect(() => {
     }
   }, [user]);
 
-const fetchFriends = async () => {
-    try {
-        const friendsRef = ref(db, `users/${user?.uid}/friendsList`);
-        const snapshot = await get(friendsRef);
-        
-        if (snapshot.exists()) {
-            const friendIds = Object.values(snapshot.val()); // Extract values (friend IDs) from the object
-            console.log("Friend IDs:", friendIds); // Log the friend IDs
-            
-            const friendPromises = friendIds.map(async (friendId) => {
-                console.log("Processing friend ID:", friendId); // Log each friend ID
-                const userRef = ref(db, `users/${friendId}`);
-                const userSnapshot = await get(userRef);
-                if (userSnapshot.exists()) {
-                    return { id: friendId, ...userSnapshot.val() };
-                } else {
-                    console.error(`User with ID ${friendId} does not exist.`);
-                    return null;
-                }
-            });
 
-            const friendData = await Promise.all(friendPromises);
-            console.log("Fetched friends:", friendData); // Log the fetched friend data
-
-            setFriends(friendData.filter(Boolean)); // Filter out null values
-        } else {
-            console.log("User has no friends.");
-            setFriends([]);
-        }
-    } catch (error) {
-        console.error("Error fetching friends:", error);
-    }
-};
 
 
 
@@ -223,8 +191,7 @@ const fetchFriends = async () => {
                     <div className="h-[610px] px-2" data-simplebar>
                         <ul className="chat-user-list">
                             {/* users */}
-                            {/* {filteredFriends && filteredFriends.length > 0 ? (
-  filteredFriends.map((friend, index) */}
+                            {/* filteredFriends */}
                             {filteredFriends.length > 0 &&
                                 filteredFriends.filter(u => u.id !== user?.uid).map((user) => (
                                     <li key={user.id}>
