@@ -5,6 +5,7 @@ import { auth, db } from "../../service/firebase-config";
 import { AppContext } from "../../AppContext";
 import { ChatButton } from "./ChatButton";
 import { getAllUsers } from "../../service/users.service";
+import {  FriendsList } from '../../service/users.service';
 
 
 export function Chats() {
@@ -34,6 +35,15 @@ export function Chats() {
 //     useEffect(() => {
 //         getAllFriends().then((f) => setFriends(f));
 //     }, []);
+
+const [friendsList, setFriendsList] = useState([]);
+
+const filteredFriends = friendsList.filter(friend => friend);
+useEffect(() => {
+    if (user) {
+      FriendsList(user.uid, setFriendsList);
+    }
+  }, [user]);
 
 const fetchFriends = async () => {
     try {
@@ -213,8 +223,10 @@ const fetchFriends = async () => {
                     <div className="h-[610px] px-2" data-simplebar>
                         <ul className="chat-user-list">
                             {/* users */}
-                            {friends.length > 0 &&
-                                friends.filter(u => u.id !== user?.uid).map((user) => (
+                            {/* {filteredFriends && filteredFriends.length > 0 ? (
+  filteredFriends.map((friend, index) */}
+                            {filteredFriends.length > 0 &&
+                                filteredFriends.filter(u => u.id !== user?.uid).map((user) => (
                                     <li key={user.id}>
                                         <ChatButton selected={selectedFriend === user} user={user} key={user.id} onClick={() => (selectFriend(user))} />
                                     </li>
