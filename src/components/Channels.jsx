@@ -12,7 +12,7 @@ export function Channels({ groupId }) {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [channelName, setChannelName] = useState('');
   const [currentUser, setCurrentUser] = useState(null);
-
+console.log({channels});
   useEffect(() => {
     const getChannels = async () => {
       const fetchedChannelsIds = await fetchChannelsIdsByGroup(groupId);
@@ -141,7 +141,9 @@ export function Channels({ groupId }) {
           <div className="mt-2">
             {/* Display channels here */}
             {Object.entries(channels).map(([key, channel]) => (
-              <div key={key} onClick={() => navigate(`/groups/${groupId}/channels/${key}`)} className="p-4 max-w-md bg-white rounded-lg border border-gray-200 shadow-sm hover:shadow-lg transition-shadow duration-200 ease-in-out mb-3 cursor-pointer">
+
+              <div key={key} idChannel={key} onClick={ () => navigate(`/channels/${key}`)} className="p-4 max-w-md bg-white rounded-lg border border-gray-200 shadow-sm hover:shadow-lg transition-shadow duration-200 ease-in-out mb-3 cursor-pointer">
+
                 <h5 className="mb-2 text-xl font-semibold tracking-tight text-blue-600">{channel.name}</h5>
                 {
                   channel?.creatorId === currentUser?.uid && (
