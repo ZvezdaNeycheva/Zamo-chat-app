@@ -16,7 +16,7 @@ export function Groups() {
   const { user, userData } = useContext(AppContext);
   let { idGroup } = useParams();
   const navigate = useNavigate();
-  const [GroupList, setGroupList] = useState([]);
+  const [groupList, setgroupList] = useState([]);
 
   useEffect(() => {
     const getGroups = async () => {
@@ -100,9 +100,9 @@ export function Groups() {
   };
 
   const handleDropDownMenu = (index) => {
-    const updatedGroupList = [...GroupList];
+    const updatedGroupList = [...groupList];
     updatedGroupList[index].isOpen = !updatedGroupList[index].isOpen;
-    setGroupList(updatedGroupList);
+    setgroupList(updatedGroupList);
   };
 
   return (
@@ -224,8 +224,10 @@ export function Groups() {
                         <div className="flex items-center relative">
                           <div className="ltr:mr-5 rtl:ml-5">
                             <div className="flex items-center justify-center rounded-full w-10 h-10 group-data-[theme-color=violet]:bg-violet-500/20 group-data-[theme-color=green]:bg-green-500/20 group-data-[theme-color=red]:bg-red-500/20">
-                              <span className="font-medium text-lg group-data-[theme-color=violet]:text-violet-500 group-data-[theme-color=green]:text-green-500 group-data-[theme-color=red]:text-red-500">
-                                {group.name[0].toUpperCase()}
+                              <span className="group-data-[theme-color=violet]:text-violet-500 group-data-[theme-color=green]:text-green-500 group-data-[theme-color=red]:text-red-500">
+                                <svg className="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                                  <path fill-rule="evenodd" d="M12 6a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7Zm-1.5 8a4 4 0 0 0-4 4c0 1.1.9 2 2 2h7a2 2 0 0 0 2-2 4 4 0 0 0-4-4h-3Zm6.8-3.1a5.5 5.5 0 0 0-2.8-6.3c.6-.4 1.3-.6 2-.6a3.5 3.5 0 0 1 .8 6.9Zm2.2 7.1h.5a2 2 0 0 0 2-2 4 4 0 0 0-4-4h-1.1l-.5.8c1.9 1 3.1 3 3.1 5.2ZM4 7.5a3.5 3.5 0 0 1 5.5-2.9A5.5 5.5 0 0 0 6.7 11 3.5 3.5 0 0 1 4 7.5ZM7.1 12H6a4 4 0 0 0-4 4c0 1.1.9 2 2 2h.5a6 6 0 0 1 3-5.2l-.4-.8Z" clip-rule="evenodd" />
+                                </svg>
                               </span>
                             </div>
                           </div>
@@ -236,7 +238,7 @@ export function Groups() {
                           <button className="p-2 ml-2 text-gray-500 hover:text-gray-800 dark:text-gray-300" onClick={() => handleDropDownMenu(index)}>
                             <i className="ri-more-2-fill"></i>
                           </button>
-                          {GroupList[index]?.isOpen && (
+                          {groupList[index]?.isOpen && (
                             <div className="absolute z-50 block w-40 py-2 text-left list-none bg-white border border-transparent rounded shadow-lg ltr:left-auto ltr:right-0 bg-clip-padding dark:bg-zinc-700 dark:border-zinc-500/50 dark:shadow-sm">
                               <ul>
                                 <li>
