@@ -233,7 +233,7 @@ export function Chat() {
                                                                 )}
                                                             </p>
                                                             <p className="mt-1 mb-0 text-xs text-right text-white/50"><i className="align-middle ri-time-line"></i> <span className="align-middle">    {`${new Date(message.timestamp).toLocaleDateString()} ${new Date(message.timestamp).toLocaleTimeString()}`}</span></p>
-                    <div className="mb-0 border-transparent bg-transparent focus:outline-none focus:ring-0">
+                    <div className="text-xs text-right mt-1 mb-0 cursor: pointer;">
                         {/* Example reaction buttons/icons */}
                         <button onClick={() => reactToMessage(message.id, 'thumbsUp')}>
                             👍 {message.reactions && message.reactions.thumbsUp ? message.reactions.thumbsUp.length : 0}
