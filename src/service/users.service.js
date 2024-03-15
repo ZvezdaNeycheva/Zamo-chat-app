@@ -69,6 +69,15 @@ export const getUserByEmail = async (email) => {
   }
 };
 
+export const getUserByUsername = async (username) => {
+  const usersRef = query(ref(db, 'users'), orderByChild('username'), equalTo(username));
+  const snapshot = await get(usersRef);
+  if (snapshot.exists()) {
+    return snapshot;
+  }
+  return null;
+};
+
 // Friends List Management
 export const addFriend = async (currentUserUid, friendUid) => {
   try {

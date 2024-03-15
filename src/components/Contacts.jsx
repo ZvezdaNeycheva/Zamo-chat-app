@@ -4,14 +4,14 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import { get, query, ref, onValue, orderByChild, equalTo, update } from 'firebase/database';
 import { AppContext } from '../AppContext';
 import { auth, db } from '../service/firebase-config';
-import { updateUserData, getUserByUid, removeFriend, handleAcceptFriendRequest, handleRejectFriendRequest, FriendsList, addFriend } from '../service/users.service';
+import { updateUserData, getUserByUid, removeFriend, handleAcceptFriendRequest, handleRejectFriendRequest, FriendsList, addFriend, getUserByUsername } from '../service/users.service';
 
 export function Contacts() {
   const { userData } = useContext(AppContext);
   const [user] = useAuthState(auth);
   const navigate = useNavigate();
   const [friendRequests, setFriendRequests] = useState([]);
-  const [emailInputValue, setEmailInputValue] = useState('');
+  const [usernameInputValue, setUsernameInputValue] = useState('');
   const [isContactModalVisible, setIsContactModalVisible] = useState(false);
   const [hasPendingRequests, setHasPendingRequests] = useState(false);
   const [subscriptionMessage, setSubscriptionMessage] = useState('');
@@ -84,11 +84,11 @@ export function Contacts() {
     try {
       const usersSnapshot = await get(query(ref(db, 'users')));
       const users = usersSnapshot.val();
+      const userByUsernameSnapshot = await getUserByUsername(usernameInputValue);
 
-      const userByEmail = Object.values(users).find(u => u.email === emailInputValue);
-
-      if (userByEmail) {
-        const recipientUid = userByEmail.uid;
+      if (userByUsernameSnapshot) {
+        const users = userByUsernameSnapshot.val();
+        const [recipientUid, userByUsername] = Object.entries(users)[0];
         const senderUid = user.uid;
 
         if (friendsList.some(friend => friend.uid === recipientUid)) {
@@ -109,7 +109,7 @@ export function Contacts() {
           return;
         }
 
-        if (userByEmail.sentRequests && userByEmail.sentRequests.includes(senderUid)) {
+        if (userByUsername.sentRequests && userByUsername.sentRequests.includes(senderUid)) {
           setErrorMessage('This user has already sent you an invitation.');
           return;
         }
@@ -117,20 +117,21 @@ export function Contacts() {
         const updatedSentRequests = [...(currentUserData.sentRequests ?? []), recipientUid];
         await updateUserData(senderUid, { sentRequests: updatedSentRequests });
 
-        const updatedPendingRequests = [...(userByEmail.pendingRequests ?? []), senderUid];
+        const updatedPendingRequests = [...(userByUsername.pendingRequests ?? []), senderUid];
         await updateUserData(recipientUid, { pendingRequests: updatedPendingRequests });
 
         console.log('Friend request sent successfully.');
 
-        setFriendRequests(prev => [...prev, { uid: recipientUid, username: userByEmail.username, type: 'sent' }]);
+        setFriendRequests(prev => [...prev, { uid: recipientUid, username: userByUsername.username, type: 'sent' }]);
 
-        setSubscriptionMessage(`Invitation sent to ${emailInputValue}`);
+        setSubscriptionMessage(`Invitation sent to ${usernameInputValue}`);
         setIsContactModalVisible(false);
         setTimeout(clearSubscriptionMessage, 2000);
       } else {
         setErrorMessage('User is not found.');
       }
     } catch (error) {
+      console.error(error);
       setErrorMessage('Error sending invitation. Please try again.');
       setTimeout(clearErrorMessage, 2000);
     }
@@ -224,8 +225,8 @@ export function Contacts() {
                                     {errorMessage}
                                   </div>
                                 )}
-                                <label className="block mb-2 dark:text-gray-300"> Email </label>
-                                <input onChange={(e) => setEmailInputValue(e.target.value)} value={emailInputValue} type="text" className="py-1.5 bg-transparent border-gray-100 rounded placeholder:text-13 w-full focus:border-violet-500 focus:ring-0 focus:ring-offset-0 dark:border-zinc-500 dark:placeholder:text-gray-300" id="addgroupname-input1" placeholder="Enter Email" />
+                                <label className="block mb-2 dark:text-gray-300"> Username </label>
+                                <input onChange={(e) => setUsernameInputValue(e.target.value)} value={usernameInputValue} type="text" className="py-1.5 bg-transparent border-gray-100 rounded placeholder:text-13 w-full focus:border-violet-500 focus:ring-0 focus:ring-offset-0 dark:border-zinc-500 dark:placeholder:text-gray-300" id="addgroupname-input1" placeholder="Enter Username" />
                               </div>
                               <div className="flex justify-end p-4 border-t border-gray-100 dark:border-zinc-500">
                                 <div>
