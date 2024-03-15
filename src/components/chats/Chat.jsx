@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from "react";
-import { remove } from "firebase/database";
+import { get, remove } from "firebase/database";
 import { ref, update, set, push, onValue } from "firebase/database";
 import { useParams } from "react-router-dom";
 import { AppContext } from "../../AppContext";
@@ -134,7 +134,57 @@ export function Chat() {
             console.error('Error deleting message:', error);
         }
     };
+    const reactToMessage = async (messageId, reactionType) => {
+        try {
+            const messageRef = ref(db, `rooms/${id}/messages/${messageId}`);
+            const snapshot = await get(messageRef);
+            if (snapshot.exists()) {
+                const messageData = snapshot.val();
+                const reactions = messageData.reactions || {};
+                const userId = userData.uid;
+                
+                // Update or add the user's reaction to the message
+                if (reactions[reactionType]) {
+                    if (reactions[reactionType].includes(userId)) {
+                        // User has already reacted, remove the reaction
+                        reactions[reactionType] = reactions[reactionType].filter(id => id !== userId);
+                    } else {
+                        // User hasn't reacted yet, add the reaction
+                        reactions[reactionType].push(userId);
+                    }
+                } else {
+                    // No reactions of this type yet, create a new array
+                    reactions[reactionType] = [userId];
+                }
 
+                // Update the reactions in the database
+                await update(messageRef, { reactions });
+            }
+        } catch (error) {
+            console.error('Error reacting to message:', error);
+        }
+    };
+
+     const addChannelReaction = async(reaction, userHandle, channelId, msgId) => {
+        const channelReaction = {};
+        channelReaction[`channels/${channelId}/messages/${msgId}/reactions/${reaction}/${userHandle}`] = true;
+        return update(ref(db), channelReaction);
+      };
+       const removeChannelReaction = async(reaction, userHandle, channelId, msgId) => {
+        const channelReaction = {};
+        channelReaction[`channels/${channelId}/messages/${msgId}/reactions/${reaction}/${userHandle}`] = null;
+        return update(ref(db), channelReaction);
+      };
+      const addRoomReaction = async(reaction, userHandle, channelId, msgId) => {
+        const roomReaction = {};
+        roomReaction[`rooms/${channelId}/messages/${msgId}/reactions/${reaction}/${userHandle}`] = true;
+        return update(ref(db), roomReaction);
+      };
+      const removeRoomReaction = async(reaction, userHandle, channelId, msgId) => {
+        const roomReaction = {};
+        roomReaction[`rooms/${channelId}/messages/${msgId}/reactions/${reaction}/${userHandle}`] = null;
+        return update(ref(db), roomReaction);
+      };
     return (
         <>
             {/* <!-- Start User chat --> */}
@@ -183,6 +233,15 @@ export function Chat() {
                                                                 )}
                                                             </p>
                                                             <p className="mt-1 mb-0 text-xs text-right text-white/50"><i className="align-middle ri-time-line"></i> <span className="align-middle">    {`${new Date(message.timestamp).toLocaleDateString()} ${new Date(message.timestamp).toLocaleTimeString()}`}</span></p>
+                    <div className="mb-0 border-transparent bg-transparent focus:outline-none focus:ring-0">
+                        {/* Example reaction buttons/icons */}
+                        <button onClick={() => reactToMessage(message.id, 'thumbsUp')}>
+                            👍 {message.reactions && message.reactions.thumbsUp ? message.reactions.thumbsUp.length : 0}
+                        </button>
+                        <button onClick={() => reactToMessage(message.id, 'heart')}>
+                            ❤️ {message.reactions && message.reactions.heart ? message.reactions.heart.length : 0}
+                        </button>
+                    </div>                                                          
                                                         </div>
                                                         <div className={`relative self-start dropdown ${message.senderId === userData.uid ? 'right-0' : 'left-auto'}`}>                                                            <a className="p-0 text-gray-400 border-0 btn dropdown-toggle dark:text-gray-100" href="#" role="button" data-bs-toggle="dropdown" id="dropdownMenuButton12">
                                                             <div>
@@ -197,6 +256,7 @@ export function Chat() {
                                                                         <button onClick={() => handleDelete(message.id)}>Delete</button>
                                                                     </div>
                                                                 )}
+                                                                
                                                             </div>
 
                                                         </a>
@@ -204,6 +264,7 @@ export function Chat() {
                                                         </div>
                                                     </div>
                                                     <div className={`font-medium ${message.senderName === userData.username ? '' : 'text-right mr-4'} text-gray-700 text-14 dark:text-gray-300`}>{message.senderName}</div>                                                </div>
+                                                    
                                             </div>
                                         </li>
                                     ))
