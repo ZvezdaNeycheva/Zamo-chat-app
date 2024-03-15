@@ -24,6 +24,9 @@ import { Channels } from "./components/Channels";
 import { SingleCannel } from "./components/SingleCannel";
 // import { DyteMeeting } from "./components/DyteMeeting";
 
+// import { DyteProvider } from '@dytesdk/react-web-core';
+// import { useDyteClient } from '@dytesdk/react-web-core';
+// import { getAuthToken } from "./service/dyte.service";
 
 function App() {
   const [context, setContext] = useState({
@@ -53,9 +56,29 @@ function App() {
     }
   }, [user]);
 
+    // const [meeting, initMeeting] = useDyteClient(); // Initialize useDyteClient
+
+  // useEffect(() => {
+  //   getAuthToken() // Call getAuthToken to retrieve the authentication token
+  //     .then((authToken) => {
+  //       initMeeting({
+  //         roomName : 'room-name',
+  //         authToken: authToken, 
+  //         defaults: {
+  //           audio: false,
+  //           video: false,
+  //         },
+  //       });
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error retrieving authentication token:", error);
+  //     });
+  // }, []);
+
   return (
     <AppContext.Provider value={{ ...context, setContext }}>
       {/* <RoomContext.Provider value={{ ...roomId,  setRoomId: setRoomId }}> */}
+      {/* <DyteProvider value={meeting}> */}
         <Router>
           <Routes>
             <Route path="*" element={<Layout selectedAppBarButton={'chats'} sideBarContent={<Chats />} />} />
@@ -78,9 +101,8 @@ function App() {
 
           </Routes>
         </Router>
-      {/* </RoomContext.Provider> */}
+          {/* </RoomContext.Provider> */}
+      {/* </DyteProvider> */}
     </AppContext.Provider>
   );
 }
-
-export default App;
