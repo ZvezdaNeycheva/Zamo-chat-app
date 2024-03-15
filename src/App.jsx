@@ -15,7 +15,6 @@ import { AppContext } from "./AppContext";
 import Authenticated from "./components/auth/Authenticated";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { getUserData } from "./service/users.service";
-import { RecoilRoot } from 'recoil';
 import { Settings } from "./components/Settings";
 import { Contacts } from "./components/Contacts";
 import { Groups } from "./components/Groups";
@@ -57,7 +56,6 @@ function App() {
   return (
     <AppContext.Provider value={{ ...context, setContext }}>
       {/* <RoomContext.Provider value={{ ...roomId,  setRoomId: setRoomId }}> */}
-      <RecoilRoot>
         <Router>
           <Routes>
             <Route path="*" element={<Layout selectedAppBarButton={'chats'} sideBarContent={<Chats />} />} />
@@ -68,10 +66,7 @@ function App() {
             <Route path="/chats/:id" element={<Layout selectedAppBarButton={'chats'} sideBarContent={<Chats />} mainContent={<Chat />} />} />
             <Route path="/groups" element={<Layout selectedAppBarButton={'groups'} sideBarContent={<Groups />} />} />
             <Route path="/groups/:idGroup" element={<Layout selectedAppBarButton={'groups'} sideBarContent={<Channels />} />} />
-            
-            {/* <Route path="/channels/:idCannel" element={<Layout selectedAppBarButton={'groups'} sideBarContent={<Channels />} mainContent={<SingleCannel />} />} /> */}
             <Route path="/groups/:idGroup/channels/:idCannel" element={<Layout selectedAppBarButton={'groups'} sideBarContent={<Channels />} mainContent={<SingleCannel />} />} />
-
             <Route path="/contacts" element={<Layout selectedAppBarButton={'contacts'} sideBarContent={<Contacts />} />} />
             <Route path="/settings" element={<Layout selectedAppBarButton={'settings'} mainContent={<Settings />} />} />
             <Route path="/meta" element={<Meta />} />
@@ -79,11 +74,10 @@ function App() {
             <Route path="/sidebar-menu" element={<AppBar />} />
             {/* <Route path="/switcher" element={<Switcher />} /> */}
             <Route path="/user-profile-details" element={<UserProfileDetails />} />
-            {/* <Route path="/meeting" element={<DyteMeeting/>} /> */}
+            {/* <Route path="/meet" element={<DyteMeeting/>} /> */}
 
           </Routes>
         </Router>
-      </RecoilRoot>
       {/* </RoomContext.Provider> */}
     </AppContext.Provider>
   );

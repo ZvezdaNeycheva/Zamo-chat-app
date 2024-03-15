@@ -177,8 +177,6 @@ export function Chat() {
                                                                             className="w-full border-transparent bg-transparent focus:outline-none focus:ring-0"
                                                                         />
                                                                         <button onClick={() => cancelEdit()}>Cancel</button>
-                                                                        {/* Currently, the "Save" button is not functional. Instead use Enter */}
-                                                                        <button onClick={() => handleEdit(message.id, editedMessageContent)}>Save</button>
                                                                     </div>
                                                                 ) : (
                                                                     message.content
