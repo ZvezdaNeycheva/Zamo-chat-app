@@ -171,12 +171,10 @@ export function SingleCannel() {
                                                                             onChange={(e) => setEditedMessageContent(e.target.value)}
                                                                             onKeyDown={(e) => handleEditKeyDown(e, message.id)}
                                                                             onBlur={() => cancelEdit()}
-                                                                            autoFocus // Focus the input field when editing starts
+                                                                            autoFocus
                                                                             className="w-full border-transparent bg-transparent focus:outline-none focus:ring-0"
                                                                         />
                                                                         <button onClick={() => cancelEdit()}>Cancel</button>
-                                                                        {/* Currently, the "Save" button is not functional. Instead use Enter */}
-                                                                        {/* <button onClick={() => handleEdit(message.id, editedMessageContent)}>Save</button> */}
                                                                     </div>
                                                                 ) : (
                                                                     message.content
@@ -217,7 +215,6 @@ export function SingleCannel() {
                             <div className="z-40 w-full p-6 mb-0 bg-white border-t lg:mb-1 border-gray-50 dark:bg-zinc-800 dark:border-zinc-700">
                                 <div className="flex gap-2">
                                     <div className="flex-grow">
-                                        {/* handleSendMessage    sendMessage(messages) */}
                                         <input type="text" value={newMessage} onChange={handleInputMessage} onClick={() => { sendMessage(messages) }} onKeyDown={(e) => {
                                             if (e.key === 'Enter') {
                                                 e.preventDefault();
