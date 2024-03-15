@@ -4,9 +4,12 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { AppContext } from "../AppContext";
 import { useNavigate, useParams } from "react-router-dom";
 import { Channels } from "./Channels";
+import { FriendsList } from '../service/users.service';
+
 
 export function Groups() {
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isMemberPickerVisible, setIsMemberPickerVisible] = useState(false);
   const [groupName, setGroupName] = useState('');
   const [isPrivate, setIsPrivate] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -17,6 +20,8 @@ export function Groups() {
   let { idGroup } = useParams();
   const navigate = useNavigate();
   const [groupList, setgroupList] = useState([]);
+  const [friendsList, setFriendsList] = useState([]);
+
 
   useEffect(() => {
     const getGroups = async () => {
@@ -49,6 +54,12 @@ export function Groups() {
       }
     });
   }, []);
+
+  useEffect(() => {
+    if (user) {
+      FriendsList(user.uid, setFriendsList);
+    }
+  }, [user]);
 
   const toggleModal = () => {
     setIsModalVisible(!isModalVisible);
@@ -154,35 +165,40 @@ export function Groups() {
                             <div className="mb-8 ltr:text-left rtl:text-right">
                               <label className="dark:text-gray-300 "> Group Members </label>
                               <div className="mt-2 mb-3">
-                                <button className="group-data-[theme-color=violet]:bg-slate-200 group-data-[theme-color=green]:bg-white group-data-[theme-color=red]:bg-white border-0 btn group-data-[theme-color=violet]:dark:bg-zinc-600 group-data-[theme-color=green]:dark:bg-zinc-600 group-data-[theme-color=red]:dark:bg-zinc-600 dark:text-gray-50" type="button" id="toggleButton" >
+                                <button className={` border-0 btn dark:text-gray-50 ${isMemberPickerVisible ? 'bg-violet-200' : 'group-data-[theme-color=violet]:bg-slate-200 group-data-[theme-color=green]:bg-white group-data-[theme-color=red]:bg-white group-data-[theme-color=violet]:dark:bg-zinc-600 group-data-[theme-color=green]:dark:bg-zinc-600 group-data-[theme-color=red]:dark:bg-zinc-600'}`} type="button" id="toggleButton" onClick={() => setIsMemberPickerVisible(value => !value)} > {/* use this instead setIsMemberPickerVisible(!isMemberPickerVisible) */}
                                   Select Members
                                 </button>
                               </div>
-                              <div className="hidden" id="collapseElement">
-                                <div className="border border-gray-100 rounded dark:border-zinc-500">
-                                  <div className="px-3 py-2 rounded bg-gray-100/50 dark:bg-zinc-600">
-                                    <h5 className="mb-0 text-base text-gray-800 dark:text-gray-50">
-                                      Contacts
-                                    </h5>
-                                  </div>
-                                  <div className="p-2 bg-white dark:bg-zinc-800">
-                                    <div data-simplebar="" className="h-[150px]">
-                                      <div>
-                                        <ul>
-                                          <li className="px-5 py-[10px]">
-                                            <div className="flex items-center gap-3">
-                                              <input type="checkbox" d="memberCheck1" efaultChecked="" lassName="border-gray-100 rounded group-data-[theme-color=violet]:bg-violet-50 group-data-[theme-color=green]:bg-green-50 group-data-[theme-color=red]:bg-red-50 focus:ring-1 group-data-[theme-color=violet]:focus:ring-violet-500/20 group-data-[theme-color=green]:focus:ring-green-500/20 group-data-[theme-color=red]:focus:ring-red-500/20 group-data-[theme-color=violet]:checked:bg-violet-500 group-data-[theme-color=green]:checked:bg-green-500 group-data-[theme-color=red]:checked:bg-red-500 checked:ring-1 group-data-[theme-color=red]:checked:ring-violet-500/20 focus:ring-offset-0 focus:outline-0 group-data-[theme-color=violet]:dark:border-zinc-500 group-data-[theme-color=green]:dark:border-zinc-500 group-data-[theme-color=red]:dark:border-zinc-500" />
-                                              <label htmlFor="memberCheck1" className="dark:text-gray-300" >
-                                                Albert Rodarte
-                                              </label>
-                                            </div>
-                                          </li>
-                                        </ul>
+                              {isMemberPickerVisible ?
+                                <div id="collapseElement">
+                                  <div className="border border-gray-100 rounded dark:border-zinc-500">
+                                    <div className="px-3 py-2 rounded bg-gray-100/50 dark:bg-zinc-600">
+                                      <h5 className="mb-0 text-base text-gray-800 dark:text-gray-50">
+                                        Contacts
+                                      </h5>
+                                    </div>
+                                    <div className="p-2 bg-white dark:bg-zinc-800">
+                                      <div data-simplebar="" className="h-[150px]">
+                                        <div>
+                                          <ul>
+                                            {
+                                              friendsList.map((friend) => (
+                                                <li className="px-5 py-[10px]">
+                                                  <div className="flex items-center gap-3">
+                                                    <input type="checkbox" d="memberCheck1" efaultChecked="" lassName="border-gray-100 rounded group-data-[theme-color=violet]:bg-violet-50 group-data-[theme-color=green]:bg-green-50 group-data-[theme-color=red]:bg-red-50 focus:ring-1 group-data-[theme-color=violet]:focus:ring-violet-500/20 group-data-[theme-color=green]:focus:ring-green-500/20 group-data-[theme-color=red]:focus:ring-red-500/20 group-data-[theme-color=violet]:checked:bg-violet-500 group-data-[theme-color=green]:checked:bg-green-500 group-data-[theme-color=red]:checked:bg-red-500 checked:ring-1 group-data-[theme-color=red]:checked:ring-violet-500/20 focus:ring-offset-0 focus:outline-0 group-data-[theme-color=violet]:dark:border-zinc-500 group-data-[theme-color=green]:dark:border-zinc-500 group-data-[theme-color=red]:dark:border-zinc-500" />
+                                                    <label htmlFor="memberCheck1" className="dark:text-gray-300" >
+                                                      {friend.username}
+                                                    </label>
+                                                  </div>
+                                                </li>
+                                              ))
+                                            }
+                                          </ul>
+                                        </div>
                                       </div>
                                     </div>
                                   </div>
-                                </div>
-                              </div>
+                                </div> : null}
                             </div>
                             <div className="flex justify-between items-center mt-4">
                               <label htmlFor="group-private" className="inline-flex items-center">

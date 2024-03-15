@@ -146,7 +146,7 @@ export const handleRejectFriendRequest = async (currentUserUid, senderUid, curre
 };
 
 
-export const FriendsList = async (uid, setFriendsList) => {
+export const FriendsList = async (uid, onChange) => {
   try {
     const userRef = ref(db, `users/${uid}`);
     onValue(userRef, async (snapshot) => {
@@ -166,7 +166,7 @@ export const FriendsList = async (uid, setFriendsList) => {
       }));
 
       const filteredFriendsData = friendsData.filter((friend) => friend !== null);
-      setFriendsList(filteredFriendsData);
+      onChange(filteredFriendsData);
     });
   } catch (error) {
     console.error('Error getting friends list:', error);
