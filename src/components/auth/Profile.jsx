@@ -35,24 +35,8 @@ export function Profile() {
 
   const [localStatus, setLocalStatus] = useState(userData ? userData.status : "Loading...");
 
-  function toggleDropdown() {
-    setOpen((prevOpen) => !prevOpen);
-  }
-
-  function toggleStatusDropdown() {
-    setOpenStatusDropdown((prevOpen) => !prevOpen);
-  }
-
-  function toggleAboutDropdown() {
-    setOpenAboutDropdown((prevOpen) => !prevOpen);
-  }
-
-  function toggleFileDropdown() {
-    setOpenFilesDropdown((prevOpen) => !prevOpen);
-  }
-
-  const toggleFileDetailsDropdown = () => {
-    setFileDetailsDropdown((prevOpen) => !prevOpen);
+  const toggleDropdown = (dropdownSetter) => {
+    dropdownSetter(prevState => !prevState);
   };
 
   function handleChange(e) {
@@ -136,7 +120,7 @@ export function Profile() {
             {/* Drop Down */}
             <div className="ltr:float-right rtl:float-left">
               <div className={`relative flex-shrink-0 dropdown `}>
-                <button onClick={toggleDropdown} className="p-0 bottom-10 text-gray-400 border-0 btn dark:text-gray-300" data-bs-toggle="dropdown" id="dropdownMenuButtonA">
+                <button onClick={() => toggleDropdown(setOpen)} className="p-0 bottom-10 text-gray-400 border-0 btn dark:text-gray-300" data-bs-toggle="dropdown" id="dropdownMenuButtonA">
                   <i className="text-lg ri-more-2-fill" />
                 </button>
                 <ul className={`${open ? "visible" : "invisible"} absolute z-50 block w-40 py-2 text-left list-none bg-red-700 border border-transparent rounded shadow-lg rtl:right-auto rtl:left-0 ltr:left-auto ltr:right-0 my-7 bg-clip-padding dark:bg-zinc-700 dark:shadow-sm dark:border-zinc-600`} aria-labelledby="dropdownMenuButtonA">
@@ -169,7 +153,7 @@ export function Profile() {
             {/* Profile Status */}
             {/* Dropdown menu for status*/}
             <div className="relative mb-1 dropdown">
-              <button onClick={toggleStatusDropdown} className="pb-1 d-block dark:text-gray-300" data-bs-toggle="dropdown" id="dropdownMenuButtonX">
+              <button onClick={() => toggleDropdown(setOpenStatusDropdown)} className="pb-1 d-block dark:text-gray-300" data-bs-toggle="dropdown" id="dropdownMenuButtonX">
                 <a className={`pb-1 text-${localStatus === 'Online' ? 'text-green-500 ltr:ml-1 rtl:mr-1 ri-record-circle-fill green-500' : 'text-red-500 ltr:ml-1 rtl:mr-1 ri-record-circle-fill red-500'} dropdown-toggle d-block dark:text-gray-300`} href="#" role="button" data-bs-toggle="dropdown" id="dropdownMenuButtonX">
                   &nbsp;{localStatus} <i className={`mdi mdi-chevron-down ${openStatusDropdown ? "group-[.active]:rotate-180" : ""}`}></i>
                 </a>
@@ -218,7 +202,7 @@ export function Profile() {
               {/* About Drop Down menu*/}
               <div className="text-gray-700 accordion-item">
                 <h2>
-                  <button onClick={toggleAboutDropdown} type="button" className="flex items-center justify-between w-full px-3 py-2 font-medium text-left border border-gray-100 rounded-t accordion-header group active dark:border-b-zinc-600 dark:bg-zinc-600 dark:border-zinc-600">
+                  <button onClick={() => toggleDropdown(setOpenAboutDropdown)} type="button" className="flex items-center justify-between w-full px-3 py-2 font-medium text-left border border-gray-100 rounded-t accordion-header group active dark:border-b-zinc-600 dark:bg-zinc-600 dark:border-zinc-600">
                     <span className="m-0 text-[14px] dark:text-gray-50 font-semibold ltr:block rtl:hidden">
                       <i className="mr-2 align-middle ri-user-2-line d-inline-block" />
                       About
@@ -317,7 +301,7 @@ export function Profile() {
               {/* Attached Files Drop Down menu*/}
               <div className="mt-2 text-gray-700 accordion-item">
                 <h2>
-                  <button onClick={toggleFileDropdown} type="button" className='flex items-center justify-between w-full px-3 py-2 font-medium text-left border border-gray-100 rounded accordion-header group dark:border-b-zinc-600 dark:bg-zinc-600 dark:border-zinc-600'>
+                  <button onClick={() => toggleDropdown(setOpenFilesDropdown)} type="button" className='flex items-center justify-between w-full px-3 py-2 font-medium text-left border border-gray-100 rounded accordion-header group dark:border-b-zinc-600 dark:bg-zinc-600 dark:border-zinc-600'>
                     <span className="m-0 text-[14px] dark:text-gray-50 font-semibold ltr:block rtl:hidden">
                       <i className="mr-2 align-middle ri-attachment-line d-inline-block" /> Attached Files
                     </span>
@@ -362,12 +346,7 @@ export function Profile() {
                               </a>
                             </li>
                             <li className="relative flex-shrink-0 dropstart">
-                              <button
-                                onClick={toggleFileDetailsDropdown}
-                                className="p-0 text-gray-400 border-0 btn dark:text-gray-300"
-                                aria-haspopup="true"
-                                aria-expanded={openFileDetailsDropdown}>
-
+                              <button onClick={() => toggleDropdown(setFileDetailsDropdown)} className="p-0 text-gray-400 border-0 btn dark:text-gray-300" aria-haspopup="true" aria-expanded={openFileDetailsDropdown}>
                                 <i className="text-lg ri-more-fill" />
                               </button>
 
