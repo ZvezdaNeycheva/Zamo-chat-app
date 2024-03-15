@@ -5,7 +5,7 @@ import { auth, db } from "../../service/firebase-config";
 import { AppContext } from "../../AppContext";
 import { ChatButton } from "./ChatButton";
 import { getAllUsers } from "../../service/users.service";
-import {  FriendsList } from '../../service/users.service';
+import { FriendsList } from '../../service/users.service';
 
 
 export function Chats() {
@@ -15,17 +15,17 @@ export function Chats() {
     const [selectedFriend, setSelectedFriend] = useState();
     const navigate = useNavigate();
     const { id } = useParams();
-    
-// stolen from Andy's friendsList:
-const [friendsList, setFriendsList] = useState([]);
 
-const filteredFriends = friendsList.filter(friend => friend);
-useEffect(() => {
-    if (user) {
-      FriendsList(user.uid, setUsers);
-    }
-  }, [user]);
-//-------------------------------------
+    // stolen from Andy's friendsList:
+    const [friendsList, setFriendsList] = useState([]);
+
+    const filteredFriends = friendsList.filter(friend => friend);
+    useEffect(() => {
+        if (user) {
+            FriendsList(user.uid, setUsers);
+        }
+    }, [user]);
+    //-------------------------------------
 
 
 
@@ -125,18 +125,18 @@ useEffect(() => {
         const value = e.target.value.toLowerCase();
         setSearch(value);
 
-            const snapshot = await get(query(ref(db, "users")));
-            if (snapshot.exists()) {
-                const users = Object.keys(snapshot.val()).map((key) => ({
-                    id: key,
-                    ...snapshot.val()[key],
-                }));
+        const snapshot = await get(query(ref(db, "users")));
+        if (snapshot.exists()) {
+            const users = Object.keys(snapshot.val()).map((key) => ({
+                id: key,
+                ...snapshot.val()[key],
+            }));
 
-                const filteredUsers = users.filter((user) =>
-                    user.username.toLowerCase().includes(value)
-                );
-                setUsers(filteredUsers);
-            }
+            const filteredUsers = users.filter((user) =>
+                user.username.toLowerCase().includes(value)
+            );
+            setUsers(filteredUsers);
+        }
     };
 
 
@@ -180,12 +180,13 @@ useEffect(() => {
                 <div className="px-6 pt-6">
                     <h4 className="mb-0 text-gray-700 dark:text-gray-50">Chats</h4>
 
-                    <div className="py-1 mt-5 mb-5 rounded group-data-[theme-color=violet]:bg-slate-100 group-data-[theme-color=violet]:dark:bg-zinc-600">
-                        <span className="group-data-[theme-color=violet]:bg-slate-100  group-data-[theme-color=violet]:dark:bg-zinc-600" id="basic-addon1">
-                            <i className="text-gray-400 ri-search-line search-icon dark:text-gray-200"></i>
+                    <div className="py-1 mt-5 mb-5 rounded group-data-[theme-color=violet]:bg-slate-100 group-data-[theme-color=green]:bg-green-50 group-data-[theme-color=red]:bg-red-50 group-data-[theme-color=violet]:dark:bg-zinc-600 group-data-[theme-color=green]:dark:bg-zinc-600 group-data-[theme-color=red]:dark:bg-zinc-600">
+                        <span className="group-data-[theme-color=violet]:bg-slate-100 group-data-[theme-color=green]:bg-green-50 group-data-[theme-color=red]:bg-red-50 group-data-[theme-color=violet]:dark:bg-zinc-600 group-data-[theme-color=green]:dark:bg-zinc-600 group-data-[theme-color=red]:dark:bg-zinc-600 pe-1 ps-3 " id="basic-addon2">
+                            <i className="text-lg text-gray-700 ri-search-line search-icon dark:text-gray-200"></i>
                         </span>
-                        <input type="text" value={search} onChange={handleSearchChange} className="border-0 group-data-[theme-color=violet]:bg-slate-100  placeholder:text-[14px] focus:ring-offset-0 focus:outline-none focus:ring-0 group-data-[theme-color=violet]:dark:bg-zinc-600  placeholder:text-gray-400" placeholder="Search users" aria-label="Search users" aria-describedby="basic-addon1" />
+                        <input type="text" value={search} onChange={handleSearchChange} className="border-0 group-data-[theme-color=violet]:bg-slate-100 group-data-[theme-color=green]:bg-green-50 group-data-[theme-color=red]:bg-red-50 group-data-[theme-color=violet]:dark:bg-zinc-600 group-data-[theme-color=green]:dark:bg-zinc-600 group-data-[theme-color=red]:dark:bg-zinc-600 placeholder:text-[14px] focus:ring-offset-0 focus:outline-none focus:ring-0 dark:text-gray-400" placeholder="Search messages or users" aria-label="Search messages or users" aria-describedby="basic-addon2" />
                     </div>
+
                 </div>
 
                 <div className="overflow-scroll">

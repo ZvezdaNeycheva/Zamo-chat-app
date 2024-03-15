@@ -56,7 +56,7 @@ function App() {
     }
   }, [user]);
 
-    // const [meeting, initMeeting] = useDyteClient(); // Initialize useDyteClient
+  // const [meeting, initMeeting] = useDyteClient(); // Initialize useDyteClient
 
   // useEffect(() => {
   //   getAuthToken() // Call getAuthToken to retrieve the authentication token
@@ -79,29 +79,29 @@ function App() {
     <AppContext.Provider value={{ ...context, setContext }}>
       {/* <RoomContext.Provider value={{ ...roomId,  setRoomId: setRoomId }}> */}
       {/* <DyteProvider value={meeting}> */}
-        <Router>
-          <Routes>
-            <Route path="*" element={<Layout selectedAppBarButton={'chats'} sideBarContent={<Chats />} />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/lock-screen" element={<Authenticated> <LockScreen /> </Authenticated>} />
-            <Route path="/recover" element={<RecoverPassword />} />
-            <Route path="/chats/:id" element={<Layout selectedAppBarButton={'chats'} sideBarContent={<Chats />} mainContent={<Chat />} />} />
-            <Route path="/groups" element={<Layout selectedAppBarButton={'groups'} sideBarContent={<Groups />} />} />
-            <Route path="/groups/:idGroup" element={<Layout selectedAppBarButton={'groups'} sideBarContent={<Channels />} />} />
-            <Route path="/groups/:idGroup/channels/:idCannel" element={<Layout selectedAppBarButton={'groups'} sideBarContent={<Channels />} mainContent={<SingleCannel />} />} />
-            <Route path="/contacts" element={<Layout selectedAppBarButton={'contacts'} sideBarContent={<Contacts />} />} />
-            <Route path="/settings" element={<Layout selectedAppBarButton={'settings'} mainContent={<Settings />} />} />
-            <Route path="/meta" element={<Meta />} />
-            <Route path="/profile" element={<Layout selectedAppBarButton={'profile'} mainContent={<Authenticated> <Profile /> </Authenticated>} />} />
-            <Route path="/sidebar-menu" element={<AppBar />} />
-            {/* <Route path="/switcher" element={<Switcher />} /> */}
-            <Route path="/user-profile-details" element={<UserProfileDetails />} />
-            {/* <Route path="/meet" element={<DyteMeeting/>} /> */}
+      <Router>
+        <Routes>
+          <Route path="*" element={<Layout selectedAppBarButton={'chats'} sideBarContent={<Chats />} />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/lock-screen" element={<Authenticated> <LockScreen /> </Authenticated>} />
+          <Route path="/recover" element={<RecoverPassword />} />
+          <Route path="/chats/:id" element={<Layout selectedAppBarButton={'chats'} sideBarContent={<Chats />} mainContent={<Chat />} />} />
+          <Route path="/groups" element={<Layout selectedAppBarButton={'groups'} sideBarContent={<Groups />} />} />
+          <Route path="/groups/:idGroup" element={<Layout selectedAppBarButton={'groups'} sideBarContent={<Channels />} />} />
+          <Route path="/groups/:idGroup/channels/:idCannel" element={<Layout selectedAppBarButton={'groups'} sideBarContent={<Channels />} mainContent={<SingleCannel />} />} />
+          <Route path="/contacts" element={<Layout selectedAppBarButton={'contacts'} sideBarContent={<Contacts />} />} />
+          <Route path="/settings" element={<Layout selectedAppBarButton={'settings'} mainContent={<Settings />} />} />
+          <Route path="/meta" element={<Meta />} />
+          <Route path="/profile" element={<Layout selectedAppBarButton={'profile'} mainContent={<Authenticated> <Profile /> </Authenticated>} />} />
+          <Route path="/sidebar-menu" element={<AppBar />} />
+          {/* <Route path="/switcher" element={<Switcher />} /> */}
+          <Route path="/user-profile-details" element={<Layout UserProfileDetailsContent={'user-profile-details'} sideBarContent={<Chats />} mainContent={<SingleCannel />} />} />
+          {/* <Route path="/meet" element={<DyteMeeting/>} /> */}
 
-          </Routes>
-        </Router>
-          {/* </RoomContext.Provider> */}
+        </Routes>
+      </Router>
+      {/* </RoomContext.Provider> */}
       {/* </DyteProvider> */}
     </AppContext.Provider>
   );
