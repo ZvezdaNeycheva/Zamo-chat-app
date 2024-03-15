@@ -16,8 +16,7 @@ export function SingleCannel() {
     const [editMessage, setEditMessage] = useState(null);
     const [editedMessageContent, setEditedMessageContent] = useState('');
     const [activeOptionsMessageId, setActiveOptionsMessageId] = useState(null);
-
-
+ 
     useEffect(() => {
         try {
             if (!idCannel) {
@@ -47,9 +46,9 @@ export function SingleCannel() {
     }, [idCannel]);
 
     // checking for recursion
-    useEffect(() => {
-        console.log({ messages });
-    }, [messages]);
+    // useEffect(() => {
+    //     console.log({ messages });
+    // }, [messages]);
 
 
     const handleInputMessage = (e) => {
@@ -142,7 +141,7 @@ export function SingleCannel() {
                     {/* <!-- start chat conversation section --> */}
 
                     <div className="relative w-full overflow-hidden ">
-                        {/* {idCannel ? <ChatToolbar userData={userData} /> : null} */}
+                        {idCannel ? <ChatToolbar userData={userData} /> : null}
                         {/* <!-- end chat user head --> */}
 
                         {/* <!-- start chat conversation --> */}
@@ -177,7 +176,7 @@ export function SingleCannel() {
                                                                         />
                                                                         <button onClick={() => cancelEdit()}>Cancel</button>
                                                                         {/* Currently, the "Save" button is not functional. Instead use Enter */}
-                                                                        <button onClick={() => handleEdit(message.id, editedMessageContent)}>Save</button>
+                                                                        {/* <button onClick={() => handleEdit(message.id, editedMessageContent)}>Save</button> */}
                                                                     </div>
                                                                 ) : (
                                                                     message.content
