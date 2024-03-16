@@ -30,33 +30,6 @@ export const fetchMessages = (id, setMessages, setLoadingMessages) => {
     }
 };
 
-export const fetchPMs= async(id) => {
-    try {
-        if (!id) {
-            // throw new Error("No room ID provided.");
-            console.log("No room ID provided.");
-        }
-        const messagesRef = ref(db, `rooms/${id}/messages`);
-        const unsubscribe = onValue(messagesRef, (snapshot) => {
-            const messageData = snapshot.val();
-            if (messageData) {
-                const messageList = Object.keys(messageData).map((key) => ({
-                    id: key,
-                    ...messageData[key],
-                }));
-                return messageList;
-            } else {
-                console.log('No messages in the room');
-            }
-        });
-
-        return () => {
-            unsubscribe();
-        };
-    } catch (error) {
-        console.error("Error fetching messages:", error);
-    }
-};
 
 export const sendMessagePM = async (newMessage, id, userData ) => {
    

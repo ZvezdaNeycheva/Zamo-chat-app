@@ -1,12 +1,9 @@
 import { useState, useEffect, useContext } from "react";
-import { get, remove } from "firebase/database";
-import { ref, update, set, push, onValue } from "firebase/database";
 import { useParams } from "react-router-dom";
 import { AppContext } from "../../AppContext";
-import { db } from "../../service/firebase-config";
 import { ChatUploadFile } from "./ChatUploadFile";
 import { ChatToolbar } from "./ChatToolbar";
-import { fetchPMs, fetchMessages, handleEditPM, sendMessagePM, handleDeletePM, reactToMessagePM } from "../../service/message.service";
+import { fetchMessages, handleEditPM, sendMessagePM, handleDeletePM, reactToMessagePM } from "../../service/message.service";
 
 export function Chat() {
     let { id } = useParams();
@@ -17,23 +14,6 @@ export function Chat() {
     const [editMessage, setEditMessage] = useState(null);
     const [editedMessageContent, setEditedMessageContent] = useState('');
     const [activeOptionsMessageId, setActiveOptionsMessageId] = useState(null);
-
-    // useEffect(() => {
-    //     try {
-    //         const messageList = async () => {
-    //             await fetchPMs(id)
-    //         }
-    //         messageList()
-    //         if (messageList) {
-    //             setMessages(messageList);
-    //         } else {
-    //             setMessages([]);
-    //         }
-    //         setLoadingMessages(false);
-    //     } catch (error) {
-    //         console.log("Error fetching messages:", error);
-    //     }
-    // }, [id]);
 
     useEffect(() => {
         const unsubscribe = fetchMessages(id, setMessages, setLoadingMessages);
@@ -56,7 +36,6 @@ export function Chat() {
     const handleEdit = async(mId, newContent) => {
         setEditMessage(mId);
         try {
-            // 'await' has no effect on the type of this expression
             const updatedMessages = await handleEditPM(mId, newContent, id, messages)
             setMessages(updatedMessages);
         } catch (error) {
@@ -92,7 +71,6 @@ export function Chat() {
         setEditedMessageContent('');
     };
 
-
     const handleDelete = async (mId) => {
         try {
             await handleDeletePM(mId, id);
@@ -102,8 +80,6 @@ export function Chat() {
         }
     };
     
-
-
 
     return (
         <>
