@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { fetchChannelsIdsByGroup, fetchChannelsAll, addChannel, deleteChannel } from "../service/channel.service";
+import { fetchChannelsIdsByGroup, fetchChannelsAll, createChannel, deleteChannel } from "../service/channel.service";
 import { AppContext } from "../AppContext";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 
@@ -63,7 +63,7 @@ export function Channels() {
       const creatorName = userData.username;
       console.log("Creating channel with creator ID:", currentUser?.uid);
       console.log("Creating channel with creator name:", userData.username);
-      await addChannel(groupId, creatorName, { "creator": userData.uid }, channelName, creatorId);
+      await createChannel(groupId, creatorName, { "creator": userData.uid }, channelName, creatorId);
 
       // Now, re-fetch the channels to update the UI
       fetchAndUpdateChannels();

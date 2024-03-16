@@ -1,8 +1,9 @@
 import { get, set, ref, getDatabase, push, child, remove, update } from 'firebase/database';
 import { db } from './firebase-config';
 import { format } from 'date-fns';
+import { getUserData, updateUserData } from './users.service';
 // Groups
-export const createGroup = async (groupName, isPrivate, creatorId, creatorName) => {
+export const createGroup = async (groupName, isPrivate, creatorId, creatorName, members) => {
   const readableDate = format(new Date(), 'yyyy-MM-dd HH:mm:ss');
   const groupsRef = ref(getDatabase(), 'groups');
   const newGroupRef = push(groupsRef);
@@ -14,12 +15,16 @@ export const createGroup = async (groupName, isPrivate, creatorId, creatorName) 
     private: isPrivate,
     creatorId,
     creatorName,
+    members: arrayToObject(members)
   };
 
   try {
     await set(newGroupRef, groupData);
     console.log("Group created successfully with ID:", newGroupRef.key);
-    await addChannel(newGroupRef.key, creatorName, { "creator": creatorId }, '#General', creatorId);
+    await createChannel(newGroupRef.key, creatorName, members, '#General', creatorId);
+    for (const id of members) {
+      await update(ref(db, `users/${id}/groups`), {[newGroupRef?.key]: true});
+    }
     return groupData; // Return the full group object
   } catch (error) {
     console.error("Error creating group:", error);
@@ -56,30 +61,26 @@ export const deleteGroup = async (groupId) => {
 };
 
 
-export const addChannel = (groupId, creatorName, members, channelName = '#General', creatorId) => {
+export const createChannel = async (groupId, creatorName, members, channelName = '#General', creatorId) => {
   const readableDate = format(new Date(), 'yyyy-MM-dd HH:mm:ss');
-
-  return push(ref(db, `groups/${groupId}/channels`), {})
-    .then(response => {
-      set(ref(db, `channels/${response.key}`),
-        {
-          name: `${channelName}`,
-          createdOnReadable: readableDate,
-          members: {
-            ...members,
-          },
-          id: response.key,
-          creatorName,
-          creatorId,
-        });
-      return update(ref(db), {
-        [`groups/${groupId}/channels/${response.key}`]: true,
-      })
-        .then(() => {
-          return response.key;
-        });
+  try {
+    const response = await push(ref(db, `groups/${groupId}/channels`), {});
+    await set(ref(db, `channels/${response.key}`),
+      {
+        name: `${channelName}`,
+        createdOnReadable: readableDate,
+        members: arrayToObject(members),
+        id: response.key,
+        creatorName,
+        creatorId,
+      });
+    await update(ref(db), {
+      [`groups/${groupId}/channels/${response.key}`]: true,
     })
-    .catch(e => console.error(e));
+    return response.key;
+  } catch (e) {
+    console.error(e);
+  }
 }
 
 export const fetchChannelsIdsByGroup = async (groupId) => {
@@ -125,3 +126,8 @@ export const deleteChannel = async (channelId) => {
     throw error;
   }
 };
+
+function arrayToObject(array) {
+  // ["1298374fdasjf", "213984712934"] => [[1298374fdasjf: true], [213984712934: true]] => {1298...: true, 2139: true}
+  return Object.fromEntries(array.map(id => [id, true]));
+}

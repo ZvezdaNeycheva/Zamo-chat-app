@@ -21,7 +21,7 @@ export function Groups() {
   const navigate = useNavigate();
   const [groupList, setgroupList] = useState([]);
   const [friendsList, setFriendsList] = useState([]);
-
+  const [chosenFriends, setChosenFriends] = useState([]);
 
   useEffect(() => {
     const getGroups = async () => {
@@ -61,8 +61,19 @@ export function Groups() {
     }
   }, [user]);
 
+  useEffect(() => {
+    console.log(chosenFriends);
+  }, [chosenFriends]);
+
+  useEffect(() => {
+    if (isModalVisible) {
+      setIsMemberPickerVisible(false);
+      setChosenFriends([]);
+    }
+  }, [isModalVisible]);
+
   const toggleModal = () => {
-    setIsModalVisible(!isModalVisible);
+    setIsModalVisible(prev => !prev);
   };
 
   const handleCreateGroup = async (event) => {
@@ -75,7 +86,7 @@ export function Groups() {
     try {
       const creatorId = currentUser?.uid; // Get the UID from the current user object
       const creatorName = userData.username
-      const newGroup = await createGroup(groupName, isPrivate, creatorId, creatorName);
+      const newGroup = await createGroup(groupName, isPrivate, creatorId, creatorName, chosenFriends);
       setGroups(prevGroups => {
         const updatedGroups = { ...prevGroups }; // Clone the current state
         updatedGroups[newGroup.id] = newGroup; // Add the new group
@@ -115,6 +126,14 @@ export function Groups() {
     updatedGroupList[index].isOpen = !updatedGroupList[index].isOpen;
     setgroupList(updatedGroupList);
   };
+
+  const handleFriendChecked = (event, friend) => {
+    if (event.target.checked) {
+      setChosenFriends((prev) => [...prev, friend.uid]);
+    } else {
+      setChosenFriends((prev) => prev.filter(value => value !== friend.uid));
+    }
+  }
 
   return (
     <>
@@ -165,7 +184,7 @@ export function Groups() {
                             <div className="mb-8 ltr:text-left rtl:text-right">
                               <label className="dark:text-gray-300 "> Group Members </label>
                               <div className="mt-2 mb-3">
-                                <button className={` border-0 btn dark:text-gray-50 ${isMemberPickerVisible ? 'bg-violet-200' : 'group-data-[theme-color=violet]:bg-slate-200 group-data-[theme-color=green]:bg-white group-data-[theme-color=red]:bg-white group-data-[theme-color=violet]:dark:bg-zinc-600 group-data-[theme-color=green]:dark:bg-zinc-600 group-data-[theme-color=red]:dark:bg-zinc-600'}`} type="button" id="toggleButton" onClick={() => setIsMemberPickerVisible(value => !value)} > {/* use this instead setIsMemberPickerVisible(!isMemberPickerVisible) */}
+                                <button className={` border-0 btn dark:text-gray-50 ${isMemberPickerVisible ? 'bg-violet-200' : 'group-data-[theme-color=violet]:bg-slate-200 group-data-[theme-color=green]:bg-white group-data-[theme-color=red]:bg-white group-data-[theme-color=violet]:dark:bg-zinc-600 group-data-[theme-color=green]:dark:bg-zinc-600 group-data-[theme-color=red]:dark:bg-zinc-600'}`} type="button" id="toggleButton" onClick={() => setIsMemberPickerVisible((prev) => !prev)} >
                                   Select Members
                                 </button>
                               </div>
@@ -185,8 +204,8 @@ export function Groups() {
                                               friendsList.map((friend) => (
                                                 <li className="px-5 py-[10px]">
                                                   <div className="flex items-center gap-3">
-                                                    <input type="checkbox" d="memberCheck1" efaultChecked="" lassName="border-gray-100 rounded group-data-[theme-color=violet]:bg-violet-50 group-data-[theme-color=green]:bg-green-50 group-data-[theme-color=red]:bg-red-50 focus:ring-1 group-data-[theme-color=violet]:focus:ring-violet-500/20 group-data-[theme-color=green]:focus:ring-green-500/20 group-data-[theme-color=red]:focus:ring-red-500/20 group-data-[theme-color=violet]:checked:bg-violet-500 group-data-[theme-color=green]:checked:bg-green-500 group-data-[theme-color=red]:checked:bg-red-500 checked:ring-1 group-data-[theme-color=red]:checked:ring-violet-500/20 focus:ring-offset-0 focus:outline-0 group-data-[theme-color=violet]:dark:border-zinc-500 group-data-[theme-color=green]:dark:border-zinc-500 group-data-[theme-color=red]:dark:border-zinc-500" />
-                                                    <label htmlFor="memberCheck1" className="dark:text-gray-300" >
+                                                    <input type="checkbox" id={`friend-${friend.uid}`} defaultChecked="" onChange={(e) => handleFriendChecked(e, friend)} className="border-gray-100 rounded group-data-[theme-color=violet]:bg-violet-50 group-data-[theme-color=green]:bg-green-50 group-data-[theme-color=red]:bg-red-50 focus:ring-1 group-data-[theme-color=violet]:focus:ring-violet-500/20 group-data-[theme-color=green]:focus:ring-green-500/20 group-data-[theme-color=red]:focus:ring-red-500/20 group-data-[theme-color=violet]:checked:bg-violet-500 group-data-[theme-color=green]:checked:bg-green-500 group-data-[theme-color=red]:checked:bg-red-500 checked:ring-1 group-data-[theme-color=red]:checked:ring-violet-500/20 focus:ring-offset-0 focus:outline-0 group-data-[theme-color=violet]:dark:border-zinc-500 group-data-[theme-color=green]:dark:border-zinc-500 group-data-[theme-color=red]:dark:border-zinc-500" />
+                                                    <label htmlFor={`friend-${friend.uid}`} className="dark:text-gray-300" >
                                                       {friend.username}
                                                     </label>
                                                   </div>
