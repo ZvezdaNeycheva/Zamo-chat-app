@@ -4,7 +4,7 @@ import { ChatUploadFile } from "./ChatUploadFile";
 import { ChatToolbar } from "./ChatToolbar";
 import { fetchMessages, handleEditPM, sendMessagePM, handleDeletePM, reactToMessagePM } from "../../service/message.service";
 
-export function Chat({id}) {
+export function Chat({ id }) {
     const { user, userData } = useContext(AppContext);
     const [newMessage, setNewMessage] = useState("");
     const [messages, setMessages] = useState([]);
@@ -174,10 +174,10 @@ export function Chat({id}) {
                                 <div className="flex gap-2">
                                     <div className="flex-grow">
                                         {/* handleSendMessage    sendMessage(messages) */}
-                                        <input type="text" value={newMessage} onChange={handleInputMessage} onClick={() => { sendMessage(messages) }} onKeyDown={(e) => {
+                                        <input type="text" value={newMessage} onChange={handleInputMessage} onClick={() => { sendMessage(newMessage) }} onKeyDown={(e) => {
                                             if (e.key === 'Enter') {
                                                 e.preventDefault();
-                                                sendMessage(messages);
+                                                sendMessage(newMessage);
                                             }
                                         }} className="w-full border-transparent rounded bg-gray-50 placeholder:text-14 text-14 dark:bg-zinc-700 dark:placeholder:text-gray-300 dark:text-gray-300" placeholder="Enter Message..." />
                                     </div>
