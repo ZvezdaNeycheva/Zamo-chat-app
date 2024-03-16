@@ -165,26 +165,8 @@ export function Chat() {
         }
     };
 
-     const addChannelReaction = async(reaction, userHandle, channelId, msgId) => {
-        const channelReaction = {};
-        channelReaction[`channels/${channelId}/messages/${msgId}/reactions/${reaction}/${userHandle}`] = true;
-        return update(ref(db), channelReaction);
-      };
-       const removeChannelReaction = async(reaction, userHandle, channelId, msgId) => {
-        const channelReaction = {};
-        channelReaction[`channels/${channelId}/messages/${msgId}/reactions/${reaction}/${userHandle}`] = null;
-        return update(ref(db), channelReaction);
-      };
-      const addRoomReaction = async(reaction, userHandle, channelId, msgId) => {
-        const roomReaction = {};
-        roomReaction[`rooms/${channelId}/messages/${msgId}/reactions/${reaction}/${userHandle}`] = true;
-        return update(ref(db), roomReaction);
-      };
-      const removeRoomReaction = async(reaction, userHandle, channelId, msgId) => {
-        const roomReaction = {};
-        roomReaction[`rooms/${channelId}/messages/${msgId}/reactions/${reaction}/${userHandle}`] = null;
-        return update(ref(db), roomReaction);
-      };
+     
+  
     return (
         <>
             {/* <!-- Start User chat --> */}
@@ -232,8 +214,9 @@ export function Chat() {
                                                                     message.content
                                                                 )}
                                                             </p>
-                                                            <p className="mt-1 mb-0 text-xs text-right text-white/50"><i className="align-middle ri-time-line"></i> <span className="align-middle">    {`${new Date(message.timestamp).toLocaleDateString()} ${new Date(message.timestamp).toLocaleTimeString()}`}</span></p>
-                    <div className="text-xs text-right mt-1 mb-0 cursor: pointer;">
+                                                            <p className="mt-1 mb-0 text-xs text-right text-white/50"><i className="align-middle ri-time-line"></i> <span className="align-middle">    {`${new Date(message.timestamp).toLocaleDateString()} ${new Date(message.timestamp).toLocaleTimeString().replace(/:\d+ [AP]M/, '')}`}</span></p>
+                   
+                   <div  className={`text-xs text-right mt-1 mb-0 cursor: pointer`} >
                         {/* Example reaction buttons/icons */}
                         <button onClick={() => reactToMessage(message.id, 'thumbsUp')}>
                             👍 {message.reactions && message.reactions.thumbsUp ? message.reactions.thumbsUp.length : 0}
@@ -241,7 +224,7 @@ export function Chat() {
                         <button onClick={() => reactToMessage(message.id, 'heart')}>
                             ❤️ {message.reactions && message.reactions.heart ? message.reactions.heart.length : 0}
                         </button>
-                    </div>                                                          
+                    </div>                                                        
                                                         </div>
                                                         <div className={`relative self-start dropdown ${message.senderId === userData.uid ? 'right-0' : 'left-auto'}`}>                                                            <a className="p-0 text-gray-400 border-0 btn dropdown-toggle dark:text-gray-100" href="#" role="button" data-bs-toggle="dropdown" id="dropdownMenuButton12">
                                                             <div>
