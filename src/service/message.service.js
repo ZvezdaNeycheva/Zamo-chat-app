@@ -109,3 +109,59 @@ export const reactToMessagePM = async (messageId, reactionType, userData, id) =>
         console.error('Error reacting to message:', error);
     }
 };
+
+export const getRoom = async (participants) => {
+    try {
+        const roomsRef = ref(db, 'rooms');
+        const snapshot = await get(roomsRef);
+
+        if (snapshot.exists()) {
+            const allRooms = snapshot.val();
+            const roomId = Object.keys(allRooms).find(roomId => {
+                const room = allRooms[roomId];
+                const roomParticipants = Object.keys(room.participants);
+                return (
+                    room.type === 'direct' &&
+                    roomParticipants.length === participants.length &&
+                    roomParticipants.every(participant => participants.includes(participant))
+                );
+            });
+
+            if (roomId) {
+                return {
+                    id: roomId,
+                    ...allRooms[roomId]
+                };
+            }
+        }
+        return null;
+    } catch (error) {
+        console.error('Error fetching room:', error);
+        return null;
+    }
+};
+
+export const createRoom = async (participants) => {
+    const newRoom = {
+        type: 'direct',
+        participants: participants.reduce((acc, key) => ({
+            ...acc,
+            [key]: true
+
+        }), {}),
+    };
+
+    const roomRef = push(ref(db, "rooms"));
+    await update(roomRef, newRoom);
+
+    for (const participant of participants) {
+        await update(ref(db, `users/${participant}/rooms`), {
+            [roomRef.key]: true
+        });
+    }
+
+    return {
+        id: roomRef.key,
+        ...newRoom
+    };
+};
