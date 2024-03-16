@@ -6,7 +6,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Channels } from "./Channels";
 import { FriendsList } from '../service/users.service';
 
-
 export function Groups() {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isMemberPickerVisible, setIsMemberPickerVisible] = useState(false);
@@ -138,7 +137,7 @@ export function Groups() {
       setChosenFriends((prev) => prev.filter(value => value !== friend.uid));
     }
   }
-
+  
   return (
     <>
       {idGroup ? <Channels groupId={idGroup} /> : <div className="">
@@ -228,7 +227,7 @@ export function Groups() {
                                 <input id="group-private" type="checkbox" checked={isPrivate} onChange={(e) => setIsPrivate(e.target.checked)} className="form-checkbox h-5 w-5 text-gray-600" /><span className="ml-2 text-gray-700">Private Group</span>
                               </label>
                               <div className="flex p-4 border-t border-gray-100 ltr:justify-end dark:border-zinc-500 rtl:justify-start">
-                                <button type="button" className="border-0 btn hover:underline group-data-[theme-color=violet]:text-violet-500 group-data-[theme-color=green]:text-green-500 group-data-[theme-color=red]:text-red-500" data-tw-dismiss="modal">
+                                <button onClick={toggleModal} type="button" className="border-0 btn hover:underline group-data-[theme-color=violet]:text-violet-500 group-data-[theme-color=green]:text-green-500 group-data-[theme-color=red]:text-red-500" data-tw-dismiss="modal">
                                   Close
                                 </button>
                                 <button type="submit" className="text-white border-transparent btn group-data-[theme-color=violet]:bg-violet-500 group-data-[theme-color=violet]:hover:bg-violet-600 group-data-[theme-color=green]:bg-green-500 group-data-[theme-color=green]:hover:bg-green-600 group-data-[theme-color=red]:bg-red-500 group-data-[theme-color=red]:hover:bg-red-600">
