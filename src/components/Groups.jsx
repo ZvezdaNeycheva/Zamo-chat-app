@@ -19,7 +19,7 @@ export function Groups() {
   const { user, userData } = useContext(AppContext);
   let { idGroup } = useParams();
   const navigate = useNavigate();
-  const [groupList, setgroupList] = useState([]);
+  const [visibleGroupDropdown, setVisibleGroupDropdown] = useState(null);
   const [friendsList, setFriendsList] = useState([]);
   const [chosenFriends, setChosenFriends] = useState([]);
 
@@ -111,7 +111,8 @@ export function Groups() {
     setGroups(filteredGroups); // Update `groups` to only include those that match the search query
   };
 
-  const handleDeleteGroup = async (groupId) => {
+  const handleDeleteGroup = async (event, groupId) => {
+    event.stopPropagation();
     try {
       await deleteGroup(groupId);
       const updatedGroups = await fetchGroups();
@@ -121,10 +122,13 @@ export function Groups() {
     }
   };
 
-  const handleDropDownMenu = (index) => {
-    const updatedGroupList = [...groupList];
-    updatedGroupList[index].isOpen = !updatedGroupList[index].isOpen;
-    setgroupList(updatedGroupList);
+  const handleClickGroupDropdown = (event, index) => {
+    event.stopPropagation();
+    if (visibleGroupDropdown === index) {
+      setVisibleGroupDropdown(null);
+    } else {
+      setVisibleGroupDropdown(index);
+    }
   };
 
   const handleFriendChecked = (event, friend) => {
@@ -197,7 +201,7 @@ export function Groups() {
                                       </h5>
                                     </div>
                                     <div className="p-2 bg-white dark:bg-zinc-800">
-                                      <div data-simplebar="" className="h-[150px]">
+                                      <div className="h-[150px]">
                                         <div>
                                           <ul>
                                             {
@@ -249,7 +253,7 @@ export function Groups() {
               <input type="text" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} onKeyPress={(e) => e.key === 'Enter' && handleSearch()} className="border-0 group-data-[theme-color=violet]:bg-slate-100 group-data-[theme-color=green]:bg-green-50 group-data-[theme-color=red]:bg-red-50 group-data-[theme-color=violet]:dark:bg-zinc-600 group-data-[theme-color=green]:dark:bg-zinc-600 group-data-[theme-color=red]:dark:bg-zinc-600 placeholder:text-[14px] focus:ring-offset-0 focus:outline-none focus:ring-0 dark:text-gray-400" placeholder="Search messages or users" aria-label="Search messages or users" aria-describedby="basic-addon2" />
             </div>
 
-            <div className="chat-message-list chat-group-list" data-simplebar>
+            <div className="chat-message-list chat-group-list">
               <div className="mt-2">
                 <ul>
                   {/* Display groups here */}
@@ -272,14 +276,14 @@ export function Groups() {
                             <p> </p>
                           </div>
                           {/* Dropdown menu */}
-                          <button className="p-2 ml-2 text-gray-500 hover:text-gray-800 dark:text-gray-300" onClick={() => handleDropDownMenu(index)}>
+                          <button className="p-2 ml-2 text-gray-500 hover:text-gray-800 dark:text-gray-300" onClick={(e) => handleClickGroupDropdown(e, index)}>
                             <i className="ri-more-2-fill"></i>
                           </button>
-                          {groupList[index]?.isOpen && (
-                            <div className="absolute z-50 block w-40 py-2 text-left list-none bg-white border border-transparent rounded shadow-lg ltr:left-auto ltr:right-0 bg-clip-padding dark:bg-zinc-700 dark:border-zinc-500/50 dark:shadow-sm">
+                          {visibleGroupDropdown === index && (
+                            <div className="absolute z-50 block w-40 mt-20 py-2 text-left list-none bg-white border border-transparent rounded shadow-lg ltr:left-auto ltr:right-0 bg-clip-padding dark:bg-zinc-700 dark:border-zinc-500/50 dark:shadow-sm">
                               <ul>
                                 <li>
-                                  <button onClick={() => handleDeleteGroup(key)} className="block w-full px-6 py-2 text-sm font-normal text-red-500 bg-red dropdown-item whitespace-nowrap hover:bg-gray-100/50 dark:text-red-300 dark:hover:bg-zinc-500/50" type="button">
+                                  <button onClick={(e) => handleDeleteGroup(e, key)} className="block w-full px-6 py-2 text-sm font-normal text-red-500 bg-red dropdown-item whitespace-nowrap hover:bg-gray-100/50 dark:text-red-300 dark:hover:bg-zinc-500/50" type="button">
                                     Remove
                                     <i className="float-right text-red-500 dark:text-red-300 ri-delete-bin-line"></i>
                                   </button>

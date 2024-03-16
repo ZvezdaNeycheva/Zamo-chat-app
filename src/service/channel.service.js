@@ -23,7 +23,7 @@ export const createGroup = async (groupName, isPrivate, creatorId, creatorName, 
     console.log("Group created successfully with ID:", newGroupRef.key);
     await createChannel(newGroupRef.key, creatorName, members, '#General', creatorId);
     for (const id of members) {
-      await update(ref(db, `users/${id}/groups`), {[newGroupRef?.key]: true});
+      await update(ref(db, `users/${id}/groups`), { [newGroupRef?.key]: true });
     }
     return groupData; // Return the full group object
   } catch (error) {
@@ -46,12 +46,23 @@ export const fetchGroups = async () => {
     console.error("Error fetching groups:", error);
     throw error;
   }
-};
+}
 
 export const deleteGroup = async (groupId) => {
-  const groupRef = ref(getDatabase(), `groups/${groupId}`);
-
+  const groupRef = ref(db, `groups/${groupId}`);
+  const snapshot = await get(groupRef);
+  if (!snapshot.exists()) {
+    console.log("No group with id " + id);
+    return;
+  }
   try {
+    const group = snapshot.val();
+    for (const channelId in group.channels ?? {}) {
+      await deleteChannel(channelId);
+    }
+    for (const memberId in group.members ?? {}) {
+      await remove(ref(db, `users/${memberId}/groups/${groupId}`));
+    }
     await remove(groupRef);
     console.log('Group deleted successfully.');
   } catch (error) {
@@ -59,7 +70,6 @@ export const deleteGroup = async (groupId) => {
     throw error;
   }
 };
-
 
 export const createChannel = async (groupId, creatorName, members, channelName = '#General', creatorId) => {
   const readableDate = format(new Date(), 'yyyy-MM-dd HH:mm:ss');
@@ -70,6 +80,7 @@ export const createChannel = async (groupId, creatorName, members, channelName =
         name: `${channelName}`,
         createdOnReadable: readableDate,
         members: arrayToObject(members),
+        group: groupId,
         id: response.key,
         creatorName,
         creatorId,
@@ -77,6 +88,9 @@ export const createChannel = async (groupId, creatorName, members, channelName =
     await update(ref(db), {
       [`groups/${groupId}/channels/${response.key}`]: true,
     })
+    for (const id of members) {
+      await update(ref(db, `users/${id}/channels`), { [response.key]: true });
+    }
     return response.key;
   } catch (e) {
     console.error(e);
@@ -116,9 +130,18 @@ export const fetchChannelsAll = async () => {
 };
 
 export const deleteChannel = async (channelId) => {
-  const channelRef = ref(getDatabase(), `channels/${channelId}`);
-
+  const channelRef = ref(db, `channels/${channelId}`);
+  const snapshot = await (get(channelRef));
+  if (!snapshot.exists()) {
+    console.log("No channel with id " + id);
+    return;
+  }
   try {
+    const channel = snapshot.val();
+    for (const memberId in channel.members ?? {}) {
+      await remove(ref(db, `users/${memberId}/channels/${channelId}`));
+    }
+    await remove(ref(db, `groups/${channel.group}/channels/${channelId}`));
     await remove(channelRef);
     console.log('Channel deleted successfully.');
   } catch (error) {

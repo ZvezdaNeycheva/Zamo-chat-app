@@ -63,7 +63,7 @@ export function Channels() {
       const creatorName = userData.username;
       console.log("Creating channel with creator ID:", currentUser?.uid);
       console.log("Creating channel with creator name:", userData.username);
-      await createChannel(groupId, creatorName, { "creator": userData.uid }, channelName, creatorId);
+      await createChannel(groupId, creatorName, [userData.uid], channelName, creatorId);
 
       // Now, re-fetch the channels to update the UI
       fetchAndUpdateChannels();
