@@ -193,7 +193,7 @@ export function Chats() {
 
                     <h5 className="px-6 mb-4 text-16 dark:text-gray-50">Friends</h5>
 
-                    <div className="h-[610px] px-2" data-simplebar>
+                    <div className="h-[610px] px-2">
                         <ul className="chat-user-list">
 
                             {users.length > 0 &&

@@ -7,7 +7,7 @@ import { db } from "../service/firebase-config";
 import { ChatUploadFile } from "./chats/ChatUploadFile";
 import { ChatToolbar } from "./chats/ChatToolbar";
 
-export function SingleCannel() {
+export function SingleChannel() {
     let { idCannel } = useParams();
     const { user, userData } = useContext(AppContext);
     const [newMessage, setNewMessage] = useState("");

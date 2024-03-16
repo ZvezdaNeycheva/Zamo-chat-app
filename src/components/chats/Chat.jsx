@@ -6,6 +6,7 @@ import { AppContext } from "../../AppContext";
 import { db } from "../../service/firebase-config";
 import { ChatUploadFile } from "./ChatUploadFile";
 import { ChatToolbar } from "./ChatToolbar";
+import { fetchPMs, fetchMessages, handleEditPM, sendMessagePM, handleDeletePM, reactToMessagePM } from "../../service/message.service";
 
 export function Chat() {
     let { id } = useParams();
@@ -17,69 +18,51 @@ export function Chat() {
     const [editedMessageContent, setEditedMessageContent] = useState('');
     const [activeOptionsMessageId, setActiveOptionsMessageId] = useState(null);
 
+    // useEffect(() => {
+    //     try {
+    //         const messageList = async () => {
+    //             await fetchPMs(id)
+    //         }
+    //         messageList()
+    //         if (messageList) {
+    //             setMessages(messageList);
+    //         } else {
+    //             setMessages([]);
+    //         }
+    //         setLoadingMessages(false);
+    //     } catch (error) {
+    //         console.log("Error fetching messages:", error);
+    //     }
+    // }, [id]);
 
     useEffect(() => {
-        try {
-            if (!id) {
-                // throw new Error("No room ID provided.");
-                console.log("No room ID provided.");
-            }
-            const messagesRef = ref(db, `rooms/${id}/messages`);
-            const unsubscribe = onValue(messagesRef, (snapshot) => {
-                const messageData = snapshot.val();
-                if (messageData) {
-                    const messageList = Object.keys(messageData).map((key) => ({
-                        id: key,
-                        ...messageData[key],
-                    }));
-                    setMessages(messageList);
-                } else {
-                    setMessages([]);
-                }
-                setLoadingMessages(false);
-            });
-
-            return () => {
-                unsubscribe();
-            };
-        } catch (error) {
-            console.error("Error fetching messages:", error);
-        }
+        const unsubscribe = fetchMessages(id, setMessages, setLoadingMessages);
+        return () => {
+            unsubscribe();
+        };
     }, [id]);
-
-    // checking for recursion
-    useEffect(() => {
-        console.log({ messages });
-    }, [messages]);
-
-
     const handleInputMessage = (e) => {
         e.preventDefault();
         const message = e.target.value;
         setNewMessage(message);
     };
 
-    const sendMessage = async () => {
+    const sendMessage = async (newMessage) => {
         if (!newMessage.trim()) return;
-
-        const message = {
-            senderId: userData.uid,
-            senderName: userData.username,
-            content: newMessage,
-            timestamp: Date.now(),
-            avatar: userData?.profilePhotoURL || null,
-        };
-
-        const newMessageRef = await push(ref(db, `rooms/${id}/messages`), message);
-        const messageId = newMessageRef.key;
-        message.id = messageId;
-
+        await sendMessagePM(newMessage, id, userData)
         setNewMessage("");
-        await set(ref(db, `rooms/${id}/messages/${messageId}`), message);
-        return {
-            id: messageId,
-            ...newMessageRef
-        };
+    };
+
+    const handleEdit = async(mId, newContent) => {
+        setEditMessage(mId);
+        try {
+            // 'await' has no effect on the type of this expression
+            const updatedMessages = await handleEditPM(mId, newContent, id, messages)
+            setMessages(updatedMessages);
+        } catch (error) {
+            console.error('Error editing message:', error);
+            return null;
+        }
     };
 
     const handleIconClick = (messageId) => {
@@ -96,7 +79,7 @@ export function Chat() {
         if (e.key === 'Enter') {
             e.preventDefault();
             if (editedMessageContent.trim() !== '') {
-                handleEdit(messageId, editedMessageContent);
+                handleEdit(messageId, editedMessageContent, id, messages);
                 cancelEdit()
             }
         } else if (e.key === 'Escape') {
@@ -108,65 +91,20 @@ export function Chat() {
         setEditMessage(null);
         setEditedMessageContent('');
     };
-    const handleEdit = async (mId, newContent) => {
-        setEditMessage(mId);
-        try {
-            const messageRef = ref(db, `rooms/${id}/messages/${mId}`);
 
-            await update(messageRef, {
-                content: newContent,
-            });
-            const updatedMessages = messages.map(message =>
-                message.id === mId ? { ...message, content: newContent } : message
-            );
-            setMessages(updatedMessages);
-        } catch (error) {
-            console.error('Error editing message:', error);
-        }
-    };
 
     const handleDelete = async (mId) => {
         try {
-            const messageRef = ref(db, `rooms/${id}/messages/${mId}`);
-            await remove(messageRef);
+            await handleDeletePM(mId, id);
             setMessages((prevMessages) => prevMessages.filter((message) => message.id !== mId));
         } catch (error) {
             console.error('Error deleting message:', error);
         }
     };
-    const reactToMessage = async (messageId, reactionType) => {
-        try {
-            const messageRef = ref(db, `rooms/${id}/messages/${messageId}`);
-            const snapshot = await get(messageRef);
-            if (snapshot.exists()) {
-                const messageData = snapshot.val();
-                const reactions = messageData.reactions || {};
-                const userId = userData.uid;
-                
-                // Update or add the user's reaction to the message
-                if (reactions[reactionType]) {
-                    if (reactions[reactionType].includes(userId)) {
-                        // User has already reacted, remove the reaction
-                        reactions[reactionType] = reactions[reactionType].filter(id => id !== userId);
-                    } else {
-                        // User hasn't reacted yet, add the reaction
-                        reactions[reactionType].push(userId);
-                    }
-                } else {
-                    // No reactions of this type yet, create a new array
-                    reactions[reactionType] = [userId];
-                }
+    
 
-                // Update the reactions in the database
-                await update(messageRef, { reactions });
-            }
-        } catch (error) {
-            console.error('Error reacting to message:', error);
-        }
-    };
 
-     
-  
+
     return (
         <>
             {/* <!-- Start User chat --> */}
@@ -215,16 +153,16 @@ export function Chat() {
                                                                 )}
                                                             </p>
                                                             <p className="mt-1 mb-0 text-xs text-right text-white/50"><i className="align-middle ri-time-line"></i> <span className="align-middle">    {`${new Date(message.timestamp).toLocaleDateString()} ${new Date(message.timestamp).toLocaleTimeString().replace(/:\d+ [AP]M/, '')}`}</span></p>
-                   
-                   <div  className={`text-xs text-right mt-1 mb-0 cursor: pointer`} >
-                        {/* Example reaction buttons/icons */}
-                        <button onClick={() => reactToMessage(message.id, 'thumbsUp')}>
-                            👍 {message.reactions && message.reactions.thumbsUp ? message.reactions.thumbsUp.length : 0}
-                        </button>
-                        <button onClick={() => reactToMessage(message.id, 'heart')}>
-                            ❤️ {message.reactions && message.reactions.heart ? message.reactions.heart.length : 0}
-                        </button>
-                    </div>                                                        
+
+                                                            <div className={`text-xs text-right mt-1 mb-0 cursor: pointer`} >
+                                                                {/* Example reaction buttons/icons */}
+                                                                <button onClick={() => reactToMessagePM(message.id, 'thumbsUp', userData, id)}>
+                                                                    👍 {message.reactions && message.reactions.thumbsUp ? message.reactions.thumbsUp.length : 0}
+                                                                </button>
+                                                                <button onClick={() => reactToMessagePM(message.id, 'heart', userData, id)}>
+                                                                    ❤️ {message.reactions && message.reactions.heart ? message.reactions.heart.length : 0}
+                                                                </button>
+                                                            </div>
                                                         </div>
                                                         <div className={`relative self-start dropdown ${message.senderId === userData.uid ? 'right-0' : 'left-auto'}`}>                                                            <a className="p-0 text-gray-400 border-0 btn dropdown-toggle dark:text-gray-100" href="#" role="button" data-bs-toggle="dropdown" id="dropdownMenuButton12">
                                                             <div>
@@ -239,7 +177,7 @@ export function Chat() {
                                                                         <button onClick={() => handleDelete(message.id)}>Delete</button>
                                                                     </div>
                                                                 )}
-                                                                
+
                                                             </div>
 
                                                         </a>
@@ -247,7 +185,7 @@ export function Chat() {
                                                         </div>
                                                     </div>
                                                     <div className={`font-medium ${message.senderName === userData.username ? '' : 'text-right mr-4'} text-gray-700 text-14 dark:text-gray-300`}>{message.senderName}</div>                                                </div>
-                                                    
+
                                             </div>
                                         </li>
                                     ))
@@ -285,7 +223,7 @@ export function Chat() {
                                                 <ChatUploadFile />
                                                 {/* Send Message */}
                                                 <li className="inline-block">
-                                                    <button type="submit" onClick={() => { sendMessage() }} className="text-white border-transparent btn group-data-[theme-color=violet]:bg-violet-500 group-data-[theme-color=green]:bg-green-500 group-data-[theme-color=red]:bg-red-500 group-data-[theme-color=violet]:hover:bg-violet-600 group-data-[theme-color=green]:hover:bg-green-600">
+                                                    <button type="submit" onClick={() => { sendMessage(newMessage) }} className="text-white border-transparent btn group-data-[theme-color=violet]:bg-violet-500 group-data-[theme-color=green]:bg-green-500 group-data-[theme-color=red]:bg-red-500 group-data-[theme-color=violet]:hover:bg-violet-600 group-data-[theme-color=green]:hover:bg-green-600">
                                                         <i className="ri-send-plane-2-fill"></i>
                                                     </button>
                                                 </li>
