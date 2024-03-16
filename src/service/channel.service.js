@@ -19,7 +19,7 @@ export const createGroup = async (groupName, isPrivate, creatorId, creatorName) 
   try {
     await set(newGroupRef, groupData);
     console.log("Group created successfully with ID:", newGroupRef.key);
-    await addChannel(newGroupRef.key, creatorName, { "creator": creatorId }, '#General');
+    await addChannel(newGroupRef.key, creatorName, { "creator": creatorId }, '#General', creatorId);
     return groupData; // Return the full group object
   } catch (error) {
     console.error("Error creating group:", error);
