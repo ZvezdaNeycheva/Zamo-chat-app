@@ -85,7 +85,8 @@ export function Groups() {
     try {
       const creatorId = currentUser?.uid; // Get the UID from the current user object
       const creatorName = userData.username
-      const newGroup = await createGroup(groupName, isPrivate, creatorId, creatorName, chosenFriends);
+      const members = [creatorId, ...chosenFriends];
+      const newGroup = await createGroup(groupName, isPrivate, creatorId, creatorName, members);
       setGroups(prevGroups => {
         const updatedGroups = { ...prevGroups }; // Clone the current state
         updatedGroups[newGroup.id] = newGroup; // Add the new group
@@ -137,7 +138,7 @@ export function Groups() {
       setChosenFriends((prev) => prev.filter(value => value !== friend.uid));
     }
   }
-  
+
   return (
     <>
       {idGroup ? <Channels groupId={idGroup} /> : <div className="">

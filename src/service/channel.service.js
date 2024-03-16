@@ -74,24 +74,28 @@ export const deleteGroup = async (groupId) => {
 export const createChannel = async (groupId, creatorName, members, channelName = '#General', creatorId) => {
   const readableDate = format(new Date(), 'yyyy-MM-dd HH:mm:ss');
   try {
-    const response = await push(ref(db, `groups/${groupId}/channels`), {});
-    await set(ref(db, `channels/${response.key}`),
+    const dbChannel = await push(ref(db, `groups/${groupId}/channels`), {});
+    const dbRoom = await push(ref(db, `rooms`), {
+      type: 'channel',
+      participants: arrayToObject(members),
+    });
+    await set(ref(db, `channels/${dbChannel.key}`),
       {
         name: `${channelName}`,
         createdOnReadable: readableDate,
-        members: arrayToObject(members),
         group: groupId,
-        id: response.key,
+        id: dbChannel.key,
+        room: dbRoom.key,
         creatorName,
         creatorId,
       });
     await update(ref(db), {
-      [`groups/${groupId}/channels/${response.key}`]: true,
+      [`groups/${groupId}/channels/${dbChannel.key}`]: true,
     })
     for (const id of members) {
-      await update(ref(db, `users/${id}/channels`), { [response.key]: true });
+      await update(ref(db, `users/${id}/channels`), { [dbChannel.key]: true });
     }
-    return response.key;
+    return dbChannel.key;
   } catch (e) {
     console.error(e);
   }
@@ -148,6 +152,12 @@ export const deleteChannel = async (channelId) => {
     console.error('Error deleting channel:', error);
     throw error;
   }
+};
+
+export const fetchChannel = async (channelId) => {
+  const snapshot = await get(ref(db, `channels/${channelId}`));
+  if (!snapshot.exists()) throw new Error('No channel with id ' + channelId);
+  return snapshot.val();
 };
 
 function arrayToObject(array) {

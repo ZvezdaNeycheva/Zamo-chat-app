@@ -78,6 +78,7 @@ export function Chats() {
                     const room = allRooms[roomId];
                     const roomParticipants = Object.keys(room.participants);
                     return (
+                        room.type === 'direct' &&
                         roomParticipants.length === participants.length &&
                         roomParticipants.every(participant => participants.includes(participant))
                     );
@@ -99,6 +100,7 @@ export function Chats() {
 
     const createRoom = async (participants) => {
         const newRoom = {
+            type: 'direct',
             participants: participants.reduce((acc, key) => ({
                 ...acc,
                 [key]: true

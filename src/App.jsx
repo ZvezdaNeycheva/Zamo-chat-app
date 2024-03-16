@@ -21,7 +21,8 @@ import { Groups } from "./components/Groups";
 import { Chats } from "./components/chats/Chats";
 import { Chat } from "./components/chats/Chat";
 import { Channels } from "./components/Channels";
-import { SingleChannel } from "./components/SingleChannel";
+import { DirectChat } from "./components/chats/DirectChat";
+import { ChannelChat } from "./components/chats/ChannelChat";
 // import { DyteMeeting } from "./components/DyteMeeting";
 
 // import { DyteProvider } from '@dytesdk/react-web-core';
@@ -63,7 +64,7 @@ function App() {
   //     .then((authToken) => {
   //       initMeeting({
   //         roomName : 'room-name',
-  //         authToken: authToken, 
+  //         authToken: authToken,
   //         defaults: {
   //           audio: false,
   //           video: false,
@@ -86,17 +87,17 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/lock-screen" element={<Authenticated> <LockScreen /> </Authenticated>} />
           <Route path="/recover" element={<RecoverPassword />} />
-          <Route path="/chats/:id" element={<Layout selectedAppBarButton={'chats'} sideBarContent={<Chats />} mainContent={<Chat />} />} />
+          <Route path="/chats/:id" element={<Layout selectedAppBarButton={'chats'} sideBarContent={<Chats />} mainContent={<DirectChat />} />} />
           <Route path="/groups" element={<Layout selectedAppBarButton={'groups'} sideBarContent={<Groups />} />} />
-          <Route path="/groups/:idGroup" element={<Layout selectedAppBarButton={'groups'} sideBarContent={<Channels />} />} />
-          <Route path="/groups/:idGroup/channels/:idCannel" element={<Layout selectedAppBarButton={'groups'} sideBarContent={<Channels />} mainContent={<SingleChannel />} />} />
+          <Route path="/groups/:groupId" element={<Layout selectedAppBarButton={'groups'} sideBarContent={<Channels />} />} />
+          <Route path="/groups/:groupId/channels/:channelId" element={<Layout selectedAppBarButton={'groups'} sideBarContent={<Channels />} mainContent={<ChannelChat />} />} />
           <Route path="/contacts" element={<Layout selectedAppBarButton={'contacts'} sideBarContent={<Contacts />} />} />
           <Route path="/settings" element={<Layout selectedAppBarButton={'settings'} mainContent={<Settings />} />} />
           <Route path="/meta" element={<Meta />} />
           <Route path="/profile" element={<Layout selectedAppBarButton={'profile'} mainContent={<Authenticated> <Profile /> </Authenticated>} />} />
           <Route path="/sidebar-menu" element={<AppBar />} />
           {/* <Route path="/switcher" element={<Switcher />} /> */}
-          <Route path="/user-profile-details" element={<Layout UserProfileDetailsContent={'user-profile-details'} sideBarContent={<Chats />} mainContent={<SingleChannel />} />} />
+          {/* <Route path="/user-profile-details" element={<Layout UserProfileDetailsContent={'user-profile-details'} sideBarContent={<Chats />} mainContent={<SingleChannel />} />} /> */}
           {/* <Route path="/meet" element={<DyteMeeting/>} /> */}
 
         </Routes>

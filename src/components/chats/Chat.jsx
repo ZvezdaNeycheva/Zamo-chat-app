@@ -1,12 +1,10 @@
 import { useState, useEffect, useContext } from "react";
-import { useParams } from "react-router-dom";
 import { AppContext } from "../../AppContext";
 import { ChatUploadFile } from "./ChatUploadFile";
 import { ChatToolbar } from "./ChatToolbar";
 import { fetchMessages, handleEditPM, sendMessagePM, handleDeletePM, reactToMessagePM } from "../../service/message.service";
 
-export function Chat() {
-    let { id } = useParams();
+export function Chat({id}) {
     const { user, userData } = useContext(AppContext);
     const [newMessage, setNewMessage] = useState("");
     const [messages, setMessages] = useState([]);
@@ -79,7 +77,7 @@ export function Chat() {
             console.error('Error deleting message:', error);
         }
     };
-    
+
 
     return (
         <>
@@ -97,7 +95,7 @@ export function Chat() {
                             {/* {fetching Messages} */}
                             <ul className="mb-0">
                                 {!id ? <p>Select a friend to start a chat.</p> : null}
-                                {id && !messages.length ? <p>The messages with your friend will appear here.</p> : null}
+                                {id && !messages.length ? <p>Your messages will appear here.</p> : null}
                                 {messages.length > 0 &&
                                     messages.map((message) => (
                                         <li key={message.id} className="clear-both py-4" >

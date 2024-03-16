@@ -7,9 +7,7 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 export function Channels() {
   const [channels, setChannels] = useState({});
-  let { idGroup } = useParams();
-  const groupId = idGroup;
-  let { idChannel } = useParams();
+  let { groupId } = useParams();
   const navigate = useNavigate();
   const { user, userData } = useContext(AppContext);
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -20,7 +18,7 @@ export function Channels() {
 
   useEffect(() => {
     const getChannels = async () => {
-      const fetchedChannelsIds = await fetchChannelsIdsByGroup(idGroup);
+      const fetchedChannelsIds = await fetchChannelsIdsByGroup(groupId);
       const fetchedChannels = await fetchChannelsAll();
       const filteredChannels = Object.keys(fetchedChannelsIds).reduce((acc, key) => {
         if (fetchedChannels[key]) {
@@ -33,7 +31,7 @@ export function Channels() {
       setChannels(filteredChannels);
     };
     getChannels();
-  }, [idGroup]);
+  }, [groupId]);
 
   const toggleModal = () => {
     setIsModalVisible(!isModalVisible);
@@ -158,7 +156,7 @@ export function Channels() {
             {/* Display channels here */}
             {Object.entries(channels).map(([key, channel]) => (
 
-              <div key={key} idChannel={key} onClick={() => navigate(`/groups/${idGroup}/channels/${key}`)} className="p-4 max-w-md bg-white rounded-lg border border-gray-200 shadow-sm hover:shadow-lg transition-shadow duration-200 ease-in-out mb-3 cursor-pointer">
+              <div key={key} idChannel={key} onClick={() => navigate(`/groups/${groupId}/channels/${key}`)} className="p-4 max-w-md bg-white rounded-lg border border-gray-200 shadow-sm hover:shadow-lg transition-shadow duration-200 ease-in-out mb-3 cursor-pointer">
 
                 <h5 className="mb-2 text-xl font-semibold tracking-tight text-blue-600">{channel.name}</h5>
                 {
