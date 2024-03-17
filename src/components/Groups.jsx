@@ -263,7 +263,7 @@ export function Groups() {
                             <i className="ri-more-2-fill"></i>
                           </button>
                           {visibleGroupDropdown === index && (
-                            <div className="absolute z-50 block w-40 mt-20 py-2 text-left list-none bg-white border border-transparent rounded shadow-lg ltr:left-auto ltr:right-0 bg-clip-padding dark:bg-zinc-700 dark:border-zinc-500/50 dark:shadow-sm">
+                            <div className="absolute z-50 block w-40 mt-32 py-2 text-left list-none bg-white border border-transparent rounded shadow-lg ltr:left-auto ltr:right-0 bg-clip-padding dark:bg-zinc-700 dark:border-zinc-500/50 dark:shadow-sm">
                               <ul>
                                 {/* Remove button */}
                                 {group.creatorId === user.uid && (
@@ -277,7 +277,7 @@ export function Groups() {
                                 {/* Leave the group button */}
                                 <li>
                                   <button onClick={(e) => handleLeaveGroup(e, key)} className="block w-full px-6 py-2 text-sm font-normal text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-zinc-500" type="button">
-                                    Leave the group
+                                    Leave
                                     <i className="float-right ri-logout-box-r-line"></i>
                                   </button>
                                 </li>
