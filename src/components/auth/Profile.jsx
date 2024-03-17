@@ -1,16 +1,11 @@
 import React, { useContext, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { AppContext } from "../../AppContext";
 import { uploadProfileImage } from "../../service/auth.service";
 import { updateUserData } from "../../service/users.service";
-import { upload } from "@testing-library/user-event/dist/upload";
 
 export function Profile() {
-  const navigate = useNavigate();
-  const { user, userData } = useContext(AppContext);
-  const [photo, setPhoto] = useState(null);
+  const { userData } = useContext(AppContext);
   const [loading, setLoading] = useState(false);
-  const [photoURL, setPhotoURL] = useState("https://thinksport.com.au/wp-content/uploads/2020/01/avatar-.jpg");
 
   const [open, setOpen] = useState(false);
   const [openStatusDropdown, setOpenStatusDropdown] = useState(false);
@@ -39,25 +34,20 @@ export function Profile() {
     dropdownSetter(prevState => !prevState);
   };
 
-  function handleChange(e) {
-    if (e.target.files[0]) {
-      const photo = e.target.files[0];
+  async function handleUploadPhoto(e) {
+    if (!userData) return;
+    const photo = e.target.files[0];
+    if (photo) {
+      try {
+        // Upload the selected photo
+        const profilePhotoURL = await uploadProfileImage(photo, userData, setLoading);
+        // Update user data with the new photo URL
+        await updateUserData(userData?.uid, {profilePhotoURL});
+        console.log(photoURL);
+      } catch(e) {
+        console.error('Error uploading profile image:', e);
 
-      // Upload the selected photo
-      uploadProfileImage(photo, user, setLoading)
-        .then((photoURL) => {
-          if (user) {
-            // Update user data with the new photo URL
-            userData.profilePhotoURL = photoURL;
-            updateUserData(userData?.uid, userData);
-            console.log(photoURL);
-          } else {
-            console.error('Error updating user data: User is undefined');
-          }
-        })
-        .catch((error) => {
-          console.error('Error uploading profile image:', error);
-        });
+      }
     }
   }
 
@@ -67,12 +57,6 @@ export function Profile() {
       setAttachedFiles(filesArray);
     }
   }, [userData]);
-
-  useEffect(() => {
-    if (user && user.photoURL) {
-      setPhotoURL(user?.photoURL);
-    }
-  }, [user, photo]);
 
   const handleUsernameUpdate = async () => {
     try {
@@ -139,11 +123,9 @@ export function Profile() {
 
           <div className="p-6 text-center border-b border-gray-100 dark:border-zinc-600">
             {/* Profile picture */}
-            <div className="mb-4">
-              <input type="file" onChange={handleChange} id="file" style={{ display: "none" }} />
-              <label htmlFor="file">
-                <button disabled={loading} className="leading-10 ri-pencil-fill text-16 w-10 h-10 bg-gray-100 rounded-full dark:bg-zinc-800 dark:text-gray-100"></button>
-              </label>
+            <div className="mb-4 relative">
+              <input type="file" onChange={handleUploadPhoto} id="file" name="file" className="hidden" />
+              <label disabled={loading} htmlFor="file" className="absolute bottom-0 ri-pencil-fill w-10 h-10 bg-gray-100 rounded-full dark:bg-zinc-800 dark:text-gray-100 cursor-pointer hover:bg-gray-200" />
               <img src={userData?.profilePhotoURL || "https://thinksport.com.au/wp-content/uploads/2020/01/avatar-.jpg"} className="w-24 h-24 p-1 mx-auto border border-gray-100 rounded-full dark:border-zinc-800" alt="Avatar" />
             </div>
 
