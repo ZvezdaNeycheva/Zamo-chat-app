@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { get, query, ref, push, update, orderByChild, equalTo } from "firebase/database";
 import { useNavigate, useParams, Link } from "react-router-dom";
-import { auth } from "../../service/firebase-config";
+import { auth, db } from "../../service/firebase-config";
 import { AppContext } from "../../AppContext";
 import { ChatButton } from "./ChatButton";
 import { getAllUsers, FriendsList } from "../../service/users.service";
