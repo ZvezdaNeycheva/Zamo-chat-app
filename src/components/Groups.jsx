@@ -10,7 +10,6 @@ export function Groups() {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isMemberPickerVisible, setIsMemberPickerVisible] = useState(false);
   const [groupName, setGroupName] = useState('');
-  const [isPrivate, setIsPrivate] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [groups, setGroups] = useState({});
   const [allGroups, setAllGroups] = useState({});
@@ -86,7 +85,7 @@ export function Groups() {
       const creatorId = currentUser?.uid; // Get the UID from the current user object
       const creatorName = userData.username
       const members = [creatorId, ...chosenFriends];
-      const newGroup = await createGroup(groupName, isPrivate, creatorId, creatorName, members);
+      const newGroup = await createGroup(groupName, creatorId, creatorName, members);
       setGroups(prevGroups => {
         const updatedGroups = { ...prevGroups }; // Clone the current state
         updatedGroups[newGroup.id] = newGroup; // Add the new group
@@ -94,7 +93,6 @@ export function Groups() {
       });
       setIsModalVisible(false); // Close the modal
       setGroupName(''); // Reset the group name input field
-      setIsPrivate(false); // Reset the privacy toggle
     } catch (error) {
       console.error("Failed to create group:", error);
     }
@@ -152,7 +150,7 @@ export function Groups() {
                   <i className="ri-group-line me-1 ms-0" />
                   <span className="absolute items-center hidden mb-6 top-8 group-hover/tag:flex ltr:-left-8 rtl:-right-8">
                     <span className="relative z-10 p-2 text-xs leading-none text-white whitespace-no-wrap bg-black rounded shadow-lg">
-                      Create groups
+                      Create group
                     </span>
                     <span className="w-3 h-3 -mt-6 rotate-45 bg-black ltr:-ml-12 rtl:-mr-12" />
                   </span>
@@ -224,15 +222,12 @@ export function Groups() {
                                 </div> : null}
                             </div>
                             <div className="flex justify-between items-center mt-4">
-                              <label htmlFor="group-private" className="inline-flex items-center">
-                                <input id="group-private" type="checkbox" checked={isPrivate} onChange={(e) => setIsPrivate(e.target.checked)} className="form-checkbox h-5 w-5 text-gray-600" /><span className="ml-2 text-gray-700">Private Group</span>
-                              </label>
                               <div className="flex p-4 border-t border-gray-100 ltr:justify-end dark:border-zinc-500 rtl:justify-start">
                                 <button onClick={toggleModal} type="button" className="border-0 btn hover:underline group-data-[theme-color=violet]:text-violet-500 group-data-[theme-color=green]:text-green-500 group-data-[theme-color=red]:text-red-500" data-tw-dismiss="modal">
                                   Close
                                 </button>
                                 <button type="submit" className="text-white border-transparent btn group-data-[theme-color=violet]:bg-violet-500 group-data-[theme-color=violet]:hover:bg-violet-600 group-data-[theme-color=green]:bg-green-500 group-data-[theme-color=green]:hover:bg-green-600 group-data-[theme-color=red]:bg-red-500 group-data-[theme-color=red]:hover:bg-red-600">
-                                  Create Groups
+                                  Create Group
                                 </button>
                               </div>
                             </div>
@@ -272,8 +267,6 @@ export function Groups() {
                           </div>
                           <div className="flex-grow overflow-hidden">
                             <h5 className="mb-0 text-gray-700 truncate dark:text-gray-50"> {group.name}</h5>
-                            <p className="font-normal text-gray-600">{group.private ? 'Private' : 'Public'}</p>
-                            <p> </p>
                           </div>
                           {/* Dropdown menu */}
                           <button className="p-2 ml-2 text-gray-500 hover:text-gray-800 dark:text-gray-300" onClick={(e) => handleClickGroupDropdown(e, index)}>

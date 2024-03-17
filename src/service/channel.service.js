@@ -3,7 +3,7 @@ import { db } from './firebase-config';
 import { format } from 'date-fns';
 import { getUserData, updateUserData } from './users.service';
 // Groups
-export const createGroup = async (groupName, isPrivate, creatorId, creatorName, members) => {
+export const createGroup = async (groupName, creatorId, creatorName, members) => {
   const readableDate = format(new Date(), 'yyyy-MM-dd HH:mm:ss');
   const groupsRef = ref(getDatabase(), 'groups');
   const newGroupRef = push(groupsRef);
@@ -12,7 +12,6 @@ export const createGroup = async (groupName, isPrivate, creatorId, creatorName, 
     id: newGroupRef?.key,
     name: groupName,
     createdOnReadable: readableDate,
-    private: isPrivate,
     creatorId,
     creatorName,
     members: arrayToObject(members)
@@ -91,7 +90,7 @@ export const createChannel = async (groupId, creatorName, members, channelName =
     console.log(props);
     await set(ref(db, `channels/${dbChannel.key}`),
       props);
-    
+
     await update(ref(db), {
       [`groups/${groupId}/channels/${dbChannel.key}`]: true,
     })
