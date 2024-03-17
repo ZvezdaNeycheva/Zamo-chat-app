@@ -4,7 +4,7 @@ export function ChatButton({ user, onClick, selected }) {
         <div className="flex">
             <div className="relative self-center ltr:mr-3 rtl:ml-3">
                 <img src={user?.profilePhotoURL || "https://thinksport.com.au/wp-content/uploads/2020/01/avatar-.jpg"} alt="Avatar" className="rounded-full w-9 h-9" />
-
+                <span className={`absolute w-2.5 h-2.54 text-${user?.status === 'Online' ? 'bg-green-500 text-green-500 ltr:ml-1 rtl:mr-1 ri-record-circle-fill green-500' : 'bg-red-500 text-red-500 ltr:ml-1 rtl:mr-1 ri-record-circle-fill red-500'}  border-2 border-transparent rounded-full top-5 ltr:right-1 rtl:left-1 dark:border-zinc-600`}></span>
 
                 </div>
 
@@ -19,3 +19,7 @@ export function ChatButton({ user, onClick, selected }) {
         </div>
     )
 }
+
+{/* <a className={`pb-1 text-${localStatus === 'Online' ? 'text-green-500 ltr:ml-1 rtl:mr-1 ri-record-circle-fill green-500' : 'text-red-500 ltr:ml-1 rtl:mr-1 ri-record-circle-fill red-500'} dropdown-toggle d-block dark:text-gray-300`} href="#" role="button" data-bs-toggle="dropdown" id="dropdownMenuButtonX">
+                  &nbsp;{localStatus} <i className={`mdi mdi-chevron-down ${openStatusDropdown ? "group-[.active]:rotate-180" : ""}`}></i>
+                </a> */}

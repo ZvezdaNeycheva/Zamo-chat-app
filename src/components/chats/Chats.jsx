@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { useNavigate, useParams, Link } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { AppContext } from "../../AppContext";
 import { ChatButton } from "./ChatButton";
 import { subscribeToUserFriendsListChanges } from "../../service/users.service";
@@ -10,7 +10,6 @@ export function Chats() {
     const { user } = useContext(AppContext);
     const [friendsList, setFriendsList] = useState([]);
     const [filteredFriendsList, setFilteredFriendsList] = useState([]);
-
     const [search, setSearch] = useState("");
     const [selectedFriend, setSelectedFriend] = useState();
     const navigate = useNavigate();
@@ -64,10 +63,6 @@ export function Chats() {
         setSearch(e.target.value);
     };
 
-    const displayFriends = () => {
-        setFriendsList(filteredFriends);
-    }
-
     return (
         <>
             <div>
@@ -85,7 +80,7 @@ export function Chats() {
 
                 <div className="overflow-scroll">
 
-                    <h5 className="px-6 mb-4 text-16 dark:text-gray-50"><Link onClick={displayFriends}>Friends</Link></h5>
+                    <h5 className="px-6 mb-4 text-16 dark:text-gray-50">Friends</h5>
 
                     <div className="h-auto px-2">
                         <ul className="chat-user-list">
