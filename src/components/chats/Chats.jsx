@@ -1,11 +1,12 @@
 import { useContext, useEffect, useState } from "react";
 import { get, query, ref, push, update, orderByChild, equalTo } from "firebase/database";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, Link } from "react-router-dom";
 import { auth, db } from "../../service/firebase-config";
 import { AppContext } from "../../AppContext";
 import { ChatButton } from "./ChatButton";
 import { getAllUsers } from "../../service/users.service";
 import { FriendsList } from '../../service/users.service';
+import { set } from "date-fns";
 
 
 export function Chats() {
@@ -22,8 +23,10 @@ export function Chats() {
     const filteredFriends = friendsList.filter(friend => friend);
     useEffect(() => {
         if (user) {
-            FriendsList(user.uid, setUsers);
+            FriendsList(user.uid, setFriendsList);
+
         }
+        setUsers(filteredFriends);
     }, [user]);
     //-------------------------------------
 
@@ -139,43 +142,54 @@ export function Chats() {
             );
             setUsers(filteredUsers);
         }
+        if (!value) {
+           setUsers(filteredFriends); 
+        }
+        console.log({ users });
+        console.log({ search });
     };
 
 
 
-    // const [conversations, setConversations] = useState([]);
-    // const fetchConversations = async (userId) => {
-    //     try {
-    //         const roomsRef = ref(db, 'rooms');
-    //         const roomsSnapshot = await get(roomsRef);
+    const [conversations, setConversations] = useState([]);
+    const fetchConversations = async (userId) => {
+        try {
+            const roomsRef = ref(db, 'rooms');
+            const roomsSnapshot = await get(roomsRef);
 
-    //         const conversations = [];
-    //         roomsSnapshot.forEach((room) => {
-    //             const participants = room.val().participants;
-    //             if (participants && participants[userId]) {
-    //                 const otherParticipants = Object.keys(participants).filter(id => id !== userId);
-    //                 otherParticipants.forEach(participantId => {
-    //                     if (!conversations.find(c => c.uid === participantId)) {
-    //                         conversations.push({
-    //                             uid: participantId,
-    //                             roomId: room.key
-    //                         });
-    //                     }
-    //                 });
-    //             }
-    //         });
+            const conversations = [];
+            roomsSnapshot.forEach((room) => {
+                const participants = room.val().participants;
+                if (participants && participants[userId]) {
+                    const otherParticipants = Object.keys(participants).filter(id => id !== userId);
+                    otherParticipants.forEach(participantId => {
+                        if (!conversations.find(c => c.uid === participantId)) {
+                            conversations.push({
+                                uid: participantId,
+                                roomId: room.key
+                            });
+                        }
+                    });
+                }
+            });
 
-    //         setConversations(conversations);
-    //     } catch (error) {
-    //         console.error('Error fetching conversations:', error);
-    //     }
-    // };
-    // useEffect(() => {
-    //     if (user) {
-    //         fetchConversations(user.uid);
-    //     }
-    // }, [user]);
+            setConversations(conversations);
+        } catch (error) {
+            console.error('Error fetching conversations:', error);
+        }
+    };
+    useEffect(() => {
+        if (user) {
+            fetchConversations(user.uid);
+        }
+    }, [user]);
 
+const displayConversations = () => {
+    setUsers(conversations);
+}
+const displayFriends = () => {
+    setUsers(filteredFriends);
+}
     return (
         <>
             <div>
@@ -193,7 +207,7 @@ export function Chats() {
 
                 <div className="overflow-scroll">
 
-                    <h5 className="px-6 mb-4 text-16 dark:text-gray-50">Friends</h5>
+                    <h5 className="px-6 mb-4 text-16 dark:text-gray-50"><Link onClick={displayFriends}>Friends</Link> &nbsp;&nbsp;&nbsp;<Link onClick={displayConversations}> Conversations</Link></h5>
 
                     <div className="h-[610px] px-2">
                         <ul className="chat-user-list">
