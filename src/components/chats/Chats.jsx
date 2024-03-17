@@ -101,13 +101,13 @@ export function Chats() {
 
                     <h5 className="px-6 mb-4 text-16 dark:text-gray-50"><Link onClick={displayFriends}>Friends</Link></h5>
 
-                    <div className="h-[100vh] px-2">
+                    <div className="h-auto px-2">
                         <ul className="chat-user-list">
 
                             {users.length > 0 &&
                                 users.filter(u => u.id !== user?.uid).map((user) => (
-                                    <li key={user.id}>
-                                        <ChatButton selected={selectedFriend === user} user={user} key={user.id} onClick={() => (selectFriend(user))} />
+                                    <li key={user.username}>
+                                        <ChatButton selected={selectedFriend === user} user={user} onClick={() => (selectFriend(user))} />
                                     </li>
                                 ))}
                         </ul>
