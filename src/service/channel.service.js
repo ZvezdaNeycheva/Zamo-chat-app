@@ -1,7 +1,7 @@
 import { get, set, ref, getDatabase, push, child, remove, update } from 'firebase/database';
 import { db } from './firebase-config';
 import { format } from 'date-fns';
-import { getUserData, updateUserData } from './users.service';
+import { getUserByUid, getUserData, updateUserData } from './users.service';
 // Groups
 export const createGroup = async (groupName, creatorId, creatorName, members) => {
   const readableDate = format(new Date(), 'yyyy-MM-dd HH:mm:ss');
@@ -31,20 +31,27 @@ export const createGroup = async (groupName, creatorId, creatorName, members) =>
   }
 };
 
-export const fetchGroups = async () => {
-  const dbRef = ref(getDatabase());
-  try {
-    const snapshot = await get(child(dbRef, `groups`));
-    if (snapshot.exists()) {
-      return snapshot.val();
-    } else {
-      console.log("No groups available");
-      return {};
-    }
-  } catch (error) {
-    console.error("Error fetching groups:", error);
-    throw error;
+export const fetchGroups = async (userId) => {
+  const userSnapshot = await getUserByUid(userId);
+  if (!userSnapshot.exists()) {
+    throw new Error('User does not exist');
   }
+  const user = userSnapshot.val();
+  return Object.fromEntries(await Promise.all(Object.keys(user.groups ?? {}).map(async groupId => {
+    try {
+      const snapshot = await get(ref(db, `groups/${groupId}`));
+      if (snapshot.exists()) {
+        const val = snapshot.val();
+        return [val.id, val];
+      } else {
+        console.log("No groups available");
+        return {};
+      }
+    } catch (error) {
+      console.error("Error fetching groups:", error);
+      throw error;
+    }
+  })));
 }
 
 export const deleteGroup = async (groupId) => {

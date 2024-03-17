@@ -22,26 +22,6 @@ export function Groups() {
   const [chosenFriends, setChosenFriends] = useState([]);
 
   useEffect(() => {
-    const getGroups = async () => {
-      const fetchedGroups = await fetchGroups();
-      setGroups(fetchedGroups);
-    };
-
-    getGroups();
-  }, []);
-
-  useEffect(() => {
-    // Fetch groups from Firebase and store in `allGroups`
-    const fetchAndSetGroups = async () => {
-      const fetchedGroups = await fetchGroups(); // Your function to fetch groups
-      setAllGroups(fetchedGroups);
-      setGroups(fetchedGroups); // Initially, display all groups
-    };
-
-    fetchAndSetGroups();
-  }, []);
-
-  useEffect(() => {
     const auth = getAuth();
     onAuthStateChanged(auth, (user) => {
       if (user) {
@@ -51,6 +31,7 @@ export function Groups() {
         setCurrentUser(null);
       }
     });
+    updateGroups().catch(console.error);
   }, []);
 
   useEffect(() => {
@@ -60,15 +41,19 @@ export function Groups() {
   }, [user]);
 
   useEffect(() => {
-    console.log(chosenFriends);
-  }, [chosenFriends]);
-
-  useEffect(() => {
     if (isModalVisible) {
       setIsMemberPickerVisible(false);
       setChosenFriends([]);
     }
   }, [isModalVisible]);
+
+  const updateGroups = async () => {
+    if (!user) return;
+    // Fetch groups from Firebase and store in `allGroups`
+    const fetchedGroups = await fetchGroups(user.uid); // Your function to fetch groups
+    setAllGroups(fetchedGroups);
+    setGroups(fetchedGroups); // Initially, display all groups
+  }
 
   const toggleModal = () => {
     setIsModalVisible(prev => !prev);
@@ -113,8 +98,7 @@ export function Groups() {
     event.stopPropagation();
     try {
       await deleteGroup(groupId);
-      const updatedGroups = await fetchGroups();
-      setGroups(updatedGroups);
+      await updateGroups();
     } catch (error) {
       console.error("Error deleting group:", error);
     }
