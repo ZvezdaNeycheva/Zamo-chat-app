@@ -1,9 +1,14 @@
 import { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink } from "react-router-dom"; 
 import { createDyteCallRoom } from "../../service/Dyte/dyte.service";
+import { Video } from "../DyteSDK/Video";
 
 export function ChatToolbar({ otherUser, channel }) {
     const [showProfileDetails, setShowProfileDetails] = useState(false);
+    
+    const handleVideoCall = () => {
+       
+    };
 
     const toggleProfileDetails = () => {
         setShowProfileDetails(!showProfileDetails);
@@ -46,10 +51,10 @@ export function ChatToolbar({ otherUser, channel }) {
                 </div>
                 <div className="col-span-4 sm:col-span-8">
                     <ul className="flex items-center justify-end lg:gap-4">
-
+                        
                         {/* Audio Call */}
                         <li>
-                            <button onClick={toggleModalAudio} type="button" className=" text-xl text-gray-500 border-0 btn dark:text-gray-300 lg:block" data-tw-toggle="modal" data-tw-target="#audiCallModal">
+                            <button  type="button" className=" text-xl text-gray-500 border-0 btn dark:text-gray-300 lg:block" data-tw-toggle="modal" data-tw-target="#audiCallModal">
                                 <i className="ri-phone-line"></i>
                             </button>
                         </li>

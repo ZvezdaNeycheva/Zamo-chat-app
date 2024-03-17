@@ -23,6 +23,8 @@ import { Chat } from "./components/chats/Chat";
 import { Channels } from "./components/Channels";
 import { DirectChat } from "./components/chats/DirectChat";
 import { ChannelChat } from "./components/chats/ChannelChat";
+import { Video } from "./components/DyteSDK/Video";
+
 // import { DyteMeeting } from "./components/DyteMeeting";
 
 // import { DyteProvider } from '@dytesdk/react-web-core';
@@ -87,6 +89,8 @@ function App() {
           <Route path="/meta" element={<Meta />} />
           <Route path="/profile" element={<Layout selectedAppBarButton={'profile'} mainContent={<Authenticated> <Profile /> </Authenticated>} />} />
           <Route path="/sidebar-menu" element={<AppBar />} />
+          <Route path="/video" element={<Video />} />
+
           {/* <Route path="/switcher" element={<Switcher />} /> */}
           {/* <Route path="/user-profile-details" element={<Layout UserProfileDetailsContent={'user-profile-details'} sideBarContent={<Chats />} mainContent={<SingleChannel />} />} /> */}
           {/* <Route path="/meet" element={<DyteMeeting/>} /> */}
