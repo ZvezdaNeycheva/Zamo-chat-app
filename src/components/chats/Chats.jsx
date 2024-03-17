@@ -29,14 +29,9 @@ export function Chats() {
     }, [user]);
     //-------------------------------------
 
-
-
-
-
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged((user) => {
             if (!user) {
-                // If user is not logged in, redirect to login page or do something else
                 navigate('/login');
             }
         });
@@ -68,11 +63,10 @@ export function Chats() {
         // console.log("Current Room in useEffect:", id);
         if (!id) setSelectedFriend(undefined);
     }, [id]);
-   
+
     const handleSearchChange = async (e) => {
         const value = e.target.value.toLowerCase();
         setSearch(value);
-
 
         const users = await getAllUsers();
         const filteredUsers = users.filter((user) =>
@@ -81,29 +75,13 @@ export function Chats() {
         setUsers(filteredUsers);
     };
 
-
-
     const [conversations, setConversations] = useState([]);
     const fetchConversations = async (userId) => {
         try {
 
-            const roomsUserRef = ref(db, 'users/rooms');
-            const roomsUserSnapshot = await get(roomsUserRef);
-            const roomsUser = roomsUserSnapshot.val();
-            console.log({ roomsUser });
-            const conversationsRooms = [];
-            for (const room in roomsUser) {
-                const roomsRef = ref(db, `rooms/${room}`);
-            const roomsSnapshot = await get(roomsRef);
-                conversationsRooms.push(roomsSnapshot.val());
-            }
-
-
-
-
             const roomsRef = ref(db, 'rooms');
             const roomsSnapshot = await get(roomsRef);
-    
+
             const conversations = [];
             roomsSnapshot.forEach((room) => {
                 const participants = room.val().participants;
@@ -114,7 +92,7 @@ export function Chats() {
                             const userSnapshot = await get(ref(db, `users/${participantId}`));
                             const userData = userSnapshot.val();
                             const participantName = userData ? userData.username : "Unknown";
-                            
+
                             conversations.push({
                                 uid: participantId,
                                 roomId: room.key,
@@ -125,26 +103,26 @@ export function Chats() {
                     });
                 }
             });
-    
+
             setConversations(conversations);
         } catch (error) {
             console.error('Error fetching conversations:', error);
         }
     };
-    
+
     useEffect(() => {
         if (user) {
             fetchConversations(user.uid);
         }
     }, [user]);
 
-const displayConversations = () => {
-    setUsers(conversations);
+    const displayConversations = () => {
+        setUsers(conversations);
 
-}
-const displayFriends = () => {
-    setUsers(filteredFriends);
-}
+    }
+    const displayFriends = () => {
+        setUsers(filteredFriends);
+    }
     return (
         <>
             <div>
