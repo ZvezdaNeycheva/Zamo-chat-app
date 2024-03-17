@@ -1,181 +1,183 @@
-// import { get, onValue, push, ref, set, update } from 'firebase/database';
-// import { db } from './firebase-config';
-// import { getUserByUsername } from './users.service';
+import { get, onValue, push, ref, set, update } from "firebase/database";
+import { db } from "../firebase-config";
+import { getUserByUsername } from "../users.service";
 
-// export const createMeeting = (handle, participants, topic, start, end, teamId) => {
-//   return push(ref(db, 'meetings'), {})
-//     .then(response => {
+export const createMeeting = (
+  handle,
+  participants,
+  topic,
+  start,
+  end,
+  teamId
+) => {
+  return push(ref(db, "meetings"), {})
+    .then((response) => {
+      const members = {};
+      participants.map((participant) => (members[participant] = true));
 
-//       const members = {};
-//       participants.map(participant => members[participant] = true);
+      set(ref(db, `meetings/${response.key}`), {
+        topic: topic,
+        members,
+        id: response.key,
+        owner: handle,
+        start,
+        end,
+        team: teamId,
+      });
+      return update(ref(db), {
+        [`users/${handle}/meetings/${response.key}`]: true,
+        [`teams/${teamId}/meetings/${response.key}`]: true,
+      })
+        .then(() => {
+          if (participants.length !== 1) {
+            return Promise.all(
+              participants.map((participantHandle) =>
+                addMemberToMeeting(response.key, participantHandle)
+              )
+            );
+          }
+        })
+        .then(() => response.key);
+    })
+    .catch((e) => console.error(e));
+};
 
-//       set(ref(db, `meetings/${response.key}`),
-//         {
-//           topic: topic,
-//           members,
-//           id: response.key,
-//           owner: handle,
-//           start,
-//           end,
-//           team: teamId
-//         });
-//       return update(ref(db), {
-//         [`users/${handle}/meetings/${response.key}`]: true,
-//         [`teams/${teamId}/meetings/${response.key}`]: true,
-//       })
-//         .then(() => {
-//           if (participants.length !== 1) {
-//             return Promise.all(participants.map(participantHandle => addMemberToMeeting(response.key, participantHandle)));
-//           }
-//         })
-//         .then(() => response.key);
-//     })
-//     .catch(e => console.error(e));
-// };
+export const getMeetingById = (meetingId) => {
+  return get(ref(db, `meetings/${meetingId}`))
+    .then((snapshot) => (snapshot.exists() ? snapshot.val() : {}))
+    .catch((e) => console.error(e));
+};
 
-// export const getMeetingById = (meetingId) => {
-//   return get(ref(db, `meetings/${meetingId}`))
-//     .then(snapshot => snapshot.exists() ? snapshot.val() : {})
-//     .catch(e => console.error(e));
-// }
+export const addMemberToMeeting = (meetingId, handle) => {
+  const addMember = {};
+  addMember[`meetings/${meetingId}/members/${handle}`] = true;
+  addMember[`users/${handle}/meetings/${meetingId}`] = true;
 
-// export const addMemberToMeeting = (meetingId, handle) => {
-//   const addMember = {};
-//   addMember[`meetings/${meetingId}/members/${handle}`] = true;
-//   addMember[`users/${handle}/meetings/${meetingId}`] = true;
+  return update(ref(db), addMember);
+};
 
-//   return update(ref(db), addMember);
-// }
+export const addMeetingRoomId = (meetingId, roomId) => {
+  const updateRoom = {};
+  updateRoom[`meetings/${meetingId}/room`] = roomId;
 
-// export const addMeetingRoomId = (meetingId, roomId) => {
-//   const updateRoom = {};
-//   updateRoom[`meetings/${meetingId}/room`] = roomId;
+  return update(ref(db), updateRoom);
+};
 
-//   return update(ref(db), updateRoom);
-// }
+export const fromMeetingsDocument = (snapshot) => {
+  const meetingsDocument = snapshot.val();
 
-// export const fromMeetingsDocument = (snapshot) => {
-//   const meetingsDocument = snapshot.val();
+  return Object.keys(meetingsDocument).map((key) => {
+    const meeting = meetingsDocument[key];
 
-//   return Object.keys(meetingsDocument).map(key => {
-//     const meeting = meetingsDocument[key];
+    return {
+      ...meeting,
+      id: key,
+      members: meeting.members ? Object.keys(meeting.members) : [],
+    };
+  });
+};
 
-//     return {
-//       ...meeting,
-//       id: key,
-//       members: meeting.members ? Object.keys(meeting.members) : [],
-//     }
-//   })
-// }
+export const getAllMeetings = () =>
+  get(ref(db, "meetings"))
+    .then((snapshot) => {
+      const data = snapshot.exists() ? snapshot : [];
 
-// export const getAllMeetings = () =>
-//   get(ref(db, 'meetings'))
-//     .then((snapshot) => {
-//       const data = snapshot.exists() ? snapshot : [];
+      return fromMeetingsDocument(data);
+    })
+    .catch((e) => console.error(e));
 
-//       return fromMeetingsDocument(data);
-//     })
-//     .catch(e => console.error(e));
+export const getAllMeetingsByHandle = (handle) =>
+  get(ref(db, `users/${handle}/meetings`))
+    .then((snapshot) => {
+      const data = snapshot.exists() ? Object.keys(snapshot.val()) : [];
 
-// export const getAllMeetingsByHandle = (handle) =>
-//   get(ref(db, `users/${handle}/meetings`))
-//     .then(snapshot => {
-//       const data = snapshot.exists() ? Object.keys(snapshot.val()) : [];
+      return data;
+    })
+    .catch((e) => console.error(e));
 
-//       return data;
-//     })
-//     .catch(e => console.error(e));
+export const getLiveMeetingsByHandle = (listenFn, handle) =>
+  onValue(ref(db, `users/${handle}/meetings`), (snapshot) => {
+    const data = snapshot.exists() ? snapshot.val() : {};
+    listenFn(Object.keys(data));
+  });
 
-// export const getLiveMeetingsByHandle = (listenFn, handle) =>
-//   onValue(
-//     ref(db, `users/${handle}/meetings`),
-//     snapshot => {
-//       const data = snapshot.exists() ? snapshot.val() : {};
-//       listenFn(Object.keys(data));
-//     }
-//   );
+export const getLiveMeetingInfo = (listenFn, meetingId) =>
+  onValue(ref(db, `meetings/${meetingId}`), (snapshot) => {
+    const data = snapshot.exists() ? snapshot.val() : {};
+    listenFn(data);
+  });
 
-// export const getLiveMeetingInfo = (listenFn, meetingId) =>
-//   onValue(
-//     ref(db, `meetings/${meetingId}`),
-//     snapshot => {
-//       const data = snapshot.exists() ? snapshot.val() : {};
-//       listenFn(data);
-//     });
+export const getLiveAllMeetings = (listenFn) =>
+  onValue(ref(db, "meetings"), (snapshot) => {
+    const data = snapshot.exists() ? Object.values(snapshot.val()) : {};
 
-// export const getLiveAllMeetings = (listenFn) =>
-//   onValue(
-//     ref(db, 'meetings'),
-//     snapshot => {
-//       const data = snapshot.exists() ? Object.values(snapshot.val()) : {};
+    listenFn(data);
+  });
 
-//       listenFn(data);
-//     }
-//   );
+export const getLiveMeetingMembers = (listenFn, meetingId) =>
+  onValue(ref(db, `meetings/${meetingId}/members`), (snapshot) => {
+    const data = snapshot.exists() ? Object.keys(snapshot.val()) : [];
 
-// export const getLiveMeetingMembers = (listenFn, meetingId) =>
-//   onValue(
-//     ref(db, `meetings/${meetingId}/members`),
-//     snapshot => {
-//       const data = snapshot.exists() ? Object.keys(snapshot.val()) : [];
+    listenFn(data);
+  });
 
-//       listenFn(data);
-//     }
-//   );
+export const getMeetingMembers = (meetingId) =>
+  get(ref(db, `meetings/${meetingId}/members`))
+    .then((snapshot) => {
+      const data = snapshot.exists() ? snapshot.val() : {};
 
-// export const getMeetingMembers = (meetingId) =>
-//   get(ref(db, `meetings/${meetingId}/members`))
-//     .then(snapshot => {
-//       const data = snapshot.exists() ? snapshot.val() : {};
+      return Object.keys(data);
+    })
+    .catch((e) => console.error(e));
 
-//       return Object.keys(data);
-//     })
-//     .catch(e => console.error(e));
+export const deleteMeeting = (meetingId, teamId) =>
+  getMeetingMembers(meetingId)
+    .then((membersArr) => {
+      const getMembers = membersArr.map((member) => {
+        return getUserByUsername(member).then((snapshot) =>
+          snapshot.exists() ? snapshot.val() : {}
+        );
+      });
 
-// export const deleteMeeting = (meetingId, teamId) =>
-//   getMeetingMembers(meetingId)
-//     .then(membersArr => {
-//       const getMembers = membersArr.map(member => {
-//         return getUserByUsername(member)
-//           .then(snapshot => snapshot.exists() ? snapshot.val() : {})
-//       })
+      return Promise.all(getMembers)
+        .then((responseArr) => {
+          const removeMeeting = {};
+          responseArr.map(
+            (user) =>
+              (removeMeeting[`users/${user.handle}/meetings/${meetingId}`] =
+                null)
+          );
 
-//       return Promise.all(getMembers)
-//         .then(responseArr => {
-//           const removeMeeting = {};
-//           responseArr.map(user => removeMeeting[`users/${user.handle}/meetings/${meetingId}`] = null)
+          return update(ref(db), removeMeeting);
+        })
+        .then(() => {
+          const deleteMeeting = {};
+          deleteMeeting[`meetings/${meetingId}`] = null;
+          deleteMeeting[`teams/${teamId}/meetings/${meetingId}`] = null;
 
-//           return update(ref(db), removeMeeting)
-//         })
-//         .then(() => {
+          return update(ref(db), deleteMeeting);
+        });
+    })
+    .catch((e) => console.error(e));
 
-//           const deleteMeeting = {};
-//           deleteMeeting[`meetings/${meetingId}`] = null;
-//           deleteMeeting[`teams/${teamId}/meetings/${meetingId}`] = null;
+export const addRecordingToMeeting = (meetingId, recordingURL) => {
+  const addRecording = {};
+  addRecording[`meetings/${meetingId}/recording`] = recordingURL;
 
-//           return update(ref(db), deleteMeeting);
-//         });
-//     })
-//     .catch(e => console.error(e));
+  return update(ref(db), addRecording);
+};
 
-// export const addRecordingToMeeting = (meetingId, recordingURL) => {
-//   const addRecording = {};
-//   addRecording[`meetings/${meetingId}/recording`] = recordingURL;
+export const addMeetingDescription = (meetingId, description) => {
+  const addDescription = {};
+  addDescription[`meetings/${meetingId}/description`] = description;
 
-//   return update(ref(db), addRecording);
-// }
+  return update(ref(db), addDescription);
+};
 
-// export const addMeetingDescription = (meetingId, description) => {
-//   const addDescription = {};
-//   addDescription[`meetings/${meetingId}/description`] = description;
+export const removeMemberFromMeeting = (meetingId, handle) => {
+  const removeMember = {};
+  removeMember[`meetings/${meetingId}/members/${handle}`] = null;
+  removeMember[`users/${handle}/meetings/${meetingId}`] = null;
 
-//   return update(ref(db), addDescription);
-// }
-
-// export const removeMemberFromMeeting = (meetingId, handle) => {
-//   const removeMember = {};
-//   removeMember[`meetings/${meetingId}/members/${handle}`] = null;
-//   removeMember[`users/${handle}/meetings/${meetingId}`] = null;
-
-//   return update(ref(db), removeMember);
-// }
+  return update(ref(db), removeMember);
+};

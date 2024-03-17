@@ -24,8 +24,7 @@ export function Profile() {
   const [editedUsername, setEditedUsername] = useState(userData ? userData.username : "");
   const [editedEmail, setEditedEmail] = useState(userData ? userData.email : "");
   const [editedLocation, setEditedLocation] = useState(userData ? userData.location : "");
-
-
+  
   const [attachedFiles, setAttachedFiles] = useState([]);
 
   const [localStatus, setLocalStatus] = useState(userData ? userData.status : "Loading...");
@@ -39,14 +38,11 @@ export function Profile() {
     const photo = e.target.files[0];
     if (photo) {
       try {
-        // Upload the selected photo
         const profilePhotoURL = await uploadProfileImage(photo, userData, setLoading);
-        // Update user data with the new photo URL
-        await updateUserData(userData?.uid, {profilePhotoURL});
-        console.log(photoURL);
+        await updateUserData(userData?.uid, { profilePhotoURL });
+        userData.profilePhotoURL = profilePhotoURL;
       } catch(e) {
         console.error('Error uploading profile image:', e);
-
       }
     }
   }
@@ -125,7 +121,7 @@ export function Profile() {
             {/* Profile picture */}
             <div className="mb-4 relative">
               <input type="file" onChange={handleUploadPhoto} id="file" name="file" className="hidden" />
-              <label disabled={loading} htmlFor="file" className="absolute bottom-0 ri-pencil-fill w-10 h-10 bg-gray-100 rounded-full dark:bg-zinc-800 dark:text-gray-100 cursor-pointer hover:bg-gray-200" />
+              <label disabled={loading} htmlFor="file" className="absolute  pt-2 bottom-0 ri-pencil-fill w-10 h-10 bg-gray-100 rounded-full dark:bg-zinc-800 dark:text-gray-100 cursor-pointer hover:bg-gray-200" />
               <img src={userData?.profilePhotoURL || "https://thinksport.com.au/wp-content/uploads/2020/01/avatar-.jpg"} className="w-24 h-24 p-1 mx-auto border border-gray-100 rounded-full dark:border-zinc-800" alt="Avatar" />
             </div>
 

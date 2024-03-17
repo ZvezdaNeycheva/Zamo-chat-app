@@ -3,17 +3,22 @@ import { ModalAudioCall } from "./ModalAudioCall";
 import { useState } from "react";
 import { UserProfileDetails } from "./UserProfileDetails";
 import { NavLink } from "react-router-dom";
+import { createDyteCallRoom } from "../../service/Dyte/dyte.service";
 
 export function ChatToolbar({ userData }) {
-    const [showProfileDetails, setShowProfileDetails] = useState(false); 
+    const [showProfileDetails, setShowProfileDetails] = useState(false);
 
     const toggleProfileDetails = () => {
-        setShowProfileDetails(!showProfileDetails); 
+        setShowProfileDetails(!showProfileDetails);
     };
 
-    const toggleModalAudio = () => { // This is the function that will be called when the audio button is clicked
+    const toggleModalAudio = () => {
+        createDyteCallRoom().then((roomId) => {
+            console.log("Call room created with roomId:", roomId);
+        }).catch((error) => {
+            console.error("Error creating call room:", error);
+        });
     };
-
 
     return (
         <div className="p-4 border-b border-gray-100 lg:p-6 dark:border-zinc-600">
@@ -56,12 +61,7 @@ export function ChatToolbar({ userData }) {
                             <button onClick={toggleModalAudio} type="button" className=" text-xl text-gray-500 border-0 btn dark:text-gray-300 lg:block" data-tw-toggle="modal" data-tw-target="#audiCallModal">
                                 <i className="ri-phone-line"></i>
                             </button>
-                            {toggleModalAudio && <ModalAudioCall />}
                         </li>
-
-                        {/* <!-- Modal start --> */}
-                        <ModalAudioCall />
-                        {/* <!-- Modal end --> */}
 
                         {/* Video Call */}
                         <li>
@@ -69,10 +69,6 @@ export function ChatToolbar({ userData }) {
                                 <i className="ri-vidicon-line"></i>
                             </button>
                         </li>
-
-                        {/* <!-- Modal start --> */}
-                        <ModalVideoCall />
-                        {/* <!-- Modal end --> */}
 
                         {/* UserProfileDetails */}
                         <li className="px-3">
