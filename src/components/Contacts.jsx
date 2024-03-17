@@ -4,7 +4,7 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import { ref, onValue } from 'firebase/database';
 import { AppContext } from '../AppContext';
 import { auth, db } from '../service/firebase-config';
-import { updateUserData, getUserByUid, removeFriend, acceptFriendRequest, rejectFriendRequest, FriendsList, getUserByUsername } from '../service/users.service';
+import { updateUserData, getUserByUid, removeFriend, acceptFriendRequest, rejectFriendRequest, subscribeToUserFriendsListChanges, getUserByUsername } from '../service/users.service';
 
 export function Contacts() {
   const [user] = useAuthState(auth);
@@ -63,7 +63,7 @@ export function Contacts() {
 
   useEffect(() => {
     if (user) {
-      FriendsList(user.uid, setFriendsList);
+      subscribeToUserFriendsListChanges(user.uid, setFriendsList);
     }
   }, [user]);
 

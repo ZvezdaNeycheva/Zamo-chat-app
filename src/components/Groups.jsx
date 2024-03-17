@@ -4,7 +4,7 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { AppContext } from "../AppContext";
 import { useNavigate, useParams } from "react-router-dom";
 import { Channels } from "./Channels";
-import { FriendsList } from '../service/users.service';
+import { subscribeToUserFriendsListChanges } from '../service/users.service';
 
 export function Groups() {
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -36,7 +36,7 @@ export function Groups() {
 
   useEffect(() => {
     if (user) {
-      FriendsList(user.uid, setFriendsList);
+      subscribeToUserFriendsListChanges(user.uid, setFriendsList);
     }
   }, [user]);
 

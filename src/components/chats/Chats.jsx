@@ -4,54 +4,37 @@ import { useNavigate, useParams, Link } from "react-router-dom";
 import { auth, db } from "../../service/firebase-config";
 import { AppContext } from "../../AppContext";
 import { ChatButton } from "./ChatButton";
-import { getAllUsers, FriendsList } from "../../service/users.service";
+import { subscribeToUserFriendsListChanges } from "../../service/users.service";
 import { createRoom, getRoomByParticipants } from "../../service/message.service";
 
 
 export function Chats() {
     const { user } = useContext(AppContext);
-    const [users, setUsers] = useState([]);
+    const [friendsList, setFriendsList] = useState([]);
+    const [filteredFriendsList, setFilteredFriendsList] = useState([]);
+
     const [search, setSearch] = useState("");
     const [selectedFriend, setSelectedFriend] = useState();
     const navigate = useNavigate();
     const { id } = useParams();
 
-    // stolen from Andy's friendsList:
-    const [friendsList, setFriendsList] = useState([]);
-
-    const filteredFriends = friendsList.filter(friend => friend);
     useEffect(() => {
         if (user) {
-            FriendsList(user.uid, setFriendsList);
-
+           updateFriendsList().catch(console.error);
         }
-        setUsers(filteredFriends);
     }, [user]);
-    //-------------------------------------
+
     useEffect(() => {
-        if (user) {
-           const friends = getFriends();
-           setUsers(friends);
-           console.log({friends});
+        if (!search) {
+            setFilteredFriendsList(friendsList);
+            return;
         }
-    }, [user]);
-    console.log({users});
+        setFilteredFriendsList(friendsList.filter(friend => friend.username.includes(search.toLocaleLowerCase())));
+    }, [search, friendsList]);
 
-    const getFriends = async () => {
-        const users = await FriendsList(user.uid, setUsers);
-        // const users = await getFriendsList(user.uid);
-        // return users
+    const updateFriendsList = async () => {
+        await subscribeToUserFriendsListChanges(user.uid, setFriendsList);
     };
-
-    useEffect(() => {
-        const unsubscribe = auth.onAuthStateChanged((user) => {
-            if (!user) {
-                navigate('/login');
-            }
-        });
-
-        return () => unsubscribe();
-    }, [auth, navigate]);
 
     const selectFriend = async (friend) => {
         const participants = [user?.uid, friend.uid];
@@ -73,27 +56,18 @@ export function Chats() {
             console.error("Error selecting friend:", error);
         }
     }
+
     useEffect(() => {
         // console.log("Current Room in useEffect:", id);
         if (!id) setSelectedFriend(undefined);
     }, [id]);
 
     const handleSearchChange = async (e) => {
-        const value = e.target.value.toLowerCase();
-        setSearch(value);
-
-        const users = await getAllUsers();
-        const filteredUsers = users.filter((user) =>
-            user.username.toLowerCase().includes(value)
-        );
-        setUsers(filteredUsers);
-        if (!value) {
-            setUsers(filteredFriends);
-         }
+        setSearch(e.target.value);
     };
 
     const displayFriends = () => {
-        setUsers(filteredFriends);
+        setFriendsList(filteredFriends);
     }
 
     return (
@@ -117,13 +91,11 @@ export function Chats() {
 
                     <div className="h-auto px-2">
                         <ul className="chat-user-list">
-
-                            {users.length > 0 &&
-                                users.filter(u => u.id !== user?.uid).map((user) => (
-                                    <li key={user.username}>
-                                        <ChatButton selected={selectedFriend === user} user={user} onClick={() => (selectFriend(user))} />
-                                    </li>
-                                ))}
+                            {filteredFriendsList.map((user) => (
+                                <li key={user.username}>
+                                    <ChatButton selected={selectedFriend === user} user={user} onClick={() => (selectFriend(user))} />
+                                </li>
+                            ))}
                         </ul>
                     </div>
                 </div>

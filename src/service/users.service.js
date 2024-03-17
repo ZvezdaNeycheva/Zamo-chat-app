@@ -136,7 +136,7 @@ export const rejectFriendRequest = async (currentUserUid, senderUid, currentUser
 };
 
 
-export const FriendsList = async (uid, onChange) => {
+export const subscribeToUserFriendsListChanges = async (uid, onChange) => {
   try {
     const userRef = ref(db, `users/${uid}`);
     onValue(userRef, async (snapshot) => {
