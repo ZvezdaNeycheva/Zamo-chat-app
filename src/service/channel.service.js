@@ -71,7 +71,7 @@ export const deleteGroup = async (groupId) => {
   }
 };
 
-export const createChannel = async (groupId, creatorName, members, channelName = '#General', creatorId, isPrivate) => {
+export const createChannel = async (groupId, creatorName, members, channelName = '#General', creatorId) => {
   const readableDate = format(new Date(), 'yyyy-MM-dd HH:mm:ss');
   try {
     const dbChannel = await push(ref(db, `groups/${groupId}/channels`), {});
@@ -79,17 +79,19 @@ export const createChannel = async (groupId, creatorName, members, channelName =
       type: 'channel',
       participants: arrayToObject(members),
     });
+    const props = {
+      name: `${channelName}`,
+      createdOnReadable: readableDate,
+      group: groupId,
+      id: dbChannel.key,
+      room: dbRoom.key,
+      creatorName,
+      creatorId,
+    };
+    console.log(props);
     await set(ref(db, `channels/${dbChannel.key}`),
-      {
-        name: `${channelName}`,
-        createdOnReadable: readableDate,
-        group: groupId,
-        id: dbChannel.key,
-        room: dbRoom.key,
-        creatorName,
-        creatorId,
-        private: isPrivate,
-      });
+      props);
+    
     await update(ref(db), {
       [`groups/${groupId}/channels/${dbChannel.key}`]: true,
     })
