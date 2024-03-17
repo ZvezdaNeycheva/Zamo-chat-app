@@ -33,6 +33,19 @@ const darkModeClass = isDarkMode ? "dark" : "";
     }
   };
 
+function test() {
+  console.log("test");
+
+ 
+    // document.body.classList.add("dark");
+  const html = document.querySelector('html');
+  const currentMode = html.getAttribute('data-mode');
+  const newMode = currentMode === 'light' ? 'dark' : 'light';
+  html.setAttribute('data-mode', newMode);
+  
+
+}
+
   return (
     <>
       <div className="sidebar-menu w-full lg:w-[75px] shadow lg:flex lg:flex-col flex flex-row justify-between items-center fixed lg:relative z-40 bottom-0 bg-white dark:bg-zinc-600 ">
@@ -118,7 +131,7 @@ const darkModeClass = isDarkMode ? "dark" : "";
 
         {/* <!-- Start side-menu footer --> */}
         <div className="w-20 my-5 lg:w-auto">
-          <ul className="lg:block">
+          <ul className="lg:block" id ='toggle-between-dark-light-mode' onClick={test} >
             {/*dark mode need to change attribute(a)*/}
             <li className="hidden text-center light-dark-mode nav-item lg:block">
               <a href="#" className="hidden dark:block dark:text-violet-100/80">
