@@ -12,15 +12,9 @@ export function Channels() {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [channelName, setChannelName] = useState('');
   const [currentUser, setCurrentUser] = useState(null);
-  const [groupMembers, setGroupMembers] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [visibleChannelDropdown, setVisibleChannelDropdown] = useState(null);
   const [selectedChannel, setSelectedChannel] = useState(null);
-
-  const [isMemberPickerVisible, setIsMemberPickerVisible] = useState(false);
-
-  const [chosenMember, setChosenMember] = useState([]);
-
 
   const handleGoBack = () => {
     navigate('/groups');
@@ -29,13 +23,6 @@ export function Channels() {
   const toggleModal = () => {
     setIsModalVisible(prev => !prev);
   };
-
-  useEffect(() => {
-    if (isModalVisible) {
-      setIsMemberPickerVisible(false);
-      setChosenMember([]);
-    }
-  }, [isModalVisible]);
 
   useEffect(() => {
     const getChannels = async () => {
@@ -107,8 +94,8 @@ export function Channels() {
   };
 
   const getAndUpdateChannels = async () => {
-    const fetchedChannelsIds = await fetchChannelsIdsByGroup(groupId);
-    const fetchedChannels = await fetchChannelsAll();
+    const fetchedChannelsIds = await getChannelsIdsByGroup(groupId);
+    const fetchedChannels = await getChannelsAll();
     const filteredChannels = Object.keys(fetchedChannelsIds).reduce((acc, key) => {
       if (fetchedChannels[key]) {
         acc[key] = fetchedChannels[key];
@@ -240,24 +227,26 @@ export function Channels() {
                     </div>
 
                     {/* Dropdown menu */}
-                    <button onClick={(e) => handleClickCannelDropdown(e, index)} className="p-2 ml-2 text-gray-500 hover:text-gray-800 dark:text-gray-300" >
-                      <i className="ri-more-2-fill"></i>
-                    </button>
-                    {visibleChannelDropdown === index && (
-                      <div className="absolute z-50 block w-40 mt-20 py-2 text-left list-none bg-white border border-transparent rounded shadow-lg ltr:left-auto ltr:right-0 bg-clip-padding dark:bg-zinc-700 dark:border-zinc-500/50 dark:shadow-sm">
-                        <ul>
-                          <li>
-                            {channel?.creatorId === currentUser?.uid && (
-                              <div className="text-right">
-                                <button onClick={(e) => { e.stopPropagation(); handleDeleteChannel(key) }} className="block w-full px-6 py-2 text-sm font-normal text-red-500 bg-red dropdown-item whitespace-nowrap hover:bg-gray-100/50 dark:text-red-300 dark:hover:bg-zinc-500/50" type="button">
-                                  Delete the Channel
-                                  <i className="float-right text-red-500 dark:text-red-300 ri-delete-bin-line"></i>
-                                </button>
-                              </div>
-                            )}
-                          </li>
-                        </ul>
-                      </div>
+                    {channel?.creatorId === currentUser?.uid && (
+                      <>
+                        <button onClick={(e) => handleClickCannelDropdown(e, index)} className="p-2 ml-2 text-gray-500 hover:text-gray-800 dark:text-gray-300" >
+                          <i className="ri-more-2-fill"></i>
+                        </button>
+                        {visibleChannelDropdown === index && (
+                          <div className="absolute z-50 block w-40 mt-20 py-2 text-left list-none bg-white border border-transparent rounded shadow-lg ltr:left-auto ltr:right-0 bg-clip-padding dark:bg-zinc-700 dark:border-zinc-500/50 dark:shadow-sm">
+                            <ul>
+                              <li>
+                                <div className="text-right">
+                                  <button onClick={(e) => { e.stopPropagation(); handleDeleteChannel(key) }} className="block w-full px-6 py-2 text-sm font-normal text-red-500 bg-red dropdown-item whitespace-nowrap hover:bg-gray-100/50 dark:text-red-300 dark:hover:bg-zinc-500/50" type="button">
+                                    Remove
+                                    <i className="float-right text-red-500 dark:text-red-300 ri-delete-bin-line"></i>
+                                  </button>
+                                </div>
+                              </li>
+                            </ul>
+                          </div>
+                        )}
+                      </>
                     )}
                   </div>
                 </div>
