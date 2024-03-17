@@ -169,3 +169,31 @@ function arrayToObject(array) {
   // ["1298374fdasjf", "213984712934"] => [[1298374fdasjf: true], [213984712934: true]] => {1298...: true, 2139: true}
   return Object.fromEntries(array.map(id => [id, true]));
 }
+
+export const removeUserFromGroup = async (groupId, userId) => {
+  const snapshotGroup = await get(ref(db, `groups/${groupId}`));
+  const snapshotUser = await get(ref(db, `users/${userId}`));
+
+  if (!snapshotGroup.exists() || !snapshotUser.exists()) {
+    console.log("No user/group with id " + id);
+    return;
+  }
+
+  try {
+    await remove(ref(db, `groups/${groupId}/members/${userId}`));
+    await remove(ref(db, `users/${userId}/groups/${groupId}`));
+
+    const groupChannelsSnapshot = await get(ref(db, `groups/${groupId}/channels`));
+    if (groupChannelsSnapshot.exists()) {
+      const channels = groupChannelsSnapshot.val();
+      for (const channelId in channels) {
+        await remove(ref(db, `users/${userId}/channels/${channelId}`));
+      }
+    }
+
+    console.log(`User ${userId} removed from group ${groupId} and related channels.`);
+  } catch (error) {
+    console.error('Error removing user from group:', error);
+    throw error;
+  }
+}

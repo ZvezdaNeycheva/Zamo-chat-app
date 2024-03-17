@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import { Chat } from "./Chat";
-import { getChannel } from "../../service/channel.service";
+import { getChannel } from "../../service/groupAndChannel.service";
 import { useEffect, useState } from "react";
 
 export function ChannelChat() {

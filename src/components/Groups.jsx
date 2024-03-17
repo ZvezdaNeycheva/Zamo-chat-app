@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { createGroup, getGroups, deleteGroup } from "../service/channel.service";
+import { createGroup, getGroups, deleteGroup, removeUserFromGroup } from "../service/groupAndChannel.service";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { AppContext } from "../AppContext";
 import { useNavigate, useParams } from "react-router-dom";
@@ -103,6 +103,12 @@ export function Groups() {
       console.error("Error deleting group:", error);
     }
   };
+
+  const handleLeaveGroup = async (event, groupId) => {
+    event.stopPropagation();
+    await removeUserFromGroup(groupId, user.uid)
+    await updateGroups();
+  }
 
   const handleClickGroupDropdown = (event, index) => {
     event.stopPropagation();
@@ -259,10 +265,20 @@ export function Groups() {
                           {visibleGroupDropdown === index && (
                             <div className="absolute z-50 block w-40 mt-20 py-2 text-left list-none bg-white border border-transparent rounded shadow-lg ltr:left-auto ltr:right-0 bg-clip-padding dark:bg-zinc-700 dark:border-zinc-500/50 dark:shadow-sm">
                               <ul>
+                                {/* Remove button */}
+                                {group.creatorId === user.uid && (
+                                  <li>
+                                    <button onClick={(e) => handleDeleteGroup(e, key)} className="block w-full px-6 py-2 text-sm font-normal text-red-500 bg-red dropdown-item whitespace-nowrap hover:bg-gray-100/50 dark:text-red-300 dark:hover:bg-zinc-500/50" type="button">
+                                      Remove
+                                      <i className="float-right text-red-500 dark:text-red-300 ri-delete-bin-line"></i>
+                                    </button>
+                                  </li>
+                                )}
+                                {/* Leave the group button */}
                                 <li>
-                                  <button onClick={(e) => handleDeleteGroup(e, key)} className="block w-full px-6 py-2 text-sm font-normal text-red-500 bg-red dropdown-item whitespace-nowrap hover:bg-gray-100/50 dark:text-red-300 dark:hover:bg-zinc-500/50" type="button">
-                                    Remove
-                                    <i className="float-right text-red-500 dark:text-red-300 ri-delete-bin-line"></i>
+                                  <button onClick={(e) => handleLeaveGroup(e, key)} className="block w-full px-6 py-2 text-sm font-normal text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-zinc-500" type="button">
+                                    Leave the group
+                                    <i className="float-right ri-logout-box-r-line"></i>
                                   </button>
                                 </li>
                               </ul>
