@@ -86,30 +86,52 @@ export function Chats() {
     const [conversations, setConversations] = useState([]);
     const fetchConversations = async (userId) => {
         try {
+
+            const roomsUserRef = ref(db, 'users/rooms');
+            const roomsUserSnapshot = await get(roomsUserRef);
+            const roomsUser = roomsUserSnapshot.val();
+            console.log({ roomsUser });
+            const conversationsRooms = [];
+            for (const room in roomsUser) {
+                const roomsRef = ref(db, `rooms/${room}`);
+            const roomsSnapshot = await get(roomsRef);
+                conversationsRooms.push(roomsSnapshot.val());
+            }
+
+
+
+
             const roomsRef = ref(db, 'rooms');
             const roomsSnapshot = await get(roomsRef);
-
+    
             const conversations = [];
             roomsSnapshot.forEach((room) => {
                 const participants = room.val().participants;
                 if (participants && participants[userId]) {
                     const otherParticipants = Object.keys(participants).filter(id => id !== userId);
-                    otherParticipants.forEach(participantId => {
+                    otherParticipants.forEach(async (participantId) => {
                         if (!conversations.find(c => c.uid === participantId)) {
+                            const userSnapshot = await get(ref(db, `users/${participantId}`));
+                            const userData = userSnapshot.val();
+                            const participantName = userData ? userData.username : "Unknown";
+                            
                             conversations.push({
                                 uid: participantId,
-                                roomId: room.key
+                                roomId: room.key,
+                                username: participantName,
+                                profilePhotoURL: userData?.profilePhotoURL
                             });
                         }
                     });
                 }
             });
-
+    
             setConversations(conversations);
         } catch (error) {
             console.error('Error fetching conversations:', error);
         }
     };
+    
     useEffect(() => {
         if (user) {
             fetchConversations(user.uid);
@@ -118,6 +140,7 @@ export function Chats() {
 
 const displayConversations = () => {
     setUsers(conversations);
+
 }
 const displayFriends = () => {
     setUsers(filteredFriends);
