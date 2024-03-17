@@ -1,10 +1,9 @@
 import { useState, useEffect, useContext } from "react";
 import { AppContext } from "../../AppContext";
 import { ChatUploadFile } from "./ChatUploadFile";
-import { ChatToolbar } from "./ChatToolbar";
 import { getMessages, editMessage, sendMessage, deleteMessage, reactToMessage } from "../../service/message.service";
 
-export function Chat({ id }) {
+export function Chat({ id, toolbar }) {
     const { user } = useContext(AppContext);
     const [newMessage, setNewMessage] = useState("");
     const [messages, setMessages] = useState([]);
@@ -87,7 +86,7 @@ export function Chat({ id }) {
                     {/* <!-- start chat conversation section --> */}
 
                     <div className="relative w-full overflow-hidden ">
-                        {id ? <ChatToolbar user={user} /> : null}
+                        {toolbar}
                         {/* <!-- end chat user head --> */}
 
                         {/* <!-- start chat conversation --> */}

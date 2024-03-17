@@ -104,7 +104,7 @@ export const reactToMessage = async (messageId, reactionType, userData, id) => {
     }
 };
 
-export const getRoom = async (participants) => {
+export const getRoomByParticipants = async (participants) => {
     try {
         const roomsRef = ref(db, 'rooms');
         const snapshot = await get(roomsRef);
@@ -133,6 +133,12 @@ export const getRoom = async (participants) => {
         console.error('Error fetching room:', error);
         return null;
     }
+};
+
+export const getRoomById = async (id) => {
+    const snapshot = await get(ref(db, `rooms/${id}`));
+    if (!snapshot.exists()) throw new Error(`Room with id ${id} does not exist.`);
+    return snapshot.val();
 };
 
 export const createRoom = async (participants) => {

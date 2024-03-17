@@ -5,7 +5,7 @@ import { auth, db } from "../../service/firebase-config";
 import { AppContext } from "../../AppContext";
 import { ChatButton } from "./ChatButton";
 import { getAllUsers, FriendsList } from "../../service/users.service";
-import { createRoom, getRoom } from "../../service/message.service";
+import { createRoom, getRoomByParticipants } from "../../service/message.service";
 
 
 export function Chats() {
@@ -57,7 +57,7 @@ export function Chats() {
         const participants = [user?.uid, friend.uid];
         try {
 
-            const room = await getRoom(participants);
+            const room = await getRoomByParticipants(participants);
 
             if (!room) {
                 const newRoom = await createRoom(participants);
