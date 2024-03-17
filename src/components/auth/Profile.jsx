@@ -4,7 +4,7 @@ import { uploadProfileImage } from "../../service/auth.service";
 import { updateUserData } from "../../service/users.service";
 
 export function Profile() {
-  const { userData } = useContext(AppContext);
+  const { user, setUser } = useContext(AppContext);
   const [loading, setLoading] = useState(false);
 
   const [open, setOpen] = useState(false);
@@ -17,30 +17,30 @@ export function Profile() {
   const [editEmail, setEditEmail] = useState(false);
   const [editLocation, setEditLocation] = useState(false);
 
-  const [newUsername, setNewUsername] = useState(userData ? userData.username : "");
-  const [newEmail, setNewEmail] = useState(userData ? userData.email : "");
-  const [newLocation, setNewLocation] = useState(userData ? userData.location : "");
+  const [newUsername, setNewUsername] = useState(user ? user.username : "");
+  const [newEmail, setNewEmail] = useState(user ? user.email : "");
+  const [newLocation, setNewLocation] = useState(user ? user.location : "");
 
-  const [editedUsername, setEditedUsername] = useState(userData ? userData.username : "");
-  const [editedEmail, setEditedEmail] = useState(userData ? userData.email : "");
-  const [editedLocation, setEditedLocation] = useState(userData ? userData.location : "");
-  
+  const [editedUsername, setEditedUsername] = useState(user ? user.username : "");
+  const [editedEmail, setEditedEmail] = useState(user ? user.email : "");
+  const [editedLocation, setEditedLocation] = useState(user ? user.location : "");
+
   const [attachedFiles, setAttachedFiles] = useState([]);
 
-  const [localStatus, setLocalStatus] = useState(userData ? userData.status : "Loading...");
+  const [localStatus, setLocalStatus] = useState(user ? user.status : "Loading...");
 
   const toggleDropdown = (dropdownSetter) => {
     dropdownSetter(prevState => !prevState);
   };
 
   async function handleUploadPhoto(e) {
-    if (!userData) return;
+    if (!user) return;
     const photo = e.target.files[0];
     if (photo) {
       try {
-        const profilePhotoURL = await uploadProfileImage(photo, userData, setLoading);
-        await updateUserData(userData?.uid, { profilePhotoURL });
-        userData.profilePhotoURL = profilePhotoURL;
+        const profilePhotoURL = await uploadProfileImage(photo, user, setLoading);
+        await updateUserData(user?.uid, { profilePhotoURL });
+        setUser({...user, profilePhotoURL});
       } catch(e) {
         console.error('Error uploading profile image:', e);
       }
@@ -48,16 +48,17 @@ export function Profile() {
   }
 
   useEffect(() => {
-    if (userData && userData.fileURL) {
-      const filesArray = Array.isArray(userData.fileURL) ? userData.fileURL : [userData.fileURL];
+    if (user && user.fileURL) {
+      const filesArray = Array.isArray(user.fileURL) ? user.fileURL : [user.fileURL];
       setAttachedFiles(filesArray);
     }
-  }, [userData]);
+  }, [user]);
 
   const handleUsernameUpdate = async () => {
     try {
-      await updateUserData(userData?.uid, { username: editedUsername });
+      await updateUserData(user?.uid, { username: editedUsername });
       setEditUsername(false);
+      setUser({...user, username: editedUsername});
     } catch (error) {
       console.error("Error updating username:", error);
     }
@@ -65,8 +66,9 @@ export function Profile() {
 
   const handleEmailUpdate = async () => {
     try {
-      await updateUserData(userData?.uid, { email: editedEmail });
+      await updateUserData(user?.uid, { email: editedEmail });
       setEditEmail(false);
+      setUser({...user, email: editedEmail});
     } catch (error) {
       console.error("Error updating email:", error);
     }
@@ -74,8 +76,9 @@ export function Profile() {
 
   const handleLocationUpdate = async () => {
     try {
-      await updateUserData(userData?.uid, { location: editedLocation });
+      await updateUserData(user?.uid, { location: editedLocation });
       setEditLocation(false);
+      setUser({...user, location: editedLocation});
     } catch (error) {
       console.error("Error updating location:", error);
     }
@@ -84,8 +87,9 @@ export function Profile() {
   const handleStatusChange = async (status) => {
     try {
       setLocalStatus(status);
-      await updateUserData(userData.uid, { status });
+      await updateUserData(user.uid, { status });
       setOpenStatusDropdown(false);
+      setUser({...user, status});
     } catch (error) {
       console.error("Error updating user status:", error);
     }
@@ -122,10 +126,10 @@ export function Profile() {
             <div className="mb-4 relative">
               <input type="file" onChange={handleUploadPhoto} id="file" name="file" className="hidden" />
               <label disabled={loading} htmlFor="file" className="absolute  pt-2 bottom-0 ri-pencil-fill w-10 h-10 bg-gray-100 rounded-full dark:bg-zinc-800 dark:text-gray-100 cursor-pointer hover:bg-gray-200" />
-              <img src={userData?.profilePhotoURL || "https://thinksport.com.au/wp-content/uploads/2020/01/avatar-.jpg"} className="w-24 h-24 p-1 mx-auto border border-gray-100 rounded-full dark:border-zinc-800" alt="Avatar" />
+              <img src={user?.profilePhotoURL || "https://thinksport.com.au/wp-content/uploads/2020/01/avatar-.jpg"} className="w-24 h-24 p-1 mx-auto border border-gray-100 rounded-full dark:border-zinc-800" alt="Avatar" />
             </div>
 
-            <h5 className="mb-1 text-16 dark:text-gray-50">{userData ? userData.username : "N/A"}</h5>
+            <h5 className="mb-1 text-16 dark:text-gray-50">{user ? user.username : "N/A"}</h5>
             {/* End profile picture */}
 
             {/* Profile Status */}
@@ -205,13 +209,13 @@ export function Profile() {
                             <button onClick={handleUsernameUpdate} className="py-1.5 btn bg-slate-100 border-transparent rounded hover:bg-gray-50 transition-all ease-in-out dark:bg-zinc-600 dark:text-gray-50 dark:hover:bg-zinc-500/50">
                               Save
                             </button>
-                            <button onClick={() => { setEditUsername(false); setEditedUsername(userData ? userData.username : "") }} className="ml-2 py-1.5 btn bg-slate-100 border-transparent rounded hover:bg-gray-50 transition-all ease-in-out dark:bg-zinc-600 dark:text-gray-50 dark:hover:bg-zinc-500/50" >
+                            <button onClick={() => { setEditUsername(false); setEditedUsername(user ? user.username : "") }} className="ml-2 py-1.5 btn bg-slate-100 border-transparent rounded hover:bg-gray-50 transition-all ease-in-out dark:bg-zinc-600 dark:text-gray-50 dark:hover:bg-zinc-500/50" >
                               Cancel
                             </button>
                           </>
                         ) : (
                           <div className="flex items-center">
-                            <h5 className="text-sm dark:text-gray-50">{userData ? userData.username : "N/A"}</h5>
+                            <h5 className="text-sm dark:text-gray-50">{user ? user.username : "N/A"}</h5>
                             <button onClick={() => setEditUsername(true)} className="ml-2 text-gray-500 hover:text-gray-700 dark:text-gray-300 dark:hover:text-gray-100" >
                               Edit
                             </button>
@@ -228,13 +232,13 @@ export function Profile() {
                             <button onClick={handleEmailUpdate} className="py-1.5 btn bg-slate-100 border-transparent rounded hover:bg-gray-50 transition-all ease-in-out dark:bg-zinc-600 dark:text-gray-50 dark:hover:bg-zinc-500/50" >
                               Save
                             </button>
-                            <button onClick={() => { setEditEmail(false); setNewEmail(userData ? userData.email : "") }} className="ml-2 py-1.5 btn bg-slate-100 border-transparent rounded hover:bg-gray-50 transition-all ease-in-out dark:bg-zinc-600 dark:text-gray-50 dark:hover:bg-zinc-500/50" >
+                            <button onClick={() => { setEditEmail(false); setNewEmail(user ? user.email : "") }} className="ml-2 py-1.5 btn bg-slate-100 border-transparent rounded hover:bg-gray-50 transition-all ease-in-out dark:bg-zinc-600 dark:text-gray-50 dark:hover:bg-zinc-500/50" >
                               Cancel
                             </button>
                           </>
                         ) : (
                           <div className="flex items-center">
-                            <h5 className="text-sm dark:text-gray-50">{userData ? userData.email : "N/A"}</h5>
+                            <h5 className="text-sm dark:text-gray-50">{user ? user.email : "N/A"}</h5>
                             <button onClick={() => setEditEmail(true)} className="ml-2 text-gray-500 hover:text-gray-700 dark:text-gray-300 dark:hover:text-gray-100" >
                               Edit
                             </button>
@@ -251,13 +255,13 @@ export function Profile() {
                             <button onClick={handleLocationUpdate} className="py-1.5 btn bg-slate-100 border-transparent rounded hover:bg-gray-50 transition-all ease-in-out dark:bg-zinc-600 dark:text-gray-50 dark:hover:bg-zinc-500/50" >
                               Save
                             </button>
-                            <button onClick={() => { setEditLocation(false); setNewLocation(userData ? userData.location : "") }} className="ml-2 py-1.5 btn bg-slate-100 border-transparent rounded hover:bg-gray-50 transition-all ease-in-out dark:bg-zinc-600 dark:text-gray-50 dark:hover:bg-zinc-500/50">
+                            <button onClick={() => { setEditLocation(false); setNewLocation(user ? user.location : "") }} className="ml-2 py-1.5 btn bg-slate-100 border-transparent rounded hover:bg-gray-50 transition-all ease-in-out dark:bg-zinc-600 dark:text-gray-50 dark:hover:bg-zinc-500/50">
                               Cancel
                             </button>
                           </>
                         ) : (
                           <div className="flex items-center">
-                            <h5 className="text-sm dark:text-gray-50">{userData ? userData.location : "N/A"}</h5>
+                            <h5 className="text-sm dark:text-gray-50">{user ? user.location : "N/A"}</h5>
                             <button onClick={() => setEditLocation(true)} className="ml-2 text-gray-500 hover:text-gray-700 dark:text-gray-300 dark:hover:text-gray-100">
                               Edit
                             </button>
@@ -268,7 +272,7 @@ export function Profile() {
                       {/* Time */}
                       <div className="mt-5">
                         <p className="mb-1 text-gray-500 dark:text-gray-300">Create Profile Date</p>
-                        <h5 className="text-sm dark:text-gray-50">{userData ? userData.createdOnReadable : "N/A"}</h5>
+                        <h5 className="text-sm dark:text-gray-50">{user ? user.createdOnReadable : "N/A"}</h5>
                       </div>
                     </div>
                   </div>

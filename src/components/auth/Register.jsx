@@ -3,11 +3,11 @@ import { Meta } from '../Meta.jsx';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { registerUser } from '../../service/auth.service.js';
 import { createUserProfile, getUserByUid } from '../../service/users.service.js';
-import { AppContext } from '../../AppContext.js';
+import { AppContext } from '../../AppContext.jsx';
 import { format } from 'date-fns';
 
 export function Register() {
-  const { setContext } = useContext(AppContext);
+  const { setUser } = useContext(AppContext);
   const [form, setForm] = useState({
     uid: '',
     username: '',
@@ -83,7 +83,7 @@ export function Register() {
         readableDate,
         [],
       );
-      setContext({ user: credentials.user, userData: null });
+      setUser(credentials.user);
       navigate('/login');
     } catch (error) {
       if (error.code === 'auth/email-already-in-use') {

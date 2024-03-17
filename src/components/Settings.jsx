@@ -2,7 +2,7 @@ import { AppContext } from "../AppContext";
 import { useContext, useState } from "react";
 
 export function Settings() {
-  const { user, userData } = useContext(AppContext);
+  const { user } = useContext(AppContext);
   const [photoURL] = useState(user?.photoURL);
 
 
@@ -17,14 +17,14 @@ export function Settings() {
 
           {/* Profile Picture */}
           <div className="relative mb-4">
-            <img src={userData?.profilePhotoURL || "https://thinksport.com.au/wp-content/uploads/2020/01/avatar-.jpg"} className="w-24 h-24 p-1 mx-auto border border-gray-100 rounded-full dark:border-zinc-800" alt="Avatar" />
+            <img src={user?.profilePhotoURL || "https://thinksport.com.au/wp-content/uploads/2020/01/avatar-.jpg"} className="w-24 h-24 p-1 mx-auto border border-gray-100 rounded-full dark:border-zinc-800" alt="Avatar" />
             <a href="#!" className="absolute bottom-0 w-10 h-10 bg-gray-100 rounded-full ltr:right-28 rtl:left-28dark:bg-zinc-800 dark:text-gray-100">
               <i className="leading-10 ri-pencil-fill text-16" />
             </a>
           </div>
 
           {/* Profile Name */}
-          <h5 className="mb-1 text-16 dark:text-gray-50">{userData ? userData.username : "N/A"}</h5>
+          <h5 className="mb-1 text-16 dark:text-gray-50">{user ? user.username : "N/A"}</h5>
 
           {/* Profile Status */}
           <div className="relative mb-1 dropdown">
@@ -74,19 +74,19 @@ export function Settings() {
 
                     {/* Name */}
                     <p className="mb-1 text-gray-500 dark:text-gray-300">Name</p>
-                    <h5 className="text-sm dark:text-gray-50">{userData ? userData.username : "N/A"}</h5>
+                    <h5 className="text-sm dark:text-gray-50">{user ? user.username : "N/A"}</h5>
                   </div>
 
                   {/* Email */}
                   <div className="mt-5">
                     <p className="mb-1 text-gray-500 dark:text-gray-300">Email</p>
-                    <h5 className="text-sm dark:text-gray-50">{userData ? userData.email : "N/A"}</h5>
+                    <h5 className="text-sm dark:text-gray-50">{user ? user.email : "N/A"}</h5>
                   </div>
 
                   {/* Time */}
                   <div className="mt-5">
                     <p className="mb-1 text-gray-500 dark:text-gray-300">Time</p>
-                    <h5 className="text-sm dark:text-gray-50">{userData ? userData.createdOnReadable : "N/A"}</h5>
+                    <h5 className="text-sm dark:text-gray-50">{user ? user.createdOnReadable : "N/A"}</h5>
                   </div>
 
                   {/* Location */}

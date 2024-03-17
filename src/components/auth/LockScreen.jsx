@@ -2,15 +2,15 @@ import React, { useContext, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { Meta } from "../Meta.jsx";
 import { Login } from "./Login";
-import { AppContext } from '../../AppContext.js';
+import { AppContext } from '../../AppContext.jsx';
 
 export function LockScreen() {
-  const { userData } = useContext(AppContext);
+  const { user } = useContext(AppContext);
   const [enteredPassword, setEnteredPassword] = useState("");
-  const [photoURL] = useState(userData?.profilePhotoURL);
+  const [photoURL] = useState(user?.profilePhotoURL);
 
   const unlockProfile = () => {
-    if (userData.password === enteredPassword) {
+    if (user.password === enteredPassword) {
       console.log('Unlocking profile...');
       // Perform actions to unlock the profile
     } else {
@@ -40,11 +40,11 @@ export function LockScreen() {
                   <div className="p-4">
                     <div className="mb-4 text-center user-thumb">
                       <img src={photoURL} className="w-24 h-24 mx-auto border-4 rounded-full border-gray-50 dark:border-zinc-600" alt="thumbnail" />
-                      <h5 className="mt-3 text-base text-gray-700 dark:text-gray-200"> {userData.username} </h5>
+                      <h5 className="mt-3 text-base text-gray-700 dark:text-gray-200"> {user.username} </h5>
                     </div>
                     <form action="/">
                       <div className="mb-5">
-                        <label className="font-medium text-gray-700 dark:text-gray-200"> {userData.password} </label>
+                        <label className="font-medium text-gray-700 dark:text-gray-200"> {user.password} </label>
                         <div className="flex items-center mt-2 mb-3 rounded-3 bg-slate-50/50 dark:bg-transparent">
                           <span className="flex items-center px-4 py-2 text-gray-500 border border-r-0 border-gray-100 rounded rounded-r-none dark:border-zinc-600" id="basic-addon3">
                             <i className="ri-lock-2-line text-16" />

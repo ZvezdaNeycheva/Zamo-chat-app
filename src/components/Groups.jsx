@@ -14,7 +14,7 @@ export function Groups() {
   const [groups, setGroups] = useState({});
   const [allGroups, setAllGroups] = useState({});
   const [currentUser, setCurrentUser] = useState(null); // State to hold the current user
-  const { user, userData } = useContext(AppContext);
+  const { user } = useContext(AppContext);
   let { idGroup } = useParams();
   const navigate = useNavigate();
   const [visibleGroupDropdown, setVisibleGroupDropdown] = useState(null);
@@ -68,7 +68,7 @@ export function Groups() {
 
     try {
       const creatorId = currentUser?.uid; // Get the UID from the current user object
-      const creatorName = userData.username
+      const creatorName = user.username
       const members = [creatorId, ...chosenFriends];
       const newGroup = await createGroup(groupName, creatorId, creatorName, members);
       setGroups(prevGroups => {

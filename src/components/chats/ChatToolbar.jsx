@@ -5,7 +5,7 @@ import { UserProfileDetails } from "./UserProfileDetails";
 import { NavLink } from "react-router-dom";
 import { createDyteCallRoom } from "../../service/Dyte/dyte.service";
 
-export function ChatToolbar({ userData }) {
+export function ChatToolbar({ user }) {
     const [showProfileDetails, setShowProfileDetails] = useState(false);
 
     const toggleProfileDetails = () => {
@@ -29,11 +29,11 @@ export function ChatToolbar({ userData }) {
                             <a href="#" onClick={() => { }} className="p-2 text-gray-500 user-chat-remove text-16"><i className="ri-arrow-left-s-line"></i></a>
                         </div>
                         <div className="rtl:ml-3 ltr:mr-3">
-                            <img src={userData?.profilePhotoURL || "https://thinksport.com.au/wp-content/uploads/2020/01/avatar-.jpg"} alt="Avatar" className="rounded-full w-9 h-9" />
+                            <img src={user?.profilePhotoURL || "https://thinksport.com.au/wp-content/uploads/2020/01/avatar-.jpg"} alt="Avatar" className="rounded-full w-9 h-9" />
                         </div>
                         <div className="flex-grow overflow-hidden">
                             <h5 className="mb-0 truncate text-16 ltr:block rtl:hidden">
-                                <a href="#" className="text-gray-800 dark:text-gray-50">{userData?.username}</a>
+                                <a href="#" className="text-gray-800 dark:text-gray-50">{user?.username}</a>
                                 {/* <i className="text-green-500 ltr:ml-1 rtl:mr-1 ri-record-circle-fill text-10 "></i> */}
                             </h5>
                         </div>

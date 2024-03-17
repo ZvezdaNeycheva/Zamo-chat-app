@@ -5,7 +5,7 @@ import { ChatToolbar } from "./ChatToolbar";
 import { getMessages, editMessage, sendMessage, deleteMessage, reactToMessage } from "../../service/message.service";
 
 export function Chat({ id }) {
-    const { user, userData } = useContext(AppContext);
+    const { user } = useContext(AppContext);
     const [newMessage, setNewMessage] = useState("");
     const [messages, setMessages] = useState([]);
     const [loadingMessages, setLoadingMessages] = useState(true);
@@ -27,7 +27,7 @@ export function Chat({ id }) {
 
     const handleAcceptMessage = async (newMessage) => {
         if (!newMessage.trim()) return;
-        await sendMessage(newMessage, id, userData)
+        await sendMessage(newMessage, id, user)
         setNewMessage("");
     };
 
@@ -87,7 +87,7 @@ export function Chat({ id }) {
                     {/* <!-- start chat conversation section --> */}
 
                     <div className="relative w-full overflow-hidden ">
-                        {id ? <ChatToolbar userData={userData} /> : null}
+                        {id ? <ChatToolbar user={user} /> : null}
                         {/* <!-- end chat user head --> */}
 
                         {/* <!-- start chat conversation --> */}
@@ -99,14 +99,14 @@ export function Chat({ id }) {
                                 {messages.length > 0 &&
                                     messages.map((message) => (
                                         <li key={message.id} className="clear-both py-4" >
-                                            <div className={`flex mr-7 items-end gap-3 ${message.senderId === userData.uid ? 'justify-start' : 'justify-end'}`}>
+                                            <div className={`flex mr-7 items-end gap-3 ${message.senderId === user.uid ? 'justify-start' : 'justify-end'}`}>
                                                 <div>
                                                     <img src={message?.avatar || "https://thinksport.com.au/wp-content/uploads/2020/01/avatar-.jpg"} alt="" className="rounded-full h-9 w-9" />
                                                 </div>
 
                                                 <div>
                                                     <div className="flex gap-2 mb-2  ">
-                                                        <div className={`relative px-5 py-3 text-white rounded-lg ${message.senderName === userData.username ? 'ltr:rounded-bl-none' : 'ltr:rounded-br-none'} bg-violet-500`}>
+                                                        <div className={`relative px-5 py-3 text-white rounded-lg ${message.senderName === user.username ? 'ltr:rounded-bl-none' : 'ltr:rounded-br-none'} bg-violet-500`}>
                                                             <p className="mb-0" >
                                                                 {/* {message.content} */}
                                                                 {editedMessage === message.id ? (
@@ -130,15 +130,15 @@ export function Chat({ id }) {
 
                                                             <div className={`text-xs text-right mt-1 mb-0 cursor: pointer`} >
                                                                 {/* Example reaction buttons/icons */}
-                                                                <button onClick={() => reactToMessage(message.id, 'thumbsUp', userData, id)}>
+                                                                <button onClick={() => reactToMessage(message.id, 'thumbsUp', user, id)}>
                                                                     👍 {message.reactions && message.reactions.thumbsUp ? message.reactions.thumbsUp.length : 0}
                                                                 </button>
-                                                                <button onClick={() => reactToMessage(message.id, 'heart', userData, id)}>
+                                                                <button onClick={() => reactToMessage(message.id, 'heart', user, id)}>
                                                                     ❤️ {message.reactions && message.reactions.heart ? message.reactions.heart.length : 0}
                                                                 </button>
                                                             </div>
                                                         </div>
-                                                        <div className={`relative self-start dropdown ${message.senderId === userData.uid ? 'right-0' : 'left-auto'}`}>                                                            <a className="p-0 text-gray-400 border-0 btn dropdown-toggle dark:text-gray-100" href="#" role="button" data-bs-toggle="dropdown" id="dropdownMenuButton12">
+                                                        <div className={`relative self-start dropdown ${message.senderId === user.uid ? 'right-0' : 'left-auto'}`}>                                                            <a className="p-0 text-gray-400 border-0 btn dropdown-toggle dark:text-gray-100" href="#" role="button" data-bs-toggle="dropdown" id="dropdownMenuButton12">
                                                             <div>
                                                                 {message?.senderId === user?.uid && <div onClick={() => handleIconClick(message.id)}>
                                                                     <i className="ri-more-2-fill"></i>
@@ -158,7 +158,7 @@ export function Chat({ id }) {
 
                                                         </div>
                                                     </div>
-                                                    <div className={`font-medium ${message.senderName === userData.username ? '' : 'text-right mr-4'} text-gray-700 text-14 dark:text-gray-300`}>{message.senderName}</div>                                                </div>
+                                                    <div className={`font-medium ${message.senderName === user.username ? '' : 'text-right mr-4'} text-gray-700 text-14 dark:text-gray-300`}>{message.senderName}</div>                                                </div>
 
                                             </div>
                                         </li>

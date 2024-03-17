@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { BrowserRouter as Router, Routes, Route, useParams } from "react-router-dom";
 import { auth } from "./service/firebase-config";
 import "./App.css";
@@ -11,7 +11,7 @@ import { Meta } from "./components/Meta";
 import { Profile } from "./components/auth/Profile";
 import { AppBar } from "./components/AppBar";
 import { UserProfileDetails } from "./components/chats/UserProfileDetails";
-import { AppContext } from "./AppContext";
+import { AppContext, AppContextProvider } from "./AppContext";
 import Authenticated from "./components/auth/Authenticated";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { getUserByUid } from "./service/users.service";
@@ -30,11 +30,8 @@ import { ChannelChat } from "./components/chats/ChannelChat";
 // import { getAuthToken } from "./service/dyte.service";
 
 function App() {
-  const [context, setContext] = useState({
-    user: null,
-    userData: null,
-  });
   const [dbUser, loading, error] = useAuthState(auth);
+  const { setUser } = useContext(AppContext);
   let { id } = useParams();
   let { idGroup } = useParams();
   let { idCannel } = useParams();
@@ -43,10 +40,7 @@ function App() {
     if (dbUser) {
       getUserByUid(dbUser.uid)
         .then((user) => {
-          setContext({
-            user: dbUser,
-            userData: user,
-          });
+          setUser(user);
         })
         .catch((error) => {
           console.error("Error fetching user data:", error);
@@ -74,7 +68,7 @@ function App() {
   // }, []);
 
   return (
-    <AppContext.Provider value={{ ...context, setContext }}>
+    <>
       {/* <RoomContext.Provider value={{ ...roomId,  setRoomId: setRoomId }}> */}
       {/* <DyteProvider value={meeting}> */}
       <Router>
@@ -101,7 +95,7 @@ function App() {
       </Router>
       {/* </RoomContext.Provider> */}
       {/* </DyteProvider> */}
-    </AppContext.Provider>
+    </>
   );
 }
 

@@ -8,7 +8,7 @@ export function Channels() {
   const [channels, setChannels] = useState({});
   let { groupId } = useParams();
   const navigate = useNavigate();
-  const { userData } = useContext(AppContext);
+  const { user } = useContext(AppContext);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [channelName, setChannelName] = useState('');
   const [currentUser, setCurrentUser] = useState(null);
@@ -73,17 +73,17 @@ export function Channels() {
 
   const handleCreateChannel = async (event) => {
     event.preventDefault();
-    if (!userData) {
+    if (!user) {
       console.error("No current user found. Cannot create channel.");
       return;
     }
 
     try {
       const creatorId = currentUser?.uid;
-      const creatorName = userData.username;
+      const creatorName = user.username;
       console.log("Creating channel with creator ID:", currentUser?.uid);
-      console.log("Creating channel with creator name:", userData.username);
-      await createChannel(groupId, creatorName, [userData.uid], channelName, creatorId);
+      console.log("Creating channel with creator name:", user.username);
+      await createChannel(groupId, creatorName, [user.uid], channelName, creatorId);
       getAndUpdateChannels();
       console.log("Channel created:", channelName);
       setIsModalVisible(false);

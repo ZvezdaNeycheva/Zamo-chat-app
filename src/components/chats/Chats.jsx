@@ -9,7 +9,7 @@ import { createRoom, getRoom } from "../../service/message.service";
 
 
 export function Chats() {
-    const { user, userData } = useContext(AppContext);
+    const { user } = useContext(AppContext);
     const [users, setUsers] = useState([]);
     const [search, setSearch] = useState("");
     const [selectedFriend, setSelectedFriend] = useState();
@@ -88,14 +88,14 @@ export function Chats() {
         );
         setUsers(filteredUsers);
         if (!value) {
-            setUsers(filteredFriends); 
+            setUsers(filteredFriends);
          }
     };
 
     const displayFriends = () => {
         setUsers(filteredFriends);
     }
-    
+
     return (
         <>
             <div>

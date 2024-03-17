@@ -10,7 +10,7 @@ export function ChatUploadFile() {
     // Upload File State: Create a state to store the file and loading state.
     const [loading, setLoading] = useState(false);
     const [file, setFile] = useState(null);
-    const { user, userData, updateUserData } = useContext(AppContext);
+    const { user } = useContext(AppContext);
 
     function handleUploadFile(e) {
         if (e.target.files[0]) {
@@ -31,8 +31,8 @@ export function ChatUploadFile() {
         uploadFile(file, user, setLoading)
             .then((photoURL) => {
                 if (user) {
-                    userData.fileURL = photoURL; // Update with the correct property name (e.g., fileURL)
-                    updateUserData(userData?.uid, userData);
+                    user.fileURL = photoURL; // Update with the correct property name (e.g., fileURL)
+                    updateUserData(user?.uid, user);
                 } else {
                     console.error('Error updating user data: User is undefined');
                 }

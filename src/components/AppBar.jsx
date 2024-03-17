@@ -4,8 +4,7 @@ import { AppContext } from "../AppContext";
 import React, { useContext, useState } from "react";
 
 export function AppBar({ selected }) {
-  const { user, userData, setContext } = useContext(AppContext);
-  const [photoURL] = useState(user?.photoURL);
+  const { user, setUser } = useContext(AppContext);
   const [openSidebar, setOpenSidebar] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [selectedTab, setSelectedTab] = useState('chats');
@@ -25,7 +24,7 @@ const darkModeClass = isDarkMode ? "dark" : "";
   const logout = async () => {
     try {
       await logoutUser();
-      setContext({ user: null, userData: null });
+      setUser(null);
       console.log("User logged out successfully.");
       alert("Logout successful!");
       navigate("/login");
@@ -133,7 +132,7 @@ const darkModeClass = isDarkMode ? "dark" : "";
             {/*profile photo*/}
             <li className="relative lg:mt-4 dropdown lg:dropup">
               <button onClick={toggleSidebarDropdown} className={`${openSidebar ? "group-[.active]:rotate-180" : ""} dropdown-toggle" id="dropdownButton2" data-bs-toggle="dropdown`} >
-                <img src={userData?.profilePhotoURL || "https://thinksport.com.au/wp-content/uploads/2020/01/avatar-.jpg"} alt="Avatar" className="w-10 h-10 p-1 mx-auto rounded-full bg-gray-50 dark:bg-zinc-700" />
+                <img src={user?.profilePhotoURL || "https://thinksport.com.au/wp-content/uploads/2020/01/avatar-.jpg"} alt="Avatar" className="w-10 h-10 p-1 mx-auto rounded-full bg-gray-50 dark:bg-zinc-700" />
               </button>
 
               {/* Dropdown */}

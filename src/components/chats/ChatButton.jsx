@@ -1,10 +1,4 @@
-import { useContext } from "react"
-import { AppContext } from "../../AppContext";
-
-
-
 export function ChatButton({ user, onClick, selected }) {
-const { userData } = useContext(AppContext);
   return (
     <div onClick={onClick} className={`px-5 py-[15px] group-data-[theme-color=violet]:hover:bg-slate-100 group-data-[theme-color=green]:hover:bg-green-50/50 group-data-[theme-color=red]:hover:bg-red-50/50 transition-all ease-in-out border-b border-white/20 dark:border-zinc-700 group-data-[theme-color=violet]:dark:hover:bg-zinc-600 group-data-[theme-color=green]:dark:hover:bg-zinc-600 group-data-[theme-color=red]:dark:hover:bg-zinc-600 dark:hover:border-zinc-700 cursor-pointer ${selected ? 'bg-slate-100' : ''}`}>
         <div className="flex">

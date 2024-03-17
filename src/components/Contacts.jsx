@@ -7,7 +7,6 @@ import { auth, db } from '../service/firebase-config';
 import { updateUserData, getUserByUid, removeFriend, acceptFriendRequest, rejectFriendRequest, FriendsList, getUserByUsername } from '../service/users.service';
 
 export function Contacts() {
-  const { userData } = useContext(AppContext);
   const [user] = useAuthState(auth);
   const navigate = useNavigate();
   const [friendRequests, setFriendRequests] = useState([]);

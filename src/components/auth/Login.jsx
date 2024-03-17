@@ -7,7 +7,7 @@ import { loginUser } from "../../service/auth.service";
 
 export function Login() {
 
-  const { user, setContext } = useContext(AppContext);
+  const { user, setUser } = useContext(AppContext);
   const [form, setForm] = useState({
     email: "",
     password: "",
@@ -45,7 +45,7 @@ export function Login() {
     try {
       console.log("Logging in...");
       const credentials = await loginUser(form.email, form.password);
-      setContext({ user: credentials.user, userData: null });
+      setUser(credentials.user);
       navigate("/chats");
     } catch (error) {
       if (error.code === "auth/invalid-credential") {
