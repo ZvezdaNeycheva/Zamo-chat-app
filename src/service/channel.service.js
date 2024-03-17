@@ -71,7 +71,7 @@ export const deleteGroup = async (groupId) => {
   }
 };
 
-export const createChannel = async (groupId, creatorName, members, channelName = '#General', creatorId) => {
+export const createChannel = async (groupId, creatorName, members, channelName = '#General', creatorId, isPrivate) => {
   const readableDate = format(new Date(), 'yyyy-MM-dd HH:mm:ss');
   try {
     const dbChannel = await push(ref(db, `groups/${groupId}/channels`), {});
@@ -88,6 +88,7 @@ export const createChannel = async (groupId, creatorName, members, channelName =
         room: dbRoom.key,
         creatorName,
         creatorId,
+        private: isPrivate,
       });
     await update(ref(db), {
       [`groups/${groupId}/channels/${dbChannel.key}`]: true,
