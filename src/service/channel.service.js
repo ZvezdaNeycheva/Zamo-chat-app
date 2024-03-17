@@ -1,7 +1,7 @@
 import { get, set, ref, getDatabase, push, child, remove, update } from 'firebase/database';
 import { db } from './firebase-config';
 import { format } from 'date-fns';
-import { getUserByUid, getUserData, updateUserData } from './users.service';
+import { getUserByUid } from './users.service';
 // Groups
 export const createGroup = async (groupName, creatorId, creatorName, members) => {
   const readableDate = format(new Date(), 'yyyy-MM-dd HH:mm:ss');
@@ -31,27 +31,23 @@ export const createGroup = async (groupName, creatorId, creatorName, members) =>
   }
 };
 
-export const fetchGroups = async (userId) => {
-  const userSnapshot = await getUserByUid(userId);
-  if (!userSnapshot.exists()) {
-    throw new Error('User does not exist');
-  }
-  const user = userSnapshot.val();
+export const getGroups = async (userId) => {
+  const user = await getUserByUid(userId);
   return Object.fromEntries(await Promise.all(Object.keys(user.groups ?? {}).map(async groupId => {
     try {
-      const snapshot = await get(ref(db, `groups/${groupId}`));
-      if (snapshot.exists()) {
-        const val = snapshot.val();
-        return [val.id, val];
-      } else {
-        console.log("No groups available");
-        return {};
-      }
+      const group = await getGroup(groupId);
+      return [group.id, group];
     } catch (error) {
       console.error("Error fetching groups:", error);
       throw error;
     }
   })));
+}
+
+const getGroup = async (id) => {
+  const snapshot = await get(ref(db, `groups/${id}`));
+  if (!snapshot.exists()) throw new Error('Group with id ' + id + ' does not exist.');
+  return snapshot.val();
 }
 
 export const deleteGroup = async (groupId) => {
@@ -110,7 +106,7 @@ export const createChannel = async (groupId, creatorName, members, channelName =
   }
 }
 
-export const fetchChannelsIdsByGroup = async (groupId) => {
+export const getChannelsIdsByGroup = async (groupId) => {
   const dbRef = ref(getDatabase());
   try {
     const snapshot = await get(child(dbRef, `groups/${groupId}/channels`));
@@ -126,7 +122,7 @@ export const fetchChannelsIdsByGroup = async (groupId) => {
   }
 };
 
-export const fetchChannelsAll = async () => {
+export const getChannelsAll = async () => {
   const dbRef = ref(getDatabase());
   try {
     const snapshot = await get(child(dbRef, `channels`));
@@ -163,7 +159,7 @@ export const deleteChannel = async (channelId) => {
   }
 };
 
-export const fetchChannel = async (channelId) => {
+export const getChannel = async (channelId) => {
   const snapshot = await get(ref(db, `channels/${channelId}`));
   if (!snapshot.exists()) throw new Error('No channel with id ' + channelId);
   return snapshot.val();

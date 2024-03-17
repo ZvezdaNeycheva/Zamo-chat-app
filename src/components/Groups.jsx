@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { createGroup, fetchGroups, deleteGroup } from "../service/channel.service";
+import { createGroup, getGroups, deleteGroup } from "../service/channel.service";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { AppContext } from "../AppContext";
 import { useNavigate, useParams } from "react-router-dom";
@@ -50,7 +50,7 @@ export function Groups() {
   const updateGroups = async () => {
     if (!user) return;
     // Fetch groups from Firebase and store in `allGroups`
-    const fetchedGroups = await fetchGroups(user.uid); // Your function to fetch groups
+    const fetchedGroups = await getGroups(user.uid); // Your function to fetch groups
     setAllGroups(fetchedGroups);
     setGroups(fetchedGroups); // Initially, display all groups
   }

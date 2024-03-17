@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import { Chat } from "./Chat";
-import { fetchChannel } from "../../service/channel.service";
+import { getChannel } from "../../service/channel.service";
 import { useEffect, useState } from "react";
 
 export function ChannelChat() {
@@ -12,7 +12,7 @@ export function ChannelChat() {
     }, []);
 
     const updateRoomId = async () => {
-        const channel = await fetchChannel(channelId);
+        const channel = await getChannel(channelId);
         setRoomId(channel.room);
     }
 

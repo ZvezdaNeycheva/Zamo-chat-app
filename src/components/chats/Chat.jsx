@@ -2,19 +2,19 @@ import { useState, useEffect, useContext } from "react";
 import { AppContext } from "../../AppContext";
 import { ChatUploadFile } from "./ChatUploadFile";
 import { ChatToolbar } from "./ChatToolbar";
-import { fetchMessages, handleEditPM, sendMessagePM, handleDeletePM, reactToMessagePM } from "../../service/message.service";
+import { getMessages, editMessage, sendMessage, deleteMessage, reactToMessage } from "../../service/message.service";
 
 export function Chat({ id }) {
     const { user, userData } = useContext(AppContext);
     const [newMessage, setNewMessage] = useState("");
     const [messages, setMessages] = useState([]);
     const [loadingMessages, setLoadingMessages] = useState(true);
-    const [editMessage, setEditMessage] = useState(null);
+    const [editedMessage, setEditedMessage] = useState(null);
     const [editedMessageContent, setEditedMessageContent] = useState('');
     const [activeOptionsMessageId, setActiveOptionsMessageId] = useState(null);
 
     useEffect(() => {
-        const unsubscribe = fetchMessages(id, setMessages, setLoadingMessages);
+        const unsubscribe = getMessages(id, setMessages, setLoadingMessages);
         return () => {
             unsubscribe();
         };
@@ -25,16 +25,16 @@ export function Chat({ id }) {
         setNewMessage(message);
     };
 
-    const sendMessage = async (newMessage) => {
+    const handleAcceptMessage = async (newMessage) => {
         if (!newMessage.trim()) return;
-        await sendMessagePM(newMessage, id, userData)
+        await sendMessage(newMessage, id, userData)
         setNewMessage("");
     };
 
     const handleEdit = async(mId, newContent) => {
-        setEditMessage(mId);
+        setEditedMessage(mId);
         try {
-            const updatedMessages = await handleEditPM(mId, newContent, id, messages)
+            const updatedMessages = await editMessage(mId, newContent, id, messages)
             setMessages(updatedMessages);
         } catch (error) {
             console.error('Error editing message:', error);
@@ -48,7 +48,7 @@ export function Chat({ id }) {
     };
 
     const startEdit = (message) => {
-        setEditMessage(message.id);
+        setEditedMessage(message.id);
         setEditedMessageContent(message.content);
     };
 
@@ -65,13 +65,13 @@ export function Chat({ id }) {
     };
 
     const cancelEdit = () => {
-        setEditMessage(null);
+        setEditedMessage(null);
         setEditedMessageContent('');
     };
 
     const handleDelete = async (mId) => {
         try {
-            await handleDeletePM(mId, id);
+            await deleteMessage(mId, id);
             setMessages((prevMessages) => prevMessages.filter((message) => message.id !== mId));
         } catch (error) {
             console.error('Error deleting message:', error);
@@ -109,7 +109,7 @@ export function Chat({ id }) {
                                                         <div className={`relative px-5 py-3 text-white rounded-lg ${message.senderName === userData.username ? 'ltr:rounded-bl-none' : 'ltr:rounded-br-none'} bg-violet-500`}>
                                                             <p className="mb-0" >
                                                                 {/* {message.content} */}
-                                                                {editMessage === message.id ? (
+                                                                {editedMessage === message.id ? (
                                                                     <div>
                                                                         <input
                                                                             type="text"
@@ -130,10 +130,10 @@ export function Chat({ id }) {
 
                                                             <div className={`text-xs text-right mt-1 mb-0 cursor: pointer`} >
                                                                 {/* Example reaction buttons/icons */}
-                                                                <button onClick={() => reactToMessagePM(message.id, 'thumbsUp', userData, id)}>
+                                                                <button onClick={() => reactToMessage(message.id, 'thumbsUp', userData, id)}>
                                                                     👍 {message.reactions && message.reactions.thumbsUp ? message.reactions.thumbsUp.length : 0}
                                                                 </button>
-                                                                <button onClick={() => reactToMessagePM(message.id, 'heart', userData, id)}>
+                                                                <button onClick={() => reactToMessage(message.id, 'heart', userData, id)}>
                                                                     ❤️ {message.reactions && message.reactions.heart ? message.reactions.heart.length : 0}
                                                                 </button>
                                                             </div>
@@ -174,10 +174,10 @@ export function Chat({ id }) {
                                 <div className="flex gap-2">
                                     <div className="flex-grow">
                                         {/* handleSendMessage    sendMessage(messages) */}
-                                        <input type="text" value={newMessage} onChange={handleInputMessage} onClick={() => { sendMessage(newMessage) }} onKeyDown={(e) => {
+                                        <input type="text" value={newMessage} onChange={handleInputMessage} onClick={() => { handleAcceptMessage(newMessage) }} onKeyDown={(e) => {
                                             if (e.key === 'Enter') {
                                                 e.preventDefault();
-                                                sendMessage(newMessage);
+                                                handleAcceptMessage(newMessage);
                                             }
                                         }} className="w-full border-transparent rounded bg-gray-50 placeholder:text-14 text-14 dark:bg-zinc-700 dark:placeholder:text-gray-300 dark:text-gray-300" placeholder="Enter Message..." />
                                     </div>
@@ -197,7 +197,7 @@ export function Chat({ id }) {
                                                 <ChatUploadFile />
                                                 {/* Send Message */}
                                                 <li className="inline-block">
-                                                    <button type="submit" onClick={() => { sendMessage(newMessage) }} className="text-white border-transparent btn group-data-[theme-color=violet]:bg-violet-500 group-data-[theme-color=green]:bg-green-500 group-data-[theme-color=red]:bg-red-500 group-data-[theme-color=violet]:hover:bg-violet-600 group-data-[theme-color=green]:hover:bg-green-600">
+                                                    <button type="submit" onClick={() => { handleAcceptMessage(newMessage) }} className="text-white border-transparent btn group-data-[theme-color=violet]:bg-violet-500 group-data-[theme-color=green]:bg-green-500 group-data-[theme-color=red]:bg-red-500 group-data-[theme-color=violet]:hover:bg-violet-600 group-data-[theme-color=green]:hover:bg-green-600">
                                                         <i className="ri-send-plane-2-fill"></i>
                                                     </button>
                                                 </li>

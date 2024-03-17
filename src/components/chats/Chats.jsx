@@ -76,7 +76,7 @@ export function Chats() {
     };
 
     const [conversations, setConversations] = useState([]);
-    const fetchConversations = async (userId) => {
+    const updateConversations = async (userId) => {
         try {
 
             const roomsRef = ref(db, 'rooms');
@@ -112,7 +112,7 @@ export function Chats() {
 
     useEffect(() => {
         if (user) {
-            fetchConversations(user.uid);
+            updateConversations(user.uid);
         }
     }, [user]);
 

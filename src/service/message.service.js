@@ -2,7 +2,7 @@ import { onValue, push, ref, remove, set, update, get } from "firebase/database"
 import { db } from "./firebase-config";
 
 
-export const fetchMessages = (id, setMessages, setLoadingMessages) => {
+export const getMessages = (id, setMessages, setLoadingMessages) => {
     try {
         if (!id) {
             console.log("No channel ID provided.");
@@ -23,7 +23,7 @@ export const fetchMessages = (id, setMessages, setLoadingMessages) => {
             setLoadingMessages(false);
         });
 
-        return unsubscribe; 
+        return unsubscribe;
     } catch (error) {
         console.error("Error fetching messages:", error);
         return () => {};
@@ -31,9 +31,7 @@ export const fetchMessages = (id, setMessages, setLoadingMessages) => {
 };
 
 
-export const sendMessagePM = async (newMessage, id, userData ) => {
-   
-
+export const sendMessage = async (newMessage, id, userData ) => {
     const message = {
         senderId: userData.uid,
         senderName: userData.username,
@@ -47,13 +45,9 @@ export const sendMessagePM = async (newMessage, id, userData ) => {
     message.id = messageId;
 
     await set(ref(db, `rooms/${id}/messages/${messageId}`), message);
-    return {
-        id: messageId,
-        ...newMessageRef
-    };
 };
 
-export const handleEditPM = async (mId, newContent, id, messages ) => {
+export const editMessage = async (mId, newContent, id, messages ) => {
     try {
         const messageRef = ref(db, `rooms/${id}/messages/${mId}`);
 
@@ -70,7 +64,7 @@ export const handleEditPM = async (mId, newContent, id, messages ) => {
     }
 };
 
-export const handleDeletePM = async (mId, id) => {
+export const deleteMessage = async (mId, id) => {
     try {
         const messageRef = ref(db, `rooms/${id}/messages/${mId}`);
         await remove(messageRef);
@@ -79,7 +73,7 @@ export const handleDeletePM = async (mId, id) => {
     }
 };
 
-export const reactToMessagePM = async (messageId, reactionType, userData, id) => {
+export const reactToMessage = async (messageId, reactionType, userData, id) => {
     try {
         const messageRef = ref(db, `rooms/${id}/messages/${messageId}`);
         const snapshot = await get(messageRef);

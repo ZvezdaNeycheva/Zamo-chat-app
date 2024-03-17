@@ -69,12 +69,6 @@ export function Register() {
         return;
       }
 
-      const user = await getUserByUid(form.username);
-      if (user.exists()) {
-        setErrorMessage(`Username @${form.username} already exists`);
-        return;
-      }
-
       const credentials = await registerUser(form.email, form.password);
       const readableDate = format(new Date(), 'yyyy-MM-dd HH:mm:ss');
       await createUserProfile(

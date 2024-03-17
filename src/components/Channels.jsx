@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { fetchChannelsIdsByGroup, fetchChannelsAll, createChannel, deleteChannel } from "../service/channel.service";
+import { getChannelsIdsByGroup, getChannelsAll, createChannel, deleteChannel } from "../service/channel.service";
 import { AppContext } from "../AppContext";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 
@@ -18,8 +18,8 @@ export function Channels() {
 
   useEffect(() => {
     const getChannels = async () => {
-      const fetchedChannelsIds = await fetchChannelsIdsByGroup(groupId);
-      const fetchedChannels = await fetchChannelsAll();
+      const fetchedChannelsIds = await getChannelsIdsByGroup(groupId);
+      const fetchedChannels = await getChannelsAll();
       const filteredChannels = Object.keys(fetchedChannelsIds).reduce((acc, key) => {
         if (fetchedChannels[key]) {
           acc[key] = fetchedChannels[key];
@@ -64,7 +64,7 @@ export function Channels() {
       await createChannel(groupId, creatorName, [userData.uid], channelName, creatorId);
 
       // Now, re-fetch the channels to update the UI
-      fetchAndUpdateChannels();
+      getAndUpdateChannels();
       console.log("Channel created:", channelName);
       setIsModalVisible(false); // Close the modal
       setChannelName(''); // Reset the channel name input field
@@ -73,9 +73,9 @@ export function Channels() {
     }
   };
 
-  const fetchAndUpdateChannels = async () => {
-    const fetchedChannelsIds = await fetchChannelsIdsByGroup(groupId);
-    const fetchedChannels = await fetchChannelsAll();
+  const getAndUpdateChannels = async () => {
+    const fetchedChannelsIds = await getChannelsIdsByGroup(groupId);
+    const fetchedChannels = await getChannelsAll();
     const filteredChannels = Object.keys(fetchedChannelsIds).reduce((acc, key) => {
       if (fetchedChannels[key]) {
         acc[key] = fetchedChannels[key];
@@ -90,8 +90,8 @@ export function Channels() {
     try {
       await deleteChannel(channelId);
       console.log("Channel deleted successfully");
-      const updatedChannelIds = await fetchChannelsIdsByGroup(groupId);
-      const allChannels = await fetchChannelsAll();
+      const updatedChannelIds = await getChannelsIdsByGroup(groupId);
+      const allChannels = await getChannelsAll();
 
       const updatedChannels = Object.keys(updatedChannelIds).reduce((acc, key) => {
         if (allChannels[key]) {
@@ -183,7 +183,7 @@ export function Channels() {
 
 
 
-// The new view for the Channels component 
+// The new view for the Channels component
 
 
 // import React, { useContext, useEffect, useState } from "react";

@@ -2,7 +2,7 @@ import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, ge
 import { auth } from './firebase-config';
 import { storage } from './firebase-config';
 import { uploadBytes, ref as storageRef, getDownloadURL } from "firebase/storage";
-import { updateUserData, getUserByEmail } from './users.service';
+import { updateUserData } from './users.service';
 
 export const registerUser = (email, password) => {
   return createUserWithEmailAndPassword(auth, email, password);
@@ -26,29 +26,6 @@ export const updateUserEmail = async (newEmail) => {
   } catch (error) {
     console.error('Error updating email:', error);
     return false;
-  }
-};
-
-
-export const sendFriendRequest = async (senderUid, recipientEmail) => {
-  try {
-    // Get the user by email
-    const userByEmailSnapshot = await getUserByEmail(recipientEmail);
-    const userByEmail = userByEmailSnapshot.val();
-
-    if (userByEmail) {
-      const recipientUid = userByEmail.uid;
-
-      // Add the sender's ID to the recipient's pendingRequests
-      const updatedPendingRequests = [...userByEmail.pendingRequests, senderUid];
-      await updateUserData(recipientUid, { pendingRequests: updatedPendingRequests });
-
-      console.log('Friend request sent successfully.');
-    } else {
-      console.log('User not found with the provided email.');
-    }
-  } catch (error) {
-    console.error('Error sending friend request:', error);
   }
 };
 

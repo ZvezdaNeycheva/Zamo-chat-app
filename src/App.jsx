@@ -14,7 +14,7 @@ import { UserProfileDetails } from "./components/chats/UserProfileDetails";
 import { AppContext } from "./AppContext";
 import Authenticated from "./components/auth/Authenticated";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { getUserData } from "./service/users.service";
+import { getUserByUid } from "./service/users.service";
 import { Settings } from "./components/Settings";
 import { Contacts } from "./components/Contacts";
 import { Groups } from "./components/Groups";
@@ -34,28 +34,25 @@ function App() {
     user: null,
     userData: null,
   });
-  const [user, loading, error] = useAuthState(auth);
+  const [dbUser, loading, error] = useAuthState(auth);
   let { id } = useParams();
   let { idGroup } = useParams();
   let { idCannel } = useParams();
 
   useEffect(() => {
-    if (user) {
-      getUserData(user.uid)
-        .then((snapshot) => {
-          if (snapshot.exists()) {
-
-            setContext({
-              user,
-              userData: snapshot.val()[Object.keys(snapshot.val())[0]],
-            });
-          }
+    if (dbUser) {
+      getUserByUid(dbUser.uid)
+        .then((user) => {
+          setContext({
+            user: dbUser,
+            userData: user,
+          });
         })
         .catch((error) => {
           console.error("Error fetching user data:", error);
         });
     }
-  }, [user]);
+  }, [dbUser]);
 
   // const [meeting, initMeeting] = useDyteClient(); // Initialize useDyteClient
 
