@@ -73,56 +73,15 @@ export function Chats() {
             user.username.toLowerCase().includes(value)
         );
         setUsers(filteredUsers);
+        if (!value) {
+            setUsers(filteredFriends); 
+         }
     };
 
-    const [conversations, setConversations] = useState([]);
-    const updateConversations = async (userId) => {
-        try {
-
-            const roomsRef = ref(db, 'rooms');
-            const roomsSnapshot = await get(roomsRef);
-
-            const conversations = [];
-            roomsSnapshot.forEach((room) => {
-                const participants = room.val().participants;
-                if (participants && participants[userId]) {
-                    const otherParticipants = Object.keys(participants).filter(id => id !== userId);
-                    otherParticipants.forEach(async (participantId) => {
-                        if (!conversations.find(c => c.uid === participantId)) {
-                            const userSnapshot = await get(ref(db, `users/${participantId}`));
-                            const userData = userSnapshot.val();
-                            const participantName = userData ? userData.username : "Unknown";
-
-                            conversations.push({
-                                uid: participantId,
-                                roomId: room.key,
-                                username: participantName,
-                                profilePhotoURL: userData?.profilePhotoURL
-                            });
-                        }
-                    });
-                }
-            });
-
-            setConversations(conversations);
-        } catch (error) {
-            console.error('Error fetching conversations:', error);
-        }
-    };
-
-    useEffect(() => {
-        if (user) {
-            updateConversations(user.uid);
-        }
-    }, [user]);
-
-    const displayConversations = () => {
-        setUsers(conversations);
-
-    }
     const displayFriends = () => {
         setUsers(filteredFriends);
     }
+    
     return (
         <>
             <div>
@@ -140,9 +99,9 @@ export function Chats() {
 
                 <div className="overflow-scroll">
 
-                    <h5 className="px-6 mb-4 text-16 dark:text-gray-50"><Link onClick={displayFriends}>Friends</Link> &nbsp;&nbsp;&nbsp;<Link onClick={displayConversations}> Conversations</Link></h5>
+                    <h5 className="px-6 mb-4 text-16 dark:text-gray-50"><Link onClick={displayFriends}>Friends</Link></h5>
 
-                    <div className="h-[610px] px-2">
+                    <div className="h-[100vh] px-2">
                         <ul className="chat-user-list">
 
                             {users.length > 0 &&
