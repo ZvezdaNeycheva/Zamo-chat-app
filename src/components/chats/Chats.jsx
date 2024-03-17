@@ -1,12 +1,11 @@
 import { useContext, useEffect, useState } from "react";
 import { get, query, ref, push, update, orderByChild, equalTo } from "firebase/database";
 import { useNavigate, useParams, Link } from "react-router-dom";
-import { auth, db } from "../../service/firebase-config";
+import { auth } from "../../service/firebase-config";
 import { AppContext } from "../../AppContext";
 import { ChatButton } from "./ChatButton";
-import { getAllUsers } from "../../service/users.service";
-import { FriendsList } from '../../service/users.service';
-import { set } from "date-fns";
+import { getAllUsers, FriendsList } from "../../service/users.service";
+import { createRoom, getRoom } from "../../service/message.service";
 
 
 export function Chats() {
@@ -69,84 +68,17 @@ export function Chats() {
         // console.log("Current Room in useEffect:", id);
         if (!id) setSelectedFriend(undefined);
     }, [id]);
-
-    const getRoom = async (participants) => {
-        try {
-            const roomsRef = ref(db, 'rooms');
-            const snapshot = await get(roomsRef);
-
-            if (snapshot.exists()) {
-                const allRooms = snapshot.val();
-                const roomId = Object.keys(allRooms).find(roomId => {
-                    const room = allRooms[roomId];
-                    const roomParticipants = Object.keys(room.participants);
-                    return (
-                        room.type === 'direct' &&
-                        roomParticipants.length === participants.length &&
-                        roomParticipants.every(participant => participants.includes(participant))
-                    );
-                });
-
-                if (roomId) {
-                    return {
-                        id: roomId,
-                        ...allRooms[roomId]
-                    };
-                }
-            }
-            return null;
-        } catch (error) {
-            console.error('Error fetching room:', error);
-            return null;
-        }
-    };
-
-    const createRoom = async (participants) => {
-        const newRoom = {
-            type: 'direct',
-            participants: participants.reduce((acc, key) => ({
-                ...acc,
-                [key]: true
-
-            }), {}),
-        };
-
-        const roomRef = push(ref(db, "rooms"));
-        await update(roomRef, newRoom);
-
-        for (const participant of participants) {
-            await update(ref(db, `users/${participant}/rooms`), {
-                [roomRef.key]: true
-            });
-        }
-
-        return {
-            id: roomRef.key,
-            ...newRoom
-        };
-    };
-
+   
     const handleSearchChange = async (e) => {
         const value = e.target.value.toLowerCase();
         setSearch(value);
 
-        const snapshot = await get(query(ref(db, "users")));
-        if (snapshot.exists()) {
-            const users = Object.keys(snapshot.val()).map((key) => ({
-                id: key,
-                ...snapshot.val()[key],
-            }));
 
-            const filteredUsers = users.filter((user) =>
-                user.username.toLowerCase().includes(value)
-            );
-            setUsers(filteredUsers);
-        }
-        if (!value) {
-           setUsers(filteredFriends); 
-        }
-        console.log({ users });
-        console.log({ search });
+        const users = await getAllUsers();
+        const filteredUsers = users.filter((user) =>
+            user.username.toLowerCase().includes(value)
+        );
+        setUsers(filteredUsers);
     };
 
 
@@ -196,11 +128,11 @@ const displayFriends = () => {
                 <div className="px-6 pt-6">
                     <h4 className="mb-0 text-gray-700 dark:text-gray-50">Chats</h4>
 
-                    <div className="py-1 mt-5 mb-5 rounded group-data-[theme-color=violet]:bg-slate-100 group-data-[theme-color=green]:bg-green-50 group-data-[theme-color=red]:bg-red-50 group-data-[theme-color=violet]:dark:bg-zinc-600 group-data-[theme-color=green]:dark:bg-zinc-600 group-data-[theme-color=red]:dark:bg-zinc-600">
-                        <span className="group-data-[theme-color=violet]:bg-slate-100 group-data-[theme-color=green]:bg-green-50 group-data-[theme-color=red]:bg-red-50 group-data-[theme-color=violet]:dark:bg-zinc-600 group-data-[theme-color=green]:dark:bg-zinc-600 group-data-[theme-color=red]:dark:bg-zinc-600 pe-1 ps-3 " id="basic-addon2">
-                            <i className="text-lg text-gray-700 ri-search-line search-icon dark:text-gray-200"></i>
+                    <div className="py-1 mt-5 mb-5 rounded group-data-[theme-color=violet]:bg-slate-100 group-data-[theme-color=violet]:dark:bg-zinc-600">
+                        <span className="group-data-[theme-color=violet]:bg-slate-100 group-data-[theme-color=violet]:dark:bg-zinc-600  pe-1 ps-3 " id="basic-addon2">
+                            <i className="text-gray-700 ri-search-line search-icon dark:text-gray-200"></i>
                         </span>
-                        <input type="text" value={search} onChange={handleSearchChange} className="border-0 group-data-[theme-color=violet]:bg-slate-100 group-data-[theme-color=green]:bg-green-50 group-data-[theme-color=red]:bg-red-50 group-data-[theme-color=violet]:dark:bg-zinc-600 group-data-[theme-color=green]:dark:bg-zinc-600 group-data-[theme-color=red]:dark:bg-zinc-600 placeholder:text-[14px] focus:ring-offset-0 focus:outline-none focus:ring-0 dark:text-gray-400" placeholder="Search messages or users" aria-label="Search messages or users" aria-describedby="basic-addon2" />
+                        <input type="text" value={search} onChange={handleSearchChange} className="border-0 group-data-[theme-color=violet]:bg-slate-100 group-data-[theme-color=violet]:dark:bg-zinc-600  placeholder:text-[14px] focus:ring-offset-0 focus:outline-none focus:ring-0 dark:text-gray-400" placeholder="Search users" aria-label="Search users" aria-describedby="basic-addon2" />
                     </div>
 
                 </div>
