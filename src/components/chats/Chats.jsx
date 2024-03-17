@@ -1,7 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { get, query, ref, push, update, orderByChild, equalTo } from "firebase/database";
 import { useNavigate, useParams, Link } from "react-router-dom";
-import { auth, db } from "../../service/firebase-config";
 import { AppContext } from "../../AppContext";
 import { ChatButton } from "./ChatButton";
 import { subscribeToUserFriendsListChanges } from "../../service/users.service";
@@ -29,7 +27,7 @@ export function Chats() {
             setFilteredFriendsList(friendsList);
             return;
         }
-        setFilteredFriendsList(friendsList.filter(friend => friend.username.includes(search.toLocaleLowerCase())));
+        setFilteredFriendsList(friendsList.filter(friend => ((friend.username).toLocaleLowerCase()).includes(search.toLocaleLowerCase())));
     }, [search, friendsList]);
 
     const updateFriendsList = async () => {
