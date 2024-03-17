@@ -28,6 +28,20 @@ export function Chats() {
         setUsers(filteredFriends);
     }, [user]);
     //-------------------------------------
+    useEffect(() => {
+        if (user) {
+           const friends = getFriends();
+           setUsers(friends);
+           console.log({friends});
+        }
+    }, [user]);
+    console.log({users});
+
+    const getFriends = async () => {
+        const users = await FriendsList(user.uid, setUsers);
+        // const users = await getFriendsList(user.uid);
+        // return users
+    };
 
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged((user) => {
