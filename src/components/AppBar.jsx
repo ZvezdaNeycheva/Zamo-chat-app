@@ -6,15 +6,8 @@ import React, { useContext, useState } from "react";
 export function AppBar({ selected }) {
   const { user, setUser } = useContext(AppContext);
   const [openSidebar, setOpenSidebar] = useState(false);
-  const [isDarkMode, setIsDarkMode] = useState(false);
   const [selectedTab, setSelectedTab] = useState('chats');
   const navigate = useNavigate();
-
-const toggleDarkMode = () => {
-  setIsDarkMode(!isDarkMode);
-};
-
-const darkModeClass = isDarkMode ? "dark" : "";
 
   function toggleSidebarDropdown() {
     setOpenSidebar((prevOpen) => !prevOpen);
@@ -34,16 +27,10 @@ const darkModeClass = isDarkMode ? "dark" : "";
   };
 
 function test() {
-  console.log("test");
-
- 
-    // document.body.classList.add("dark");
   const html = document.querySelector('html');
   const currentMode = html.getAttribute('data-mode');
   const newMode = currentMode === 'light' ? 'dark' : 'light';
   html.setAttribute('data-mode', newMode);
-  
-
 }
 
   return (

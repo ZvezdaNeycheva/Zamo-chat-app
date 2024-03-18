@@ -1,5 +1,11 @@
 import { onValue, push, ref, remove, set, update, get } from "firebase/database";
 import { db } from "./firebase-config";
+import { format } from 'date-fns';
+
+const readableDate = format(new Date(), 'yyyy-MM-dd HH:mm')
+const date = new Date().toLocaleDateString() 
+const time = new Date().toLocaleTimeString().replace(/:\d+ [AP]M/, '')
+const date2 = `${date} ${time}`
 
 
 export const getMessages = (id, setMessages, setLoadingMessages) => {
@@ -36,7 +42,7 @@ export const sendMessage = async (newMessage, id, userData ) => {
         senderId: userData.uid,
         senderName: userData.username,
         content: newMessage,
-        timestamp: Date.now(),
+        timestamp: date2,
         avatar: userData?.profilePhotoURL || null,
     };
 
@@ -165,3 +171,17 @@ export const createRoom = async (participants) => {
         ...newRoom
     };
 };
+
+export const sendPictureMessage = (channelId, sender, msg, picURL) =>
+  push(ref(db, `channels/${channelId}/msgs`), {})
+    .then(response =>
+      set(ref(db, `channels/${channelId}/msgs/${response.key}`),
+        {
+          body: msg,
+          pic: picURL,
+          id: response.key,
+          owner: sender,
+          createdOn: date2,
+        })
+    )
+    .catch(e => console.error(e));

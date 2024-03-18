@@ -12,6 +12,10 @@ export function Chat({ id, toolbar }) {
     const [editedMessageContent, setEditedMessageContent] = useState('');
     const [activeOptionsMessageId, setActiveOptionsMessageId] = useState(null);
 
+    const [pictureURL, setPictureURL] = useState(null);
+    const handleFileUploaded = (url) => {
+        setPictureURL(url);
+    };
     useEffect(() => {
         const unsubscribe = getMessages(id, setMessages, setLoadingMessages);
         return () => {
@@ -95,6 +99,12 @@ export function Chat({ id, toolbar }) {
                             <ul className="mb-0">
                                 {!id ? <p>Select a friend to start a chat.</p> : null}
                                 {id && !messages.length ? <p>Your messages will appear here.</p> : null}
+{pictureURL && (
+    <div>
+        <img src={pictureURL} alt="Uploaded" style={{ maxWidth: '100px' }} />
+    </div>
+)}
+
                                 {messages.length > 0 &&
                                     messages.map((message) => (
                                         <li key={message.id} className="clear-both py-4" >
@@ -193,7 +203,7 @@ export function Chat({ id, toolbar }) {
                                                     </button>
                                                 </li>
 
-                                                <ChatUploadFile />
+                                                <ChatUploadFile handleFileUploaded={handleFileUploaded}/>
                                                 {/* Send Message */}
                                                 <li className="inline-block">
                                                     <button type="submit" onClick={() => { handleAcceptMessage(newMessage) }} className="text-white border-transparent btn group-data-[theme-color=violet]:bg-violet-500 group-data-[theme-color=green]:bg-green-500 group-data-[theme-color=red]:bg-red-500 group-data-[theme-color=violet]:hover:bg-violet-600 group-data-[theme-color=green]:hover:bg-green-600">
