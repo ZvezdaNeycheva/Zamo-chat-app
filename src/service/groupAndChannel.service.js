@@ -197,3 +197,31 @@ export const removeUserFromGroup = async (groupId, userId) => {
     throw error;
   }
 }
+
+export const addPeopleToGroup = async (groupId, newMemberIds) => {
+  console.log('zdr');
+  const dbRef = getDatabase();
+
+  const groupRef = ref(dbRef, `groups/${groupId}`);
+  const groupSnapshot = await get(groupRef);
+  if (!groupSnapshot.exists()) {
+    console.error("Group with id " + groupId + " does not exist.");
+    return;
+  }
+  const groupData = groupSnapshot.val();
+
+  let updates = {};
+
+  newMemberIds.forEach((memberId) => {
+    updates[`groups/${groupId}/members/${memberId}`] = true;
+    updates[`users/${memberId}/groups/${groupId}`] = true;
+  });
+debugger;
+  try {
+    await update(ref(dbRef), updates);
+    console.log("Added new members to the group successfully.");
+  } catch (error) {
+    console.error("Error adding people to the group:", error);
+    throw error;
+  }
+};

@@ -1,27 +1,37 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { getChannelsIdsByGroup, getChannelsAll, createChannel, deleteChannel } from "../service/groupAndChannel.service";
+import { getChannelsIdsByGroup, getChannelsAll, createChannel, deleteChannel, addPeopleToGroup } from "../service/groupAndChannel.service";
 import { AppContext } from "../AppContext";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { subscribeToUserFriendsListChanges } from "../service/users.service";
 
 export function Channels() {
   const [channels, setChannels] = useState({});
   let { groupId } = useParams();
   const navigate = useNavigate();
   const { user } = useContext(AppContext);
-  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isCreateChannelModalVisible, setIsCreateChannelModalVisible] = useState(false);
   const [channelName, setChannelName] = useState('');
   const [currentUser, setCurrentUser] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [visibleChannelDropdown, setVisibleChannelDropdown] = useState(null);
   const [selectedChannel, setSelectedChannel] = useState(null);
+  const [isAddPeopleModalVisible, setIsAddPeopleModalVisible] = useState(false);
+  const [chosenFriends, setChosenFriends] = useState([]);
+  const [isMemberPickerVisible, setIsMemberPickerVisible] = useState(false);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [friendsList, setFriendsList] = useState([]);
 
   const handleGoBack = () => {
     navigate('/groups');
   };
 
   const toggleModal = () => {
-    setIsModalVisible(prev => !prev);
+    setIsCreateChannelModalVisible(prev => !prev);
+  };
+
+  const toggleModalTwo = () => {
+    setIsAddPeopleModalVisible(prev => !prev);
   };
 
   useEffect(() => {
@@ -50,6 +60,19 @@ export function Channels() {
       }
     });
   }, []);
+
+  useEffect(() => {
+    if (isModalVisible) {
+      setIsMemberPickerVisible(false);
+      setChosenFriends([]);
+    }
+  }, [isModalVisible]);
+
+  useEffect(() => {
+    if (user) {
+      subscribeToUserFriendsListChanges(user.uid, setFriendsList);
+    }
+  }, [user]);
 
   const handleSearch = () => {
     const filteredChannels = Object.entries(channels).reduce((acc, [key, channel]) => {
@@ -86,7 +109,7 @@ export function Channels() {
       await createChannel(groupId, creatorName, [user.uid], channelName, creatorId);
       getAndUpdateChannels();
       console.log("Channel created:", channelName);
-      setIsModalVisible(false);
+      setIsCreateChannelModalVisible(false);
       setChannelName('');
     } catch (error) {
       console.error("Failed to create channel:", error);
@@ -110,7 +133,7 @@ export function Channels() {
     try {
       await deleteChannel(channelId);
       console.log("Channel deleted successfully");
-      const updatedChannelIds = await  getChannelsIdsByGroup(groupId);
+      const updatedChannelIds = await getChannelsIdsByGroup(groupId);
       const allChannels = await getChannelsAll();
 
       const updatedChannels = Object.keys(updatedChannelIds).reduce((acc, key) => {
@@ -126,11 +149,49 @@ export function Channels() {
     }
   };
 
+  const handleAddPeopleToGroup = async (event) => {
+    event.preventDefault();
+    if (chosenFriends.length === 0) {
+      alert("Please select friends to add to the group.");
+      return;
+    }
+
+    try {
+      await addPeopleToGroup(groupId, chosenFriends);
+      alert("Friends added to the group successfully!");
+
+      setIsAddPeopleModalVisible(false);
+      setChosenFriends([]);
+    } catch (error) {
+      console.error("Failed to add friends to the group:", error);
+    }
+  };
+
+  const handleFriendChecked = (event, friend) => {
+    if (event.target.checked) {
+      setChosenFriends((prev) => [...prev, friend.uid]);
+    } else {
+      setChosenFriends((prev) => prev.filter(value => value !== friend.uid));
+    }
+  }
+
   return (
     <>
       <div className="h-screen lg:h-auto">
         <div className="p-6">
-          <div className="ltr:float-right rtl:float-left">
+          <div className="ltr:float-right rtl:float-left flex items-center space-x-4">
+            {/* Add People button */}
+            <div className="relative">
+              <button onClick={toggleModalTwo} type="button" className="px-4 text-lg text-gray-500 group/tag dark:text-gray-300" data-tw-toggle="modal" data-tw-target="#modal-id" >
+                <i className="ri-user-add-line me-1 ms-0" />
+                <span className="absolute items-center hidden mb-6 top-8 group-hover/tag:flex ltr:-left-8 rtl:-right-8">
+                  <span className="relative z-10 p-2 text-xs leading-none text-white whitespace-no-wrap bg-black rounded shadow-lg">
+                    Add people
+                  </span>
+                  <span className="w-3 h-3 -mt-6 rotate-45 bg-black ltr:-ml-12 rtl:-mr-12" />
+                </span>
+              </button>
+            </div>
             <div className="relative">
               {/* Button trigger modal */}
               <button onClick={toggleModal} type="button" className="px-4 text-lg text-gray-500 group/tag dark:text-gray-300" data-tw-toggle="modal" data-tw-target="#modal-id" >
@@ -159,7 +220,7 @@ export function Channels() {
           </div>
 
           {/* Modal */}
-          {isModalVisible && (
+          {isCreateChannelModalVisible && (
             <div className="relative z-50  modal" id="modal-id">
               <div className="fixed inset-0 z-50 ">
                 <div className="absolute inset-0 transition-opacity bg-black bg-opacity-50 modal-overlay" />
@@ -187,6 +248,80 @@ export function Channels() {
                               </button>
                               <button type="submit" className="text-white border-transparent btn group-data-[theme-color=violet]:bg-violet-500 group-data-[theme-color=violet]:hover:bg-violet-600 group-data-[theme-color=green]:bg-green-500 group-data-[theme-color=green]:hover:bg-green-600 group-data-[theme-color=red]:bg-red-500 group-data-[theme-color=red]:hover:bg-red-600">
                                 Create Channel
+                              </button>
+                            </div>
+                          </div>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {isAddPeopleModalVisible && (
+            <div className="relative z-50  modal" id="modal-id">
+              <div className="fixed inset-0 z-50 ">
+                <div className="absolute inset-0 transition-opacity bg-black bg-opacity-50 modal-overlay" />
+                <div className="flex items-center justify-center max-w-lg min-h-screen p-4 mx-auto text-center animate-translate">
+                  <div className="relative w-full max-w-lg my-8 text-left transition-all transform bg-white rounded-lg shadow-xl -top-10 dark:bg-zinc-700">
+                    <div className="group-data-[theme-color=violet]:bg-violet-800/10 group-data-[theme-color=green]:bg-green-800/10 group-data-[theme-color=red]:bg-red-800/10 group-data-[theme-color=violet]:dark:bg-zinc-700 group-data-[theme-color=red]:dark:bg-zinc-700 group-data-[theme-color=green]:dark:bg-zinc-700">
+                      <div className="flex items-center justify-between p-4 border-b border-gray-100 dark:border-zinc-500">
+                        <h5 className="mb-0 text-gray-800 text-16 dark:text-gray-50" id="addgroup-exampleModalLabel" >
+                          Add New People
+                        </h5>
+                        <button onClick={toggleModalTwo} className="text-gray-600 hover:text-gray-900"> &times; </button>
+                      </div>
+                      <div className="p-4">
+                        <form onSubmit={() => handleAddPeopleToGroup(event)}>
+
+                          {/* Select New Members to Add */}
+                          <div className="mb-8 ltr:text-left rtl:text-right">
+                            <label className="dark:text-gray-300 "> Select New Members to Add </label>
+                            <div className="mt-2 mb-3">
+                              <button className={` border-0 btn dark:text-gray-50 ${isMemberPickerVisible ? 'bg-violet-200' : 'group-data-[theme-color=violet]:bg-slate-200 group-data-[theme-color=green]:bg-white group-data-[theme-color=red]:bg-white group-data-[theme-color=violet]:dark:bg-zinc-600 group-data-[theme-color=green]:dark:bg-zinc-600 group-data-[theme-color=red]:dark:bg-zinc-600'}`} type="button" id="toggleButton" onClick={() => setIsMemberPickerVisible((prev) => !prev)} >
+                                Select Members
+                              </button>
+                            </div>
+                            {isMemberPickerVisible ?
+                              <div id="collapseElement">
+                                <div className="border border-gray-100 rounded dark:border-zinc-500">
+                                  <div className="px-3 py-2 rounded bg-gray-100/50 dark:bg-zinc-600">
+                                    <h5 className="mb-0 text-base text-gray-800 dark:text-gray-50">
+                                      Contacts
+                                    </h5>
+                                  </div>
+                                  <div className="p-2 bg-white dark:bg-zinc-800">
+                                    <div className="h-[150px]">
+                                      <div>
+                                        <ul>
+                                          {
+                                            friendsList.map((friend) => (
+                                              <li className="px-5 py-[10px]">
+                                                <div className="flex items-center gap-3">
+                                                  <input type="checkbox" id={`friend-${friend.uid}`} defaultChecked="" onChange={(e) => handleFriendChecked(e, friend)} className="border-gray-100 rounded group-data-[theme-color=violet]:bg-violet-50 group-data-[theme-color=green]:bg-green-50 group-data-[theme-color=red]:bg-red-50 focus:ring-1 group-data-[theme-color=violet]:focus:ring-violet-500/20 group-data-[theme-color=green]:focus:ring-green-500/20 group-data-[theme-color=red]:focus:ring-red-500/20 group-data-[theme-color=violet]:checked:bg-violet-500 group-data-[theme-color=green]:checked:bg-green-500 group-data-[theme-color=red]:checked:bg-red-500 checked:ring-1 group-data-[theme-color=red]:checked:ring-violet-500/20 focus:ring-offset-0 focus:outline-0 group-data-[theme-color=violet]:dark:border-zinc-500 group-data-[theme-color=green]:dark:border-zinc-500 group-data-[theme-color=red]:dark:border-zinc-500" />
+                                                  <label htmlFor={`friend-${friend.uid}`} className="dark:text-gray-300" >
+                                                    {friend.username}
+                                                  </label>
+                                                </div>
+                                              </li>
+                                            ))
+                                          }
+                                        </ul>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div> : null}
+                          </div>
+                          <div className="flex justify-between items-center mt-4">
+                            <div className="flex p-4 border-t border-gray-100 ltr:justify-end dark:border-zinc-500 rtl:justify-start">
+                              <button onClick={toggleModalTwo} type="button" className="border-0 btn hover:underline group-data-[theme-color=violet]:text-violet-500 group-data-[theme-color=green]:text-green-500 group-data-[theme-color=red]:text-red-500" data-tw-dismiss="modal">
+                                Close
+                              </button>
+                              <button type="submit" className="text-white border-transparent btn group-data-[theme-color=violet]:bg-violet-500 group-data-[theme-color=violet]:hover:bg-violet-600 group-data-[theme-color=green]:bg-green-500 group-data-[theme-color=green]:hover:bg-green-600 group-data-[theme-color=red]:bg-red-500 group-data-[theme-color=red]:hover:bg-red-600">
+                                Add New People
                               </button>
                             </div>
                           </div>
