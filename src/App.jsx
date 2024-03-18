@@ -10,27 +10,19 @@ import { Register } from "./components/auth/Register";
 import { Meta } from "./components/Meta";
 import { Profile } from "./components/auth/Profile";
 import { AppBar } from "./components/AppBar";
-import { UserProfileDetails } from "./components/chats/UserProfileDetails";
-import { AppContext, AppContextProvider } from "./AppContext";
+import { AppContext } from "./AppContext";
 import Authenticated from "./components/auth/Authenticated";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { getUserByUid } from "./service/users.service";
-import { Settings } from "./components/Settings";
 import { Contacts } from "./components/Contacts";
 import { Groups } from "./components/Groups";
 import { Chats } from "./components/chats/Chats";
-import { Chat } from "./components/chats/Chat";
 import { Channels } from "./components/Channels";
 import { DirectChat } from "./components/chats/DirectChat";
 import { ChannelChat } from "./components/chats/ChannelChat";
 import { Video } from "./components/DyteSDK/Video";
-import { Audio} from "./components/DyteSDK/Audio";
-
-// import { DyteMeeting } from "./components/DyteMeeting";
-
-// import { DyteProvider } from '@dytesdk/react-web-core';
-// import { useDyteClient } from '@dytesdk/react-web-core';
-// import { getAuthToken } from "./service/dyte.service";
+import { Audio } from "./components/DyteSDK/Audio";
+import { UserProfileDetails } from "./components/chats/UserProfileDetails";
 
 function App() {
   const [dbUser, loading, error] = useAuthState(auth);
@@ -51,29 +43,8 @@ function App() {
     }
   }, [dbUser]);
 
-  // const [meeting, initMeeting] = useDyteClient(); // Initialize useDyteClient
-
-  // useEffect(() => {
-  //   getAuthToken() // Call getAuthToken to retrieve the authentication token
-  //     .then((authToken) => {
-  //       initMeeting({
-  //         roomName : 'room-name',
-  //         authToken: authToken,
-  //         defaults: {
-  //           audio: false,
-  //           video: false,
-  //         },
-  //       });
-  //     })
-  //     .catch((error) => {
-  //       console.error("Error retrieving authentication token:", error);
-  //     });
-  // }, []);
-
   return (
     <>
-      {/* <RoomContext.Provider value={{ ...roomId,  setRoomId: setRoomId }}> */}
-      {/* <DyteProvider value={meeting}> */}
       <Router>
         <Routes>
           <Route path="*" element={<Layout selectedAppBarButton={'chats'} sideBarContent={<Chats />} />} />
@@ -86,22 +57,13 @@ function App() {
           <Route path="/groups/:groupId" element={<Layout selectedAppBarButton={'groups'} sideBarContent={<Channels />} />} />
           <Route path="/groups/:groupId/channels/:channelId" element={<Layout selectedAppBarButton={'groups'} sideBarContent={<Channels />} mainContent={<ChannelChat />} />} />
           <Route path="/contacts" element={<Layout selectedAppBarButton={'contacts'} sideBarContent={<Contacts />} />} />
-          <Route path="/settings" element={<Layout selectedAppBarButton={'settings'} mainContent={<Settings />} />} />
           <Route path="/meta" element={<Meta />} />
           <Route path="/profile" element={<Layout selectedAppBarButton={'profile'} mainContent={<Authenticated> <Profile /> </Authenticated>} />} />
           <Route path="/sidebar-menu" element={<AppBar />} />
-          
           <Route path="/video" element={<Layout selectedAppBarButton={'video'} sideBarContent={<Chats /> && <Channels />} mainContent={<Video />} />} />
           <Route path="/audio" element={<Layout selectedAppBarButton={'audio'} sideBarContent={<Chats /> && <Channels />} mainContent={<Audio />} />} />
-          
-          {/* <Route path="/switcher" element={<Switcher />} /> */}
-          {/* <Route path="/user-profile-details" element={<Layout UserProfileDetailsContent={'user-profile-details'} sideBarContent={<Chats />} mainContent={<SingleChannel />} />} /> */}
-          {/* <Route path="/meet" element={<DyteMeeting/>} /> */}
-
         </Routes>
       </Router>
-      {/* </RoomContext.Provider> */}
-      {/* </DyteProvider> */}
     </>
   );
 }

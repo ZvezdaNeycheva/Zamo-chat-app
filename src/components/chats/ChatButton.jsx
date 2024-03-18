@@ -6,19 +6,13 @@ export function ChatButton({ user, onClick, selected }) {
                     <img src={user?.profilePhotoURL || "https://thinksport.com.au/wp-content/uploads/2020/01/avatar-.jpg"} alt="Avatar" className="rounded-full w-9 h-9" />
                     <span className={`absolute w-2.5 h-2.54 text-${user?.status === 'Online' ?
                      'bg-green-500 text-green-500 ltr:ml-1 rtl:mr-1 ri-record-circle-fill green-500' : 
-                     
                      'Busy' ? 'bg-red-500 text-orange-500 ltr:ml-1 rtl:mr-1 ri-record-circle-fill' :
-                     
                      'Away' ? 'bg-red-500 text-yellow-500 ltr:ml-1 rtl:mr-1 ri-record-circle-fill' :
-                     
                      'bg-red-500 text-red-500 ltr:ml-1 rtl:mr-1 ri-record-circle-fill red-500'}  border-2 border-transparent rounded-full top-5 ltr:right-1 rtl:left-1 dark:border-zinc-600`}></span>
-
                 </div>
-
                 <div className="flex-grow overflow-hidden">
                     <h5 className="mb-1 text-base truncate dark:text-gray-50">{user.username}</h5>
                 </div>
-
             </div>
         </div>
     )

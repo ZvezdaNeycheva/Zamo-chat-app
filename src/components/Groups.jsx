@@ -13,7 +13,7 @@ export function Groups() {
   const [searchQuery, setSearchQuery] = useState('');
   const [groups, setGroups] = useState({});
   const [allGroups, setAllGroups] = useState({});
-  const [currentUser, setCurrentUser] = useState(null); // State to hold the current user
+  const [currentUser, setCurrentUser] = useState(null);
   const { user } = useContext(AppContext);
   let { idGroup } = useParams();
   const navigate = useNavigate();
@@ -25,9 +25,8 @@ export function Groups() {
     const auth = getAuth();
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        setCurrentUser(user); // Set the entire user object
+        setCurrentUser(user);
       } else {
-        // No user is signed in.
         setCurrentUser(null);
       }
     });
@@ -49,10 +48,9 @@ export function Groups() {
 
   const updateGroups = async () => {
     if (!user) return;
-    // Fetch groups from Firebase and store in `allGroups`
-    const fetchedGroups = await getGroups(user.uid); // Your function to fetch groups
+    const fetchedGroups = await getGroups(user.uid);
     setAllGroups(fetchedGroups);
-    setGroups(fetchedGroups); // Initially, display all groups
+    setGroups(fetchedGroups);
   }
 
   const toggleModal = () => {
@@ -60,24 +58,24 @@ export function Groups() {
   };
 
   const handleCreateGroup = async (event) => {
-    event.preventDefault(); // Prevent the form from submitting in the traditional way
+    event.preventDefault();
     if (!currentUser) {
       console.error("No current user found. Cannot create group.");
-      return; // Exit the function if there's no current user
+      return;
     }
 
     try {
-      const creatorId = currentUser?.uid; // Get the UID from the current user object
+      const creatorId = currentUser?.uid;
       const creatorName = user.username
       const members = [creatorId, ...chosenFriends];
       const newGroup = await createGroup(groupName, creatorId, creatorName, members);
       setGroups(prevGroups => {
-        const updatedGroups = { ...prevGroups }; // Clone the current state
-        updatedGroups[newGroup.id] = newGroup; // Add the new group
-        return updatedGroups; // Return the updated groups object
+        const updatedGroups = { ...prevGroups };
+        updatedGroups[newGroup.id] = newGroup;
+        return updatedGroups;
       });
-      setIsModalVisible(false); // Close the modal
-      setGroupName(''); // Reset the group name input field
+      setIsModalVisible(false);
+      setGroupName('');
     } catch (error) {
       console.error("Failed to create group:", error);
     }
@@ -91,7 +89,7 @@ export function Groups() {
       return acc;
     }, {});
 
-    setGroups(filteredGroups); // Update `groups` to only include those that match the search query
+    setGroups(filteredGroups);
   };
 
   const handleDeleteGroup = async (event, groupId) => {
@@ -192,18 +190,16 @@ export function Groups() {
                                       <div className="h-[150px]">
                                         <div>
                                           <ul>
-                                            {
-                                              friendsList.map((friend) => (
-                                                <li className="px-5 py-[10px]">
-                                                  <div className="flex items-center gap-3">
-                                                    <input type="checkbox" id={`friend-${friend.uid}`} defaultChecked="" onChange={(e) => handleFriendChecked(e, friend)} className="border-gray-100 rounded group-data-[theme-color=violet]:bg-violet-50 group-data-[theme-color=green]:bg-green-50 group-data-[theme-color=red]:bg-red-50 focus:ring-1 group-data-[theme-color=violet]:focus:ring-violet-500/20 group-data-[theme-color=green]:focus:ring-green-500/20 group-data-[theme-color=red]:focus:ring-red-500/20 group-data-[theme-color=violet]:checked:bg-violet-500 group-data-[theme-color=green]:checked:bg-green-500 group-data-[theme-color=red]:checked:bg-red-500 checked:ring-1 group-data-[theme-color=red]:checked:ring-violet-500/20 focus:ring-offset-0 focus:outline-0 group-data-[theme-color=violet]:dark:border-zinc-500 group-data-[theme-color=green]:dark:border-zinc-500 group-data-[theme-color=red]:dark:border-zinc-500" />
-                                                    <label htmlFor={`friend-${friend.uid}`} className="dark:text-gray-300" >
-                                                      {friend.username}
-                                                    </label>
-                                                  </div>
-                                                </li>
-                                              ))
-                                            }
+                                            {friendsList.map((friend) => (
+                                              <li className="px-5 py-[10px]">
+                                                <div className="flex items-center gap-3">
+                                                  <input type="checkbox" id={`friend-${friend.uid}`} defaultChecked="" onChange={(e) => handleFriendChecked(e, friend)} className="border-gray-100 rounded group-data-[theme-color=violet]:bg-violet-50 group-data-[theme-color=green]:bg-green-50 group-data-[theme-color=red]:bg-red-50 focus:ring-1 group-data-[theme-color=violet]:focus:ring-violet-500/20 group-data-[theme-color=green]:focus:ring-green-500/20 group-data-[theme-color=red]:focus:ring-red-500/20 group-data-[theme-color=violet]:checked:bg-violet-500 group-data-[theme-color=green]:checked:bg-green-500 group-data-[theme-color=red]:checked:bg-red-500 checked:ring-1 group-data-[theme-color=red]:checked:ring-violet-500/20 focus:ring-offset-0 focus:outline-0 group-data-[theme-color=violet]:dark:border-zinc-500 group-data-[theme-color=green]:dark:border-zinc-500 group-data-[theme-color=red]:dark:border-zinc-500" />
+                                                  <label htmlFor={`friend-${friend.uid}`} className="dark:text-gray-300" >
+                                                    {friend.username}
+                                                  </label>
+                                                </div>
+                                              </li>
+                                            ))}
                                           </ul>
                                         </div>
                                       </div>
@@ -292,7 +288,6 @@ export function Groups() {
                 </ul>
               </div>
             </div>
-
           </div>
         </div>
       </div>

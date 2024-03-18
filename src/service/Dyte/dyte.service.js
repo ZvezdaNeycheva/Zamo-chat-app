@@ -1,4 +1,4 @@
-import { DYTE_AUTH_KEY, DYTE_BASE_URL} from "./dyte.config.service";
+import { DYTE_AUTH_KEY, DYTE_BASE_URL } from "./dyte.config.service";
 
 export async function getAuthToken() {
   try {

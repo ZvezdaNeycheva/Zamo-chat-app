@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react';
 import { Meta } from '../Meta.jsx';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { registerUser } from '../../service/auth.service.js';
-import { createUserProfile, getUserByUid } from '../../service/users.service.js';
+import { createUserProfile } from '../../service/users.service.js';
 import { AppContext } from '../../AppContext.jsx';
 import { format } from 'date-fns';
 
@@ -98,7 +98,6 @@ export function Register() {
   return (
     <>
       <Meta title={'Register'} />
-
       <div className="w-full h-full">
         <div className="px-5 py-24 sm:px-24 lg:px-0">
           <div className="grid items-center justify-center grid-cols-1 lg:grid-cols-12 auth-bg">
@@ -120,7 +119,6 @@ export function Register() {
                           <svg className="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
                             <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
                           </svg>
-                          {/* <span class="sr-only">Info</span> */}
                           <div>
                             {errorMessage}
                           </div>
@@ -198,11 +196,11 @@ export function Register() {
                 </div>
               </div>
               <div className="mt-10 text-center">
-                <p className="mb-5 text-gray-700 dark:text-gray-200"> Have an account ?{" "} {/* need to change*/}
+                <p className="mb-5 text-gray-700 dark:text-gray-200"> Have an account ?{" "}
                   <NavLink to='/login' className="fw-medium text-violet-500 "> Login {" "}</NavLink>
                 </p>
                 <p className="text-gray-700 dark:text-gray-200"> © ChatApp. Crafted{" "}
-                  <i className="text-red-500 mdi mdi-heart" /> by Andy, Zvezdy, Marty {/* need to change*/}
+                  <i className="text-red-500 mdi mdi-heart" /> by Andy, Zvezdy, Marty
                 </p>
               </div>
             </div>

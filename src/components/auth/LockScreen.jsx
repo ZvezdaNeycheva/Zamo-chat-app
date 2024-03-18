@@ -12,17 +12,14 @@ export function LockScreen() {
   const unlockProfile = () => {
     if (user.password === enteredPassword) {
       console.log('Unlocking profile...');
-      // Perform actions to unlock the profile
     } else {
       console.log('Incorrect password');
-      // Handle incorrect password case
     }
   }
 
   return (
     <>
       <Meta title={'LockScreen'} />
-
       <div className="w-full h-full">
         <div className="px-5 py-24 sm:px-24 lg:px-0">
           <div className="grid items-center justify-center grid-cols-1 lg:grid-cols-12 auth-bg">
@@ -49,15 +46,7 @@ export function LockScreen() {
                           <span className="flex items-center px-4 py-2 text-gray-500 border border-r-0 border-gray-100 rounded rounded-r-none dark:border-zinc-600" id="basic-addon3">
                             <i className="ri-lock-2-line text-16" />
                           </span>
-                          <input
-                            type="password"
-                            value={enteredPassword}
-                            onChange={(e) => setEnteredPassword(e.target.value)}
-                            className="w-full border-gray-100 rounded rounded-l-none placeholder:text-14 bg-slate-50/50 text-14 focus:ring-0 dark:bg-zinc-700 dark:border-zinc-600 dark:text-gray-200"
-                            placeholder="Enter Password"
-                            aria-label="Enter Password"
-                            aria-describedby="basic-addon3"
-                          />
+                          <input onChange={(e) => setEnteredPassword(e.target.value)} value={enteredPassword} type="password" className="w-full border-gray-100 rounded rounded-l-none placeholder:text-14 bg-slate-50/50 text-14 focus:ring-0 dark:bg-zinc-700 dark:border-zinc-600 dark:text-gray-200" placeholder="Enter Password" aria-label="Enter Password" aria-describedby="basic-addon3" />
                         </div>
                       </div>
                       <div className="grid">
@@ -72,10 +61,6 @@ export function LockScreen() {
               <div className="mt-10 text-center">
                 <p className="mb-5 text-gray-700 dark:text-gray-200"> Not you? Return{" "}
                   <Login className="fw-medium text-violet-500"></Login>
-                </p>
-                <p className="text-gray-700 dark:text-gray-200">
-                  © Chatvia. Crafted with{" "}
-                  <i className="text-red-500 mdi mdi-heart" /> by Themesbrand
                 </p>
               </div>
             </div>

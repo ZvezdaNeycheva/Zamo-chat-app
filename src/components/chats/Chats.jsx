@@ -5,7 +5,6 @@ import { ChatButton } from "./ChatButton";
 import { subscribeToUserFriendsListChanges } from "../../service/users.service";
 import { createRoom, getRoomByParticipants } from "../../service/message.service";
 
-
 export function Chats() {
     const { user } = useContext(AppContext);
     const [friendsList, setFriendsList] = useState([]);
@@ -17,7 +16,7 @@ export function Chats() {
 
     useEffect(() => {
         if (user) {
-           updateFriendsList().catch(console.error);
+            updateFriendsList().catch(console.error);
         }
     }, [user]);
 
@@ -55,7 +54,6 @@ export function Chats() {
     }
 
     useEffect(() => {
-        // console.log("Current Room in useEffect:", id);
         if (!id) setSelectedFriend(undefined);
     }, [id]);
 
@@ -68,7 +66,6 @@ export function Chats() {
             <div>
                 <div className="px-6 pt-6">
                     <h4 className="mb-0 text-gray-700 dark:text-gray-50">Chats</h4>
-
                     <div className="py-1 mt-5 mb-5 rounded group-data-[theme-color=violet]:bg-slate-100 group-data-[theme-color=violet]:dark:bg-zinc-600">
                         <span className="group-data-[theme-color=violet]:bg-slate-100 group-data-[theme-color=violet]:dark:bg-zinc-600  pe-1 ps-3 " id="basic-addon2">
                             <i className="text-gray-700 ri-search-line search-icon dark:text-gray-200"></i>
@@ -79,9 +76,7 @@ export function Chats() {
                 </div>
 
                 <div className="overflow-auto">
-
                     <h5 className="px-6 mb-4 text-16 dark:text-gray-50">Friends</h5>
-
                     <div className="h-auto px-2">
                         <ul className="chat-user-list">
                             {filteredFriendsList.map((user) => (

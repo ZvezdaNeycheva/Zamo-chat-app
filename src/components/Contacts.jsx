@@ -1,8 +1,7 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { ref, onValue } from 'firebase/database';
-import { AppContext } from '../AppContext';
 import { auth, db } from '../service/firebase-config';
 import { updateUserData, getUserByUid, removeFriend, acceptFriendRequest, rejectFriendRequest, subscribeToUserFriendsListChanges, getUserByUsername } from '../service/users.service';
 
@@ -27,11 +26,6 @@ export function Contacts() {
   const filteredFriends = friendsList.filter(friend => friend.username.toLowerCase().includes(searchInputValue.toLowerCase()));
 
   useEffect(() => {
-    // const storedFriendRequests = localStorage.getItem('friendRequests');
-    // if (storedFriendRequests) {
-    //   setFriendRequests(JSON.parse(storedFriendRequests));
-    // }
-
     const updateFriendRequests = async () => {
       try {
         const userRef = ref(db, `users/${user.uid}`);
@@ -47,8 +41,6 @@ export function Contacts() {
           receivedRequestsPromise.then((receivedRequestsData) => {
             setFriendRequests(receivedRequestsData);
             setHasPendingRequests(receivedRequestsData.length > 0);
-
-            // localStorage.setItem('friendRequests', JSON.stringify(receivedRequestsData));
           });
         });
       } catch (error) {
@@ -72,8 +64,8 @@ export function Contacts() {
   };
 
   const handleSendInvitation = async () => {
-    try {
 
+    try {
       const users = await getUserByUsername(usernameInputValue);
       const [recipientUid, userByUsername] = Object.entries(users)[0];
       const senderUid = user.uid;

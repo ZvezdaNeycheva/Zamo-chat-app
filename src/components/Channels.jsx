@@ -389,7 +389,7 @@ export function Channels() {
             ))}
           </ul>
         </div>
-      </div >
+      </div>
     </>
   );
 }

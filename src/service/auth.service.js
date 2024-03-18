@@ -1,8 +1,18 @@
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, getAuth, updateEmail } from 'firebase/auth';
-import { auth } from './firebase-config';
-import { storage } from './firebase-config';
-import { uploadBytes, ref as storageRef, getDownloadURL } from "firebase/storage";
-import { updateUserData } from './users.service';
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  signOut,
+  getAuth,
+  updateEmail,
+} from "firebase/auth";
+import { auth } from "./firebase-config";
+import { storage } from "./firebase-config";
+import {
+  uploadBytes,
+  ref as storageRef,
+  getDownloadURL,
+} from "firebase/storage";
+import { updateUserData } from "./users.service";
 
 export const registerUser = (email, password) => {
   return createUserWithEmailAndPassword(auth, email, password);
@@ -21,10 +31,10 @@ export const updateUserEmail = async (newEmail) => {
 
   try {
     await updateEmail(user, newEmail);
-    console.log('Email updated successfully.');
+    console.log("Email updated successfully.");
     return true;
   } catch (error) {
-    console.error('Error updating email:', error);
+    console.error("Error updating email:", error);
     return false;
   }
 };
@@ -32,20 +42,17 @@ export const updateUserEmail = async (newEmail) => {
 // Storage
 // uploadProfileImage
 export async function uploadProfileImage(file, user, setLoading) {
-  const fileRef = storageRef(storage, user.uid + '.png');
-
+  const fileRef = storageRef(storage, user.uid + ".png");
   setLoading(true);
 
   try {
     await uploadBytes(fileRef, file);
-
     const photoURL = await getDownloadURL(fileRef);
-
-    console.log(user)
+    console.log(user);
     await updateUserData(user.uid, { profilePhotoURL: photoURL });
 
     setLoading(false);
-    alert('Profile image uploaded successfully.');
+    alert("Profile image uploaded successfully.");
     return photoURL;
   } catch (error) {
     console.error("Error uploading profile image:", error);
@@ -55,19 +62,16 @@ export async function uploadProfileImage(file, user, setLoading) {
 
 // uploadFile
 export async function uploadFile(file, user, setLoading) {
-  const fileRef = storageRef(storage, user.uid + '/' + file.name);
-
+  const fileRef = storageRef(storage, user.uid + "/" + file.name);
   setLoading(true);
 
   try {
     await uploadBytes(fileRef, file);
-
     const fileURL = await getDownloadURL(fileRef);
-
     await updateUserData(user.uid, { fileURL: fileURL });
 
     setLoading(false);
-    alert('File uploaded successfully.');
+    alert("File uploaded successfully.");
     return fileURL;
   } catch (error) {
     console.error("Error uploading file:", error);

@@ -1,21 +1,17 @@
 import { Meta } from "../Meta";
 import { NavLink } from 'react-router-dom';
 import React, { useContext, useEffect, useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { AppContext } from "../../AppContext";
 import { loginUser } from "../../service/auth.service";
 
 export function Login() {
 
   const { user, setUser } = useContext(AppContext);
-  const [form, setForm] = useState({
-    email: "",
-    password: "",
-  });
+  const [form, setForm] = useState({ email: "", password: "", });
   const [errorMsg, setErrorMsg] = useState("");
   const navigate = useNavigate();
   const location = useLocation();
-  const [errorMessage, setErrorMessage] = useState('');
 
   const updateForm = (prop) => (e) => {
     setForm({ ...form, [prop]: e.target.value });
@@ -31,16 +27,6 @@ export function Login() {
 
   const login = async (event) => {
     event.preventDefault();
-
-    // if (form.username.trim() === '') {
-    //   setErrorMessage('Username cannot be empty');
-    //   return;
-    // }
-
-    // if (form.password.length < 6) {
-    //   setErrorMessage('Password must be at least 6 characters long');
-    //   return;
-    // }
 
     try {
       console.log("Logging in...");
@@ -62,7 +48,6 @@ export function Login() {
   return (
     <>
       <Meta title={'Login'} />
-
       <div className="w-full h-full">
         <div className="px-5 py-24 sm:px-24 lg:px-0">
           <div className="grid items-center justify-center grid-cols-1 lg:grid-cols-12 auth-bg">
@@ -125,9 +110,6 @@ export function Login() {
               </div>
               <div className="mt-10 text-center">
                 <p className="mb-5 text-gray-700 dark:text-gray-200"> Don't have an account ?{" "}
-                  {/* <a href="./Register.jsx" className="fw-medium text-violet-500">
-                    Signup now{" "}
-                  </a>{" "} */}
                   <NavLink to='/register' className="fw-medium text-violet-500 "> Register {" "}</NavLink>
                 </p>
                 <p className="text-gray-700 dark:text-gray-200"> © ChatApp. Crafted {" "}

@@ -4,7 +4,6 @@ import { getDatabase } from "firebase/database";
 import { getStorage } from "firebase/storage";
 import { getMessaging, onMessage } from "firebase/messaging";
 
-// Your web app's Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyCJLJh9C08iNJ4oCNnysoREuHe64c26uFo",
   authDomain: "final-project-chat-cd4de.firebaseapp.com",
@@ -17,17 +16,11 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 
-// Get Firebase Auth, Database, and Storage instances
 export const auth = getAuth(app);
 export const db = getDatabase(app);
 export const storage = getStorage(app);
-
-// Get Firebase Cloud Messaging (FCM) instance
 export const messaging = getMessaging(app);
 
-
-// Optional: If you want to receive messages when your web app is in the foreground
 onMessage(messaging, (payload) => {
-  console.log('Message received. ', payload);
-  // Handle the incoming message
+  console.log("Message received. ", payload);
 });

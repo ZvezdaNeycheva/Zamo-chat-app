@@ -6,7 +6,6 @@ import React, { useContext, useState } from "react";
 export function AppBar({ selected }) {
   const { user, setUser } = useContext(AppContext);
   const [openSidebar, setOpenSidebar] = useState(false);
-  const [selectedTab, setSelectedTab] = useState('chats');
   const navigate = useNavigate();
 
   function toggleSidebarDropdown() {
@@ -26,12 +25,12 @@ export function AppBar({ selected }) {
     }
   };
 
-function test() {
-  const html = document.querySelector('html');
-  const currentMode = html.getAttribute('data-mode');
-  const newMode = currentMode === 'light' ? 'dark' : 'light';
-  html.setAttribute('data-mode', newMode);
-}
+  function test() {
+    const html = document.querySelector('html');
+    const currentMode = html.getAttribute('data-mode');
+    const newMode = currentMode === 'light' ? 'dark' : 'light';
+    html.setAttribute('data-mode', newMode);
+  }
 
   return (
     <>
@@ -43,9 +42,7 @@ function test() {
             </span>
           </NavLink>
         </div>
-        {/* <!-- end navbar-brand-box --> */}
-
-        {/* <!-- Start side-menu nav --> */}
+        
         {/* <!-- Tabs --> */}
         <div className="w-full mx-auto lg:my-auto">
           <ul id="tabs" className="flex flex-row justify-center w-full lg:flex-col lg:flex nav-tabs" >
@@ -118,9 +115,9 @@ function test() {
 
         {/* <!-- Start side-menu footer --> */}
         <div className="w-20 my-5 lg:w-auto">
-          <ul className="lg:block" id ='toggle-between-dark-light-mode' >
+          <ul className="lg:block" id='toggle-between-dark-light-mode' >
             {/*dark mode need to change attribute(a)*/}
-            <li  onClick={test} className="hidden text-center light-dark-mode nav-item lg:block">
+            <li onClick={test} className="hidden text-center light-dark-mode nav-item lg:block">
               <a href="#" className="hidden dark:block dark:text-violet-100/80">
                 <i className="text-2xl ri-sun-line "></i>
               </a>

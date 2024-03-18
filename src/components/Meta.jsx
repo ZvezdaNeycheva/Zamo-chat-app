@@ -7,7 +7,6 @@ export function Meta({ title }) {
       <meta content="Tailwind Admin & Dashboard Template" name="description" />
       <meta content="" name="Themesbrand" />
       <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
-      {/* App favicon */}
       <link rel="shortcut icon" href="/assets/images/favicon.ico" />
     </>
   );
