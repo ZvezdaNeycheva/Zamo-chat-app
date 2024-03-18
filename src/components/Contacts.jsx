@@ -310,12 +310,6 @@ export function Contacts() {
                                 <div className="absolute z-50 block w-40 py-2  text-left list-none bg-white border border-transparent rounded shadow-lg  ltr:left-auto ltr:right-0 bg-clip-padding dark:bg-zinc-700 dark:border-zinc-500/50 dark:shadow-sm">
                                   <ul>
                                     <li>
-                                      <button className="block w-full px-6 py-2 text-sm font-normal text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/50 dark:text-gray-300 dark:hover:bg-zinc-500/50" type="button">
-                                        Block
-                                        <i className="float-right text-gray-500 dark:text-gray-300 ri-forbid-line"></i>
-                                      </button>
-                                    </li>
-                                    <li>
                                       <button onClick={() => handleRemoveFriend(friend.uid)} className="block w-full px-6 py-2 text-sm font-normal text-red-500 bg-red dropdown-item whitespace-nowrap hover:bg-gray-100/50 dark:text-red-300 dark:hover:bg-zinc-500/50 " type="button">
                                         Remove
                                         <i className="float-right text-red-500 dark:text-red-300 ri-delete-bin-line"></i>

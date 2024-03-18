@@ -95,6 +95,18 @@ export function Profile() {
     }
   };
 
+  const handleDeleteAccount = async () => {
+    try {
+      const currentUser = firebase.auth().currentUser;
+      await currentUser.delete();
+      await firebase.firestore().collection("users").doc(currentUser.uid).delete();
+      await firebase.database().ref("users").child(currentUser.uid).remove();
+      await firebase.auth().signOut();
+    } catch (error) {
+      console.error("Error deleting account:", error);
+    }
+  };
+
   return (
     <>
         <div className="max-w-3xl mx-auto">
@@ -109,9 +121,9 @@ export function Profile() {
                   </button>
                   <ul className={`${open ? "visible" : "invisible"} absolute z-50 block w-40 py-2 text-left list-none bg-red-700 border border-transparent rounded shadow-lg rtl:right-auto rtl:left-0 ltr:left-auto ltr:right-0 my-7 bg-clip-padding dark:bg-zinc-700 dark:shadow-sm dark:border-zinc-600`} aria-labelledby="dropdownMenuButtonA">
                     <li>
-                      <a className="block w-full px-4 py-2 text-sm font-normal text-white bg-transparent dropdown-item whitespace-nowrap hover:bg-red-800 dark:text-gray-100 dark:hover:bg-zinc-600 ltr:text-left rtl:text-right" href="#">
+                      <button onClick={handleDeleteAccount} className="block w-full px-4 py-2 text-sm font-normal text-white bg-transparent dropdown-item whitespace-nowrap hover:bg-red-800 dark:text-gray-100 dark:hover:bg-zinc-600 ltr:text-left rtl:text-right" type="button">
                         Delete your account
-                      </a>
+                      </button>
                     </li>
                   </ul>
                 </div>

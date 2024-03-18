@@ -24,6 +24,7 @@ import { Channels } from "./components/Channels";
 import { DirectChat } from "./components/chats/DirectChat";
 import { ChannelChat } from "./components/chats/ChannelChat";
 import { Video } from "./components/DyteSDK/Video";
+import { Audio} from "./components/DyteSDK/Audio";
 
 // import { DyteMeeting } from "./components/DyteMeeting";
 
@@ -78,7 +79,7 @@ function App() {
           <Route path="*" element={<Layout selectedAppBarButton={'chats'} sideBarContent={<Chats />} />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/lock-screen" element={<Authenticated> <LockScreen /> </Authenticated>} />
+          <Route path="/lock-screen" element={<LockScreen />} />
           <Route path="/recover" element={<RecoverPassword />} />
           <Route path="/chats/:id" element={<Layout selectedAppBarButton={'chats'} sideBarContent={<Chats />} mainContent={<DirectChat />} />} />
           <Route path="/groups" element={<Layout selectedAppBarButton={'groups'} sideBarContent={<Groups />} />} />
@@ -90,7 +91,8 @@ function App() {
           <Route path="/profile" element={<Layout selectedAppBarButton={'profile'} mainContent={<Authenticated> <Profile /> </Authenticated>} />} />
           <Route path="/sidebar-menu" element={<AppBar />} />
           
-          <Route path="/video" element={<Layout selectedAppBarButton={'video'} sideBarContent={<Chats />} mainContent={<Video />} />} />
+          <Route path="/video" element={<Layout selectedAppBarButton={'video'} sideBarContent={<Chats /> && <Channels />} mainContent={<Video />} />} />
+          <Route path="/audio" element={<Layout selectedAppBarButton={'audio'} sideBarContent={<Chats /> && <Channels />} mainContent={<Audio />} />} />
           
           {/* <Route path="/switcher" element={<Switcher />} /> */}
           {/* <Route path="/user-profile-details" element={<Layout UserProfileDetailsContent={'user-profile-details'} sideBarContent={<Chats />} mainContent={<SingleChannel />} />} /> */}

@@ -4,7 +4,7 @@ import { useDyteClient, DyteProvider } from "@dytesdk/react-web-core";
 import { DyteMeeting } from "@dytesdk/react-ui-kit";
 import { DYTE_AUTH_KEY } from "../../service/Dyte/dyte.config.service";
 
-export const Video = () => {
+export const Audio = () => {
     const navigate = useNavigate();
     const [meeting, initMeeting] = useDyteClient();
 
@@ -13,7 +13,7 @@ export const Video = () => {
             authToken: DYTE_AUTH_KEY,
             defaults: {
                 audio: false,
-                video: true,
+                video: false,
             },
         });
     }
@@ -23,7 +23,6 @@ export const Video = () => {
         <>
             <DyteProvider value={meeting}>
                     <DyteMeeting meeting={meeting} mode="fill" showSetupScreen={true} />
-
             </DyteProvider>
         </>
     );
