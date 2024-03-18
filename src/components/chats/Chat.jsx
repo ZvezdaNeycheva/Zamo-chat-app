@@ -30,6 +30,8 @@ export function Chat({ id, toolbar }) {
 
     const handleAcceptMessage = async (newMessage) => {
         if (!newMessage.trim()) return;
+        if (!pictureURL) return;
+        const messageToSend = pictureURL ? `${newMessage}\n${pictureURL}` : newMessage;
         await sendMessage(newMessage, id, user)
         setNewMessage("");
     };
@@ -127,9 +129,10 @@ export function Chat({ id, toolbar }) {
                                                                         <button onClick={() => cancelEdit()}>Cancel</button>
                                                                     </div>
                                                                 ) : (
-                                                                    pictureURL ? (
+                                                                    message.content === pictureURL ? (
                                                                         <div>
-                                                                            <img src={pictureURL} alt="Uploaded" style={{ maxWidth: '100px' }} />
+                                                                            <img src={pictureURL} alt="Uploaded" style={{ maxHeight: '100px' }} />
+                                                                            {/* <p>{message.content}</p> */}
                                                                         </div>
                                                                     ):
                                                                     message.content
@@ -183,7 +186,7 @@ export function Chat({ id, toolbar }) {
                                 <div className="flex gap-2">
                                     <div className="flex-grow">
                                         {/* handleSendMessage    sendMessage(messages) */}
-                                        <input type="text" value={newMessage} onChange={handleInputMessage} onClick={() => { handleAcceptMessage(newMessage) }} onKeyDown={(e) => {
+                                        <input type="text" value={newMessage} onChange={handleInputMessage}  onKeyDown={(e) => {
                                             if (e.key === 'Enter') {
                                                 e.preventDefault();
                                                 handleAcceptMessage(newMessage);
@@ -194,7 +197,7 @@ export function Chat({ id, toolbar }) {
                                         <div>
                                             <ul className="mb-0">
                                                 <li className="inline-block" title="Emoji">
-                                                    <button type="button" className="border-transparent group/tooltip btn relative group-data-[theme-color=violet]:dark:text-violet-200 group-data-[theme-color=green]:dark:text-green-200 group-data-[theme-color=red]:dark:text-red-200 group-data-[theme-color=violet]:text-violet-500 group-data-[theme-color=green]:text-green-500 group-data-[theme-color=red]:text-red-500 text-16">
+                                                    <button  onClick={() => { handleAcceptMessage(newMessage) }} type="button" className="border-transparent group/tooltip btn relative group-data-[theme-color=violet]:dark:text-violet-200 group-data-[theme-color=green]:dark:text-green-200 group-data-[theme-color=red]:dark:text-red-200 group-data-[theme-color=violet]:text-violet-500 group-data-[theme-color=green]:text-green-500 group-data-[theme-color=red]:text-red-500 text-16">
                                                         <div className="absolute items-center hidden -top-10 ltr:-left-2 group-hover/tooltip:flex rtl:-right-2">
                                                             <div className="absolute -bottom-1 left-[40%] w-3 h-3 rotate-45 bg-black"></div>
                                                             <span className="relative z-10 p-2 text-xs leading-none text-white whitespace-no-wrap bg-black rounded shadow-lg">Emoji</span>
@@ -203,7 +206,7 @@ export function Chat({ id, toolbar }) {
                                                     </button>
                                                 </li>
 
-                                                <ChatUploadFile handleFileUploaded={handleFileUploaded}/>
+                                                <ChatUploadFile handleFileUploaded={handleFileUploaded} id={id}/>
                                                 {/* Send Message */}
                                                 <li className="inline-block">
                                                     <button type="submit" onClick={() => { handleAcceptMessage(newMessage) }} className="text-white border-transparent btn group-data-[theme-color=violet]:bg-violet-500 group-data-[theme-color=green]:bg-green-500 group-data-[theme-color=red]:bg-red-500 group-data-[theme-color=violet]:hover:bg-violet-600 group-data-[theme-color=green]:hover:bg-green-600">
