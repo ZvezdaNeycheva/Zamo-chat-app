@@ -99,11 +99,6 @@ export function Chat({ id, toolbar }) {
                             <ul className="mb-0">
                                 {!id ? <p>Select a friend to start a chat.</p> : null}
                                 {id && !messages.length ? <p>Your messages will appear here.</p> : null}
-{pictureURL && (
-    <div>
-        <img src={pictureURL} alt="Uploaded" style={{ maxWidth: '100px' }} />
-    </div>
-)}
 
                                 {messages.length > 0 &&
                                     messages.map((message) => (
@@ -132,6 +127,11 @@ export function Chat({ id, toolbar }) {
                                                                         <button onClick={() => cancelEdit()}>Cancel</button>
                                                                     </div>
                                                                 ) : (
+                                                                    pictureURL ? (
+                                                                        <div>
+                                                                            <img src={pictureURL} alt="Uploaded" style={{ maxWidth: '100px' }} />
+                                                                        </div>
+                                                                    ):
                                                                     message.content
                                                                 )}
                                                             </p>
