@@ -131,9 +131,9 @@ function test() {
 
         {/* <!-- Start side-menu footer --> */}
         <div className="w-20 my-5 lg:w-auto">
-          <ul className="lg:block" id ='toggle-between-dark-light-mode' onClick={test} >
+          <ul className="lg:block" id ='toggle-between-dark-light-mode' >
             {/*dark mode need to change attribute(a)*/}
-            <li className="hidden text-center light-dark-mode nav-item lg:block">
+            <li  onClick={test} className="hidden text-center light-dark-mode nav-item lg:block">
               <a href="#" className="hidden dark:block dark:text-violet-100/80">
                 <i className="text-2xl ri-sun-line "></i>
               </a>
