@@ -89,8 +89,9 @@ function App() {
           <Route path="/meta" element={<Meta />} />
           <Route path="/profile" element={<Layout selectedAppBarButton={'profile'} mainContent={<Authenticated> <Profile /> </Authenticated>} />} />
           <Route path="/sidebar-menu" element={<AppBar />} />
-          <Route path="/video" element={<Video />} />
-
+          
+          <Route path="/video" element={<Layout selectedAppBarButton={'video'} sideBarContent={<Chats />} mainContent={<Video />} />} />
+          
           {/* <Route path="/switcher" element={<Switcher />} /> */}
           {/* <Route path="/user-profile-details" element={<Layout UserProfileDetailsContent={'user-profile-details'} sideBarContent={<Chats />} mainContent={<SingleChannel />} />} /> */}
           {/* <Route path="/meet" element={<DyteMeeting/>} /> */}

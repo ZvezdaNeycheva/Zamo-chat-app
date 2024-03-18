@@ -1,25 +1,25 @@
-import { useState } from "react";
-import { NavLink } from "react-router-dom"; 
-import { createDyteCallRoom } from "../../service/Dyte/dyte.service";
-import { Video } from "../DyteSDK/Video";
+import React, { useState } from "react";
+import { NavLink } from "react-router-dom";
+import { createDyteCallRoom } from "../../service/Dyte/dyte.calls.service";
+import { Video } from "../DyteSDK/Video"; // Import the Video component
+import { useNavigate } from "react-router-dom";
 
 export function ChatToolbar({ otherUser, channel }) {
     const [showProfileDetails, setShowProfileDetails] = useState(false);
-    
+    const [showVideoCall, setShowVideoCall] = useState(false); // State to control the visibility of the Video component
+    const navigate = useNavigate();
+
     const handleVideoCall = () => {
-       
+        createDyteCallRoom("meetingId", "Test Meeting").then((roomId) => {
+            console.log("Call room created with roomId:", roomId);
+            navigate("/video");
+        }).catch((error) => {
+            console.error("Error creating call room:", error);
+        });
     };
 
     const toggleProfileDetails = () => {
         setShowProfileDetails(!showProfileDetails);
-    };
-
-    const toggleModalAudio = () => {
-        createDyteCallRoom().then((roomId) => {
-            console.log("Call room created with roomId:", roomId);
-        }).catch((error) => {
-            console.error("Error creating call room:", error);
-        });
     };
 
     return (
@@ -54,7 +54,7 @@ export function ChatToolbar({ otherUser, channel }) {
                         
                         {/* Audio Call */}
                         <li>
-                            <button  type="button" className=" text-xl text-gray-500 border-0 btn dark:text-gray-300 lg:block" data-tw-toggle="modal" data-tw-target="#audiCallModal">
+                            <button onClick={handleVideoCall} type="button" className=" text-xl text-gray-500 border-0 btn dark:text-gray-300 lg:block" data-tw-toggle="modal" data-tw-target="#audiCallModal">
                                 <i className="ri-phone-line"></i>
                             </button>
                         </li>
@@ -76,6 +76,8 @@ export function ChatToolbar({ otherUser, channel }) {
                     </ul>
                 </div>
             </div>
+            {/* Render the Video component if showVideoCall is true */}
+            {showVideoCall && <Video />}
         </div>
     );
 }

@@ -78,7 +78,7 @@ export function Chats() {
 
                 </div>
 
-                <div className="overflow-scroll">
+                <div className="overflow-auto">
 
                     <h5 className="px-6 mb-4 text-16 dark:text-gray-50">Friends</h5>
 

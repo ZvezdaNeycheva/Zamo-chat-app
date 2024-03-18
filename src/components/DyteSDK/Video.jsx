@@ -22,15 +22,8 @@ export const Video = () => {
     return (
         <>
             <DyteProvider value={meeting}>
-                <div className="container column-centered">
-                    <DyteMeeting meeting={meeting} mode="fill" showSetupScreen={false} />
-                    <div> Dyte Video </div>
-                </div>
+                    <DyteMeeting meeting={meeting} mode="fill" showSetupScreen={true} />
 
-                <div className="control-buttons">
-                    <button type="button" onClick={() => navigate("/video")}>Join Meeting</button>
-                    <button type="button">Create Meeting</button>
-                </div>
             </DyteProvider>
         </>
     );
