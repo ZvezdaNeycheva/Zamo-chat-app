@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { getChannelsIdsByGroup, getChannelsAll, createChannel, deleteChannel, addPeopleToGroup } from "../service/groupAndChannel.service";
+import { getChannelsIdsByGroup, getChannelsAll, createChannel, deleteChannel, addPeopleToGroup, getGroup } from "../service/groupAndChannel.service";
 import { AppContext } from "../AppContext";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { subscribeToUserFriendsListChanges } from "../service/users.service";
@@ -19,8 +19,8 @@ export function Channels() {
   const [isAddPeopleModalVisible, setIsAddPeopleModalVisible] = useState(false);
   const [chosenFriends, setChosenFriends] = useState([]);
   const [isMemberPickerVisible, setIsMemberPickerVisible] = useState(false);
-  const [isModalVisible, setIsModalVisible] = useState(false);
   const [friendsList, setFriendsList] = useState([]);
+  const [filteredFriends, setFilteredFriends] = useState([]);
 
   const handleGoBack = () => {
     navigate('/groups');
@@ -61,12 +61,19 @@ export function Channels() {
     });
   }, []);
 
+  const initializeFriendsMemberPicker = async () => {
+    setIsMemberPickerVisible(false);
+    setChosenFriends([]);
+    const group = await getGroup(groupId);
+    const memberIds = Object.keys(group.members);
+    setFilteredFriends(friendsList.filter(friend => !memberIds.includes(friend.uid)));
+  }
+
   useEffect(() => {
-    if (isModalVisible) {
-      setIsMemberPickerVisible(false);
-      setChosenFriends([]);
+    if (isAddPeopleModalVisible) {
+      initializeFriendsMemberPicker().catch(console.error);
     }
-  }, [isModalVisible]);
+  }, [isAddPeopleModalVisible, friendsList]);
 
   useEffect(() => {
     if (user) {
@@ -303,7 +310,7 @@ export function Channels() {
                                       <div>
                                         <ul>
                                           {
-                                            friendsList.map((friend) => (
+                                            filteredFriends.map((friend) => (
                                               <li className="px-5 py-[10px]">
                                                 <div className="flex items-center gap-3">
                                                   <input type="checkbox" id={`friend-${friend.uid}`} defaultChecked="" onChange={(e) => handleFriendChecked(e, friend)} className="border-gray-100 rounded group-data-[theme-color=violet]:bg-violet-50 group-data-[theme-color=green]:bg-green-50 group-data-[theme-color=red]:bg-red-50 focus:ring-1 group-data-[theme-color=violet]:focus:ring-violet-500/20 group-data-[theme-color=green]:focus:ring-green-500/20 group-data-[theme-color=red]:focus:ring-red-500/20 group-data-[theme-color=violet]:checked:bg-violet-500 group-data-[theme-color=green]:checked:bg-green-500 group-data-[theme-color=red]:checked:bg-red-500 checked:ring-1 group-data-[theme-color=red]:checked:ring-violet-500/20 focus:ring-offset-0 focus:outline-0 group-data-[theme-color=violet]:dark:border-zinc-500 group-data-[theme-color=green]:dark:border-zinc-500 group-data-[theme-color=red]:dark:border-zinc-500" />

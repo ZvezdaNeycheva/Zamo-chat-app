@@ -3,7 +3,7 @@ import { db } from "./firebase-config";
 import { format } from "date-fns";
 import { getUserByUid } from "./users.service";
 
-export const createGroup = async ( groupName, creatorId, creatorName, members ) => {
+export const createGroup = async (groupName, creatorId, creatorName, members) => {
   const readableDate = format(new Date(), "yyyy-MM-dd HH:mm:ss");
   const groupsRef = ref(getDatabase(), "groups");
   const newGroupRef = push(groupsRef);
@@ -20,7 +20,7 @@ export const createGroup = async ( groupName, creatorId, creatorName, members ) 
   try {
     await set(newGroupRef, groupData);
     console.log("Group created successfully with ID:", newGroupRef.key);
-    await createChannel( newGroupRef.key, creatorName, members, "#General", creatorId );
+    await createChannel(newGroupRef.key, creatorName, members, "#General", creatorId);
     for (const id of members) {
       await update(ref(db, `users/${id}/groups`), { [newGroupRef?.key]: true });
     }
@@ -48,7 +48,7 @@ export const getGroups = async (userId) => {
   );
 };
 
-const getGroup = async (id) => {
+export const getGroup = async (id) => {
   const snapshot = await get(ref(db, `groups/${id}`));
   if (!snapshot.exists())
     throw new Error("Group with id " + id + " does not exist.");
@@ -78,7 +78,7 @@ export const deleteGroup = async (groupId) => {
   }
 };
 
-export const createChannel = async ( groupId, creatorName, members, channelName = "#General", creatorId ) => {
+export const createChannel = async (groupId, creatorName, members, channelName = "#General", creatorId) => {
   const readableDate = format(new Date(), "yyyy-MM-dd HH:mm:ss");
   try {
     const dbChannel = await push(ref(db, `groups/${groupId}/channels`), {});
