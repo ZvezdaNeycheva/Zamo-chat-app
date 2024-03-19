@@ -42,6 +42,11 @@ export function Register() {
   const register = async (event) => {
     event.preventDefault();
 
+    if (form.username.length < 3 || form.username.length > 20) {
+      setErrorMessage('Username must be between 3 and 20 characters long');
+      return;
+    }
+
     if (form.username.trim() === '') {
       setErrorMessage('Username cannot be empty');
       return;
