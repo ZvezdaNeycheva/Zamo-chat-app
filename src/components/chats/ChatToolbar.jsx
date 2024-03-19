@@ -7,9 +7,13 @@ export function ChatToolbar({ otherUser, channel }) {
     const navigate = useNavigate();
 
     const handleVideoCall = () => {
-            navigate("/video");
+        navigate("/video");
     };
 
+    const handleAudioCall = () => {
+        navigate("/audio");
+    };
+    
     const toggleProfileDetails = () => {
         setShowProfileDetails(!showProfileDetails);
     };
@@ -44,13 +48,13 @@ export function ChatToolbar({ otherUser, channel }) {
                     <ul className="flex items-center justify-end lg:gap-4">
                         {/* Audio Call */}
                         <li>
-                            <button onClick={() => navigate("/audio")} type="button" className=" text-xl text-gray-500 border-0 btn dark:text-gray-300 lg:block" data-tw-toggle="modal" data-tw-target="#audiCallModal">
+                            <button onClick={handleAudioCall} type="button" className=" text-xl text-gray-500 border-0 btn dark:text-gray-300 lg:block" data-tw-toggle="modal" data-tw-target="#audiCallModal">
                                 <i className="ri-phone-line"></i>
                             </button>
                         </li>
                         {/* Video Call */}
                         <li>
-                            <button onClick={() => navigate("/video")} type="button" className="text-xl text-gray-500 border-0 btn dark:text-gray-300 lg:block" data-tw-toggle="modal" data-tw-target="#videoCallModal">
+                            <button onClick={handleVideoCall} type="button" className="text-xl text-gray-500 border-0 btn dark:text-gray-300 lg:block" data-tw-toggle="modal" data-tw-target="#videoCallModal">
                                 <i className="ri-vidicon-line"></i>
                             </button>
                         </li>

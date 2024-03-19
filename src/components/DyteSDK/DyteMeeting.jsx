@@ -1,38 +1,28 @@
-import React, { useEffect, useRef, useState } from "react";
-import { DyteProvider } from "@dytesdk/react-web-core";
-import { getAuthToken, createDyteCallRoom, addMemberToCall } from "../../service/Dyte/dyte.service";
+import React, { useEffect, useRef } from "react";
+import { DyteProvider, useDyteClient } from "@dytesdk/react-web-core";
+import { createDyteCallRoom, addMemberToCall } from "../../service/Dyte/dyte.service";
 import { MyMeeting } from "../MyMeeting";
-import { createMeeting } from "../../service/Dyte/dyte.meeting.service"; // Import createMeeting function from dyte.meeting.service
+import { createMeeting } from "../../service/Dyte/dyte.meeting.service";
+import { DYTE_AUTH_KEY } from "../../service/Dyte/dyte.config.service";
 
 export function DyteMeeting() {
     const [client, initClient] = useDyteClient();
     const meetingEl = useRef();
-    const [authToken, setAuthToken] = useState(null);
 
     useEffect(() => {
-        getAuthToken()
-            .then((authToken) => {
-                setAuthToken(authToken);
-            })
-            .catch((error) => {
-                console.error("Error retrieving authentication token:", error);
-            });
-    }, []);
-
-    useEffect(() => {
-        if (authToken) {
-            initClient({
-                authToken: authToken,
-                defaults: {
-                    audio: false,
-                    video: false,
-                },
-            }).then((meeting) => {
-                meetingEl.current = meeting;
-                createAndJoinMeeting(meeting);
-            });
-        }
-    }, [authToken, initClient]);
+        initClient({
+            authToken: DYTE_AUTH_KEY,
+            defaults: {
+                audio: false,
+                video: false,
+            },
+        }).then((meeting) => {
+            meetingEl.current = meeting;
+            createAndJoinMeeting(meeting);
+        }).catch((error) => {
+            console.error("Error initializing Dyte client:", error);
+        });
+    }, [initClient]);
 
     const createAndJoinMeeting = (meeting) => {
         createMeeting("participant_handle", ["participant_handle"], "Test Meeting", new Date(), null, "teamId")
@@ -49,7 +39,6 @@ export function DyteMeeting() {
                 console.error("Error creating meeting in Firebase:", error);
             });
     };
-    
 
     return (
         <DyteProvider value={client}>
