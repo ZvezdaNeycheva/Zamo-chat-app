@@ -2,14 +2,7 @@ import { get, onValue, push, ref, set, update } from "firebase/database";
 import { db } from "../firebase-config";
 import { getUserByUsername } from "../users.service";
 
-export const createMeeting = (
-  handle,
-  participants,
-  topic,
-  start,
-  end,
-  teamId
-) => {
+export const createMeeting = ( handle, participants, topic, start, end, teamId ) => {
   return push(ref(db, "meetings"), {})
     .then((response) => {
       const members = {};

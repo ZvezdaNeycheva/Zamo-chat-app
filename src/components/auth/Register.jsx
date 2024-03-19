@@ -104,8 +104,8 @@ export function Register() {
             <div className="mx-5 lg:mx-20 lg:col-start-5 lg:col-span-4">
               <div className="text-center">
                 <NavLink to="/register" className="block mb-10">
-                  <img src="/assets/images/logo-dark.png" alt="" className="block h-8 mx-auto dark:hidden" />
-                  <img src="/assets/images/logo-light.png" alt="" className="hidden h-8 mx-auto logo-light dark:block" />
+                  <img src="/assets/images/zamo.png" alt="" className="block h-8 mx-auto dark:hidden" />
+                  <img src="/assets/images/zamo.png" alt="" className="hidden h-8 mx-auto logo-light dark:block" />
                 </NavLink>
                 <h4 className="mb-2 text-gray-800 text-21 dark:text-gray-50"> Register </h4>
                 <p className="mb-6 text-gray-500 dark:text-gray-300"> Get your ChatApp account now. </p>
@@ -187,7 +187,6 @@ export function Register() {
                       </div>
                       <div className="mt-5 text-center">
                         <p className="mb-0 text-gray-500 dark:text-gray-300">
-                          By registering you agree to the Chatvia{" "}
                           <a href="#" className="text-violet-500"> Terms of Use </a>
                         </p>
                       </div>
