@@ -1,4 +1,4 @@
-import {DYTE_AUTH_KEY, DYTE_BASE_URL, DYTE_ORG_KEY, DYTE_API_KEY, } from "./dyte.config.service";
+import { DYTE_AUTH_KEY, DYTE_BASE_URL } from "./dyte.config.service";
 import { addMeetingRoomId } from "./dyte.meeting.service";
 
 export const createDyteCallRoom = (meetingId, title) => {

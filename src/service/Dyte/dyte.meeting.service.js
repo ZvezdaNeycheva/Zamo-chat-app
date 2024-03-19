@@ -2,7 +2,14 @@ import { get, onValue, push, ref, set, update } from "firebase/database";
 import { db } from "../firebase-config";
 import { getUserByUsername } from "../users.service";
 
-export const createMeeting = (handle, participants, topic, start, end, teamId) => {
+export const createMeeting = (
+  handle,
+  participants,
+  topic,
+  start,
+  end,
+  teamId
+) => {
   return push(ref(db, "meetings"), {})
     .then((response) => {
       const members = {};
@@ -19,7 +26,7 @@ export const createMeeting = (handle, participants, topic, start, end, teamId) =
       });
       return update(ref(db), {
         [`users/${handle}/meetings/${response.key}`]: true,
-        [`groups/${teamId}/meetings/${response.key}`]: true,
+        [`teams/${teamId}/meetings/${response.key}`]: true,
       })
         .then(() => {
           if (participants.length !== 1) {
@@ -146,7 +153,7 @@ export const deleteMeeting = (meetingId, teamId) =>
         .then(() => {
           const deleteMeeting = {};
           deleteMeeting[`meetings/${meetingId}`] = null;
-          deleteMeeting[`groups/${teamId}/meetings/${meetingId}`] = null;
+          deleteMeeting[`teams/${teamId}/meetings/${meetingId}`] = null;
 
           return update(ref(db), deleteMeeting);
         });

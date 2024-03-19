@@ -60,8 +60,8 @@ function App() {
           <Route path="/meta" element={<Meta />} />
           <Route path="/profile" element={<Layout selectedAppBarButton={'profile'} mainContent={<Authenticated> <Profile /> </Authenticated>} />} />
           <Route path="/sidebar-menu" element={<AppBar />} />
-          <Route path="/video" element={<Layout selectedAppBarButton={'video'} sideBarContent={<Chats /> && <Channels />} mainContent={<Video />} />} />
-          <Route path="/audio" element={<Layout selectedAppBarButton={'audio'} sideBarContent={<Chats /> && <Channels />} mainContent={<Audio />} />} />
+          <Route path="/video" element={<Layout selectedAppBarButton={'video'} sideBarContent={<Chats /> || <Channels />} mainContent={<Video />} />} />
+          <Route path="/audio" element={<Layout selectedAppBarButton={'audio'} sideBarContent={<Chats /> || <Channels />} mainContent={<Audio />} />} />
         </Routes>
       </Router>
     </>
