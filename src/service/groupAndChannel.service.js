@@ -96,7 +96,7 @@ export const createChannel = async (groupId, creatorName, members, channelName =
       creatorId,
     };
     console.log(props);
-    await set(ref(db, `#channels/${dbChannel.key}`), props);
+    await set(ref(db, `channels/${dbChannel.key}`), props);
 
     await update(ref(db), {
       [`groups/${groupId}/channels/${dbChannel.key}`]: true,

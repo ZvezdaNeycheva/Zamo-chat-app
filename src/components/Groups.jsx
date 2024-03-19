@@ -11,8 +11,8 @@ export function Groups() {
   const [isMemberPickerVisible, setIsMemberPickerVisible] = useState(false);
   const [groupName, setGroupName] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
-  const [groups, setGroups] = useState({});
-  const [allGroups, setAllGroups] = useState({});
+  const [filteredGroups, setFilteredGroups] = useState([]);
+  const [groups, setGroups] = useState([]);
   const [currentUser, setCurrentUser] = useState(null);
   const { user } = useContext(AppContext);
   let { idGroup } = useParams();
@@ -46,11 +46,18 @@ export function Groups() {
     }
   }, [isModalVisible]);
 
+  useEffect(() => {
+    if (!groups) return;
+    const filteredGroups = groups.filter((group) => group.name.toLowerCase().includes(searchQuery.toLowerCase()));
+    setFilteredGroups(filteredGroups);
+  }, [groups, searchQuery])
+
   const updateGroups = async () => {
     if (!user) return;
-    const fetchedGroups = await getGroups(user.uid);
-    setAllGroups(fetchedGroups);
-    setGroups(fetchedGroups);
+    const groups = await getGroups(user.uid);
+    const groupsArr = Object.values(groups);
+    setGroups(groupsArr);
+    setFilteredGroups(groupsArr);
   }
 
   const toggleModal = () => {
@@ -75,11 +82,7 @@ export function Groups() {
       const creatorName = user.username
       const members = [creatorId, ...chosenFriends];
       const newGroup = await createGroup(groupName, creatorId, creatorName, members);
-      setGroups(prevGroups => {
-        const updatedGroups = { ...prevGroups };
-        updatedGroups[newGroup.id] = newGroup;
-        return updatedGroups;
-      });
+      setGroups(prevGroups => [...prevGroups, newGroup]);
       setIsModalVisible(false);
       setGroupName('');
     } catch (error) {
@@ -87,16 +90,6 @@ export function Groups() {
     }
   };
 
-  const handleSearch = () => {
-    const filteredGroups = Object.entries(allGroups).reduce((acc, [key, group]) => {
-      if (group.name.toLowerCase().includes(searchQuery.toLowerCase())) {
-        acc[key] = group;
-      }
-      return acc;
-    }, {});
-
-    setGroups(filteredGroups);
-  };
 
   const handleDeleteGroup = async (event, groupId) => {
     event.stopPropagation();
@@ -237,16 +230,16 @@ export function Groups() {
               <span className="group-data-[theme-color=violet]:bg-slate-100 group-data-[theme-color=green]:bg-green-50 group-data-[theme-color=red]:bg-red-50 group-data-[theme-color=violet]:dark:bg-zinc-600 group-data-[theme-color=green]:dark:bg-zinc-600 group-data-[theme-color=red]:dark:bg-zinc-600 pe-1 ps-3 " id="basic-addon2">
                 <i className="text-lg text-gray-700 ri-search-line search-icon dark:text-gray-200"></i>
               </span>
-              <input type="text" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} onKeyPress={(e) => e.key === 'Enter' && handleSearch()} className="border-0 group-data-[theme-color=violet]:bg-slate-100 group-data-[theme-color=green]:bg-green-50 group-data-[theme-color=red]:bg-red-50 group-data-[theme-color=violet]:dark:bg-zinc-600 group-data-[theme-color=green]:dark:bg-zinc-600 group-data-[theme-color=red]:dark:bg-zinc-600 placeholder:text-[14px] focus:ring-offset-0 focus:outline-none focus:ring-0 dark:text-gray-400" placeholder="Search messages or users" aria-label="Search messages or users" aria-describedby="basic-addon2" />
+              <input type="text" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} className="border-0 group-data-[theme-color=violet]:bg-slate-100 group-data-[theme-color=green]:bg-green-50 group-data-[theme-color=red]:bg-red-50 group-data-[theme-color=violet]:dark:bg-zinc-600 group-data-[theme-color=green]:dark:bg-zinc-600 group-data-[theme-color=red]:dark:bg-zinc-600 placeholder:text-[14px] focus:ring-offset-0 focus:outline-none focus:ring-0 dark:text-gray-400" placeholder="Search messages or users" aria-label="Search messages or users" aria-describedby="basic-addon2" />
             </div>
 
             <div className="chat-message-list chat-group-list">
               <div className="mt-2">
                 <ul>
                   {/* Display groups here */}
-                  {Object.entries(groups).map(([key, group], index) => (
-                    <li key={key} className="px-5 py-[15px] group-data-[theme-color=violet]:hover:bg-slate-100 group-data-[theme-color=green]:hover:bg-green-50/50 group-data-[theme-color=red]:hover:bg-red-50/50 group-data-[theme-color=violet]:dark:hover:bg-zinc-600 group-data-[theme-color=green]:dark:hover:bg-zinc-600 group-data-[theme-color=red]:dark:hover:bg-zinc-600 transition-all ease-in-out rounded">
-                      <a href="#" onClick={(e) => { e.preventDefault(); navigate(`/groups/${key}`) }}>
+                  {filteredGroups.map((group, index) => (
+                    <li key={group.id} className="px-5 py-[15px] group-data-[theme-color=violet]:hover:bg-slate-100 group-data-[theme-color=green]:hover:bg-green-50/50 group-data-[theme-color=red]:hover:bg-red-50/50 group-data-[theme-color=violet]:dark:hover:bg-zinc-600 group-data-[theme-color=green]:dark:hover:bg-zinc-600 group-data-[theme-color=red]:dark:hover:bg-zinc-600 transition-all ease-in-out rounded">
+                      <a href="#" onClick={(e) => { e.preventDefault(); navigate(`/groups/${group.id}`) }}>
                         <div className="flex items-center relative">
                           <div className="ltr:mr-5 rtl:ml-5">
                             <div className="flex items-center justify-center rounded-full w-10 h-10 group-data-[theme-color=violet]:bg-violet-500/20 group-data-[theme-color=green]:bg-green-500/20 group-data-[theme-color=red]:bg-red-500/20">
@@ -270,7 +263,7 @@ export function Groups() {
                                 {/* Remove button */}
                                 {group.creatorId === user.uid && (
                                   <li>
-                                    <button onClick={(e) => handleDeleteGroup(e, key)} className="block w-full px-6 py-2 text-sm font-normal text-red-500 bg-red dropdown-item whitespace-nowrap hover:bg-gray-100/50 dark:text-red-300 dark:hover:bg-zinc-500/50" type="button">
+                                    <button onClick={(e) => handleDeleteGroup(e, group.id)} className="block w-full px-6 py-2 text-sm font-normal text-red-500 bg-red dropdown-item whitespace-nowrap hover:bg-gray-100/50 dark:text-red-300 dark:hover:bg-zinc-500/50" type="button">
                                       Remove
                                       <i className="float-right text-red-500 dark:text-red-300 ri-delete-bin-line"></i>
                                     </button>
@@ -278,7 +271,7 @@ export function Groups() {
                                 )}
                                 {/* Leave the group button */}
                                 <li>
-                                  <button onClick={(e) => handleLeaveGroup(e, key)} className="block w-full px-6 py-2 text-sm font-normal text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-zinc-500" type="button">
+                                  <button onClick={(e) => handleLeaveGroup(e, group.id)} className="block w-full px-6 py-2 text-sm font-normal text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-zinc-500" type="button">
                                     Leave
                                     <i className="float-right ri-logout-box-r-line"></i>
                                   </button>
