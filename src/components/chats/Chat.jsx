@@ -12,9 +12,12 @@ export function Chat({ id, toolbar }) {
     const [editedMessageContent, setEditedMessageContent] = useState('');
     const [activeOptionsMessageId, setActiveOptionsMessageId] = useState(null);
 
-    const [pictureURL, setPictureURL] = useState(null);
+    const [pictureURL, setPictureURL] = useState({});
     const handleFileUploaded = (url) => {
-        setPictureURL(url);
+        setPictureURL(prevState => ({
+            ...prevState,
+            [url]: url
+        }));
     };
     useEffect(() => {
         const unsubscribe = getMessages(id, setMessages, setLoadingMessages);
@@ -129,11 +132,15 @@ export function Chat({ id, toolbar }) {
                                                                         <button onClick={() => cancelEdit()}>Cancel</button>
                                                                     </div>
                                                                 ) : (
-                                                                    message.content === pictureURL ? (
-                                                                        <div>
-                                                                            <img src={pictureURL} alt="Uploaded" style={{ maxHeight: '100px' }} />
-                                                                            {/* <p>{message.content}</p> */}
-                                                                        </div>
+                                                                    // message.content === pictureURL ?
+                                                                    Object.keys(pictureURL).includes(message.content) ?
+                                                                    (
+
+                                                                        Object.keys(pictureURL).filter(e => e === message.content).map((url, index) => (
+                                                                            <div key={index}>
+                                                                                <img src={url} alt="Uploaded" style={{ maxHeight: '100px' }} />
+                                                                            </div>
+                                                                        ))
                                                                     ):
                                                                     message.content
                                                                 )}
