@@ -234,11 +234,11 @@ export function Profile() {
                         <p className="mb-1 text-gray-500 dark:text-gray-300">Email</p>
                         {editEmail ? (
                           <>
-                            <input value={newEmail} onChange={(e) => setNewEmail(e.target.value)} type="text" className="w-full p-2 mb-2 border rounded border-gray-100 dark:border-zinc-600" />
+                            <input value={editedEmail} onChange={(e) => setEditedEmail(e.target.value)} type="text" className="w-full p-2 mb-2 border rounded border-gray-100 dark:border-zinc-600" />
                             <button onClick={handleEmailUpdate} className="py-1.5 btn bg-slate-100 border-transparent rounded hover:bg-gray-50 transition-all ease-in-out dark:bg-zinc-600 dark:text-gray-50 dark:hover:bg-zinc-500/50" >
                               Save
                             </button>
-                            <button onClick={() => { setEditEmail(false); setNewEmail(user ? user.email : "") }} className="ml-2 py-1.5 btn bg-slate-100 border-transparent rounded hover:bg-gray-50 transition-all ease-in-out dark:bg-zinc-600 dark:text-gray-50 dark:hover:bg-zinc-500/50" >
+                            <button onClick={() => { setEditEmail(false); setEditedEmail(user ? user.email : "") }} className="ml-2 py-1.5 btn bg-slate-100 border-transparent rounded hover:bg-gray-50 transition-all ease-in-out dark:bg-zinc-600 dark:text-gray-50 dark:hover:bg-zinc-500/50" >
                               Cancel
                             </button>
                           </>
@@ -257,11 +257,11 @@ export function Profile() {
                         <p className="mb-1 text-gray-500 dark:text-gray-300"> Location </p>
                         {editLocation ? (
                           <>
-                            <input value={newLocation} onChange={(e) => setNewLocation(e.target.value)} type="text" className="w-full p-2 mb-2 border rounded border-gray-100 dark:border-zinc-600" />
+                            <input value={editedLocation} onChange={(e) => setEditedLocation(e.target.value)} type="text" className="w-full p-2 mb-2 border rounded border-gray-100 dark:border-zinc-600" />
                             <button onClick={handleLocationUpdate} className="py-1.5 btn bg-slate-100 border-transparent rounded hover:bg-gray-50 transition-all ease-in-out dark:bg-zinc-600 dark:text-gray-50 dark:hover:bg-zinc-500/50" >
                               Save
                             </button>
-                            <button onClick={() => { setEditLocation(false); setNewLocation(user ? user.location : "") }} className="ml-2 py-1.5 btn bg-slate-100 border-transparent rounded hover:bg-gray-50 transition-all ease-in-out dark:bg-zinc-600 dark:text-gray-50 dark:hover:bg-zinc-500/50">
+                            <button onClick={() => { setEditLocation(false); setEditedLocation(user ? user.location : "") }} className="ml-2 py-1.5 btn bg-slate-100 border-transparent rounded hover:bg-gray-50 transition-all ease-in-out dark:bg-zinc-600 dark:text-gray-50 dark:hover:bg-zinc-500/50">
                               Cancel
                             </button>
                           </>
