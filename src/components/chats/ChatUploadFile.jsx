@@ -2,7 +2,7 @@ import { useState, useContext } from "react";
 import { storage } from "../../service/firebase-config";
 import { AppContext } from "../../AppContext";
 import { getDownloadURL, getStorage, ref as storageRef, uploadBytes } from 'firebase/storage';
-import { sendMessage } from "../../service/message.service";
+import { sendMessage, sendPicMessage } from "../../service/message.service";
 
 export function ChatUploadFile({handleFileUploaded, id}) {
     const { user } = useContext(AppContext);
@@ -37,7 +37,7 @@ export function ChatUploadFile({handleFileUploaded, id}) {
             }
 
             const picURL = await uploadFileToStorage(file);
-            await sendMessage(picURL, id, user);
+            await sendPicMessage(picURL, id, user, picURL);//
             if (handleFileUploaded) {
                 handleFileUploaded(picURL);
             }

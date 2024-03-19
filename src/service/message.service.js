@@ -168,15 +168,19 @@ export const createRoom = async (participants) => {
   };
 };
 
-export const sendPictureMessage = (channelId, sender, msg, picURL) =>
-  push(ref(db, `channels/${channelId}/msgs`), {})
-    .then((response) =>
-      set(ref(db, `channels/${channelId}/msgs/${response.key}`), {
-        body: msg,
-        pic: picURL,
-        id: response.key,
-        owner: sender,
-        createdOn: date2,
-      })
-    )
-    .catch((e) => console.error(e));
+export const sendPicMessage = async (newMessage, id, userData, picURL) => {
+  const message = {
+    senderId: userData.uid,
+    pic: picURL,
+    senderName: userData.username,
+    content: newMessage,
+    timestamp: date2,
+    avatar: userData?.profilePhotoURL || null,
+  };
+
+  const newMessageRef = await push(ref(db, `rooms/${id}/messages`), message);
+  const messageId = newMessageRef.key;
+  message.id = messageId;
+
+  await set(ref(db, `rooms/${id}/messages/${messageId}`), message);
+};

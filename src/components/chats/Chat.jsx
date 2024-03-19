@@ -133,11 +133,11 @@ export function Chat({ id, toolbar }) {
                                                                     </div>
                                                                 ) : (
                                                                     // message.content === pictureURL ?
-                                                                    Object.keys(pictureURL).includes(message.content) ?
+                                                                    message.pic &&  Object.keys(pictureURL).includes(message.pic) ?
                                                                     (
 
-                                                                        Object.keys(pictureURL).filter(e => e === message.content).map((url, index) => (
-                                                                            <div key={index}>
+                                                                        Object.keys(pictureURL).filter(e => e === message.pic).map((url) => (
+                                                                            <div key={url}>
                                                                                 <img src={url} alt="Uploaded" style={{ maxHeight: '100px' }} />
                                                                             </div>
                                                                         ))
@@ -205,11 +205,11 @@ export function Chat({ id, toolbar }) {
                                             <ul className="mb-0">
                                                 <li className="inline-block" title="Emoji">
                                                     <button  onClick={() => { handleAcceptMessage(newMessage) }} type="button" className="border-transparent group/tooltip btn relative group-data-[theme-color=violet]:dark:text-violet-200 group-data-[theme-color=green]:dark:text-green-200 group-data-[theme-color=red]:dark:text-red-200 group-data-[theme-color=violet]:text-violet-500 group-data-[theme-color=green]:text-green-500 group-data-[theme-color=red]:text-red-500 text-16">
-                                                        <div className="absolute items-center hidden -top-10 ltr:-left-2 group-hover/tooltip:flex rtl:-right-2">
+                                                        {/* <div className="absolute items-center hidden -top-10 ltr:-left-2 group-hover/tooltip:flex rtl:-right-2">
                                                             <div className="absolute -bottom-1 left-[40%] w-3 h-3 rotate-45 bg-black"></div>
                                                             <span className="relative z-10 p-2 text-xs leading-none text-white whitespace-no-wrap bg-black rounded shadow-lg">Emoji</span>
-                                                        </div>
-                                                        <i className="ri-emotion-happy-line"></i>
+                                                        </div> */}
+                                                        {/* <i className="ri-emotion-happy-line"></i> */}
                                                     </button>
                                                 </li>
 
