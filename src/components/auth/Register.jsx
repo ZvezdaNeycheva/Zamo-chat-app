@@ -113,7 +113,7 @@ export function Register() {
                   <img src="/assets/images/zamo.png" alt="" className="hidden h-8 mx-auto logo-light dark:block" />
                 </NavLink>
                 <h4 className="mb-2 text-gray-800 text-21 dark:text-gray-50"> Register </h4>
-                <p className="mb-6 text-gray-500 dark:text-gray-300"> Get your ChatApp account now. </p>
+                <p className="mb-6 text-gray-500 dark:text-gray-300"> Get your ZAMO ChatApp account now. </p>
               </div>
               <div className="bg-white card dark:bg-zinc-800 dark:border-transparent">
                 <div className="p-5">
@@ -203,7 +203,7 @@ export function Register() {
                 <p className="mb-5 text-gray-700 dark:text-gray-200"> Have an account ?{" "}
                   <NavLink to='/login' className="fw-medium text-violet-500 "> Login {" "}</NavLink>
                 </p>
-                <p className="text-gray-700 dark:text-gray-200"> © ChatApp. Crafted{" "}
+                <p className="text-gray-700 dark:text-gray-200"> © ZAMO ChatApp. Crafted{" "}
                   <i className="text-red-500 mdi mdi-heart" /> by Andy, Zvezdy, Marty
                 </p>
               </div>

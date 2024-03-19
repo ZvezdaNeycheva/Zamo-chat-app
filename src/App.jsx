@@ -23,6 +23,7 @@ import { ChannelChat } from "./components/chats/ChannelChat";
 import { Video } from "./components/DyteSDK/Video";
 import { Audio } from "./components/DyteSDK/Audio";
 import { UserProfileDetails } from "./components/chats/UserProfileDetails";
+import { Logo } from "./components/Logo";
 
 function App() {
   const [dbUser, loading, error] = useAuthState(auth);
@@ -53,7 +54,7 @@ function App() {
           <Route path="/lock-screen" element={<LockScreen />} />
           <Route path="/recover" element={<RecoverPassword />} />
           <Route path="/chats/:id" element={<Layout selectedAppBarButton={'chats'} sideBarContent={<Chats />} mainContent={<DirectChat />} />} />
-          <Route path="/groups" element={<Layout selectedAppBarButton={'groups'} sideBarContent={<Groups />} />} />
+          <Route path="/groups" element={<Layout selectedAppBarButton={'groups'} sideBarContent={<Groups />} mainContent={<Logo />}/>} />
           <Route path="/groups/:groupId" element={<Layout selectedAppBarButton={'groups'} sideBarContent={<Channels />} />} />
           <Route path="/groups/:groupId/channels/:channelId" element={<Layout selectedAppBarButton={'groups'} sideBarContent={<Channels />} mainContent={<ChannelChat />} />} />
           <Route path="/contacts" element={<Layout selectedAppBarButton={'contacts'} sideBarContent={<Contacts />} />} />

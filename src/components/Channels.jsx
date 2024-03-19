@@ -96,6 +96,12 @@ export function Channels() {
 
   const handleCreateChannel = async (event) => {
     event.preventDefault();
+
+    if (channelName.length < 3 || channelName.length > 40) {
+      alert("The name of the channel must be between 3 and 40 characters long.");
+      return;
+    }
+
     if (!user) {
       console.error("No current user found. Cannot create channel.");
       return;

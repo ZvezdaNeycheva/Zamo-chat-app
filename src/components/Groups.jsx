@@ -59,6 +59,12 @@ export function Groups() {
 
   const handleCreateGroup = async (event) => {
     event.preventDefault();
+
+    if (groupName.length < 3 || groupName.length > 40) {
+      alert("The name of the group must be between 3 and 40 characters long.");
+      return;
+    }
+
     if (!currentUser) {
       console.error("No current user found. Cannot create group.");
       return;

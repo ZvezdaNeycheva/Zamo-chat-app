@@ -59,7 +59,7 @@ export function Login() {
                 </NavLink>
                 <h4 className="mb-2 text-gray-800 text-21 dark:text-gray-50"> Login </h4>
                 <p className="mb-6 text-gray-500 dark:text-gray-300">
-                  Login to continue to ChatApp.
+                  Login to continue to ZAMO ChatApp.
                 </p>
               </div>
               <div className="bg-white card dark:bg-zinc-800 dark:border-transparent">
@@ -112,7 +112,7 @@ export function Login() {
                 <p className="mb-5 text-gray-700 dark:text-gray-200"> Don't have an account ?{" "}
                   <NavLink to='/register' className="fw-medium text-violet-500 "> Register {" "}</NavLink>
                 </p>
-                <p className="text-gray-700 dark:text-gray-200"> © ChatApp. Crafted {" "}
+                <p className="text-gray-700 dark:text-gray-200"> © ZAMO ChatApp. Crafted {" "}
                   <i className="text-red-500 mdi mdi-heart" /> by Andy, Zvezdy, Marty
                 </p>
               </div>
