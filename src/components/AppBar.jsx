@@ -38,7 +38,7 @@ export function AppBar({ selected }) {
         <div className="hidden lg:my-5 lg:block">
           <NavLink to="/" className="block">
             <span>
-              <img src="public/assets/images/logo.svg" alt="" className="h-[30px]" />
+              <img src="public/assets/images/zamo.png" alt="" className="h-[30px]" />
             </span>
           </NavLink>
         </div>
@@ -97,19 +97,6 @@ export function AppBar({ selected }) {
                 <i className="text-2xl ri-contacts-line"></i>
               </NavLink>
             </li>
-
-            {/*settings*/}
-            <li className="flex-grow lg:flex-grow-0">
-              <NavLink to="/settings" className={`tab-button relative flex items-center justify-center mx-auto h-14 w-14 leading-[14px] group/tab my-2 rounded-lg cursor-pointer ${selected === "settings" ? "active" : ""}`} >
-                <div className="absolute items-center hidden -top-10 ltr:left-0 group-hover/tab:flex rtl:right-0">
-                  <div className="absolute -bottom-1 left-[40%] w-3 h-3 rotate-45 bg-black"></div>
-                  <span className="relative z-10 p-2 text-xs leading-none text-white whitespace-no-wrap bg-black rounded shadow-lg">
-                    Settings
-                  </span>
-                </div>
-                <i className="text-2xl ri-settings-2-line"></i>
-              </NavLink>
-            </li>
           </ul>
         </div>
 
@@ -140,14 +127,6 @@ export function AppBar({ selected }) {
                     <NavLink to="/profile" className="block w-full px-4 py-2 text-sm font-normal  text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/30    dark:text-gray-100 dark:hover:bg-zinc-600/50" >
                       Profile
                       <i className="text-gray-500 rtl:float-left ltr:float-right ri-profile-line text-16"></i>
-                    </NavLink>
-                  </li>
-
-                  {/* Setting */}
-                  <li>
-                    <NavLink to="/settings" className=" block w-full px-4 py-2 text-sm font-normal   text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/30     dark:text-gray-100 dark:hover:bg-zinc-600/50 ltr:text-left rtl:text-right" >
-                      Setting
-                      <i className="text-gray-500 rtl:float-left ltr:float-right ri-settings-3-line   text-16"></i>
                     </NavLink>
                   </li>
 
