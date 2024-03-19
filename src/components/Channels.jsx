@@ -13,7 +13,6 @@ export function Channels() {
   const [isCreateChannelModalVisible, setIsCreateChannelModalVisible] = useState(false);
   const [channelName, setChannelName] = useState('');
   const [currentUser, setCurrentUser] = useState(null);
-  const [searchQuery, setSearchQuery] = useState('');
   const [visibleChannelDropdown, setVisibleChannelDropdown] = useState(null);
   const [selectedChannel, setSelectedChannel] = useState(null);
   const [isAddPeopleModalVisible, setIsAddPeopleModalVisible] = useState(false);
@@ -80,17 +79,6 @@ export function Channels() {
       subscribeToUserFriendsListChanges(user.uid, setFriendsList);
     }
   }, [user]);
-
-  const handleSearch = () => {
-    const filteredChannels = Object.entries(channels).reduce((acc, [key, channel]) => {
-      if (searchQuery.trim() === '' || channel.name.toLowerCase().includes(searchQuery.toLowerCase())) {
-        acc[key] = channel;
-      }
-      return acc;
-    }, {});
-
-    setChannels(filteredChannels);
-  };
 
   const handleClickCannelDropdown = (event, index) => {
     event.stopPropagation();
@@ -347,15 +335,7 @@ export function Channels() {
             </div>
           )}
 
-          {/* search bar */}
-          <div className="py-1 mt-5 mb-5 rounded group-data-[theme-color=violet]:bg-slate-100 group-data-[theme-color=green]:bg-green-50 group-data-[theme-color=red]:bg-red-50 group-data-[theme-color=violet]:dark:bg-zinc-600 group-data-[theme-color=green]:dark:bg-zinc-600 group-data-[theme-color=red]:dark:bg-zinc-600">
-            <span className="group-data-[theme-color=violet]:bg-slate-100 group-data-[theme-color=green]:bg-green-50 group-data-[theme-color=red]:bg-red-50 group-data-[theme-color=violet]:dark:bg-zinc-600 group-data-[theme-color=green]:dark:bg-zinc-600 group-data-[theme-color=red]:dark:bg-zinc-600 pe-1 ps-3 " id="basic-addon2">
-              <i className="text-lg text-gray-700 ri-search-line search-icon dark:text-gray-200"></i>
-            </span>
-            <input type="text" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} onKeyPress={(e) => e.key === 'Enter' && handleSearch()} className="border-0 group-data-[theme-color=violet]:bg-slate-100 group-data-[theme-color=green]:bg-green-50 group-data-[theme-color=red]:bg-red-50 group-data-[theme-color=violet]:dark:bg-zinc-600 group-data-[theme-color=green]:dark:bg-zinc-600 group-data-[theme-color=red]:dark:bg-zinc-600 placeholder:text-[14px] focus:ring-offset-0 focus:outline-none focus:ring-0 dark:text-gray-400" placeholder="Search messages or users" aria-label="Search messages or users" aria-describedby="basic-addon2" />
-          </div>
-
-          <ul>
+          <ul className="mt-5">
             {/* Display channels here */}
             {Object.entries(channels).map(([key, channel], index) => (
               <li key={key} className={`px-5 py-[15px] ${selectedChannel === key ? 'bg-slate-100' : ' px-5 py-[15px] group-data-[theme-color=violet]:hover:bg-slate-100 group-data-[theme-color=green]:hover:bg-green-50/50 group-data-[theme-color=red]:hover:bg-red-50/50 transition-all ease-in-out border-b border-white/20 dark:border-zinc-700 group-data-[theme-color=violet]:dark:hover:bg-zinc-600 group-data-[theme-color=green]:dark:hover:bg-zinc-600 group-data-[theme-color=red]:dark:hover:bg-zinc-600 dark:hover:border-zinc-700 cursor-pointer'}`}>
