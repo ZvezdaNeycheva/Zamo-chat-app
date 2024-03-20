@@ -87,7 +87,7 @@ export const createChannel = async (groupId, creatorName, members, channelName =
       participants: arrayToObject(members),
     });
     const props = {
-      name: `${channelName}`,
+      name: `#${channelName}`,
       createdOnReadable: readableDate,
       group: groupId,
       id: dbChannel.key,
