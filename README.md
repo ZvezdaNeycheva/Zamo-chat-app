@@ -1,70 +1,84 @@
-# Getting Started with Create React App
+# ZAMO Chat App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+### Description
 
-## Available Scripts
+Zamo is a cutting-edge application crafted for today's dynamic individuals and teams. Designed with modernity in mind, Zamo offers a comprehensive solution for real-time communication and collaboration. Whether it's chat, voice, or video calls, our platform ensures seamless interaction among users. Share information, exchange resources, and spark discussions with ease. Zamo is more than just an app. It's your partner in fostering meaningful connections and collaborative success.
 
-In the project directory, you can run:
+### Creators
 
-### `npm start`
+- Andrey Raychev - [@Andrey-Raychev](https://github.com/Andrey-Raychev)
+- Martin Andreev - [@Martin-Andreev-288](https://github.com/Martin-Andreev-288)
+- Zvezda Neycheva - [@DreamersJS](https://github.com/DreamersJS)
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### Technologies used
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- JavaScript
+- React
+- HTML
+- Tailwind CSS
+- Dyte SDK
+- Firebase
+- ESLint
+- git
 
-### `npm test`
+### Instalation
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+```
+npm install
+```
 
-### `npm run build`
+### Run the application
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```
+npm run start
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Usage
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- **Zamo's Public Interface: Where Engagement Begins**
+  <br />Zamo's public section welcomes users with a streamlined Login page, designed for simplicity and efficiency. Here, existing users can securely access their accounts, while new users find an intuitive registration process awaiting them.
+  <br />Crafted with the user experience in mind, this entry point ensures a smooth transition into Zamo's world of advanced communication and collaboration.
 
-### `npm run eject`
+    <img src="./src/assets/images/scrlogin.png"/>
+  <br/>
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+- **Zamo Profile Panels: Personalizing Communication for Users**
+  <br />At the core of Zamo, the Profile Panels serve as personalized hubs, enabling users to express their individual identities and control their visibility within the network. Users can effortlessly edit their usernames, emails, and locations, ensuring that their contacts are always updated with the latest information.
+  <br />The flexibility to change their avatars and statuses—from online to busy, away, or offline—allows users to convey their current availability to their network. It's their space to customize Zamo to fit their unique communication needs, adding a personal touch to enhance their experience.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+  <img src="./src/assets/images/scrprofilepage.png"/>
+  <br />
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+  - **Zamo's Chat Interface: Where Conversations Flourish**
+    <br />Zamo's chat interface offers users a dynamic space to connect with friends through direct messaging.
+    <br />This intuitive environment allows users to effortlessly search for contacts, initiating one-on-one conversations, and engage more deeply with audio and video options. Within each chat, users have the flexibility to add reactions to messages, bringing an added layer of expressiveness to their conversations.
+    <br />Moreover, the capability to edit or delete their own messages ensures that users maintain control over their communication, allowing for adjustments and clarifications as needed.
+    <br />It's a space designed for vibrant interactions, tailored to the user's evolving communication needs.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+<img src="./src/assets/images/scrchat.png"/>
+<br/>
 
-## Learn More
+- **Zamo Groups: Cultivating Collaborative Communities**
+  <br />Zamo empowers users to forge stronger connections by creating and managing their own groups.
+  <br />With the freedom to add participants exclusively from their friend list during the initial setup, users can tailor their groups to specific interests, projects, or topics of discussion. This feature enhances the sense of community, allowing for focused and meaningful interactions.
+  <br />Users maintain full control over their groups; they possess the ability to delete groups they've created or opt to leave any group at their discretion. This flexibility ensures that group participation remains aligned with users' current preferences and needs, fostering a dynamic and adaptable community environment.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+<img src="./src/assets/images/scrgroups.png"/>
+<br/>
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+- **Zamo Channels: Enriching Group Conversations**
+  <br />Upon the creation of a group in Zamo, a default #General channel is automatically established, serving as the foundational space for group discussions. However, the platform goes beyond this by empowering users with the capability to create additional channels within each group.
+  <br />The channels operate similarly to direct chats but are distinct in their facilitation of group conversations, allowing multiple users to engage with each other simultaneously.
+  <br />This feature is ideal for organizing discussions around specific topics, projects, or interests within the larger group context. Users who create channels retain the authority to delete them.
+  <br />Zamo's channels are designed to foster a vibrant, collaborative community where every voice is heard and valued.
 
-### Code Splitting
+<img src="./src/assets/images/scrchannels.png"/>
+<br/>
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+- **Zamo Contacts: Your Hub for Connections**
+  <br/>The Contacts page in Zamo serves as a central hub for managing and expanding your network of friends.
+  <br/>This intuitive space displays a comprehensive list of your current friends, coupled with a search functionality that makes finding specific contacts a breeze. Whether you’re looking to strengthen existing relationships or forge new ones, the option to add friends directly from this page streamlines the process, ensuring your network is always just a few clicks away. Incoming friend requests are prominently displayed, allowing you to welcome new connections into your circle with ease.
+  <br/>The Contacts page is designed to keep your social ecosystem organized and accessible, enhancing your Zamo experience by keeping you connected.
 
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+    <img src="./src/assets/images/scrcontacts.png"/>
+  <br/>
