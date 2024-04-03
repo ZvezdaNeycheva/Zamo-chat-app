@@ -2,7 +2,7 @@
 
 ### Description
 
-Zamo is a cutting-edge application crafted for today's dynamic individuals and teams. Designed with modernity in mind, Zamo offers a comprehensive solution for real-time communication and collaboration. Whether it's chat, voice, or video calls, our platform ensures seamless interaction among users. Share information, exchange resources, and spark discussions with ease. Zamo is more than just an app. It's your partner in fostering meaningful connections and collaborative success.
+Zamo is a cutting-edge application crafted for today's dynamic individuals and teams. Designed with modernity in mind, Zamo offers a comprehensive solution for real-time communication and collaboration. Whether it's chat, voice, or video calls, our platform ensures seamless interaction among users. Share information, exchange resources, and spark discussions with ease. Zamo is more than just an app. It's a partner in fostering meaningful connections and collaborative success.
 
 ### Creators
 
@@ -30,7 +30,7 @@ npm install
 ### Run the application
 
 ```
-npm run start
+npm start
 ```
 
 ### Usage
@@ -71,3 +71,15 @@ npm run start
 
 <img src="./public/assets/images/scrcontacts.png"/>
 <br/>
+
+### Test Accounts:
+
+- User 1:
+  - email: andrei.27@abv.bg
+  - pass: 123456
+- User 2:
+  - email: Alex95@abv.bg
+  - pass: 123456
+- User 3:
+  - email: Ivo22@abv.bg
+  - pass: 123456
