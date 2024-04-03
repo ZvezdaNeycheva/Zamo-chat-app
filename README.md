@@ -38,9 +38,8 @@ npm run start
 - **Public Interface: Where Engagement Begins**
   <br />Zamo's public section greets users with a simple and efficient Login page, ensuring existing users securely access their accounts and new users navigate an intuitive registration process. Designed with user experience in mind, this entry point facilitates a smooth transition into Zamo's realm of advanced communication and collaboration.
 
-      <img src="./public/assets/images/scrlogin.png"/>
-
-    <br/>
+<img src="./public/assets/images/scrlogin.png"/>
+<br/>
 
 - **Profile Panels: Personalizing Communication for Users**
   <br />Users have a profile panel which enables them to edit their Name, Email and Location. Users can also change their avatar and status.
