@@ -5,7 +5,10 @@
   "dependencies": {
     "@dytesdk/react-ui-kit": "^1.66.0",
     "@dytesdk/react-web-core": "^1.36.3",
+    "@emotion/react": "^11.11.4",
+    "@emotion/styled": "^11.11.5",
     "@firebase/messaging": "^0.12.6",
+    "@mui/material": "^5.15.15",
     "@popperjs/core": "^2.11.8",
     "@tailwindcss/forms": "^0.5.7",
     "@testing-library/jest-dom": "^5.17.0",
@@ -13,6 +16,7 @@
     "@testing-library/user-event": "^13.5.0",
     "date-fns": "^3.3.1",
     "firebase": "^10.8.1",
+    "mdb-react-ui-kit": "^7.2.0",
     "prop-types": "^15.8.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

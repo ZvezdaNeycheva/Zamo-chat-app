@@ -50,6 +50,7 @@ export const createUserProfile = (
     sentRequests,
     pendingRequests,
     profilePhotoURL: "",
+    profileBackgroundURL: "",
     fileURL: "",
     location: "",
   });

@@ -1,11 +1,12 @@
 import React, { useContext, useEffect, useState } from "react";
 import { AppContext } from "../../AppContext";
-import { uploadProfileImage } from "../../service/auth.service";
+import { uploadProfileImage, uploadBackgroundPhoto } from "../../service/auth.service";
 import { updateUserData } from "../../service/users.service";
 
 export function Profile() {
   const { user, setUser } = useContext(AppContext);
   const [loading, setLoading] = useState(false);
+  const [loading2, setLoading2] = useState(false);
 
   const [open, setOpen] = useState(false);
   const [openStatusDropdown, setOpenStatusDropdown] = useState(false);
@@ -43,6 +44,20 @@ export function Profile() {
         setUser({ ...user, profilePhotoURL });
       } catch (e) {
         console.error('Error uploading profile image:', e);
+      }
+    }
+  }
+
+  async function handleBackgroundPhoto(e) {
+    if (!user) return;
+    const photo = e.target.files[0];
+    if (photo) {
+      try {
+        const profileBackgroundURL = await uploadBackgroundPhoto(photo, user, setLoading2);
+        await updateUserData(user?.uid, { profileBackgroundURL });
+        setUser({ ...user, profileBackgroundURL });
+      } catch (e) {
+        console.error('Error uploading background image:', e);
       }
     }
   }
@@ -109,258 +124,245 @@ export function Profile() {
 
   return (
     <>
-      <div className="max-w-3xl mx-auto">
+      <div>
         {/* Start profile Header */}
-        <div>
+        <div className="bg-cover bg-center relative">
+          <img src={user?.profileBackgroundURL || "https://images.pexels.com/photos/255379/pexels-photo-255379.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"} className="w-full h-80 object-cover absolute" alt="background" />
+
+          {/* Add Background Img */}
+          <div className="absolute h-32 w-32 right-20 top-40">
+            <input type="file" onChange={handleBackgroundPhoto} id="file" name="file" className="hidden" />
+            <label disabled={loading2} htmlFor="file" 
+            className="left-40 absolute bottom-6 pt-2 pl-3 ri-pencil-fill w-10 h-10 bg-gray-100 rounded-full dark:bg-zinc-800 dark:text-gray-100 cursor-pointer hover:bg-gray-200" />
+          </div>
+
+          {/* Drop Down for Delete Profile */}
           <div className="px-6 pt-6">
-            {/* Drop Down */}
             <div className="ltr:float-right rtl:float-left">
               <div className={`relative flex-shrink-0 dropdown `}>
-                <button onClick={() => toggleDropdown(setOpen)} className="p-0 bottom-10 text-gray-400 border-0 btn dark:text-gray-300" data-bs-toggle="dropdown" id="dropdownMenuButtonA">
-                  <i className="text-lg ri-more-2-fill" />
+                <button onClick={() => toggleDropdown(setOpen)} className="mr-10 mt-5 text-white" data-bs-toggle="dropdown" id="dropdownMenuButtonA">
+                  <i className="text-3xl ri-more-2-fill" />
                 </button>
                 <ul className={`${open ? "visible" : "invisible"} absolute z-50 block w-40 py-2 text-left list-none bg-red-700 border border-transparent rounded shadow-lg rtl:right-auto rtl:left-0 ltr:left-auto ltr:right-0 my-7 bg-clip-padding dark:bg-zinc-700 dark:shadow-sm dark:border-zinc-600`} aria-labelledby="dropdownMenuButtonA">
                   <li>
-                    <button onClick={handleDeleteAccount} className="block w-full px-4 py-2 text-sm font-normal text-white bg-transparent dropdown-item whitespace-nowrap hover:bg-red-800 dark:text-gray-100 dark:hover:bg-zinc-600 ltr:text-left rtl:text-right" type="button">
+                    <button onClick={handleDeleteAccount} className="block w-full px-4 py-2 text-sm font-normal text-white bg-transparent dropdown-item whitespace-nowrap hover:bg-red-800 dark:text-black-100 dark:hover:bg-zinc-600 ltr:text-left rtl:text-right" type="button">
                       Delete your account
                     </button>
                   </li>
                 </ul>
               </div>
             </div>
-            {/* End Drop Down */}
-            <h4 className="mb-0 text-center text-gray-700 dark:text-gray-50"> My Profile </h4>
-          </div>
-          {/* End profile Header */}
 
-          <div className="p-6 text-center border-b border-gray-100 dark:border-zinc-600">
-            {/* Profile picture */}
-            <div className="mb-4 relative">
+            {/* Title */}
+            <div className="relative">
+              <h4 className="mb-0 text-center text-white absolute left-0 top-0 h-16 text-4xl "> My Profile </h4>
+            </div>
+          </div>
+
+          {/* Profile picture */}
+          <div className="p-6 text-center">
+            <div className="mb-4 relative flex flex-col items-start justify-end top-24">
               <input type="file" onChange={handleUploadPhoto} id="file" name="file" className="hidden" />
-              <label disabled={loading} htmlFor="file" className="absolute  pt-2 bottom-0 ri-pencil-fill w-10 h-10 bg-gray-100 rounded-full dark:bg-zinc-800 dark:text-gray-100 cursor-pointer hover:bg-gray-200" />
-              <img src={user?.profilePhotoURL || "https://thinksport.com.au/wp-content/uploads/2020/01/avatar-.jpg"} className="w-24 h-24 p-1 mx-auto border border-gray-100 rounded-full dark:border-zinc-800" alt="Avatar" />
-            </div>
-
-            <h5 className="mb-1 text-16 dark:text-gray-50">{user ? user.username : "N/A"}</h5>
-            {/* End profile picture */}
-
-            {/* Profile Status */}
-            {/* Dropdown menu for status*/}
-            <div className="relative mb-1 dropdown">
-              <button onClick={() => toggleDropdown(setOpenStatusDropdown)} className="pb-1 d-block dark:text-gray-300" data-bs-toggle="dropdown" id="dropdownMenuButtonX">
-                <a className={` pb-1 text-${localStatus === 'Online' ? 'text-green-500 ltr:ml-1 rtl:mr-1 ri-record-circle-fill green-500' : 'text-red-500 ltr:ml-1 rtl:mr-1 ri-record-circle-fill red-500'} dropdown-toggle d-block dark:text-gray-300`} href="#" role="button" data-bs-toggle="dropdown" id="dropdownMenuButtonX">
-                  &nbsp;{localStatus} <i className={`mdi mdi-chevron-down ${openStatusDropdown ? "group-[.active]:rotate-180" : ""}`}></i>
-                </a>
-              </button>
-              <div className={`${openStatusDropdown ? "" : "hidden"}`}>
-                <ul className="absolute z-50 py-2 mt-2 ml-48 text-left list-none bg-white border rounded shadow-lg left-20 w-36 top-6 dark:bg-zinc-700 bg-clip-padding border-gray-50 dark:border-zinc-500" aria-labelledby="dropdownMenuButtonX">
-                  <li>
-                    <button onClick={() => handleStatusChange('Online')} className="block w-full px-4 py-2 text-sm font-normal text-black-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/50 dark:text-gray-100 dark:hover:bg-zinc-600/80 ltr:text-left rtl:text-right">
-                      <i className="text-green-500 ltr:ml-1 rtl:mr-1 ri-record-circle-fill text-10" /> &nbsp;
-                      Online
-                    </button>
-                  </li>
-                  <li>
-                    <button onClick={() => handleStatusChange('Busy')} className="block w-full px-4 py-2 text-sm font-normal text-black-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/50 dark:text-gray-100 dark:hover:bg-zinc-600/80 ltr:text-left rtl:text-right">
-                      <i className="text-orange-500 ltr:ml-1 rtl:mr-1 ri-error-warning-fill text-10" /> &nbsp;
-                      Busy
-                    </button>
-                  </li>
-                  <li>
-                    <button onClick={() => handleStatusChange('Away')} className="block w-full px-4 py-2 text-sm font-normal text-black-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/50 dark:text-gray-100 dark:hover:bg-zinc-600/80 ltr:text-left rtl:text-right">
-                      <i className="text-yellow-500 ltr:ml-1 rtl:mr-1 ri-time-fill text-10" /> &nbsp;
-                      Away
-                    </button>
-                  </li>
-                  <li>
-                    <button onClick={() => handleStatusChange('Offline')} className="block w-full px-4 py-2 text-sm font-normal text-black-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/50 dark:text-gray-100 dark:hover:bg-zinc-600/80 ltr:text-left rtl:text-right">
-                      <i className="text-red-500 ltr:ml-1 rtl:mr-1 ri-record-circle-fill text-10" /> &nbsp;
-                      Offline
-                    </button>
-                  </li>
-                </ul>
-              </div>
+              <label disabled={loading} htmlFor="file" className="left-40 absolute bottom-6 pt-2 ri-pencil-fill w-10 h-10 bg-gray-100 rounded-full dark:bg-zinc-800 dark:text-gray-100 cursor-pointer hover:bg-gray-200" />
+              <img src={user?.profilePhotoURL || "https://thinksport.com.au/wp-content/uploads/2020/01/avatar-.jpg"} className="sm:w-30 sm:h-30 md:w-40 md:h-40 lg:w-60 lg:h-60 xl:w-70 xl:h-70 2xl:w-80 2xl:h-80 p-1 border border-gray-100 rounded-full dark:border-zinc-800" alt="Avatar" />
             </div>
           </div>
-          {/* End Profile Status */}
 
-          {/* Start user-profile-desc */}
-          <div className="p-6 h-[550px]" data-simplebar="">
-            <div data-tw-accordion="collapse">
-              {/* About Drop Down menu*/}
-              <div className="text-gray-700 accordion-item">
-                <h2>
-                  <button onClick={() => toggleDropdown(setOpenAboutDropdown)} type="button" className="flex items-center justify-between w-full px-3 py-2 font-medium text-left border border-gray-100 rounded-t accordion-header group active dark:border-b-zinc-600 dark:bg-zinc-600 dark:border-zinc-600">
-                    <span className="m-0 text-[14px] dark:text-gray-50 font-semibold ltr:block rtl:hidden">
-                      <i className="mr-2 align-middle ri-user-2-line d-inline-block" />
-                      About
+        </div>
+        {/* End profile Header */}
+
+
+        <div className="grid grid-cols-2">
+          {/* Username and Status*/}
+          <div className="border rounded-lg p-4 bg-white dark:bg-gray-800 shadow-lg w-80 h-auto mt-20 ml-5">
+
+            <h5 className="mb-1 text-lg font-semibold text-black-700 dark:text-gray-50 border-b-2 ">About</h5>
+
+            {/* Dropdown menu for status*/}
+            <div className="relative mb-1 flex mt-2">
+              <div className="mb-1 text-lg font-semibold text-gray-800 dark:text-gray-50 mt-1">Status: </div>
+
+              <div className="relative ml-2">
+                <button onClick={() => toggleDropdown(setOpenStatusDropdown)} className="flex items-center justify-between px-4 py-2 text-sm font-medium bg-gray-50 dark:text-gray-300 rounded-md focus:outline-none focus:bg-gray-200 dark:focus:bg-gray-600 transition duration-300 ease-in-out">
+                  <span className="flex items-center">
+                    <span className={`text-${localStatus === 'Online' ? 'green' : 'red'}-500 mr-2`}>
+                      <i className={`ri-record-circle-fill text-10`} />
                     </span>
-                    <span className="m-0 text-[14px] dark:text-gray-50 font-semibold ltr:hidden rtl:block">
-                      About
-                      <i className="ml-2 align-middle ri-user-2-line d-inline-block" />
-                    </span>
-                    <i className={`mdi mdi-chevron-down text-lg ${openAboutDropdown ? "group-[.active]:rotate-180" : ""} dark:text-gray-50`} />
-                  </button>
-                </h2>
-
-                <div className={`block bg-white border border-t-0 border-gray-100 accordion-body dark:bg-transparent dark:border-zinc-600
-                ${openAboutDropdown ? "" : "hidden"}`} >
-                  <div className="p-5">
-                    <div>
-                      <div>
-                        <p className="mb-1 text-gray-500 dark:text-gray-300">Name</p>
-                        {editUsername ? (
-                          <>
-                            <input value={editedUsername} onChange={(e) => setEditedUsername(e.target.value)} type="text" className="w-full p-2 mb-2 border rounded border-gray-100 dark:border-zinc-600" />
-                            <button onClick={handleUsernameUpdate} className="py-1.5 btn bg-slate-100 border-transparent rounded hover:bg-gray-50 transition-all ease-in-out dark:bg-zinc-600 dark:text-gray-50 dark:hover:bg-zinc-500/50">
-                              Save
-                            </button>
-                            <button onClick={() => { setEditUsername(false); setEditedUsername(user ? user.username : "") }} className="ml-2 py-1.5 btn bg-slate-100 border-transparent rounded hover:bg-gray-50 transition-all ease-in-out dark:bg-zinc-600 dark:text-gray-50 dark:hover:bg-zinc-500/50" >
-                              Cancel
-                            </button>
-                          </>
-                        ) : (
-                          <div className="flex items-center">
-                            <h5 className="text-sm dark:text-gray-50">{user ? user.username : "N/A"}</h5>
-                            <button onClick={() => setEditUsername(true)} className="ml-2 text-gray-500 hover:text-gray-700 dark:text-gray-300 dark:hover:text-gray-100" >
-                              Edit
-                            </button>
-                          </div>
-                        )}
-                      </div>
-
-                      {/* Email */}
-                      <div className="mt-5">
-                        <p className="mb-1 text-gray-500 dark:text-gray-300">Email</p>
-                        {editEmail ? (
-                          <>
-                            <input value={editedEmail} onChange={(e) => setEditedEmail(e.target.value)} type="text" className="w-full p-2 mb-2 border rounded border-gray-100 dark:border-zinc-600" />
-                            <button onClick={handleEmailUpdate} className="py-1.5 btn bg-slate-100 border-transparent rounded hover:bg-gray-50 transition-all ease-in-out dark:bg-zinc-600 dark:text-gray-50 dark:hover:bg-zinc-500/50" >
-                              Save
-                            </button>
-                            <button onClick={() => { setEditEmail(false); setEditedEmail(user ? user.email : "") }} className="ml-2 py-1.5 btn bg-slate-100 border-transparent rounded hover:bg-gray-50 transition-all ease-in-out dark:bg-zinc-600 dark:text-gray-50 dark:hover:bg-zinc-500/50" >
-                              Cancel
-                            </button>
-                          </>
-                        ) : (
-                          <div className="flex items-center">
-                            <h5 className="text-sm dark:text-gray-50">{user ? user.email : "N/A"}</h5>
-                            <button onClick={() => setEditEmail(true)} className="ml-2 text-gray-500 hover:text-gray-700 dark:text-gray-300 dark:hover:text-gray-100" >
-                              Edit
-                            </button>
-                          </div>
-                        )}
-                      </div>
-
-                      {/* Location */}
-                      <div className="mt-5">
-                        <p className="mb-1 text-gray-500 dark:text-gray-300"> Location </p>
-                        {editLocation ? (
-                          <>
-                            <input value={editedLocation} onChange={(e) => setEditedLocation(e.target.value)} type="text" className="w-full p-2 mb-2 border rounded border-gray-100 dark:border-zinc-600" />
-                            <button onClick={handleLocationUpdate} className="py-1.5 btn bg-slate-100 border-transparent rounded hover:bg-gray-50 transition-all ease-in-out dark:bg-zinc-600 dark:text-gray-50 dark:hover:bg-zinc-500/50" >
-                              Save
-                            </button>
-                            <button onClick={() => { setEditLocation(false); setEditedLocation(user ? user.location : "") }} className="ml-2 py-1.5 btn bg-slate-100 border-transparent rounded hover:bg-gray-50 transition-all ease-in-out dark:bg-zinc-600 dark:text-gray-50 dark:hover:bg-zinc-500/50">
-                              Cancel
-                            </button>
-                          </>
-                        ) : (
-                          <div className="flex items-center">
-                            <h5 className="text-sm dark:text-gray-50">{user ? user.location : "N/A"}</h5>
-                            <button onClick={() => setEditLocation(true)} className="ml-2 text-gray-500 hover:text-gray-700 dark:text-gray-300 dark:hover:text-gray-100">
-                              Edit
-                            </button>
-                          </div>
-                        )}
-                      </div>
-
-                      {/* Time */}
-                      <div className="mt-5">
-                        <p className="mb-1 text-gray-500 dark:text-gray-300">Create Profile Date</p>
-                        <h5 className="text-sm dark:text-gray-50">{user ? user.createdOnReadable : "N/A"}</h5>
-                      </div>
-                    </div>
-                  </div>
+                    {localStatus}
+                  </span>
+                  <i className={`mdi mdi-chevron-down ${openStatusDropdown ? "transform rotate-180" : ""} text-gray-400`} />
+                </button>
+                <div className={`${openStatusDropdown ? "" : "hidden"} absolute z-10 mt-1 w-full bg-white dark:bg-gray-700 shadow-lg rounded-md`}>
+                  <ul className="py-1">
+                    <li>
+                      <button onClick={() => handleStatusChange('Online')} className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 w-full text-left">
+                        <i className="text-green-500 ri-record-circle-fill text-10 mr-2" />
+                        Online
+                      </button>
+                    </li>
+                    <li>
+                      <button onClick={() => handleStatusChange('Busy')} className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 w-full text-left">
+                        <i className="text-orange-500 ri-error-warning-fill text-10 mr-2" />
+                        Busy
+                      </button>
+                    </li>
+                    <li>
+                      <button onClick={() => handleStatusChange('Away')} className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 w-full text-left">
+                        <i className="text-yellow-500 ri-time-fill text-10 mr-2" />
+                        Away
+                      </button>
+                    </li>
+                    <li>
+                      <button onClick={() => handleStatusChange('Offline')} className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 w-full text-left">
+                        <i className="text-red-500 ri-record-circle-fill text-10 mr-2" />
+                        Offline
+                      </button>
+                    </li>
+                  </ul>
                 </div>
               </div>
-              {/* End About Drop Down menu*/}
+            </div>
 
-              {/* Attached Files Drop Down menu*/}
-              <div className="mt-2 text-gray-700 accordion-item">
-                <h2>
-                  <button onClick={() => toggleDropdown(setOpenFilesDropdown)} type="button" className='flex items-center justify-between w-full px-3 py-2 font-medium text-left border border-gray-100 rounded accordion-header group dark:border-b-zinc-600 dark:bg-zinc-600 dark:border-zinc-600'>
-                    <span className="m-0 text-[14px] dark:text-gray-50 font-semibold ltr:block rtl:hidden">
-                      <i className="mr-2 align-middle ri-attachment-line d-inline-block" /> Attached Files
-                    </span>
-                    <span className="m-0 text-[14px] dark:text-gray-50 font-semibold ltr:hidden rtl:block">
-                      Attached Files <i className="ml-2 align-middle ri-attachment-line d-inline-block" />
-                    </span>
-                    <i className={`mdi mdi-chevron-down text-lg ${openFilesDropdown ? "group-[.active]:rotate-180" : ""} dark:text-gray-50 `} />
-                  </button>
-                </h2>
-                {/* Attached Files */}
-                <div className={`block bg-white border border-t-0 border-gray-100 accordion-body dark:bg-transparent dark:border-zinc-600
-                ${openFilesDropdown ? "" : "hidden"}`} >
-                  <div className="p-5">
-                    <div className="p-2 mb-2 border rounded border-gray-100/80 dark:bg-zinc-800 dark:border-transparent">
-                      <div className="flex items-center">
-                        <div className="flex items-center justify-center w-10 h-10 rounded ltr:mr-3 group-data-[theme-color=violet]:bg-violet-500/20 group-data-[theme-color=green]:bg-green-500/20 group-data-[theme-color=red]:bg-red-500/20 rtl:ml-3">
-                          <div className="text-xl rounded-lg group-data-[theme-color=violet]:text-violet-500 group-data-[theme-color=green]:text-green-500 group-data-[theme-color=red]:text-red-500 avatar-title ">
-                            <i className="ri-file-text-fill" />
+            <div className="pt-3">
+              <div>
+                <div>
+                  <p className="mb-1 text-gray-500 dark:text-gray-300">Name</p>
+                  {editUsername ? (
+                    <>
+                      <input value={editedUsername} onChange={(e) => setEditedUsername(e.target.value)} type="text" className="w-full p-2 mb-2 border rounded border-gray-100 dark:border-zinc-600" />
+                      <button onClick={handleUsernameUpdate} className="py-1.5 btn bg-slate-100 border-transparent rounded hover:bg-gray-50 transition-all ease-in-out dark:bg-zinc-600 dark:text-gray-50 dark:hover:bg-zinc-500/50">
+                        Save
+                      </button>
+                      <button onClick={() => { setEditUsername(false); setEditedUsername(user ? user.username : "") }} className="ml-2 py-1.5 btn bg-slate-100 border-transparent rounded hover:bg-gray-50 transition-all ease-in-out dark:bg-zinc-600 dark:text-gray-50 dark:hover:bg-zinc-500/50" >
+                        Cancel
+                      </button>
+                    </>
+                  ) : (
+                    <div className="flex items-center">
+                      <h5 className="text- dark:text-gray-50">{user ? user.username : "N/A"}</h5>
+                      <button onClick={() => setEditUsername(true)} className="ml-2 text-gray-500 hover:text-gray-700 dark:text-gray-300 dark:hover:text-gray-100" >
+                        Edit
+                      </button>
+                    </div>
+                  )}
+                </div>
+
+                {/* Email */}
+                <div className="mt-5">
+                  <p className="mb-1 text-gray-500 dark:text-gray-300">Email</p>
+                  {editEmail ? (
+                    <>
+                      <input value={editedEmail} onChange={(e) => setEditedEmail(e.target.value)} type="text" className="w-full p-2 mb-2 border rounded border-gray-100 dark:border-zinc-600" />
+                      <button onClick={handleEmailUpdate} className="py-1.5 btn bg-slate-100 border-transparent rounded hover:bg-gray-50 transition-all ease-in-out dark:bg-zinc-600 dark:text-gray-50 dark:hover:bg-zinc-500/50" >
+                        Save
+                      </button>
+                      <button onClick={() => { setEditEmail(false); setEditedEmail(user ? user.email : "") }} className="ml-2 py-1.5 btn bg-slate-100 border-transparent rounded hover:bg-gray-50 transition-all ease-in-out dark:bg-zinc-600 dark:text-gray-50 dark:hover:bg-zinc-500/50" >
+                        Cancel
+                      </button>
+                    </>
+                  ) : (
+                    <div className="flex items-center">
+                      <h5 className="dark:text-gray-50">{user ? user.email : "N/A"}</h5>
+                      <button onClick={() => setEditEmail(true)} className="ml-2 text-gray-500 hover:text-gray-700 dark:text-gray-300 dark:hover:text-gray-100" >
+                        Edit
+                      </button>
+                    </div>
+                  )}
+                </div>
+
+                {/* Location */}
+                <div className="mt-5">
+                  <p className="mb-1 text-gray-500 dark:text-gray-300"> Location </p>
+                  {editLocation ? (
+                    <>
+                      <input value={editedLocation} onChange={(e) => setEditedLocation(e.target.value)} type="text" className="w-full p-2 mb-2 border rounded border-gray-100 dark:border-zinc-600" />
+                      <button onClick={handleLocationUpdate} className="py-1.5 btn bg-slate-100 border-transparent rounded hover:bg-gray-50 transition-all ease-in-out dark:bg-zinc-600 dark:text-gray-50 dark:hover:bg-zinc-500/50" >
+                        Save
+                      </button>
+                      <button onClick={() => { setEditLocation(false); setEditedLocation(user ? user.location : "") }} className="ml-2 py-1.5 btn bg-slate-100 border-transparent rounded hover:bg-gray-50 transition-all ease-in-out dark:bg-zinc-600 dark:text-gray-50 dark:hover:bg-zinc-500/50">
+                        Cancel
+                      </button>
+                    </>
+                  ) : (
+                    <div className="flex items-center">
+                      <h5 className=" dark:text-gray-50">{user ? user.location : "N/A"}</h5>
+                      <button onClick={() => setEditLocation(true)} className="ml-2 text-gray-500 hover:text-gray-700 dark:text-gray-300 dark:hover:text-gray-100">
+                        Edit
+                      </button>
+                    </div>
+                  )}
+                </div>
+
+                {/* Time */}
+                <div className="mt-5">
+                  <p className="mb-1 text-gray-500 dark:text-gray-300">Create Profile Date</p>
+                  <h5 className="dark:text-gray-50">{user ? user.createdOnReadable : "N/A"}</h5>
+                </div>
+              </div>
+            </div>
+          </div>
+          {/* End Profile Status and Username*/}
+
+          {/* Start user-profile-desc */}
+          <div className="border rounded-lg p-4 bg-white dark:bg-gray-800 shadow-lg w-auto h-auto mr-10 ">
+            <h5 className="mb-1 text-lg font-semibold text-black-700 dark:text-gray-50 border-b-2">Attached Files</h5>
+            {/* Attached Files Drop Down menu*/}
+            <div className="p-5">
+              <div className="p-2 mb-2 border rounded border-gray-100/80 dark:bg-zinc-800 dark:border-transparent">
+                <div className="flex items-center">
+                  <div className="flex items-center justify-center w-10 h-10 rounded ltr:mr-3 group-data-[theme-color=violet]:bg-violet-500/20 group-data-[theme-color=green]:bg-green-500/20 group-data-[theme-color=red]:bg-red-500/20 rtl:ml-3">
+                    <div className="text-xl rounded-lg group-data-[theme-color=violet]:text-violet-500 group-data-[theme-color=green]:text-green-500 group-data-[theme-color=red]:text-red-500 avatar-title ">
+                      <i className="ri-file-text-fill" />
+                    </div>
+                  </div>
+                  {/* File Name */}
+                  <div className="flex-grow">
+                    <div className="text-start">
+                      {attachedFiles.map((fileURL, index) => (
+                        <div key={index} className="p-2 mb-2 border rounded border-gray-100/80 dark:bg-zinc-800 dark:border-transparent">
+                          <div className="flex items-center">
+                            {/* Display file URL */}
+                            <p className="mb-0 text-gray-500 text-13 dark:text-gray-300">{fileURL}</p>
                           </div>
                         </div>
-                        {/* File Name */}
-                        <div className="flex-grow">
-                          <div className="text-start">
-                            {attachedFiles.map((fileURL, index) => (
-                              <div key={index} className="p-2 mb-2 border rounded border-gray-100/80 dark:bg-zinc-800 dark:border-transparent">
-                                <div className="flex items-center">
-                                  {/* Display file URL */}
-                                  <p className="mb-0 text-gray-500 text-13 dark:text-gray-300">{fileURL}</p>
-                                </div>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                        {/* Drop Down */}
-                        <div className="ltr:ml-4 rtl:mr-4">
-                          <ul className="flex items-center gap-3 mb-0 text-lg">
+                      ))}
+                    </div>
+                  </div>
+                  {/* Drop Down */}
+                  <div className="ltr:ml-4 rtl:mr-4">
+                    <ul className="flex items-center gap-3 mb-0 text-lg">
+                      <li>
+                        <a href="#" className="px-1 text-gray-500 dark:text-gray-300">
+                          <i className="ri-download-2-line" />
+                        </a>
+                      </li>
+                      <li className="relative flex-shrink-0 dropstart">
+                        <button onClick={() => toggleDropdown(setFileDetailsDropdown)} className="p-0 text-gray-400 border-0 btn dark:text-gray-300" aria-haspopup="true" aria-expanded={openFileDetailsDropdown}>
+                          <i className="text-lg ri-more-fill" />
+                        </button>
+
+                        {openFileDetailsDropdown && (
+                          <ul className="absolute z-50 block w-40 py-2 text-left list-none bg-white border border-transparent rounded                   shadow-lg rtl:left-0 rtl:right-auto ltr:right-0 ltr:left-auto my-7 dropdown-menu bg-clip-padding                  dark:bg-zinc-700 dark:shadow-sm dark:border-zinc-600">
                             <li>
-                              <a href="#" className="px-1 text-gray-500 dark:text-gray-300">
-                                <i className="ri-download-2-line" />
+                              <a className="block w-full px-4 py-2 text-sm font-normal text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/50 dark:text-gray-100 dark:hover:bg-zinc-600 ltr:text-left rtl:text-right">
+                                Action
                               </a>
                             </li>
-                            <li className="relative flex-shrink-0 dropstart">
-                              <button onClick={() => toggleDropdown(setFileDetailsDropdown)} className="p-0 text-gray-400 border-0 btn dark:text-gray-300" aria-haspopup="true" aria-expanded={openFileDetailsDropdown}>
-                                <i className="text-lg ri-more-fill" />
-                              </button>
-
-                              {openFileDetailsDropdown && (
-                                <ul className="absolute z-50 block w-40 py-2 text-left list-none bg-white border border-transparent rounded                   shadow-lg rtl:left-0 rtl:right-auto ltr:right-0 ltr:left-auto my-7 dropdown-menu bg-clip-padding                  dark:bg-zinc-700 dark:shadow-sm dark:border-zinc-600">
-                                  <li>
-                                    <a className="block w-full px-4 py-2 text-sm font-normal text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/50 dark:text-gray-100 dark:hover:bg-zinc-600 ltr:text-left rtl:text-right">
-                                      Action
-                                    </a>
-                                  </li>
-                                  <li>
-                                    <a className="block w-full px-4 py-2 text-sm font-normal text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/50 dark:text-gray-100 dark:hover:bg-zinc-600 ltr:text-left rtl:text-right">
-                                      Another action
-                                    </a>
-                                  </li>
-                                  <li className="my-2 border-b border-gray-100/20 dark:border-zinc-600" />
-                                  <li>
-                                    <a className="block w-full px-4 py-2 text-sm font-normal text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/50 dark:text-gray-100 dark:hover:bg-zinc-600 ltr:text-left rtl:text-right">
-                                      Delete
-                                    </a>
-                                  </li>
-                                </ul>
-                              )}
+                            <li>
+                              <a className="block w-full px-4 py-2 text-sm font-normal text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/50 dark:text-gray-100 dark:hover:bg-zinc-600 ltr:text-left rtl:text-right">
+                                Another action
+                              </a>
+                            </li>
+                            <li className="my-2 border-b border-gray-100/20 dark:border-zinc-600" />
+                            <li>
+                              <a className="block w-full px-4 py-2 text-sm font-normal text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/50 dark:text-gray-100 dark:hover:bg-zinc-600 ltr:text-left rtl:text-right">
+                                Delete
+                              </a>
                             </li>
                           </ul>
-                        </div>
-                      </div>
-                    </div>
+                        )}
+                      </li>
+                    </ul>
                   </div>
                 </div>
               </div>

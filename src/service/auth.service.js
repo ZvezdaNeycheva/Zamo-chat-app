@@ -1,17 +1,7 @@
-import {
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  signOut,
-  getAuth,
-  updateEmail,
-} from "firebase/auth";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, getAuth, updateEmail, } from "firebase/auth";
 import { auth } from "./firebase-config";
 import { storage } from "./firebase-config";
-import {
-  uploadBytes,
-  ref as storageRef,
-  getDownloadURL,
-} from "firebase/storage";
+import { uploadBytes, ref as storageRef, getDownloadURL, } from "firebase/storage";
 import { updateUserData } from "./users.service";
 
 export const registerUser = (email, password) => {
@@ -56,6 +46,25 @@ export async function uploadProfileImage(file, user, setLoading) {
     return photoURL;
   } catch (error) {
     console.error("Error uploading profile image:", error);
+    setLoading(false);
+  }
+}
+
+//handleBackgroundPhoto
+export async function uploadBackgroundPhoto(file, user, setLoading) {
+  const fileRef = storageRef(storage, user.uid + "_background.png");
+  setLoading(true);
+
+  try {
+    await uploadBytes(fileRef, file);
+    const photoURL = await getDownloadURL(fileRef);
+    await updateUserData(user.uid, { profileBackgroundURL: photoURL });
+
+    setLoading(false);
+    alert("Background image uploaded successfully.");
+    return photoURL;
+  } catch (error) {
+    console.error("Error uploading background image:", error);
     setLoading(false);
   }
 }
