@@ -1,19 +1,7 @@
-import {
-  useState,
-  useEffect,
-  useContext,
-  useRef,
-  useLayoutEffect,
-} from "react";
+import { useState, useEffect, useContext, useRef, useLayoutEffect, } from "react";
 import { AppContext } from "../../AppContext";
 import { ChatUploadFile } from "./ChatUploadFile";
-import {
-  getMessages,
-  editMessage,
-  sendMessage,
-  deleteMessage,
-  reactToMessage,
-} from "../../service/message.service";
+import { getMessages, editMessage, sendMessage, deleteMessage, reactToMessage, } from "../../service/message.service";
 
 export function Chat({ id, toolbar }) {
   const { user } = useContext(AppContext);
@@ -134,48 +122,26 @@ export function Chat({ id, toolbar }) {
                 {messages.length > 0 &&
                   messages.map((message) => (
                     <li key={message.id} className="clear-both py-4">
-                      <div
-                        className={`flex mr-7 items-end gap-3 ${
-                          message.senderId === user.uid
-                            ? "justify-start"
-                            : "justify-end"
-                        }`}
-                      >
+                      <div className={`flex mr-7 items-end gap-3 ${message.senderId === user.uid ? "justify-start" : "justify-end"}`}>
                         <div>
-                          <img
-                            src={
-                              message?.avatar ||
-                              "https://thinksport.com.au/wp-content/uploads/2020/01/avatar-.jpg"
-                            }
-                            alt=""
-                            className="rounded-full h-9 w-9"
-                          />
+                          <img src={message?.avatar || "https://thinksport.com.au/wp-content/uploads/2020/01/avatar-.jpg"} alt="" className="rounded-full h-9 w-9" />
                         </div>
 
                         <div>
                           <div className="flex gap-2 mb-2  ">
                             <div
-                              className={`relative px-5 py-3 text-white rounded-lg ${
-                                message.senderName === user.username
-                                  ? "ltr:rounded-bl-none"
-                                  : "ltr:rounded-br-none"
-                              } bg-violet-500`}
-                            >
+                              className={`relative px-5 py-3 text-white rounded-lg ${message.senderName === user.username ? "ltr:rounded-bl-none" : "ltr:rounded-br-none"} bg-violet-500`} >
                               <p className="mb-0">
                                 {/* {message.content} */}
                                 {editedMessage === message.id ? (
                                   <div>
                                     <input
-                                      type="text"
                                       value={editedMessageContent}
-                                      onChange={(e) =>
-                                        setEditedMessageContent(e.target.value)
-                                      }
-                                      onKeyDown={(e) =>
-                                        handleEditKeyDown(e, message.id)
-                                      }
+                                      onChange={(e) => setEditedMessageContent(e.target.value)}
+                                      onKeyDown={(e) => handleEditKeyDown(e, message.id)}
                                       onBlur={() => cancelEdit()}
                                       autoFocus // Focus the input field when editing starts
+                                      type="text"
                                       className="w-full border-transparent bg-transparent focus:outline-none focus:ring-0"
                                     />
                                     <button onClick={() => cancelEdit()}>
@@ -183,131 +149,65 @@ export function Chat({ id, toolbar }) {
                                     </button>
                                   </div>
                                 ) : // message.content === pictureURL ?
-                                message.pic &&
-                                  Object.keys(pictureURL).includes(
-                                    message.pic
+                                  message.pic && Object.keys(pictureURL).includes(message.pic
                                   ) ? (
-                                  Object.keys(pictureURL)
-                                    .filter((e) => e === message.pic)
-                                    .map((url) => (
-                                      <div key={url}>
-                                        <img
-                                          src={url}
-                                          alt="Uploaded"
-                                          style={{ maxHeight: "100px" }}
-                                        />
-                                      </div>
-                                    ))
-                                ) : (
-                                  message.content
-                                )}
+                                    Object.keys(pictureURL)
+                                      .filter((e) => e === message.pic)
+                                      .map((url) => (
+                                        <div key={url}>
+                                          <img src={url} alt="Uploaded" style={{ maxHeight: "100px" }} />
+                                        </div>
+                                      ))
+                                  ) : (
+                                    message.content
+                                  )}
                               </p>
                               <p className="mt-1 mb-0 text-xs text-right text-white/50">
                                 <i className="align-middle ri-time-line"></i>{" "}
                                 <span className="align-middle">
                                   {" "}
-                                  {`${new Date(
-                                    message.timestamp
-                                  ).toLocaleDateString()} ${new Date(
-                                    message.timestamp
-                                  )
+                                  {`${new Date(message.timestamp).toLocaleDateString()} ${new Date(message.timestamp)
                                     .toLocaleTimeString()
                                     .replace(/:\d+ [AP]M/, "")}`}
                                 </span>
                               </p>
 
-                              <div
-                                className={`text-xs text-right mt-1 mb-0 cursor: pointer`}
-                              >
-                                {/* Example reaction buttons/icons */}
-                                <button
-                                  onClick={() =>
-                                    reactToMessage(
-                                      message.id,
-                                      "thumbsUp",
-                                      user,
-                                      id
-                                    )
-                                  }
-                                >
-                                  👍{" "}
-                                  {message.reactions &&
-                                  message.reactions.thumbsUp
-                                    ? message.reactions.thumbsUp.length
-                                    : 0}
+                              {/* Example reaction buttons/icons */}
+                              <div className={`text-xs text-right mt-1 mb-0 cursor: pointer`}>
+                                <button onClick={() => reactToMessage(message.id, "thumbsUp", user, id)}>
+                                  👍{" "} {message.reactions && message.reactions.thumbsUp ? message.reactions.thumbsUp.length : 0}
                                 </button>
-                                <button
-                                  onClick={() =>
-                                    reactToMessage(
-                                      message.id,
-                                      "heart",
-                                      user,
-                                      id
-                                    )
-                                  }
-                                >
-                                  ❤️{" "}
-                                  {message.reactions && message.reactions.heart
-                                    ? message.reactions.heart.length
-                                    : 0}
+                                <button onClick={() => reactToMessage(message.id, "heart", user, id)} >
+                                  ❤️{" "} {message.reactions && message.reactions.heart ? message.reactions.heart.length : 0}
                                 </button>
                               </div>
+
                             </div>
-                            <div
-                              className={`relative self-start dropdown ${
-                                message.senderId === user.uid
-                                  ? "right-0"
-                                  : "left-auto"
-                              }`}
-                            >
-                              {" "}
-                              <a
-                                className="p-0 text-gray-400 border-0 btn dropdown-toggle dark:text-gray-100"
-                                href="#"
-                                role="button"
-                                data-bs-toggle="dropdown"
-                                id="dropdownMenuButton12"
-                              >
+                            <div className={`relative self-start dropdown ${message.senderId === user.uid ? "right-0" : "left-auto"}`}>{" "}
+                              <a href="#" className="p-0 text-gray-400 border-0 btn dropdown-toggle dark:text-gray-100" role="button" data-bs-toggle="dropdown" id="dropdownMenuButton12" >
                                 <div>
                                   {message?.senderId === user?.uid && (
-                                    <div
-                                      onClick={() =>
-                                        handleIconClick(message.id)
-                                      }
-                                    >
+                                    <div onClick={() => handleIconClick(message.id)} >
                                       <i className="ri-more-2-fill"></i>
                                     </div>
                                   )}
-                                  {message?.senderId === user?.uid &&
-                                    activeOptionsMessageId === message.id && (
+                                  {message?.senderId === user?.uid && activeOptionsMessageId === message.id && (
+                                    <div>
                                       <div>
-                                        <div>
-                                          <button
-                                            onClick={() => startEdit(message)}
-                                          >
-                                            Edit
-                                          </button>
-                                        </div>
-                                        <button
-                                          onClick={() =>
-                                            handleDelete(message.id)
-                                          }
-                                        >
-                                          Delete
+                                        <button onClick={() => startEdit(message)} >
+                                          Edit
                                         </button>
                                       </div>
-                                    )}
+                                      <button onClick={() => handleDelete(message.id)} >
+                                        Delete
+                                      </button>
+                                    </div>
+                                  )}
                                 </div>
                               </a>
                             </div>
                           </div>
-                          <div
-                            className={`font-medium ${
-                              message.senderName === user.username
-                                ? ""
-                                : "text-right mr-4"
-                            } text-gray-700 text-14 dark:text-gray-300`}
-                          >
+                          <div className={`font-medium ${message.senderName === user.username ? "" : "text-right mr-4"} text-gray-700 text-14 dark:text-gray-300`}>
                             {message.senderName}
                           </div>{" "}
                         </div>
@@ -318,8 +218,8 @@ export function Chat({ id, toolbar }) {
               </ul>
               {/* {End of fetching Messages} */}
             </div>
-
             {/* <!-- end chat conversation end --> */}
+
             {/* <!-- start chat input section --> */}
             {id ? (
               <div className="z-40 w-full p-6 mb-0 bg-white border-t lg:mb-1 border-gray-50 dark:bg-zinc-800 dark:border-zinc-700">
@@ -327,7 +227,6 @@ export function Chat({ id, toolbar }) {
                   <div className="flex-grow">
                     {/* handleSendMessage    sendMessage(messages) */}
                     <input
-                      type="text"
                       value={newMessage}
                       onChange={handleInputMessage}
                       onKeyDown={(e) => {
@@ -336,6 +235,7 @@ export function Chat({ id, toolbar }) {
                           handleAcceptMessage(newMessage);
                         }
                       }}
+                      type="text"
                       className="w-full border-transparent rounded bg-gray-50 placeholder:text-14 text-14 dark:bg-zinc-700 dark:placeholder:text-gray-300 dark:text-gray-300"
                       placeholder="Enter Message..."
                     />
@@ -344,34 +244,14 @@ export function Chat({ id, toolbar }) {
                     <div>
                       <ul className="mb-0">
                         <li className="inline-block" title="Emoji">
-                          <button
-                            onClick={() => {
-                              handleAcceptMessage(newMessage);
-                            }}
-                            type="button"
-                            className="border-transparent group/tooltip btn relative group-data-[theme-color=violet]:dark:text-violet-200 group-data-[theme-color=green]:dark:text-green-200 group-data-[theme-color=red]:dark:text-red-200 group-data-[theme-color=violet]:text-violet-500 group-data-[theme-color=green]:text-green-500 group-data-[theme-color=red]:text-red-500 text-16"
-                          >
-                            {/* <div className="absolute items-center hidden -top-10 ltr:-left-2 group-hover/tooltip:flex rtl:-right-2">
-                                                            <div className="absolute -bottom-1 left-[40%] w-3 h-3 rotate-45 bg-black"></div>
-                                                            <span className="relative z-10 p-2 text-xs leading-none text-white whitespace-no-wrap bg-black rounded shadow-lg">Emoji</span>
-                                                        </div> */}
-                            {/* <i className="ri-emotion-happy-line"></i> */}
+                          <button onClick={() => { handleAcceptMessage(newMessage); }} type="button" className="border-transparent group/tooltip btn relative group-data-[theme-color=violet]:dark:text-violet-200 group-data-[theme-color=green]:dark:text-green-200 group-data-[theme-color=red]:dark:text-red-200 group-data-[theme-color=violet]:text-violet-500 group-data-[theme-color=green]:text-green-500 group-data-[theme-color=red]:text-red-500 text-16" >
                           </button>
                         </li>
 
-                        <ChatUploadFile
-                          handleFileUploaded={handleFileUploaded}
-                          id={id}
-                        />
+                        <ChatUploadFile handleFileUploaded={handleFileUploaded} id={id} />
                         {/* Send Message */}
                         <li className="inline-block">
-                          <button
-                            type="submit"
-                            onClick={() => {
-                              handleAcceptMessage(newMessage);
-                            }}
-                            className="text-white border-transparent btn group-data-[theme-color=violet]:bg-violet-500 group-data-[theme-color=green]:bg-green-500 group-data-[theme-color=red]:bg-red-500 group-data-[theme-color=violet]:hover:bg-violet-600 group-data-[theme-color=green]:hover:bg-green-600"
-                          >
+                          <button type="submit" onClick={() => { handleAcceptMessage(newMessage); }} className="text-white border-transparent btn group-data-[theme-color=violet]:bg-violet-500 group-data-[theme-color=green]:bg-green-500 group-data-[theme-color=red]:bg-red-500 group-data-[theme-color=violet]:hover:bg-violet-600 group-data-[theme-color=green]:hover:bg-green-600" >
                             <i className="ri-send-plane-2-fill"></i>
                           </button>
                         </li>

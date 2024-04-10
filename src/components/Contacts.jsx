@@ -245,25 +245,27 @@ export function Contacts() {
 
                 {friendRequests && friendRequests.length > 0 ? (
                   friendRequests.map((request) => (
-                    <li key={request.uid} className="px-5 py-[15px] group-data-[theme-color=violet]:hover:bg-slate-100 group-data-[theme-color=green]:hover:bg-green-50/50 group-data-[theme-color=red]:hover:bg-red-50/50 transition-all ease-in-out border-b border-white/20 dark:border-zinc-700 group-data-[theme-color=violet]:dark:hover:bg-zinc-600 group-data-[theme-color=green]:dark:hover:bg-zinc-600 group-data-[theme-color=red]:dark:hover:bg-zinc-600 dark:hover:border-zinc-700">
-                      <div className="flex">
-                        <div className="relative self-center ltr:mr-3 rtl:ml-3">
-                          <div className="flex items-center justify-center rounded-full w-9 h-9 group-data-[theme-color=violet]:bg-violet-500/20 group-data-[theme-color=green]:bg-green-500/20 group-data-[theme-color=red]:bg-red-500/20">
+                    <li key={request.uid} className="px-5 py-[15px] group-data-[theme-color=violet]:hover:bg-slate-100 group-data-[theme-color=green]:hover:bg-green-50/50 group-data-[theme-color=red]:hover:bg-red-50/50 group-data-[theme-color=violet]:dark:hover:bg-zinc-600 group-data-[theme-color=green]:dark:hover:bg-zinc-600 group-data-[theme-color=red]:dark:hover:bg-zinc-600 transition-all ease-in-out rounded">
+                      <div className="flex items-center relative">
+                        <div className="ltr:mr-5 rtl:ml-5">
+                          <div className="flex items-center justify-center rounded-full w-10 h-10 group-data-[theme-color=violet]:bg-violet-500/20 group-data-[theme-color=green]:bg-green-500/20 group-data-[theme-color=red]:bg-red-500/20">
                             <span className="group-data-[theme-color=violet]:text-violet-500 group-data-[theme-color=green]:text-green-500 group-data-[theme-color=red]:text-red-500">
                               {request.username[0].toUpperCase()}
                             </span>
                           </div>
                         </div>
+
                         <div className="flex-grow overflow-hidden">
-                          <h5 className="mb-1 text-base truncate dark:text-gray-50">{request.username}</h5>
+                          <h5 className="mb-1 text-base truncate text-gray-700 truncate dark:text-gray-50">{request.username}</h5>
+                          {/* Friend request */}
                           {request.type === 'sent' ? (
                             <p className="mb-0 text-gray-500 truncate dark:text-gray-300 text-14">Pending</p>
                           ) : request.type === 'received' ? (
-                            <div className="flex">
-                              <button onClick={() => handleAcceptRequest(request.uid)} className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600" >
+                            <div className="flex ">
+                              <button onClick={() => handleAcceptRequest(request.uid)} className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-700 w-15 h-10" >
                                 Accept
                               </button> &nbsp;
-                              <button onClick={() => handleRejectRequest(request.uid)} className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600" >
+                              <button onClick={() => handleRejectRequest(request.uid)} className="ml-3 px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-700 w-15 h-10" >
                                 Reject
                               </button>
                             </div>
@@ -284,42 +286,43 @@ export function Contacts() {
               <ul>
                 {filteredFriends && filteredFriends.length > 0 ? (
                   filteredFriends.map((friend, index) => (
-                    <li key={`${friend.uid}-${index}`} className="px-5 py-[15px] group-data-[theme-color=violet]:hover:bg-slate-100 group-data-[theme-color=green]:hover:bg-green-50/50 group-data-[theme-color=red]:hover:bg-red-50/50 transition-all ease-in-out border-b border-white/20 dark:border-zinc-700 group-data-[theme-color=violet]:dark:hover:bg-zinc-600 group-data-[theme-color=green]:dark:hover:bg-zinc-600 group-data-[theme-color=red]:dark:hover:bg-zinc-600 dark:hover:border-zinc-700">
-                      <ul className="list-unstyled contact-list">
-                        <li className="px-5 py-[15px]">
-                          <div className="flex items-center">
-                            <div className="relative self-center ltr:mr-3 rtl:ml-3">
+                    <li key={`${friend.uid}-${index}`} className="px-5 py-[15px] group-data-[theme-color=violet]:hover:bg-slate-100 group-data-[theme-color=green]:hover:bg-green-50/50 group-data-[theme-color=red]:hover:bg-red-50/50 group-data-[theme-color=violet]:dark:hover:bg-zinc-600 group-data-[theme-color=green]:dark:hover:bg-zinc-600 group-data-[theme-color=red]:dark:hover:bg-zinc-600 transition-all ease-in-out rounded">
+                      <div className="flex items-center relative">
+                        <div className="ltr:mr-5 rtl:ml-5">
+                          <div className="flex items-center justify-center rounded-full w-10 h-10 group-data-[theme-color=violet]:bg-violet-500/20 group-data-[theme-color=green]:bg-green-500/20 group-data-[theme-color=red]:bg-red-500/20">
+                            <span className="group-data-[theme-color=violet]:text-violet-500 group-data-[theme-color=green]:text-green-500 group-data-[theme-color=red]:text-red-500">
                               <img src={friend?.profilePhotoURL || "https://thinksport.com.au/wp-content/uploads/2020/01/avatar-.jpg"} alt="Avatar" className="rounded-full w-9 h-9" />
-                            </div>
-                            <div className="flex-grow">
-                              <h5 className="mb-1 text-base truncate dark:text-gray-50">{friend.username}</h5>
-                            </div>
-                            <div className="relative flex-shrink-0 ">
-                              <button onClick={() => handleFriendMenu(index)} className="p-0 text-gray-400 border-0 btn dropdown-toggle dark:text-gray-300" type="button"  >
-                                <i className="text-lg ri-more-2-fill"></i>
-                              </button>
-                              {friend.isOpen && (
-                                <div className="absolute z-50 block w-40 py-2  text-left list-none bg-white border border-transparent rounded shadow-lg  ltr:left-auto ltr:right-0 bg-clip-padding dark:bg-zinc-700 dark:border-zinc-500/50 dark:shadow-sm">
-                                  <ul>
-                                    <li>
-                                      <button onClick={() => handleRemoveFriend(friend.uid)} className="block w-full px-6 py-2 text-sm font-normal text-red-500 bg-red dropdown-item whitespace-nowrap hover:bg-gray-100/50 dark:text-red-300 dark:hover:bg-zinc-500/50 " type="button">
-                                        Remove
-                                        <i className="float-right text-red-500 dark:text-red-300 ri-delete-bin-line"></i>
-                                      </button>
-                                    </li>
-                                  </ul>
-                                </div>
-                              )}
-                            </div>
+                            </span>
                           </div>
-                        </li>
-                      </ul>
+                        </div>
+                        <div className="flex-grow overflow-hidden">
+                          <h5 className="mb-0 text-gray-700 truncate dark:text-gray-50">{friend.username}</h5>
+                        </div>
+                        {/* Dropdown menu */}
+                        <button className="p-2 ml-2 text-gray-500 hover:text-gray-800 dark:text-gray-300" onClick={() => handleFriendMenu(index)}>
+                          <i className="ri-more-2-fill"></i>
+                        </button>
+                        {friend.isOpen && (
+                          <div className="absolute z-50 block w-40 mt-32 py-2 text-left list-none bg-white border border-transparent rounded shadow-lg ltr:left-auto ltr:right-0 bg-clip-padding dark:bg-zinc-700 dark:border-zinc-500/50 dark:shadow-sm">
+                            <ul>
+                              <li>
+                                <button onClick={() => handleRemoveFriend(friend.uid)} className="block w-full px-6 py-2 text-sm font-normal text-red-500 bg-red dropdown-item whitespace-nowrap hover:bg-gray-100/50 dark:text-red-300 dark:hover:bg-zinc-500/50" type="button">
+                                  Remove
+                                  <i className="float-right text-red-500 dark:text-red-300 ri-delete-bin-line"></i>
+                                </button>
+                              </li>
+                            </ul>
+                          </div>
+                        )}
+                      </div>
                     </li>
                   ))
                 ) : (
-                  <div>
-                    <p className="text-gray-500 dark:text-gray-300 text-center">You don't have any friends yet.</p>
-                  </div>
+                  <li>
+                    <div>
+                      <p className="text-gray-500 dark:text-gray-300 text-center">You don't have any friends yet.</p>
+                    </div>
+                  </li>
                 )}
               </ul>
             </div>
