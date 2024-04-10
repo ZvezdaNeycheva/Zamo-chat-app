@@ -119,6 +119,7 @@ export function Chat({ id, toolbar }) {
                   <p>Your messages will appear here.</p>
                 ) : null}
 
+                {/* All message */}
                 {messages.length > 0 &&
                   messages.map((message) => (
                     <li key={message.id} className="clear-both py-4">
@@ -128,11 +129,10 @@ export function Chat({ id, toolbar }) {
                         </div>
 
                         <div>
-                          <div className="flex gap-2 mb-2  ">
-                            <div
-                              className={`relative px-5 py-3 text-white rounded-lg ${message.senderName === user.username ? "ltr:rounded-bl-none" : "ltr:rounded-br-none"} bg-violet-500`} >
+                          <div className="flex gap-2 mb-2">
+                            <div className={`relative px-5 py-3 text-white rounded-lg ${message.senderName === user.username ? "ltr:rounded-bl-none" : "ltr:rounded-br-none"} bg-violet-500`} >
                               <p className="mb-0">
-                                {/* {message.content} */}
+                                {/* message.content */}
                                 {editedMessage === message.id ? (
                                   <div>
                                     <input
@@ -162,10 +162,11 @@ export function Chat({ id, toolbar }) {
                                     message.content
                                   )}
                               </p>
+
+                              {/* Date */}
                               <p className="mt-1 mb-0 text-xs text-right text-white/50">
                                 <i className="align-middle ri-time-line"></i>{" "}
-                                <span className="align-middle">
-                                  {" "}
+                                <span className="align-middle"> {" "}
                                   {`${new Date(message.timestamp).toLocaleDateString()} ${new Date(message.timestamp)
                                     .toLocaleTimeString()
                                     .replace(/:\d+ [AP]M/, "")}`}
@@ -183,6 +184,8 @@ export function Chat({ id, toolbar }) {
                               </div>
 
                             </div>
+
+                            {/* Dropdown for Edit and Delete */}
                             <div className={`relative self-start dropdown ${message.senderId === user.uid ? "right-0" : "left-auto"}`}>{" "}
                               <a href="#" className="p-0 text-gray-400 border-0 btn dropdown-toggle dark:text-gray-100" role="button" data-bs-toggle="dropdown" id="dropdownMenuButton12" >
                                 <div>
@@ -192,14 +195,14 @@ export function Chat({ id, toolbar }) {
                                     </div>
                                   )}
                                   {message?.senderId === user?.uid && activeOptionsMessageId === message.id && (
-                                    <div>
-                                      <div>
-                                        <button onClick={() => startEdit(message)} >
-                                          Edit
-                                        </button>
-                                      </div>
-                                      <button onClick={() => handleDelete(message.id)} >
+                                    <div className="absolute z-50 w-auto py-2 my-6 text-left list-none bg-white border-none rounded shadow-lg ltr:left-auto ltr:right-0 xl:ltr:left-0 xl:ltr:right-auto rtl:left-0 rtl:right-auto xl:rtl:right-0 xl:rtl:left-auto dropdown-menu bg-clip-padding dark:bg-zinc-700 dark:border-gray-600/50" aria-labelledby="dropdownMenuButton12">
+                                      <button onClick={() => startEdit(message)} className="block w-24 px-4 py-2 text-sm font-normal text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/50 dark:text-gray-100 dark:hover:bg-zinc-600 ltr:text-left rtl:text-right">
+                                        Edit
+                                        <i className="text-gray-500 rtl:float-left ltr:float-right dark:text-gray-200 ri-file-copy-line"></i>
+                                      </button>
+                                      <button onClick={() => handleDelete(message.id)} className="block w-24 px-4 py-2 text-sm font-normal text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/50 dark:text-gray-100 dark:hover:bg-zinc-600 ltr:text-left rtl:text-right">
                                         Delete
+                                        <i className="text-gray-500 rtl:float-left ltr:float-right dark:text-gray-200 ri-save-line"></i>
                                       </button>
                                     </div>
                                   )}
