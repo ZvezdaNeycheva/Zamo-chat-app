@@ -132,8 +132,8 @@ export function Profile() {
           {/* Add Background Img */}
           <div className="absolute h-32 w-32 right-20 top-40">
             <input type="file" onChange={handleBackgroundPhoto} id="file" name="file" className="hidden" />
-            <label disabled={loading2} htmlFor="file" 
-            className="left-40 absolute bottom-6 pt-2 pl-3 ri-pencil-fill w-10 h-10 bg-gray-100 rounded-full dark:bg-zinc-800 dark:text-gray-100 cursor-pointer hover:bg-gray-200" />
+            <label disabled={loading2} htmlFor="file"
+              className="left-40 absolute bottom-6 pt-2 pl-3 ri-pencil-fill w-10 h-10 bg-gray-100 rounded-full dark:bg-zinc-800 dark:text-gray-100 cursor-pointer hover:bg-gray-200" />
           </div>
 
           {/* Drop Down for Delete Profile */}
@@ -226,7 +226,12 @@ export function Profile() {
             <div className="pt-3">
               <div>
                 <div>
-                  <p className="mb-1 text-gray-500 dark:text-gray-300">Name</p>
+                  <div className="mb-2 flex items-center">
+                    <span className="inline-block w-3 h-6 mr-2">
+                      <i className="ri-user-fill text-gray-500 dark:text-gray-400"></i>
+                    </span>
+                    <p className="text-gray-500 dark:text-gray-300">Username</p>
+                  </div>
                   {editUsername ? (
                     <>
                       <input value={editedUsername} onChange={(e) => setEditedUsername(e.target.value)} type="text" className="w-full p-2 mb-2 border rounded border-gray-100 dark:border-zinc-600" />
@@ -249,7 +254,12 @@ export function Profile() {
 
                 {/* Email */}
                 <div className="mt-5">
-                  <p className="mb-1 text-gray-500 dark:text-gray-300">Email</p>
+                  <div className="mb-2 flex items-center">
+                    <span className="inline-block w-3 h-6 mr-2">
+                      <i className="ri-mail-fill text-gray-500 dark:text-gray-400"></i>
+                    </span>
+                    <p className="text-gray-500 dark:text-gray-300">Email</p>
+                  </div>
                   {editEmail ? (
                     <>
                       <input value={editedEmail} onChange={(e) => setEditedEmail(e.target.value)} type="text" className="w-full p-2 mb-2 border rounded border-gray-100 dark:border-zinc-600" />
@@ -272,7 +282,12 @@ export function Profile() {
 
                 {/* Location */}
                 <div className="mt-5">
-                  <p className="mb-1 text-gray-500 dark:text-gray-300"> Location </p>
+                  <div className="mb-2 flex items-center">
+                    <span className="inline-block w-3 h-6 mr-2">
+                      <i className="ri-map-pin-2-fill text-gray-500 dark:text-gray-400"></i>
+                    </span>
+                    <p className="text-gray-500 dark:text-gray-300">Location</p>
+                  </div>
                   {editLocation ? (
                     <>
                       <input value={editedLocation} onChange={(e) => setEditedLocation(e.target.value)} type="text" className="w-full p-2 mb-2 border rounded border-gray-100 dark:border-zinc-600" />
@@ -295,7 +310,12 @@ export function Profile() {
 
                 {/* Time */}
                 <div className="mt-5">
-                  <p className="mb-1 text-gray-500 dark:text-gray-300">Create Profile Date</p>
+                  <div className="mb-2 flex items-center">
+                    <span className="inline-block w-3 h-6 mr-2">
+                      <i className="ri-calendar-fill text-gray-500 dark:text-gray-400"></i>
+                    </span>
+                    <p className="text-gray-500 dark:text-gray-300">Create Profile Date</p>
+                  </div>
                   <h5 className="dark:text-gray-50">{user ? user.createdOnReadable : "N/A"}</h5>
                 </div>
               </div>
@@ -304,69 +324,9 @@ export function Profile() {
           {/* End Profile Status and Username*/}
 
           {/* Start user-profile-desc */}
-          <div className="border rounded-lg p-4 bg-white dark:bg-gray-800 shadow-lg w-auto h-auto mr-10 ">
-            <h5 className="mb-1 text-lg font-semibold text-black-700 dark:text-gray-50 border-b-2">Attached Files</h5>
-            {/* Attached Files Drop Down menu*/}
-            <div className="p-5">
-              <div className="p-2 mb-2 border rounded border-gray-100/80 dark:bg-zinc-800 dark:border-transparent">
-                <div className="flex items-center">
-                  <div className="flex items-center justify-center w-10 h-10 rounded ltr:mr-3 group-data-[theme-color=violet]:bg-violet-500/20 group-data-[theme-color=green]:bg-green-500/20 group-data-[theme-color=red]:bg-red-500/20 rtl:ml-3">
-                    <div className="text-xl rounded-lg group-data-[theme-color=violet]:text-violet-500 group-data-[theme-color=green]:text-green-500 group-data-[theme-color=red]:text-red-500 avatar-title ">
-                      <i className="ri-file-text-fill" />
-                    </div>
-                  </div>
-                  {/* File Name */}
-                  <div className="flex-grow">
-                    <div className="text-start">
-                      {attachedFiles.map((fileURL, index) => (
-                        <div key={index} className="p-2 mb-2 border rounded border-gray-100/80 dark:bg-zinc-800 dark:border-transparent">
-                          <div className="flex items-center">
-                            {/* Display file URL */}
-                            <p className="mb-0 text-gray-500 text-13 dark:text-gray-300">{fileURL}</p>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                  {/* Drop Down */}
-                  <div className="ltr:ml-4 rtl:mr-4">
-                    <ul className="flex items-center gap-3 mb-0 text-lg">
-                      <li>
-                        <a href="#" className="px-1 text-gray-500 dark:text-gray-300">
-                          <i className="ri-download-2-line" />
-                        </a>
-                      </li>
-                      <li className="relative flex-shrink-0 dropstart">
-                        <button onClick={() => toggleDropdown(setFileDetailsDropdown)} className="p-0 text-gray-400 border-0 btn dark:text-gray-300" aria-haspopup="true" aria-expanded={openFileDetailsDropdown}>
-                          <i className="text-lg ri-more-fill" />
-                        </button>
+          <div className="border rounded-lg p-4 bg-white dark:bg-gray-800 shadow-lg w-auto h-auto mr-10">
+            <h5 className="mb-1 text-lg font-semibold text-black-700 dark:text-gray-50 border-b-2">Profile Information</h5>
 
-                        {openFileDetailsDropdown && (
-                          <ul className="absolute z-50 block w-40 py-2 text-left list-none bg-white border border-transparent rounded                   shadow-lg rtl:left-0 rtl:right-auto ltr:right-0 ltr:left-auto my-7 dropdown-menu bg-clip-padding                  dark:bg-zinc-700 dark:shadow-sm dark:border-zinc-600">
-                            <li>
-                              <a className="block w-full px-4 py-2 text-sm font-normal text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/50 dark:text-gray-100 dark:hover:bg-zinc-600 ltr:text-left rtl:text-right">
-                                Action
-                              </a>
-                            </li>
-                            <li>
-                              <a className="block w-full px-4 py-2 text-sm font-normal text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/50 dark:text-gray-100 dark:hover:bg-zinc-600 ltr:text-left rtl:text-right">
-                                Another action
-                              </a>
-                            </li>
-                            <li className="my-2 border-b border-gray-100/20 dark:border-zinc-600" />
-                            <li>
-                              <a className="block w-full px-4 py-2 text-sm font-normal text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/50 dark:text-gray-100 dark:hover:bg-zinc-600 ltr:text-left rtl:text-right">
-                                Delete
-                              </a>
-                            </li>
-                          </ul>
-                        )}
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </div>
           </div>
         </div>
       </div>
