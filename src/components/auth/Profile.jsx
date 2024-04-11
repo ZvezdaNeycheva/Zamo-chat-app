@@ -10,23 +10,14 @@ export function Profile() {
 
   const [open, setOpen] = useState(false);
   const [openStatusDropdown, setOpenStatusDropdown] = useState(false);
-  const [openAboutDropdown, setOpenAboutDropdown] = useState(false);
-  const [openFilesDropdown, setOpenFilesDropdown] = useState(false);
-  const [openFileDetailsDropdown, setFileDetailsDropdown] = useState(false);
 
   const [editUsername, setEditUsername] = useState(false);
   const [editEmail, setEditEmail] = useState(false);
   const [editLocation, setEditLocation] = useState(false);
 
-  const [newUsername, setNewUsername] = useState(user ? user.username : "");
-  const [newEmail, setNewEmail] = useState(user ? user.email : "");
-  const [newLocation, setNewLocation] = useState(user ? user.location : "");
-
   const [editedUsername, setEditedUsername] = useState(user ? user.username : "");
   const [editedEmail, setEditedEmail] = useState(user ? user.email : "");
   const [editedLocation, setEditedLocation] = useState(user ? user.location : "");
-
-  const [attachedFiles, setAttachedFiles] = useState([]);
 
   const [localStatus, setLocalStatus] = useState(user ? user.status : "Loading...");
 
@@ -61,13 +52,6 @@ export function Profile() {
       }
     }
   }
-
-  useEffect(() => {
-    if (user && user.fileURL) {
-      const filesArray = Array.isArray(user.fileURL) ? user.fileURL : [user.fileURL];
-      setAttachedFiles(filesArray);
-    }
-  }, [user]);
 
   const handleUsernameUpdate = async () => {
     try {
@@ -131,8 +115,8 @@ export function Profile() {
 
           {/* Add Background Img */}
           <div className="absolute right-20 top-40">
-            <label htmlFor="file" className="relative cursor-pointer">
-              <input type="file" onChange={handleBackgroundPhoto} id="file" name="backgroundFile" className="hidden" />
+            <label htmlFor="background-img-file" className="relative cursor-pointer">
+              <input type="file" onChange={handleBackgroundPhoto} id="background-img-file" name="backgroundFile" className="hidden" />
               <span className="absolute inset-0 flex items-center justify-center w-12 h-12 bg-gray-200 rounded-full dark:bg-zinc-800 dark:text-gray-100 hover:bg-gray-300 transition duration-300">
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -167,8 +151,8 @@ export function Profile() {
           {/* Profile picture */}
           <div className="p-6 text-center">
             <div className="mb-4 relative flex flex-col items-start justify-end top-24">
-              <input type="file" onChange={handleUploadPhoto} id="file" name="file" className="hidden" />
-              <label disabled={loading} htmlFor="file" className="left-40 absolute bottom-6 pt-2 ri-pencil-fill w-10 h-10 bg-gray-100 rounded-full dark:bg-zinc-800 dark:text-gray-100 cursor-pointer hover:bg-gray-200" />
+              <input type="file" onChange={handleUploadPhoto} id="profile-img-file" name="file" className="hidden" />
+              <label disabled={loading} htmlFor="profile-img-file" className="left-40 absolute bottom-6 pt-2 ri-pencil-fill w-10 h-10 bg-gray-100 rounded-full dark:bg-zinc-800 dark:text-gray-100 cursor-pointer hover:bg-gray-200" />
               <img src={user?.profilePhotoURL || "https://thinksport.com.au/wp-content/uploads/2020/01/avatar-.jpg"} className="sm:w-30 sm:h-30 md:w-40 md:h-40 lg:w-60 lg:h-60 xl:w-70 xl:h-70 2xl:w-80 2xl:h-80 p-1 border border-gray-100 rounded-full dark:border-zinc-800" alt="Avatar" />
             </div>
           </div>
