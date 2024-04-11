@@ -85,36 +85,25 @@ export const getUserByUsername = async (username) => {
 const addFriend = async (currentUserUid, friendUid) => {
   try {
     const currentUserData = await getUserByUid(currentUserUid);
-    const updatedFriendsList = [
-      ...(currentUserData.friendsList || []),
-      friendUid,
-    ];
+    const updatedFriendsList = [ ...(currentUserData.friendsList || []), friendUid];
+    
     await updateUserData(currentUserUid, { friendsList: updatedFriendsList });
-    console.log(
-      `Friend added to ${currentUserUid}'s friendsList successfully.`
-    );
+    console.log(`Friend added to ${currentUserUid}'s friendsList successfully.`);
   } catch (error) {
-    console.error(
-      `Error adding friend to ${currentUserUid}'s friendsList:`,
-      error
-    );
+    console.error(`Error adding friend to ${currentUserUid}'s friendsList:`, error);
   }
 };
 
 export const removeFriend = async (currentUserUid, friendUid) => {
   try {
     const currentUserData = await getUserByUid(currentUserUid);
-    const updatedCurrentUserFriendsList = (
-      currentUserData.friendsList || []
-    ).filter((uid) => uid !== friendUid);
-    await updateUserData(currentUserUid, {
-      friendsList: updatedCurrentUserFriendsList,
-    });
+    const updatedCurrentUserFriendsList = (currentUserData.friendsList || []).filter((uid) => uid !== friendUid);
+
+    await updateUserData(currentUserUid, { friendsList: updatedCurrentUserFriendsList, });
 
     const friendData = await getUserByUid(friendUid);
-    const updatedFriendFriendsList = (friendData.friendsList || []).filter(
-      (uid) => uid !== currentUserUid
-    );
+    const updatedFriendFriendsList = (friendData.friendsList || []).filter((uid) => uid !== currentUserUid);
+
     await updateUserData(friendUid, { friendsList: updatedFriendFriendsList });
 
     console.log(`Friend ${friendUid} removed successfully.`);
@@ -133,19 +122,12 @@ export const acceptFriendRequest = async (currentUserUid, senderUid) => {
     await addFriend(senderUid, currentUserUid);
     await addFriend(currentUserUid, senderUid);
 
-    const updatedPendingRequests = (
-      currentUserData.pendingRequests || []
-    ).filter((request) => request !== senderUid);
-    await updateUserData(currentUserUid, {
-      pendingRequests: updatedPendingRequests,
-    });
+    const updatedPendingRequests = (currentUserData.pendingRequests || []).filter((request) => request !== senderUid);
+    await updateUserData(currentUserUid, { pendingRequests: updatedPendingRequests, });
 
-    const updatedSenderSentRequests = (
-      senderUserData.sentRequests || []
-    ).filter((request) => request !== currentUserUid);
-    await updateUserData(senderUid, {
-      sentRequests: updatedSenderSentRequests,
-    });
+    const updatedSenderSentRequests = ( senderUserData.sentRequests || [] ).filter((request) => request !== currentUserUid);
+
+    await updateUserData(senderUid, {sentRequests: updatedSenderSentRequests,});
 
     console.log("Friend request accepted successfully.");
   } catch (error) {
@@ -153,26 +135,16 @@ export const acceptFriendRequest = async (currentUserUid, senderUid) => {
   }
 };
 
-export const rejectFriendRequest = async (
-  currentUserUid,
-  senderUid,
-  currentUserData
-) => {
+export const rejectFriendRequest = async ( currentUserUid, senderUid, currentUserData ) => {
   try {
-    const updatedPendingRequests = currentUserData.pendingRequests.filter(
-      (request) => request !== senderUid
-    );
-    await updateUserData(currentUserUid, {
-      pendingRequests: updatedPendingRequests,
-    });
+    const updatedPendingRequests = currentUserData.pendingRequests.filter((request) => request !== senderUid);
+
+    await updateUserData(currentUserUid, {pendingRequests: updatedPendingRequests,});
 
     const senderUserData = await getUserByUid(senderUid);
-    const updatedSenderSentRequests = (
-      senderUserData.sentRequests || []
-    ).filter((request) => request !== currentUserUid);
-    await updateUserData(senderUid, {
-      sentRequests: updatedSenderSentRequests,
-    });
+    const updatedSenderSentRequests = (senderUserData.sentRequests || []).filter((request) => request !== currentUserUid);
+
+    await updateUserData(senderUid, {sentRequests: updatedSenderSentRequests,});
 
     console.log("Friend request rejected successfully.");
   } catch (error) {
@@ -200,9 +172,7 @@ export const subscribeToUserFriendsListChanges = async (uid, onChange) => {
         })
       );
 
-      const filteredFriendsData = friendsData.filter(
-        (friend) => friend !== null
-      );
+      const filteredFriendsData = friendsData.filter((friend) => friend !== null);
       onChange(filteredFriendsData);
     });
   } catch (error) {

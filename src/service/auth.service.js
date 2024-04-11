@@ -51,21 +51,21 @@ export async function uploadProfileImage(file, user, setLoading) {
 }
 
 //handleBackgroundPhoto
-export async function uploadBackgroundPhoto(file, user, setLoading) {
-  const fileRef = storageRef(storage, user.uid + "_background.png");
-  setLoading(true);
+export async function uploadBackgroundPhoto(backgroundfile, user, setLoading2) {
+  const backgroundFileRef = storageRef(storage, user.uid + "_background.png");
+  setLoading2(true);
 
   try {
-    await uploadBytes(fileRef, file);
-    const photoURL = await getDownloadURL(fileRef);
+    await uploadBytes(backgroundFileRef, backgroundfile);
+    const photoURL = await getDownloadURL(backgroundFileRef);
     await updateUserData(user.uid, { profileBackgroundURL: photoURL });
 
-    setLoading(false);
+    setLoading2(false);
     alert("Background image uploaded successfully.");
     return photoURL;
   } catch (error) {
     console.error("Error uploading background image:", error);
-    setLoading(false);
+    setLoading2(false);
   }
 }
 

@@ -130,10 +130,15 @@ export function Profile() {
           <img src={user?.profileBackgroundURL || "https://images.pexels.com/photos/255379/pexels-photo-255379.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"} className="w-full h-80 object-cover absolute" alt="background" />
 
           {/* Add Background Img */}
-          <div className="absolute h-32 w-32 right-20 top-40">
-            <input type="file" onChange={handleBackgroundPhoto} id="file" name="file" className="hidden" />
-            <label disabled={loading2} htmlFor="file"
-              className="left-40 absolute bottom-6 pt-2 pl-3 ri-pencil-fill w-10 h-10 bg-gray-100 rounded-full dark:bg-zinc-800 dark:text-gray-100 cursor-pointer hover:bg-gray-200" />
+          <div className="absolute right-20 top-40">
+            <label htmlFor="file" className="relative cursor-pointer">
+              <input type="file" onChange={handleBackgroundPhoto} id="file" name="backgroundFile" className="hidden" />
+              <span className="absolute inset-0 flex items-center justify-center w-12 h-12 bg-gray-200 rounded-full dark:bg-zinc-800 dark:text-gray-100 hover:bg-gray-300 transition duration-300">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                </svg>
+              </span>
+            </label>
           </div>
 
           {/* Drop Down for Delete Profile */}
