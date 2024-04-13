@@ -28,11 +28,22 @@ export function Chats() {
         setFilteredFriendsList(friendsList.filter(friend => ((friend.username).toLocaleLowerCase()).includes(search.toLocaleLowerCase())));
     }, [search, friendsList]);
 
+    useEffect(() => {
+        const lastSelectedFriendUid = localStorage.getItem('lastSelectedFriendUid');
+        if (!lastSelectedFriendUid) return;
+
+        const friend = filteredFriendsList.find((friend) => friend.uid === lastSelectedFriendUid);
+        if (!friend) return;
+        selectFriend(friend);
+    }, [filteredFriendsList]);
+
     const updateFriendsList = async () => {
         await subscribeToUserFriendsListChanges(user.uid, setFriendsList);
     };
 
     const selectFriend = async (friend) => {
+        localStorage.setItem('lastSelectedFriendUid', friend.uid);
+
         const participants = [user?.uid, friend.uid];
         try {
 
