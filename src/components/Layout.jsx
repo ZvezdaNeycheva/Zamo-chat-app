@@ -1,14 +1,18 @@
 import { Meta } from "./Meta";
 import { AppBar } from "./AppBar";
+import { ProfileDialog } from "./ProfileDialog";
+import { useState } from "react";
 
 export function Layout({ selectedAppBarButton, sideBarContent, mainContent, UserProfileDetailsContent }) {
+    const [isProfileDialogVisible, setIsProfileDialogVisible] = useState(false);
+
     return (
         <>
             <Meta title={'Chat App'}></Meta>
 
             <div className="lg:flex">
                 {/* <!-- Start left sidebar-menu --> */}
-                <AppBar selected={selectedAppBarButton} />
+                <AppBar selected={selectedAppBarButton} onProfile={() => setIsProfileDialogVisible(true)} />
                 {/* <!-- end left sidebar-menu --> */}
 
                 {sideBarContent && (
@@ -33,7 +37,10 @@ export function Layout({ selectedAppBarButton, sideBarContent, mainContent, User
                         </div>
                     </div>
                 )}
+
+
             </div>
+            {isProfileDialogVisible && <ProfileDialog onClose={() => setIsProfileDialogVisible(false)} />}
         </>
     )
 }

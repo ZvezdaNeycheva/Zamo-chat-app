@@ -3,14 +3,18 @@ import { logoutUser } from "../service/auth.service";
 import { AppContext } from "../AppContext";
 import React, { useContext, useState } from "react";
 
-export function AppBar({ selected }) {
+export function AppBar({ selected, onProfile }) {
   const { user, setUser } = useContext(AppContext);
-  const [openSidebar, setOpenSidebar] = useState(false);
+  const [isProfileDropdownVisible, setIsProfileDropdownVisible] = useState(false);
   const navigate = useNavigate();
 
-  function toggleSidebarDropdown() {
-    setOpenSidebar((prevOpen) => !prevOpen);
-    console.log("openSidebar:" + openSidebar);
+  function toggleProfileDropdown() {
+    setIsProfileDropdownVisible((prevOpen) => !prevOpen);
+  }
+
+  function handleProfileClick() {
+    onProfile?.();
+    setIsProfileDropdownVisible(false);
   }
 
   const logout = async () => {
@@ -115,19 +119,19 @@ export function AppBar({ selected }) {
 
             {/*profile photo*/}
             <li className="relative lg:mt-4 dropdown lg:dropup">
-              <button onClick={toggleSidebarDropdown} className={`${openSidebar ? "group-[.active]:rotate-180" : ""} dropdown-toggle" id="dropdownButton2" data-bs-toggle="dropdown`} >
+              <button onClick={toggleProfileDropdown} className={`${isProfileDropdownVisible ? "group-[.active]:rotate-180" : ""} dropdown-toggle" id="dropdownButton2" data-bs-toggle="dropdown`} >
                 <img src={user?.profilePhotoURL || "https://thinksport.com.au/wp-content/uploads/2020/01/avatar-.jpg"} alt="Avatar" className="w-10 h-10 p-1 mx-auto rounded-full bg-gray-50 dark:bg-zinc-700" />
               </button>
 
               {/* Dropdown */}
-              <div className={`${openSidebar ? "block" : "hidden"}`} aria-labelledby="dropdownButton2" >
+              <div className={`${isProfileDropdownVisible ? "block" : "hidden"}`} aria-labelledby="dropdownButton2" >
                 <ul className="absolute bottom-5 z-40 float-left w-40 py-2 mx-4 mb-12 text-left list-none  bg-white border-none rounded-lg shadow-lg bg-clip-padding dark:bg-zinc-700" aria-labelledby="dropdownButton2" >
                   {/* Profile */}
                   <li>
-                    <NavLink to="/profile" className="block w-full px-4 py-2 text-sm font-normal  text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/30    dark:text-gray-100 dark:hover:bg-zinc-600/50" >
+                    <a className="block w-full px-4 py-2 text-sm font-normal cursor-pointer text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/30    dark:text-gray-100 dark:hover:bg-zinc-600/50" onClick={handleProfileClick}>
                       Profile
                       <i className="text-gray-500 rtl:float-left ltr:float-right ri-profile-line text-16"></i>
-                    </NavLink>
+                    </a>
                   </li>
 
                   <li>
