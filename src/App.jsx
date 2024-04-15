@@ -8,7 +8,7 @@ import { LockScreen } from "./components/auth/LockScreen";
 import { Login } from "./components/auth/Login";
 import { Register } from "./components/auth/Register";
 import { Meta } from "./components/Meta";
-import { Profile } from "./components/auth/Profile";
+// import { Profile } from "./components/auth/Profile";
 import { AppBar } from "./components/AppBar";
 import { AppContext } from "./AppContext";
 import Authenticated from "./components/auth/Authenticated";
@@ -59,7 +59,7 @@ function App() {
           <Route path="/groups/:groupId/channels/:channelId" element={<Layout selectedAppBarButton={'groups'} sideBarContent={<Channels />} mainContent={<ChannelChat />} />} />
           <Route path="/contacts" element={<Layout selectedAppBarButton={'contacts'} sideBarContent={<Contacts />} />} />
           <Route path="/meta" element={<Meta />} />
-          <Route path="/profile" element={<Layout selectedAppBarButton={'profile'} mainContent={<Authenticated> <Profile /> </Authenticated>} />} />
+          {/* <Route path="/profile" element={<Layout selectedAppBarButton={'profile'} mainContent={<Authenticated> <Profile /> </Authenticated>} />} /> */}
           <Route path="/sidebar-menu" element={<AppBar />} />
           <Route path="/video" element={<Layout selectedAppBarButton={'video'} sideBarContent={<Chats /> || <Channels />} mainContent={<Video />} />} />
           <Route path="/audio" element={<Layout selectedAppBarButton={'audio'} sideBarContent={<Chats /> || <Channels />} mainContent={<Audio />} />} />
