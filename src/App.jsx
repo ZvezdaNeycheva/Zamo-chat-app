@@ -22,7 +22,7 @@ import { DirectChat } from "./components/chats/DirectChat";
 import { ChannelChat } from "./components/chats/ChannelChat";
 import { Video } from "./components/DyteSDK/Video";
 import { Audio } from "./components/DyteSDK/Audio";
-import { UserProfileDetails } from "./components/chats/UserProfileDetails";
+// import { UserProfileDetails } from "./components/chats/UserProfileDetails";
 import { Logo } from "./components/Logo";
 
 function App() {
