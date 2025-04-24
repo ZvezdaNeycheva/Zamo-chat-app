@@ -2,6 +2,7 @@
   "name": "my-project",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "dependencies": {
     "@dytesdk/react-ui-kit": "^1.66.0",
     "@dytesdk/react-web-core": "^1.36.3",
