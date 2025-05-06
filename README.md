@@ -12,8 +12,8 @@ Zamo is a cutting-edge application crafted for today's dynamic individuals and t
 
 ### Technologies used
 
-- JavaScript
 - React
+- React-router
 - HTML
 - Tailwind CSS
 - Dyte SDK
@@ -36,8 +36,11 @@ npm start
 ### Usage
 
 - **Public Interface: Where Engagement Begins**
-  <br />Zamo's public section greets users with a simple and efficient Login page, ensuring existing users securely access their accounts and new users navigate an intuitive registration process. Designed with user experience in mind, this entry point facilitates a smooth transition into Zamo's realm of advanced communication and collaboration.
+<br/>Users enjoy a visually appealing welcome page that guides them smoothly. Each user could choose 'Login' or 'Create an account' to get started its way. The simple and efficient Login page ensures users securely access their accounts and new users navigate an intuitive registration process.
 
+<img src="./public/assets/images/scrwelcomepage.png"/>
+<br/>
+<br/>
 <img src="./public/assets/images/scrlogin.png"/>
 <br/>
 
@@ -61,13 +64,13 @@ npm start
 
 - **Channels: Enriching Group Conversations**
   <br/>Upon the creation of a group in Zamo, a default #General channel is automatically established, serving as the foundational space for group discussions. However, the platform goes beyond this by empowering users with the capability to create additional channels within each group.
-  <br/>The channels operate similarly to direct chats but are distinct in their facilitation of group conversations, allowing multiple users to engage with each other simultaneously.This feature is ideal for organizing discussions around specific topics, projects, or interests within the larger group context. Users who create channels retain the authority to delete them.
+  <br/>The channels operate similarly to direct chats but are distinct in their facilitation of group conversations, allowing multiple users to engage with each other simultaneously. This feature is ideal for organizing discussions around specific topics, projects, or interests within the larger group context. Users who create channels retain the authority to delete them.
 
 <img src="./public/assets/images/scrchannels.png"/>
 <br/>
 
 - **Contacts: Your Hub for Connections**
-  The Contacts page in Zamo acts as a central hub for managing and expanding your friend network. It features a comprehensive list of current friends with an easy-to-use search function. Adding friends directly from this page streamlines the process, making your network easily accessible. Incoming friend requests are prominently displayed, simplifying the process of welcoming new connections into your circle.
+  <br/>The Contacts page in Zamo acts as a central hub for managing and expanding your friend network. It features a comprehensive list of current friends with an easy-to-use search function. Adding friends directly from this page streamlines the process, making your network easily accessible. Incoming friend requests are prominently displayed, simplifying the process of welcoming new connections into your circle.
 
 <img src="./public/assets/images/scrcontacts.png"/>
 <br/>
