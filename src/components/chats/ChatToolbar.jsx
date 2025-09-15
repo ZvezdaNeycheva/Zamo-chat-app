@@ -1,13 +1,18 @@
 import React, { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import { createDyteCallRoom } from "../../service/Dyte/dyte.calls.service";
 
 export function ChatToolbar({ otherUser, channel, onProfile }) {
     const [isOtherUserProfileVisible, setIsOtherUserProfileVisible] = useState(false);
     const navigate = useNavigate();
 
     const handleVideoCall = () => {
-        navigate("/video");
+        if (!otherUser?.uid) return;
+        try {
+            navigate(`/video/${otherUser.uid}`, { state: { username: otherUser.username, autoCall: true } });
+
+        } catch (error) {
+            console.error("Error initiating video call:", error);
+        }
     };
 
     const handleAudioCall = () => {

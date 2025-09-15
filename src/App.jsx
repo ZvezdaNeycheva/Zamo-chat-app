@@ -20,10 +20,9 @@ import { Chats } from "./components/chats/Chats";
 import { Channels } from "./components/Channels";
 import { DirectChat } from "./components/chats/DirectChat";
 import { ChannelChat } from "./components/chats/ChannelChat";
-import { Video } from "./components/DyteSDK/Video";
-import { Audio } from "./components/DyteSDK/Audio";
 // import { UserProfileDetails } from "./components/chats/UserProfileDetails";
 import { Logo } from "./components/Logo";
+import DirectVideo from "./components/Video/DirectVideo";
 
 function App() {
   const [dbUser, loading, error] = useAuthState(auth);
@@ -61,7 +60,7 @@ function App() {
           <Route path="/meta" element={<Meta />} />
           {/* <Route path="/profile" element={<Layout selectedAppBarButton={'profile'} mainContent={<Authenticated> <Profile /> </Authenticated>} />} /> */}
           <Route path="/sidebar-menu" element={<AppBar />} />
-          <Route path="/video" element={<Layout selectedAppBarButton={'video'} sideBarContent={<Chats /> || <Channels />} mainContent={<Video />} />} />
+          <Route path="/video/:id" element={<Layout selectedAppBarButton={'chats'} mainContent={<DirectVideo />} />} />
           <Route path="/audio" element={<Layout selectedAppBarButton={'audio'} sideBarContent={<Chats /> || <Channels />} mainContent={<Audio />} />} />
         </Routes>
       </Router>

@@ -102,16 +102,16 @@ export function Chat({ id, toolbar }) {
   return (
     <>
       {/* <!-- Start User chat --> */}
-      <div className="w-full overflow-hidden transition-all duration-150 bg-white user-chat dark:bg-zinc-800">
-        <div className="lg:flex">
+      <div className=" ">
+        <div className=" ">
           {/* <!-- start chat conversation section --> */}
 
-          <div className="relative w-full overflow-hidden ">
+          <div className="flex flex-col min-h-screen w-full">
             {toolbar}
             {/* <!-- end chat user head --> */}
 
             {/* <!-- start chat conversation --> */}
-            <div className="h-[80vh] overflow-scroll p-4 lg:p-6">
+            <div className="flex-1 overflow-auto p-4 lg:p-6">
               {/* {fetching Messages} */}
               <ul className="mb-0">
                 {!id ? <p>Select a friend to start a chat.</p> : null}
