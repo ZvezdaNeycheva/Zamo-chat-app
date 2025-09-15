@@ -4,7 +4,7 @@ export default function ModalCallerCalling({ callee, onCancel }) {
       <div className="bg-white p-6 rounded-xl shadow-lg flex flex-col items-center gap-4">
         <p className="text-lg font-semibold">Calling {callee}...</p>
         <button
-          className="px-4 py-2 bg-red-500 text-white rounded"
+          className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded"
           onClick={onCancel}
         >
           Cancel Call
