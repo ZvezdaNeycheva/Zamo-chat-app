@@ -260,7 +260,7 @@ export default function DirectVideo() {
   return (
     <div>
 
-      {isCalling && selectedUser && (
+      {activeCall && (
         <ModalCallerCalling callee={selectedUser.username} onCancel={handleEndCall} />
       )}
 
@@ -290,9 +290,9 @@ export default function DirectVideo() {
         />
       )}
       {/* Video streams */}
-      {(activeCall || isCalling || incomingCall) && (
+      {(incomingCall) && (
         <div className="fixed inset-0 bg-black/80 flex flex-col items-center justify-center z-50">
-          {remoteStream ? (
+          {remoteStream && (
             <div className="relative w-full max-w-5xl h-[70vh] bg-black rounded-xl overflow-hidden shadow-lg">
               <RemoteVideo ref={remoteVideoRef} stream={remoteStream} />
 
@@ -313,15 +313,6 @@ export default function DirectVideo() {
                 </div>
               )}
             </div>
-          ) : (
-            activeCall && (
-              <div className="bg-gray-900 p-8 rounded-xl shadow-xl text-white flex flex-col items-center">
-                <p className="text-lg">Waiting for the other participant...</p>
-                <div className="mt-4">
-                  <div className="w-16 h-16 border-4 border-white border-t-transparent rounded-full animate-spin"></div>
-                </div>
-              </div>
-            )
           )}
         </div>
       )}
