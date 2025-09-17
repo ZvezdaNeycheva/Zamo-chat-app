@@ -1,5 +1,6 @@
 import { onValue, push, ref, remove, set, update, get } from "firebase/database";
 import { db } from "./firebase-config";
+import { getStorage, ref as refFromURL, deleteObject} from 'firebase/storage';
 
 const date = new Date().toLocaleDateString();
 const time = new Date().toLocaleTimeString().replace(/:\d+ [AP]M/, "");
@@ -183,4 +184,15 @@ export const sendPicMessage = async (newMessage, id, userData, picURL) => {
   message.id = messageId;
 
   await set(ref(db, `rooms/${id}/messages/${messageId}`), message);
+};
+
+export const handleDeletePicFromStorage = async (picURL) => {
+  const storage = getStorage();
+  const fileRef = refFromURL(storage, picURL); 
+  try {
+    await deleteObject(fileRef);
+    console.log("Picture deleted successfully");
+  } catch (error) {
+    console.error("Error deleting picture:", error);
+  }
 };

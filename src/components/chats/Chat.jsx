@@ -1,7 +1,7 @@
 import { useState, useEffect, useContext, useRef, useLayoutEffect, } from "react";
 import { AppContext } from "../../AppContext";
 import { ChatUploadFile } from "./ChatUploadFile";
-import { getMessages, editMessage, sendMessage, deleteMessage, reactToMessage, } from "../../service/message.service";
+import { getMessages, editMessage, sendMessage, deleteMessage, reactToMessage, handleDeletePicFromStorage, } from "../../service/message.service";
 
 export function Chat({ id, toolbar }) {
   const { user } = useContext(AppContext);
@@ -12,14 +12,6 @@ export function Chat({ id, toolbar }) {
   const [editedMessageContent, setEditedMessageContent] = useState("");
   const [activeOptionsMessageId, setActiveOptionsMessageId] = useState(null);
   const messagesEndRef = useRef(null);
-
-  const [pictureURL, setPictureURL] = useState({});
-  const handleFileUploaded = (url) => {
-    setPictureURL((prevState) => ({
-      ...prevState,
-      [url]: url,
-    }));
-  };
 
   useEffect(() => {
     const unsubscribe = getMessages(id, setMessages, setLoadingMessages);
@@ -40,13 +32,9 @@ export function Chat({ id, toolbar }) {
 
   const handleAcceptMessage = async (newMessage) => {
     if (!newMessage.trim()) return;
-    if (!pictureURL) return;
-    const messageToSend = pictureURL
-      ? `${newMessage}\n${pictureURL}`
-      : newMessage;
     await sendMessage(newMessage, id, user);
     setNewMessage("");
-  };
+  };  
 
   const handleEdit = async (mId, newContent) => {
     setEditedMessage(mId);
@@ -88,9 +76,14 @@ export function Chat({ id, toolbar }) {
     setEditedMessageContent("");
   };
 
-  const handleDelete = async (mId) => {
+  const handleDelete = async (mId, picURL) => {
     try {
       await deleteMessage(mId, id);
+
+      if (picURL) {
+        await handleDeletePicFromStorage(picURL);
+      }
+
       setMessages((prevMessages) =>
         prevMessages.filter((message) => message.id !== mId)
       );
@@ -148,16 +141,9 @@ export function Chat({ id, toolbar }) {
                                       Cancel
                                     </button>
                                   </div>
-                                ) : // message.content === pictureURL ?
-                                  message.pic && Object.keys(pictureURL).includes(message.pic
-                                  ) ? (
-                                    Object.keys(pictureURL)
-                                      .filter((e) => e === message.pic)
-                                      .map((url) => (
-                                        <div key={url}>
-                                          <img src={url} alt="Uploaded" style={{ maxHeight: "100px" }} />
-                                        </div>
-                                      ))
+                                ) :
+                                  message.pic ? (
+                                    <img src={message.pic} alt="Uploaded" style={{ maxHeight: "100px" }} />
                                   ) : (
                                     message.content
                                   )}
@@ -200,7 +186,7 @@ export function Chat({ id, toolbar }) {
                                         Edit
                                         <i className="text-gray-500 rtl:float-left ltr:float-right dark:text-gray-200 ri-file-copy-line"></i>
                                       </button>
-                                      <button onClick={() => handleDelete(message.id)} className="block w-24 px-4 py-2 text-sm font-normal text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/50 dark:text-gray-100 dark:hover:bg-zinc-600 ltr:text-left rtl:text-right">
+                                      <button onClick={() => handleDelete(message.id, message.pic)} className="block w-24 px-4 py-2 text-sm font-normal text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/50 dark:text-gray-100 dark:hover:bg-zinc-600 ltr:text-left rtl:text-right">
                                         Delete
                                         <i className="text-gray-500 rtl:float-left ltr:float-right dark:text-gray-200 ri-save-line"></i>
                                       </button>
@@ -251,7 +237,7 @@ export function Chat({ id, toolbar }) {
                           </button>
                         </li>
 
-                        <ChatUploadFile handleFileUploaded={handleFileUploaded} id={id} />
+                        <ChatUploadFile id={id} />
                         {/* Send Message */}
                         <li className="inline-block">
                           <button type="submit" onClick={() => { handleAcceptMessage(newMessage); }} className="text-white border-transparent btn group-data-[theme-color=violet]:bg-violet-500 group-data-[theme-color=green]:bg-green-500 group-data-[theme-color=red]:bg-red-500 group-data-[theme-color=violet]:hover:bg-violet-600 group-data-[theme-color=green]:hover:bg-green-600" >
