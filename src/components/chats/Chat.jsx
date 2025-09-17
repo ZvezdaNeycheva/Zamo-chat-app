@@ -40,13 +40,9 @@ export function Chat({ id, toolbar }) {
 
   const handleAcceptMessage = async (newMessage) => {
     if (!newMessage.trim()) return;
-    if (!pictureURL) return;
-    const messageToSend = pictureURL
-      ? `${newMessage}\n${pictureURL}`
-      : newMessage;
     await sendMessage(newMessage, id, user);
     setNewMessage("");
-  };
+  };  
 
   const handleEdit = async (mId, newContent) => {
     setEditedMessage(mId);
@@ -148,16 +144,9 @@ export function Chat({ id, toolbar }) {
                                       Cancel
                                     </button>
                                   </div>
-                                ) : // message.content === pictureURL ?
-                                  message.pic && Object.keys(pictureURL).includes(message.pic
-                                  ) ? (
-                                    Object.keys(pictureURL)
-                                      .filter((e) => e === message.pic)
-                                      .map((url) => (
-                                        <div key={url}>
-                                          <img src={url} alt="Uploaded" style={{ maxHeight: "100px" }} />
-                                        </div>
-                                      ))
+                                ) :
+                                  message.pic ? (
+                                    <img src={message.pic} alt="Uploaded" style={{ maxHeight: "100px" }} />
                                   ) : (
                                     message.content
                                   )}
