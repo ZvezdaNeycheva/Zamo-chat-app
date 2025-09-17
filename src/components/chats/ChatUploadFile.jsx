@@ -12,8 +12,9 @@ export function ChatUploadFile({id}) {
    async function handleUploadFile(e) {
         e.preventDefault();
         if (e.target.files[0] !== null) {
-          setFile(e.target.files[0]);
-          await handleMessageSend(selectedFile);
+            const selectedFile = e.target.files[0];
+            if (!selectedFile) return;
+            await handleMessageSend(selectedFile);
         }
     }
 
@@ -28,7 +29,7 @@ export function ChatUploadFile({id}) {
             });
     };
 
-    const handleMessageSend = async () => {
+    const handleMessageSend = async (file) => {
         try {
             if (!file) {
                 console.error('No file selected.');
@@ -36,7 +37,7 @@ export function ChatUploadFile({id}) {
             }
 
             const picURL = await uploadFileToStorage(file);
-            await sendPicMessage(picURL, id, user, picURL);//
+            await sendPicMessage(picURL, id, user, picURL);
             setPicURL('')
             setFile(null);
         } catch (error) {
@@ -57,6 +58,11 @@ export function ChatUploadFile({id}) {
                 </div>
                 <i className="ri-attachment-line"></i>
             </label>
+            {file && (
+                <button onClick={handleMessageSend} type="submit" className="text-white border-transparent btn group-data-[theme-color=violet]:bg-violet-500 group-data-[theme-color=green]:bg-green-500 group-data-[theme-color=red]:bg-red-500 group-data-[theme-color=violet]:hover:bg-violet-600 group-data-[theme-color=green]:hover:bg-green-600 ml-2">
+                    <i className="ri-send-plane-fill"></i>
+                </button>
+            )}
         </div>
     )
 }
