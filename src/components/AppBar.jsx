@@ -12,7 +12,7 @@ export function AppBar({ selected, onProfile }) {
     setIsProfileDropdownVisible(false);
   }
 
-  function test() {
+  function theme() {
     const html = document.querySelector("html");
     const currentMode = html.getAttribute("data-mode");
     const newMode = currentMode === "light" ? "dark" : "light";
@@ -97,7 +97,7 @@ export function AppBar({ selected, onProfile }) {
           <ul className="lg:block" id="toggle-between-dark-light-mode">
             {/*dark mode need to change attribute(a)*/}
             <li
-              onClick={test}
+              onClick={theme}
               className="hidden text-center light-dark-mode nav-item lg:block"
             >
               <a href="#" className="hidden dark:block dark:text-violet-100/80">

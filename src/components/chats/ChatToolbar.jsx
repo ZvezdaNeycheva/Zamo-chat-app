@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export function ChatToolbar({ otherUser, channel, onProfile }) {
     const [isOtherUserProfileVisible, setIsOtherUserProfileVisible] = useState(false);
@@ -13,10 +13,6 @@ export function ChatToolbar({ otherUser, channel, onProfile }) {
         } catch (error) {
             console.error("Error initiating video call:", error);
         }
-    };
-
-    const handleAudioCall = () => {
-        navigate("/audio");
     };
 
     const toggleProfileDetails = () => {
@@ -52,16 +48,10 @@ export function ChatToolbar({ otherUser, channel, onProfile }) {
                     </div>
                     <div className="col-span-4 sm:col-span-8">
                         <ul className="flex items-center justify-end lg:gap-4">
-                            {/* Audio Call */}
-                            <li>
-                                <button onClick={handleAudioCall} type="button" className=" text-xl text-gray-500 border-0 btn dark:text-gray-300 lg:block" data-tw-toggle="modal" data-tw-target="#audiCallModal">
-                                    <i className="ri-phone-line"></i>
-                                </button>
-                            </li>
                             {/* Video Call */}
                             <li>
                                 <button onClick={handleVideoCall} type="button" className="text-xl text-gray-500 border-0 btn dark:text-gray-300 lg:block" data-tw-toggle="modal" data-tw-target="#videoCallModal">
-                                    <i className="ri-vidicon-line"></i>
+                                    <i className="ri-phone-line"></i>
                                 </button>
                             </li>
                             {/* UserProfileDetails */}

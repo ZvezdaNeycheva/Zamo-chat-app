@@ -2,7 +2,7 @@
 
 ### Description
 
-Zamo is a cutting-edge application crafted for today's dynamic individuals and teams. Designed with modernity in mind, Zamo offers a comprehensive solution for real-time communication and collaboration. Whether it's chat, voice, or video calls, our platform ensures seamless interaction among users. Share information, exchange resources, and spark discussions with ease. Zamo is more than just an app. It's a partner in fostering meaningful connections and collaborative success.
+Zamo is a cutting-edge application crafted for today's dynamic individuals and teams. Designed with modernity in mind, Zamo offers a comprehensive solution for real-time communication and collaboration. Whether it's chat or video calls, our platform ensures seamless interaction among users. Share information, exchange resources, and spark discussions with ease. Zamo is more than just an app. It's a partner in fostering meaningful connections and collaborative success.
 
 ### Creators
 
@@ -16,7 +16,7 @@ Zamo is a cutting-edge application crafted for today's dynamic individuals and t
 - React-router
 - HTML
 - Tailwind CSS
-- Dyte SDK
+- WebRTC
 - Firebase
 - ESLint
 - git
@@ -73,6 +73,12 @@ npm start
   <br/>The Contacts page in Zamo acts as a central hub for managing and expanding your friend network. It features a comprehensive list of current friends with an easy-to-use search function. Adding friends directly from this page streamlines the process, making your network easily accessible. Incoming friend requests are prominently displayed, simplifying the process of welcoming new connections into your circle.
 
 <img src="./public/assets/images/scrcontacts.png"/>
+<br/>
+
+- **Video calls: Real-Time Conversations Beyond Text**
+  <br/>For moments when typing just isn’t enough, Zamo empowers users with instant video calling powered by WebRTC and Firebase signaling. When initiating a call, the recipient is immediately notified—ensuring real-time, face-to-face communication without delays. 
+
+<!-- <img src="./public/assets/images/video.png"/> -->
 <br/>
 
 ### Test Accounts:
