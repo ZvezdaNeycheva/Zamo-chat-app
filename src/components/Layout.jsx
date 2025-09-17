@@ -23,7 +23,7 @@ export function Layout({
         <>
           <Meta title={"Chat App"}></Meta>
 
-          <div className="flex flex-col lg:flex-row min-h-screen overflow-hidden">
+          <div className="flex flex-col lg:flex-row min-h-screen max-h-screen overflow-hidden">
             {/* AppBar */}
             <AppBar
               selected={selectedAppBarButton}
@@ -32,20 +32,20 @@ export function Layout({
 
             {/* Left Sidebar */}
             {sideBarContent && (
-              <div className="chat-leftsidebar w-full lg:w-[380px] overflow-y-auto bg-slate-50 dark:bg-zinc-700">
+              <div className="chat-leftsidebar w-full lg:w-[380px] overflow-y-scroll bg-slate-50 dark:bg-zinc-700">
                 {sideBarContent}
               </div>
             )}
 
             {/* Main Content */}
-            <div className={`flex-1 min-h-0 overflow-auto bg-white dark:bg-zinc-800 ${mainContent && !sideBarContent ? "bg-slate-50" : ""
+            <div className={`flex-1 min-h-0 overflow-scroll bg-white dark:bg-zinc-800 ${mainContent && !sideBarContent ? "bg-slate-50" : ""
               }`}>
               {mainContent}
             </div>
 
             {/* Right Sidebar */}
             {UserProfileDetailsContent && (
-              <div className="chat-rightsidebar w-full lg:w-[380px] overflow-y-auto bg-slate-50 dark:bg-zinc-700">
+              <div className="chat-rightsidebar w-full lg:w-[380px] overflow-y-hidden bg-slate-50 dark:bg-zinc-700">
                 <div>
                   <div className="tab-content active">
                     {" "}

@@ -3,7 +3,7 @@ import { db } from "./firebase-config";
 
 // helper
 const log = (action, data) => {
-  console.log(`[${new Date().toISOString()}] 🔥 ${action}:`, data);
+  console.log(`[${new Date().toISOString()}] ${action}:`, data);
 };
 
 export const createTable = async () => {
@@ -33,7 +33,6 @@ export const listenForAnswer = (callId, callback) => {
   onValue(ref(db, `calls/${callId}/answer`), async (snapshot) => {
     const answer = snapshot.val();
     if (answer) {
-      console.log("Answer received from DB:", answer);
       log("answerReceived", { callId, type: answer.type });
       callback(answer);
     }
@@ -70,7 +69,6 @@ export const addIceCandidateToDb = async (callId, candidate, isCaller) => {
     role: isCaller ? "caller" : "callee",
   });
   await push(ref(db, candidatePath), candidate.toJSON());
-  console.log("Adding ICE candidate to DB:", candidate, "at path:", candidatePath);
 };
 
 export const listenForIceCandidates = (callId, isCaller, callback) => {
@@ -79,7 +77,6 @@ export const listenForIceCandidates = (callId, isCaller, callback) => {
     : `calls/${callId}/callerCandidates`;
 
   log("listenForIceCandidates", { callId, path: candidatePath });
-  console.log("Listening for ICE candidates at path:", candidatePath);
 
   onChildAdded(ref(db, candidatePath), (snapshot) => {
     const candidate = snapshot.val();
