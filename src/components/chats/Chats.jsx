@@ -87,7 +87,7 @@ export function Chats() {
                 </div>
 
                 <div className="overflow-auto">
-                    <h5 className="px-6 mb-4 text-16 dark:text-gray-50">Friends</h5>
+                    <h5 className="px-6 mb-6 text-16 dark:text-gray-50">Friends</h5>
                     <div className="h-auto px-2">
                         <ul className="chat-user-list">
                             {filteredFriendsList.map((user) => (

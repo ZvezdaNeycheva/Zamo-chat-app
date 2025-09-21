@@ -95,7 +95,7 @@ export function Chat({ id, toolbar }) {
   return (
     <>
       {/* <!-- Start User chat --> */}
-      <div className=" ">
+      <div className="mt-2 ">
         <div className=" ">
           {/* <!-- start chat conversation section --> */}
 
