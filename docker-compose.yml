@@ -1,0 +1,25 @@
+version: '3'
+services:
+  chat-app:
+    build: .
+    ports:
+      - "3000:3000"   # dev server
+      - "4040:4040"   # ngrok dashboard
+    cpus: "0.5"
+    working_dir: /src
+    volumes:
+      - .:/src:cached
+      - /node_modules
+    environment:
+      NODE_ENV: development
+       # Pass all env vars from .env
+      VITE_FIREBASE_API_KEY: ${VITE_FIREBASE_API_KEY}
+      VITE_FIREBASE_AUTH_DOMAIN: ${VITE_FIREBASE_AUTH_DOMAIN}
+      VITE_FIREBASE_PROJECT_ID: ${VITE_FIREBASE_PROJECT_ID}
+      VITE_FIREBASE_STORAGE_BUCKET: ${VITE_FIREBASE_STORAGE_BUCKET}
+      VITE_FIREBASE_MESSAGING_SENDER_ID: ${VITE_FIREBASE_MESSAGING_SENDER_ID}
+      VITE_FIREBASE_APP_ID: ${VITE_FIREBASE_APP_ID}
+      VITE_FIREBASE_DATABASE_URL: ${VITE_FIREBASE_DATABASE_URL}
+    stdin_open: true
+    tty: true
+    command: /bin/sh

@@ -25,18 +25,20 @@ export default function DirectVideo() {
   let { id: calleeId } = useParams();
   const { state } = useLocation();
   const calleeName = state?.username;
-  // const autoJoin = state?.autoJoin;
   const locationState = useLocation().state;
   const autoCall = state?.autoCall;
   const { incomingCall, setIncomingCall } = useCall();
 
   const [isCalling, setIsCalling] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
-  // const [incomingCall, setIncomingCall] = useState(null);
   const [localStream, setLocalStream] = useState(null);
   const [remoteStream, setRemoteStream] = useState(null);
   const [activeCall, setActiveCall] = useState(null);
   const [callId, setCallId] = useState(null);
+
+  // mute/camera state
+  const [isMuted, setIsMuted] = useState(false);
+  const [isCameraOff, setIsCameraOff] = useState(false);
 
   const pc = useRef(null);
   const localVideoRef = useRef();
@@ -45,29 +47,15 @@ export default function DirectVideo() {
   const isCallerRef = useRef(false);
 
   useEffect(() => {
-    if (user?.uid) {
-      return;
-    }
-  }, [user]);
-
-  useEffect(() => {
     if (locationState?.autoJoin && locationState?.callId && locationState?.callKey) {
       handleJoinCall({
         callId: locationState.callId,
         key: locationState.callKey,
         callerId: locationState.callerId,
-        callerName: locationState.username
+        callerName: locationState.username,
       });
     }
-    console.log("DirectVideo locationState:", locationState);
   }, [locationState]);
-
-  // useEffect(() => {
-  //   console.log("DirectVideo mounted with params:", { calleeId, calleeName, autoJoin, autoCall });
-  //   if (autoJoin && incomingCall) {
-  //     handleJoinCall(incomingCall);
-  //   }
-  // }, [autoJoin, incomingCall]);  
 
   useEffect(() => {
     if (autoCall && calleeId && calleeName) {
@@ -103,6 +91,8 @@ export default function DirectVideo() {
     setIsCalling(false);
     setSelectedUser(null);
     setCallId(null);
+    setIsMuted(false);
+    setIsCameraOff(false);
     iceQueue.current = [];
   };
 
@@ -119,6 +109,20 @@ export default function DirectVideo() {
   useEffect(() => {
     if (remoteVideoRef.current) remoteVideoRef.current.srcObject = remoteStream;
   }, [remoteStream]);
+
+  // Toggle mute
+  const toggleMute = () => {
+    if (!localStream) return;
+    localStream.getAudioTracks().forEach((track) => (track.enabled = isMuted));
+    setIsMuted((prev) => !prev);
+  };
+
+  // Toggle camera
+  const toggleCamera = () => {
+    if (!localStream) return;
+    localStream.getVideoTracks().forEach((track) => (track.enabled = isCameraOff));
+    setIsCameraOff((prev) => !prev);
+  };
 
   // Flush queued ICE
   const flushIceQueue = async () => {
@@ -211,12 +215,12 @@ export default function DirectVideo() {
     };
 
     try {
-      // Wait for offer in DB (retry up to 5x)
+      // Wait for offer in DB (retry)
       let offer = null;
       for (let i = 0; i < 20; i++) {
         offer = await getOfferFromDb(cid);
         if (offer) break;
-        console.warn(`Offer not found yet, retrying... (${i + 1}/5)`);
+        console.warn(`Offer not found yet, retrying...`);
         await new Promise((res) => setTimeout(res, 500));
       }
       if (!offer) throw new Error("No offer found in DB after retries");
@@ -252,17 +256,15 @@ export default function DirectVideo() {
       console.error("handleJoinCall failed:", err);
       alert("Could not join the call. Please try again.");
     } finally {
-      // Always close modal (even if error)
       setIncomingCall(null);
     }
   };
 
   return (
     <div>
-
-      {activeCall && (
+      {/* {isCalling && selectedUser && (
         <ModalCallerCalling callee={selectedUser.username} onCancel={handleEndCall} />
-      )}
+      )} */}
 
       {incomingCall && (
         <ModalCallee
@@ -270,17 +272,15 @@ export default function DirectVideo() {
           onAccept={async () => {
             try {
               await handleJoinCall(incomingCall);
-              setIncomingCall(null); //only clear modal after success
+              setIncomingCall(null);
             } catch (err) {
               console.error("Failed to join call:", err);
               alert("Joining failed, try again.");
             }
           }}
-
           onReject={async () => {
             try {
-              await addRejectCallToDb(incomingCall.callId, user.uid); // mark call rejected
-              await removeIncoming(user.uid, incomingCall.key);       // remove your incoming entry
+              await removeIncoming(user.uid, incomingCall.key);
             } catch (err) {
               console.error("Failed to clean DB on reject:", err);
             } finally {
@@ -289,10 +289,10 @@ export default function DirectVideo() {
           }}
         />
       )}
-      {/* Video streams */}
-      {(incomingCall) && (
+
+      {(activeCall || isCalling || incomingCall) && (
         <div className="fixed inset-0 bg-black/80 flex flex-col items-center justify-center z-50">
-          {remoteStream && (
+          {remoteStream ? (
             <div className="relative w-full max-w-5xl h-[70vh] bg-black rounded-xl overflow-hidden shadow-lg">
               <RemoteVideo ref={remoteVideoRef} stream={remoteStream} />
 
@@ -305,6 +305,22 @@ export default function DirectVideo() {
               {activeCall && (
                 <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-4">
                   <button
+                    onClick={toggleMute}
+                    className={`bg-gray-700 hover:bg-gray-800 text-white p-3 rounded-full shadow-lg transition ${isMuted ? "bg-gray-500" : ""}`}
+                    title={isMuted ? "Unmute" : "Mute"}
+                  >
+                    <i className={`ri-mic${isMuted ? "-off-line" : "-line"} text-xl`}></i>
+                  </button>
+
+                  <button
+                    onClick={toggleCamera}
+                    className={`bg-gray-700 hover:bg-gray-800 text-white p-3 rounded-full shadow-lg transition ${isCameraOff ? "bg-gray-500" : ""}`}
+                    title={isCameraOff ? "Turn camera on" : "Turn camera off"}
+                  >
+                    <i className={`ri-camera${isCameraOff ? "-off-line" : "-line"} text-xl`}></i>
+                  </button>
+
+                  <button
                     onClick={handleEndCall}
                     className="bg-red-600 hover:bg-red-700 text-white p-3 rounded-full shadow-lg transition"
                   >
@@ -313,10 +329,24 @@ export default function DirectVideo() {
                 </div>
               )}
             </div>
+          ) : (
+            activeCall && (
+              <div className="bg-gray-900 p-8 rounded-xl shadow-xl text-white flex flex-col items-center">
+                <p className="text-lg">Waiting for the other participant...</p>
+                <div className="mt-4">
+                  <div className="w-16 h-16 border-4 border-white border-t-transparent rounded-full animate-spin"></div>
+                </div>
+                <button
+                  onClick={handleEndCall}
+                  className="mt-6 bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded shadow-lg transition"
+                >
+                  Cancel
+                </button>
+              </div>
+            )
           )}
         </div>
       )}
-
     </div>
   );
 }

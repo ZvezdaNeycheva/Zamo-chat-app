@@ -8,6 +8,12 @@ export default defineConfig(() => {
       outDir: 'build',
     },
     plugins: [react()],
+    server: {
+      host: true,
+      port: 3000,
+      strictPort: true,
+      allowedHosts: true, // 'all' for vite4, true for vite5+ ['fast-cobras-listen.loca.lt']
+    },
     css: {
       postcss: {
         plugins: [tailwindcss],

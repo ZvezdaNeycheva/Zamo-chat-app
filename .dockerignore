@@ -1,0 +1,27 @@
+# Node dependencies
+node_modules
+npm-debug.log
+yarn.lock
+package-lock.json
+
+# Vite / build output
+dist
+build
+.next
+.cache
+
+# OS / IDE files
+.DS_Store
+.vscode
+.idea
+
+# Public assets you don't want copied (optional)
+public/assets
+
+# Tests and coverage
+__tests__
+coverage
+
+# Docker files (if you don't want recursive build)
+Dockerfile
+docker-compose.yml
