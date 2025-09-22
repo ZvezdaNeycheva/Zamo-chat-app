@@ -1,0 +1,28 @@
+name: Sync Zamo Chat App with Upstream
+
+on:
+  workflow_dispatch:   # Only runs when you click "Run workflow" in Actions tab
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout fork
+        uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0   # fetch full history
+
+      - name: Add upstream
+        run: git remote add upstream https://github.com/Alpha-55-JS-Web-Programming/Final-Project-Team5.git
+
+      - name: Fetch upstream
+        run: git fetch upstream
+
+      - name: Merge upstream changes
+        run: |
+          git checkout main
+          git merge upstream/main --allow-unrelated-histories -m "Sync from upstream"
+
+      - name: Push changes to fork
+        run: git push origin main
