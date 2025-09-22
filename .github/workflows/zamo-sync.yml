@@ -14,7 +14,9 @@ jobs:
           fetch-depth: 0   # fetch full history
 
       - name: Add upstream
-        run: git remote add upstream https://github.com/Alpha-55-JS-Web-Programming/Final-Project-Team5.git
+  run: |
+    git remote remove upstream || true
+    git remote add upstream https://github.com/Alpha-55-JS-Web-Programming/Final-Project-Team5.git
 
       - name: Fetch upstream
         run: git fetch upstream
