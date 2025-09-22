@@ -1,4 +1,4 @@
-name: Sync Zamo Chat App with Upstream
+name: Sync with Upstream
 
 on:
   workflow_dispatch:   # run only when triggered manually
