@@ -3,7 +3,7 @@ export default function handler(req, res) {
     res.status(200).json({
       iceServers: [
         {
-          urls: "turn:relay1.expressturn.com:3480",
+          urls: process.env.TURN_URL,
           username: process.env.TURN_USERNAME,
           credential: process.env.TURN_PASSWORD
         },
