@@ -40,11 +40,25 @@ export default function DirectVideo() {
   const [isMuted, setIsMuted] = useState(false);
   const [isCameraOff, setIsCameraOff] = useState(false);
 
+  const [iceServers, setIceServers] = useState(null);
   const pc = useRef(null);
   const localVideoRef = useRef();
   const remoteVideoRef = useRef();
   const iceQueue = useRef([]);
   const isCallerRef = useRef(false);
+
+  useEffect(() => {
+    const getIceServers = async () => {
+      try {
+        const res = await fetch("/api/turn");
+        const data = await res.json();
+        setIceServers(data.iceServers);
+      } catch (err) {
+        console.error("Failed to fetch ICE servers:", err);
+      }
+    };
+    getIceServers();
+  }, []);
 
   useEffect(() => {
     if (locationState?.autoJoin && locationState?.callId && locationState?.callKey) {
@@ -138,7 +152,11 @@ export default function DirectVideo() {
     setIsCalling(true);
     isCallerRef.current = true;
 
-    pc.current = new RTCPeerConnection();
+    if (!iceServers) {
+      console.error("ICE servers not ready yet");
+      return;
+    }
+    pc.current = new RTCPeerConnection({ iceServers });
     // Get local media
     const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
     setLocalStream(stream);
@@ -194,7 +212,11 @@ export default function DirectVideo() {
     setCallId(cid);
     isCallerRef.current = false;
 
-    pc.current = new RTCPeerConnection();
+    if (!iceServers) {
+      console.error("ICE servers not ready yet");
+      return;
+    }
+    pc.current = new RTCPeerConnection({ iceServers });
 
     // Get local stream
     const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
