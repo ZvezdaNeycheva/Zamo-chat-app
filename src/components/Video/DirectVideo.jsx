@@ -19,6 +19,7 @@ import {
 } from "../../service/firebase-video";
 import { useLocation, useParams } from "react-router-dom";
 import { useCall } from "../../CallContext";
+import handler from "../../../api/turn";
 
 export default function DirectVideo() {
   const { user } = useContext(AppContext);
@@ -50,6 +51,7 @@ export default function DirectVideo() {
   useEffect(() => {
     const getIceServers = async () => {
       try {
+        // handler
         const res = await fetch("/api/turn");
         const data = await res.json();
         setIceServers(data.iceServers);
@@ -61,7 +63,7 @@ export default function DirectVideo() {
   }, []);
 
   useEffect(() => {
-    if (locationState?.autoJoin && locationState?.callId && locationState?.callKey) {
+    if (locationState?.autoJoin && locationState?.callId && locationState?.callKey && iceServers) {
       handleJoinCall({
         callId: locationState.callId,
         key: locationState.callKey,
@@ -69,13 +71,13 @@ export default function DirectVideo() {
         callerName: locationState.username,
       });
     }
-  }, [locationState]);
+  }, [locationState, iceServers]);  
 
   useEffect(() => {
-    if (autoCall && calleeId && calleeName) {
+    if (autoCall && calleeId && calleeName && iceServers) {
       handleStartCall({ id: calleeId, username: calleeName });
     }
-  }, [autoCall, calleeId, calleeName]);
+  }, [autoCall, calleeId, calleeName, iceServers]);  
 
   const handleEndCall = async () => {
     if (activeCall?.callId) {
