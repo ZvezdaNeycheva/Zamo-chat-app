@@ -9,11 +9,12 @@ export function ChatToolbar({ otherUser, channel, onProfile }) {
     const { groupId, channelId } = useParams();
     const [group, setGroup] = useState(null);
     const [memberNames, setMemberNames] = useState([]);
+
     useEffect(() => {
+        if (!groupId) return;
         const fetchGroup = async () => {
             const group = await getGroup(groupId)
             setGroup(group)
-            console.log({ group })
 
             const membersData = await Promise.all(
                 Object.keys(group.members).map(uid => getUserByUid(uid))
@@ -70,7 +71,7 @@ export function ChatToolbar({ otherUser, channel, onProfile }) {
                     <div className="col-span-4 sm:col-span-8">
                         <ul className="flex items-center justify-end lg:gap-4">
                             {/* Video Call */}
-                            {!channel ?? <li>
+                            {channel ? null : <li>
                                 <button onClick={handleVideoCall} type="button" className="text-xl text-gray-500 border-0 btn dark:text-gray-300 lg:block" data-tw-toggle="modal" data-tw-target="#videoCallModal">
                                     <i className="ri-phone-line"></i>
                                 </button>
