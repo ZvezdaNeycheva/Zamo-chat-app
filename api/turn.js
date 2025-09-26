@@ -12,7 +12,11 @@ export default function handler(req, res) {
         iceServers: [
             { urls: "stun:stun.l.google.com:19302" },
             {
-                urls: process.env.TURN_URL,
+                urls: [
+                    `turn:${process.env.TURN_URL}?transport=udp`,
+                    `turn:${process.env.TURN_URL}?transport=tcp`,
+                    "turns:relay1.expressturn.com:5349" // optional TLS
+                ],
                 username: process.env.TURN_USERNAME,
                 credential: process.env.TURN_PASSWORD
             }
