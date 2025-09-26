@@ -9,11 +9,12 @@ export function ChatToolbar({ otherUser, channel, onProfile }) {
     const { groupId, channelId } = useParams();
     const [group, setGroup] = useState(null);
     const [memberNames, setMemberNames] = useState([]);
+
     useEffect(() => {
+        if (!groupId) return;
         const fetchGroup = async () => {
             const group = await getGroup(groupId)
             setGroup(group)
-            console.log({ group })
 
             const membersData = await Promise.all(
                 Object.keys(group.members).map(uid => getUserByUid(uid))
