@@ -1,7 +1,7 @@
 
 docker-compose up --build
 docker ps
-docker exec -it f96e2466755a /bin/sh
+docker exec -it 094ab9152cbc /bin/sh
 npm run dev
 
 npm run build

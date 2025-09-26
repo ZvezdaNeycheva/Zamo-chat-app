@@ -4,8 +4,6 @@ services:
     build: .
     ports:
       - "3000:3000"   # dev server
-      - "4040:4040"   # ngrok dashboard
-    cpus: "0.5"
     working_dir: /src
     volumes:
       - .:/src:cached
@@ -22,4 +20,4 @@ services:
       VITE_FIREBASE_DATABASE_URL: ${VITE_FIREBASE_DATABASE_URL}
     stdin_open: true
     tty: true
-    command: /bin/sh
+    command: npm run dev
