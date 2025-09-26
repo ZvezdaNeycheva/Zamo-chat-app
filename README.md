@@ -4,24 +4,29 @@
 
 Zamo is a cutting-edge application crafted for today's dynamic individuals and teams. Designed with modernity in mind, Zamo offers a comprehensive solution for real-time communication and collaboration. Whether it's chat or video calls, our platform ensures seamless interaction among users. Share information, exchange resources, and spark discussions with ease. Zamo is more than just an app. It's a partner in fostering meaningful connections and collaborative success.
 
+[![Live Demo](https://img.shields.io/badge/Live_Demo-Vercel-000?logo=vercel)](https://zamo-chat-app.vercel.app)
+
 ### Creators
 
 - Andrey Raychev - [@Andrey-Raychev](https://github.com/Andrey-Raychev)
 - Martin Andreev - [@Martin-Andreev-288](https://github.com/Martin-Andreev-288)
 - Zvezda Neycheva - [@DreamersJS](https://github.com/DreamersJS)
+- Special thanks to testers who helped surface UX gaps and connectivity issues.
 
 ### Technologies used
 
-- React
-- React-router
-- HTML
-- Tailwind CSS
-- WebRTC
-- Firebase
-- ESLint
-- git
+<p align="center">
+  <img src="https://img.shields.io/badge/React-20232A?logo=react&logoColor=61DAFB"/>
+  <img src="https://img.shields.io/badge/React_Router-CA4245?logo=react-router&logoColor=white"/>
+  <img src="https://img.shields.io/badge/HTML5-E34F26?logo=html5&logoColor=white"/>
+  <img src="https://img.shields.io/badge/TailwindCSS-06B6D4?logo=tailwindcss&logoColor=white"/>
+  <img src="https://img.shields.io/badge/WebRTC-333333?logo=webrtc&logoColor=white"/>
+  <img src="https://img.shields.io/badge/Firebase-FFCA28?logo=firebase&logoColor=black"/>
+  <img src="https://img.shields.io/badge/ESLint-4B32C3?logo=eslint&logoColor=white"/>
+  <img src="https://img.shields.io/badge/Git-F05032?logo=git&logoColor=white"/>
+</p>
 
-### Instalation
+### Installation
 
 ```
 npm install
@@ -30,7 +35,12 @@ npm install
 ### Run the application
 
 ```
+# Development
 npm start
+
+# Production build
+npm run build
+npm run preview
 ```
 
 ### Usage
@@ -54,6 +64,8 @@ npm start
   <br />Zamo's chat interface provides users with a dynamic space for direct messaging with friends. Users can easily search for contacts, start one-on-one conversations, and utilize audio and video features. Adding reactions to messages adds expressiveness, while the ability to edit or delete messages gives users control over their communication.
 
 <img src="./public/assets/images/scrchat.png"/>
+
+![GIF](public/assets/images/scrsendpic.gif)
 <br/>
 
 - **Groups: Cultivating Collaborative Communities**
@@ -78,8 +90,31 @@ npm start
 - **Video calls: Real-Time Conversations Beyond Text**
   <br/>For moments when typing just isn’t enough, Zamo empowers users with instant video calling powered by WebRTC and Firebase signaling. When initiating a call, the recipient is immediately notified—ensuring real-time, face-to-face communication without delays. 
 
-<!-- <img src="./public/assets/images/video.png"/> -->
+![GIF](public/assets/images/video.gif)
 <br/>
+
+### Known Issues & Lessons Learned
+
+1. **Routing on Vercel**
+   - **Issue:** Initial deployment returned `NOT_FOUND` when refreshing routes.
+   - **Fix:** Added `vercel.json` rewrite to serve `index.html` for all paths.
+   - **Lesson:** Single Page Applications require explicit route handling in production.
+
+2. **Message Notifications**
+   - **Issue:** Testers noted that incoming messages were easy to miss (no visual indicators).
+   - **Next Step:** Plan to add unread counters and “new message” badges for better UX.
+   - **Lesson:** Functionality ≠ usability. Testing with real people reveals hidden UX gaps.
+
+3. **Mobile WebRTC Alerts**
+   - **Issue:** Rare alerts appeared on mobile after granting camera/mic access, before the stream rendered.
+   - **Status:** Intermittent, not consistently reproducible.
+   - **Lesson:** Mobile browsers handle permissions and track negotiation differently. Needs further investigation.
+
+4. **WebRTC and varying NAT/firewall restrictions**
+   - **Issue:** Video calls didn't work for one of the testers.
+   - **Cause:** The reason it fails is network-dependent.
+   - **Next Step:** Gather more testers on different networks.
+   - **Lesson:** Big apps like Viber, WhatsApp, Messenger run massive TURN server infrastructure all over the world. When a P2P connection fails (which happens often due to NAT/firewall), the call automatically falls back to a relay server. These servers are optimized for performance and reliability, often with multiple transport protocols (UDP, TCP, TLS) to traverse restrictive networks. They don’t just try one ICE candidate — they try all possible paths (local IP, STUN-derived public IP, TURN relay) in parallel. While DIY average Firebase + WebRTC setup can fail on some networks — relying on standard STUN/TURN, not aggressive network fallback.
 
 ### Test Accounts:
 
