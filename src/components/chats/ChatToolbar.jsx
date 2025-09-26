@@ -21,7 +21,7 @@ export function ChatToolbar({ otherUser, channel, onProfile }) {
 
     return (
         <>
-            <div className="sticky top-0 z-40 bg-white p-4 border-b border-gray-100 lg:p-6 dark:border-zinc-600">
+            <div className="sticky top-0 z-40 bg-white dark:bg-zinc-700 p-4 border-b border-gray-100 lg:p-6 dark:border-zinc-600">
                 <div className="grid items-center grid-cols-12">
                     <div className="col-span-8 sm:col-span-4">
                         <div className="flex items-center">
