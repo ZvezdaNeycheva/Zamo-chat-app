@@ -58,10 +58,8 @@ function App() {
           <Route path="/groups/:groupId/channels/:channelId" element={<Layout selectedAppBarButton={'groups'} sideBarContent={<Channels />} mainContent={<ChannelChat />} />} />
           <Route path="/contacts" element={<Layout selectedAppBarButton={'contacts'} sideBarContent={<Contacts />} />} />
           <Route path="/meta" element={<Meta />} />
-          {/* <Route path="/profile" element={<Layout selectedAppBarButton={'profile'} mainContent={<Authenticated> <Profile /> </Authenticated>} />} /> */}
           <Route path="/sidebar-menu" element={<AppBar />} />
           <Route path="/video/:id" element={<Layout selectedAppBarButton={'chats'} mainContent={<DirectVideo />} />} />
-          <Route path="/audio" element={<Layout selectedAppBarButton={'audio'} sideBarContent={<Chats /> || <Channels />} mainContent={<Audio />} />} />
         </Routes>
       </Router>
     </>
