@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import { AppContext } from "../../AppContext";
 import UserVideo from "./UserVideo";
 import RemoteVideo from "./RemoteVideo";
+import ModalCallerCalling from "./ModalCallerCalling";
 import ModalCallee from "./ModalCallee";
 import {
   addIncomingToDb,
@@ -13,6 +14,7 @@ import {
   getOfferFromDb,
   addIceCandidateToDb,
   listenForIceCandidates,
+  listenForIncomingCall,
   deleteTableRow,
 } from "../../service/firebase-video";
 import { useLocation, useParams } from "react-router-dom";
@@ -38,6 +40,7 @@ export default function DirectVideo() {
   const [isMuted, setIsMuted] = useState(false);
   const [isCameraOff, setIsCameraOff] = useState(false);
 
+  const [iceServers, setIceServers] = useState(null);
   const pc = useRef(null);
   const localVideoRef = useRef();
   const remoteVideoRef = useRef();
@@ -45,7 +48,22 @@ export default function DirectVideo() {
   const isCallerRef = useRef(false);
 
   useEffect(() => {
-    if (locationState?.autoJoin && locationState?.callId && locationState?.callKey ) {
+    const getIceServers = async () => {
+      try {
+        // handler
+        const res = await fetch("/api/turn");
+        const data = await res.json();
+        console.log("ICE servers:", data.iceServers);
+        setIceServers(data.iceServers);
+      } catch (err) {
+        console.error("Failed to fetch ICE servers:", err);
+      }
+    };
+    getIceServers();
+  }, []);
+
+  useEffect(() => {
+    if (locationState?.autoJoin && locationState?.callId && locationState?.callKey && iceServers) {
       handleJoinCall({
         callId: locationState.callId,
         key: locationState.callKey,
@@ -53,13 +71,13 @@ export default function DirectVideo() {
         callerName: locationState.username,
       });
     }
-  }, [locationState]);  
+  }, [locationState, iceServers]);
 
   useEffect(() => {
-    if (autoCall && calleeId && calleeName ) {
+    if (autoCall && calleeId && calleeName && iceServers) {
       handleStartCall({ id: calleeId, username: calleeName });
     }
-  }, [autoCall, calleeId, calleeName]);  
+  }, [autoCall, calleeId, calleeName, iceServers]);
 
   const handleEndCall = async () => {
     if (activeCall?.callId) {
@@ -136,8 +154,11 @@ export default function DirectVideo() {
     setIsCalling(true);
     isCallerRef.current = true;
 
-
-    pc.current = new RTCPeerConnection();
+    if (!iceServers) {
+      console.error("ICE servers not ready yet");
+      return;
+    }
+    pc.current = new RTCPeerConnection({ iceServers });
     // Get local media
     const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
     setLocalStream(stream);
@@ -193,7 +214,11 @@ export default function DirectVideo() {
     setCallId(cid);
     isCallerRef.current = false;
 
-    pc.current = new RTCPeerConnection();
+    if (!iceServers) {
+      console.error("ICE servers not ready yet");
+      return;
+    }
+    pc.current = new RTCPeerConnection({ iceServers });
 
     // Get local stream
     const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
